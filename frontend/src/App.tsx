@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import React from 'react';
+import Login from './BeforeLogin/BeforeLogin';
 
-function App() {
-
+const App: React.FC = () => {
   return (
-    <>
-      hello
-    </>
-  )
-}
+    <div>
+      <Login />
+    </div>
+  );
+};
 
-export default App
+export default App;
