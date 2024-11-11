@@ -1,9 +1,13 @@
 import React from 'react';
 import './BeforeLogin.css';
-import logo from '../assets/sutbranding2.jpg'; // นำเข้ารูปภาพโลโก้
-import backgroundVideo from '../assets/loginbackground.mp4'; // นำเข้าวิดีโอพื้นหลัง
+import logo from '../assets/sutbranding2.jpg';
+import backgroundVideo from '../assets/loginbackground.mp4';
 
-const Login: React.FC = () => {
+interface BeforeLoginProps {
+  onLoginClick: () => void;
+}
+
+const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
   return (
     <div className="app">
       <video autoPlay loop muted className="background-video">
@@ -11,7 +15,7 @@ const Login: React.FC = () => {
       </video>
       <header className="header">
         <div className="logo-container">
-          <img src={logo} alt="" className="logo" />
+          <img src={logo} alt="โลโก้" className="logo" />
         </div>
         <input type="text" placeholder="ค้นหารายวิชา" className="search-bar" />
         <div className="header-links">
@@ -22,7 +26,8 @@ const Login: React.FC = () => {
         <div className="language-toggle">
           <span>TH</span> | <span>EN</span>
         </div>
-        <button className="login-button">เข้าสู่ระบบ</button>
+        {/* ใช้ prop onLoginClick เมื่อกดปุ่มนี้ */}
+        <button className="login-button" onClick={onLoginClick}>เข้าสู่ระบบ</button>
       </header>
       <main className="main-content">
         <h1>SUT e-Learning</h1>
@@ -32,4 +37,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default BeforeLogin;
