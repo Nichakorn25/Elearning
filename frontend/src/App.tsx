@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import BeforeLogin from './BeforeLogin/BeforeLogin';
 import LoginPopup from './LoginPopup/LoginPopup';
+import Dashboard from './Dashboard/Dashboard';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  // ฟังก์ชันสำหรับเปิดและปิดป๊อปอัพ
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
 
   return (
-    <div>
-      {/* ส่งฟังก์ชัน togglePopup เป็น prop ไปที่ BeforeLogin */}
-      <BeforeLogin onLoginClick={togglePopup} />
+    <Router>
+      <div>
+        <Routes>
+          {/* กำหนดให้ BeforeLogin เป็นหน้าแรก */}
+          <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          {/* กำหนดเส้นทางสำหรับ Dashboard */}
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
 
-      {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
-      {isPopupOpen && <LoginPopup onClose={togglePopup} />}
-    </div>
+        {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
+        {isPopupOpen && <LoginPopup onClose={togglePopup} />}
+      </div>
+    </Router>
   );
 };
 

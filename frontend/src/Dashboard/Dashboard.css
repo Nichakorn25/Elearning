@@ -1,0 +1,91 @@
+.dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .dashboard-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6b00;
+    padding: 10px 20px;
+    color: white;
+    position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .language {
+    margin-left: 10px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-id, .user-name {
+    margin-right: 10px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .search-bar {
+    display: flex;
+    align-items: center;
+    margin: 80px 0 20px; /* เพิ่มระยะห่างจาก header */
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .search-button {
+    background-color: #ff6b00;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+  }
+  
+  .course-overview {
+    margin-top: 20px;
+  }
+  
+  .course-list {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .course-card {
+    background-color: #f2f2f2;
+    padding: 15px;
+    border-radius: 8px;
+    width: 200px;
+  }
+  
