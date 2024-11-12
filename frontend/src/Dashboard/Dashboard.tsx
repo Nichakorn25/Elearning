@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
         </div>
         <div className="header-right">
           <span className="user-id">B6525972</span>
-          <span className="user-name">ณิชากร จันทร์ยุติ</span>
+          <span className="user-name">ณิชากร จันทร์ยุทา</span>
           <img src="https://via.placeholder.com/40" alt="User Avatar" className="user-avatar" />
         </div>
       </header>
