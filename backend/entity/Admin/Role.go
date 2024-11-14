@@ -1,0 +1,11 @@
+package Admin
+
+import (
+	"gorm.io/gorm"
+)
+type Role struct {
+	gorm.Model
+	RoleName  string `json:"RoleName"`
+
+	Permission []Permission `gorm:"foreignKey:RoleID"`
+}
