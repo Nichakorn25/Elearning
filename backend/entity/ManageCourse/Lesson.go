@@ -1,6 +1,7 @@
 package ManageCourse
 
 import (
+	"backend/entity/CreateCourse" 
 	"gorm.io/gorm"
 )
 type Lesson struct {
