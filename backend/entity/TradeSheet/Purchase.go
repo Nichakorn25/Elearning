@@ -1,29 +1,24 @@
-package CreateCourse
+package TradeSheet
 
 import (
-	"time"
+	"backend/entity/Payment"
 	"gorm.io/gorm"
+	"time"
 )
-type Course struct {
+
+type Purchase struct {
 	gorm.Model
-	CourseName  string `json:"CourseName"`
-	CourseDate	time.Time `json:"CourseDate"`
-	Credit 		uint `json:"Credit"`
-	Description string `json:"Description"`
-	StartTime float32 `json:"StartTime"`
-	EndTime	  float32 `json:"EndTime"`
+	PurchaseDate time.Time `json:"PurchaseDate"`
+	TotalPrice   float32   `json:"TotalPrice"`
 
-	ExamSchedule []ExamSchedule `gorm:"foreignKey:CourseID"`
+	Payment []Payment `gorm:"foreignKey:PurchaseID"`
 
-	CategoryID uint `json:"CategoryID"`
-	Category   Category `gorm:"foreignKey:CategoryID"`
+	SheetID uint  `json:"SheetID"`
+	Sheet   Sheet `gorm:"foreignKey:SheetID"`
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
 
-	SemesterID uint `json:"SemesterID"`
-	Semester   Semester `gorm:"foreignKey:SemesterID"`
-
-	DayofWeekID uint `json:"DayofWeekID"`
-	DayofWeek   DayofWeek `gorm:"foreignKey:DayofWeekID"`
+	DiscountID uint     `json:"DiscountID"`
+	Discount   Discount `gorm:"foreignKey:DiscountID"`
 }

@@ -1,6 +1,7 @@
 package CreateCourse
 
 import (
+	"backend/entity/TradeSheet"
 	"time"
 	"gorm.io/gorm"
 )
@@ -14,6 +15,8 @@ type Course struct {
 	EndTime	  float32 `json:"EndTime"`
 
 	ExamSchedule []ExamSchedule `gorm:"foreignKey:CourseID"`
+
+	Sheet []Sheet `gorm:"foreignKey:CourseID"`
 
 	CategoryID uint `json:"CategoryID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
