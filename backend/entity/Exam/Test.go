@@ -12,6 +12,8 @@ type Test struct {
 	Description string    `json:"Description"`
 	DueDate     time.Time `json:"DueDate"`
 
+	QuizQuestion []QuizQuestion `gorm:"foreignKey:TestID"`
+
 	CourseID uint                `json:"CourseID"`
 	Course   CreateCourse.Course `gorm:"foreignKey:CourseID"` // ใช้ Course จาก package CreateCourse
 }

@@ -3,7 +3,7 @@ package Exam
 import (
 	"gorm.io/gorm"
 )
-type Course struct {
+type StudentAnswer struct {
 	gorm.Model
 	SelectedOption 		uint `json:"SelectedOption"`
 

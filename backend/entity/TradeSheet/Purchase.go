@@ -1,7 +1,7 @@
 package TradeSheet
 
 import (
-	"backend/entity/Payment"
+	"elearning/entity/Payment"
 	"gorm.io/gorm"
 	"time"
 )
@@ -17,8 +17,8 @@ type Purchase struct {
 	Sheet   Sheet `gorm:"foreignKey:SheetID"`
 
 	UserID uint `json:"UserID"`
-	User   User `gorm:"foreignKey:UserID"`
+	Profile.User   User `gorm:"foreignKey:UserID"`
 
 	DiscountID uint     `json:"DiscountID"`
-	Discount   Discount `gorm:"foreignKey:DiscountID"`
+	Payment.Discount   Discount `gorm:"foreignKey:DiscountID"`
 }

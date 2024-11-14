@@ -11,6 +11,17 @@ type User struct {
 	Email  string `json:"Email"`
 	Phone  string `json:"CourseName"`
 	
+	ProfilePicture []ProfilePicture `gorm:"foreignKey:UserID"`
+	Annoucement []Annoucement `gorm:"foreignKey:UserID"`
+	Log []Log `gorm:"foreignKey:UserID"`
+	Review []Review `gorm:"foreignKey:UserID"`
+	Purchase []Purchase `gorm:"foreignKey:UserID"`
+	Payment []Payment `gorm:"foreignKey:UserID"`
+	CartItem []CartItem `gorm:"foreignKey:UserID"`
+	Submission []Submissiion `gorm:"foreignKey:UserID"`
+	Course []Course `gorm:"foreignKey:UserID"`
+	StudentAnswer []StudentAnswer `gorm:"foreignKey:UserID"`
+
 
 	DepartmentID uint `json:"DepartmentID"`
 	Department   Department `gorm:"foreignKey:DepartmentID"`

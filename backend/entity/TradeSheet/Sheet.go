@@ -1,7 +1,8 @@
 package TradeSheet
 
 import (
-	"entity/CreateCourse/Course"
+	"elearing/backend/entity/CreateCourse"
+
 	"gorm.io/gorm"
 )
 
@@ -17,6 +18,6 @@ type Sheet struct {
 
 	CartItem []CartItem `gorm:"foreignKey:SheetID"`
 
-	CourseID uint   `json:"CourseID"`
-	Course   Course `gorm:"foreignKey:CourseID"`
+	CourseID uint   `json:"CourseID"` 
+	CreateCourse.Course  Course `gorm:"foreignKey:CourseID"`
 }

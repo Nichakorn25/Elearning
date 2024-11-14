@@ -8,4 +8,5 @@ type Role struct {
 	RoleName  string `json:"RoleName"`
 
 	Permission []Permission `gorm:"foreignKey:RoleID"`
+	User []User `gorm:"foreignKey:RoleID"`
 }

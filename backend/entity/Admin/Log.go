@@ -5,10 +5,9 @@ import (
 	"time"
 	"gorm.io/gorm"
 )
-type Annoucement struct {
+type Log struct {
 	gorm.Model
-	Title  string `json:"Title"`
-	Content  string `json:"Content"`
+	Action  string `json:"Action"`
 	CreateAt	time.Time `json:"CreateAt"`
 	
 	UserID uint `json:"UserID"`

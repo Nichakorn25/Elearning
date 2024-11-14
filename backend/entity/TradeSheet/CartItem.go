@@ -1,7 +1,7 @@
 package TradeSheet
 
 import (
-	"backend/entity/Prifile"
+	"backend/entity/Profile"
 	"time"
 	"gorm.io/gorm"
 )
@@ -13,6 +13,6 @@ type CartItem struct {
 	Sheet   Sheet `gorm:"foreignKey:SheetID"`
 
 	UserID uint `json:"UserID"`
-	User   User `gorm:"foreignKey:UserID"`
+	Profile.User   User `gorm:"foreignKey:UserID"`
 
 }

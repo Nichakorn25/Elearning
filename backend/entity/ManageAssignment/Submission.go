@@ -7,6 +7,8 @@ import (
 type Submission struct {
 	gorm.Model
 	CourseDate	time.Time `json:"CourseDate"`
+
+	Grade []Grade `gorm:"foreignKey:SubmissionID"`
 	
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`

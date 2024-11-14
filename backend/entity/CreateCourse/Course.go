@@ -18,6 +18,12 @@ type Course struct {
 
 	Sheet []Sheet `gorm:"foreignKey:CourseID"`
 
+	Lesson []Lesson `gorm:"foreignKey:CourseID"`
+
+	Test []Test `gorm:"foreignKey:CourseID"`
+
+	Assignment []Assignment `gorm:"foreignKey:CourseID"`
+
 	CategoryID uint `json:"CategoryID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
 
