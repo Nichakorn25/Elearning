@@ -1,29 +1,25 @@
-package CreateCourse
+package Profile
 
 import (
-	"time"
 	"gorm.io/gorm"
 )
-type Course struct {
+type User struct {
 	gorm.Model
-	CourseName  string `json:"CourseName"`
-	CourseDate	time.Time `json:"CourseDate"`
-	Credit 		uint `json:"Credit"`
-	Description string `json:"Description"`
-	StartTime float32 `json:"StartTime"`
-	EndTime	  float32 `json:"EndTime"`
+	Username  string `json:"Username"`
+	Password  string `json:"Password"`
+	FullName  string `json:"FullName"`
+	Email  string `json:"Email"`
+	Phone  string `json:"CourseName"`
+	
 
-	ExamSchedule []ExamSchedule `gorm:"foreignKey:CourseID"`
+	DepartmentID uint `json:"DepartmentID"`
+	Department   Department `gorm:"foreignKey:DepartmentID"`
 
-	CategoryID uint `json:"CategoryID"`
-	Category   Category `gorm:"foreignKey:CategoryID"`
+	MajorID uint `json:"MajorID"`
+	Major   Major `gorm:"foreignKey:MajorID"`
 
-	UserID uint `json:"UserID"`
-	User   User `gorm:"foreignKey:UserID"`
+	RoleID uint `json:"RoleID"`
+	Role   Role `gorm:"foreignKey:RoleID"`
 
-	SemesterID uint `json:"SemesterID"`
-	Semester   Semester `gorm:"foreignKey:SemesterID"`
-
-	DayofWeekID uint `json:"DayofWeekID"`
-	DayofWeek   DayofWeek `gorm:"foreignKey:DayofWeekID"`
+	
 }
