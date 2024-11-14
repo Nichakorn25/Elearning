@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Dashboard.css';
+import './Profile.css';
 
-const Dashboard: React.FC = () => {
+const Profile: React.FC = () => {
   const navigate = useNavigate();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
@@ -19,29 +19,21 @@ const Dashboard: React.FC = () => {
     navigate('/dashboard');
   };
 
-
   const handleLogout = () => {
+    closeDropdown();
     console.log('Logging out...');
-    closeDropdown();
-    navigate('/'); // เปลี่ยนเส้นทางไปหน้าแรก
-  };
-
-  const goToProfile = () => {
-    closeDropdown();
-    navigate('/profile'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
+    navigate('/');
   };
 
   return (
-    <div className="dashboard">
+    <div className="profile-dashboard">
       {/* Header Section */}
       <header className="dashboard-header">
         <div className="header-left">
           <button className="menu-button">☰</button>
           <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
         </div>
         <div className="header-right">
-          {/* คลิก User ID, Name หรือ Avatar เพื่อเปิด dropdown */}
           <div className="user-info" onClick={toggleDropdown}>
             <span className="user-id">B6525972</span>
             <span className="user-name">ณิชากร จันทร์ยุทา</span>
@@ -51,40 +43,40 @@ const Dashboard: React.FC = () => {
               className="user-avatar"
             />
           </div>
-
-          {/* Dropdown Menu */}
           {isDropdownVisible && (
             <div className="dropdown-menu">
               <button onClick={goToDashboard}>Dashboard</button>
-              <button onClick={goToProfile}>Profile</button>
+              <button onClick={() => navigate('/profile')}>Profile</button>
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>
       </header>
 
-      {/* Search Bar */}
-      <div className="search-bar">
-        <input type="text" placeholder="ค้นหารายวิชา (Search courses)" />
-        <button className="search-button">🔍</button>
-      </div>
-
-      {/* Course Overview */}
-      <div className="course-overview">
-        <h2>Course overview</h2>
-        <div className="course-list">
-          <div className="course-card">
-            <h3>ENG23 3054 Operating Systems</h3>
-            <p>Asst. Dr. Prof...</p>
-          </div>
-          <div className="course-card">
-            <h3>ENG23 4041 CYBER SECURITY FUNDAMENTALS</h3>
-            <p>02/2567 ...</p>
+      {/* Profile Content */}
+      <main className="profile-content">
+        <h2 className="profile-title">My Profile</h2>
+        <div className="profile-card">
+          <img
+            className="profile-avatar"
+            src="https://via.placeholder.com/120"
+            alt="User Avatar"
+          />
+          <div className="profile-details">
+            <h3>ณิชากร จันทร์ยุทา</h3>
+            <p>User ID: B6525972</p>
+            <p>Email: nichakorn@example.com</p>
+            <p>Faculty: Engineering</p>
+            <p>Program: Computer Engineering</p>
           </div>
         </div>
-      </div>
+        <div className="profile-actions">
+          <button className="profile-button">Edit Profile</button>
+          
+        </div>
+      </main>
     </div>
   );
 };
 
-export default Dashboard;
+export default Profile;

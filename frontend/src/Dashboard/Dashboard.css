@@ -89,3 +89,45 @@
     width: 200px;
   }
   
+  .header-right {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 10;
+    width: 150px;
+    overflow: hidden;
+  }
+  
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    color: #003366;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* User Info Hover Cursor */
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
