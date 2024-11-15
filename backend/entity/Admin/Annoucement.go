@@ -1,7 +1,7 @@
 package Admin
 
 import (
-	"backend/entity/Profile"
+	"elearning/backend/entity/Profile"
 	"time"
 	"gorm.io/gorm"
 )
@@ -12,5 +12,6 @@ type Annoucement struct {
 	CreateAt	time.Time `json:"CreateAt"`
 	
 	UserID uint `json:"UserID"`
-	User   User `gorm:"foreignKey:UserID"`
+	User Profile.User `gorm:"foreignKey:UserID"`
+
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"elearing/config"
+	"elearning/backend/config"
 )
 
 const PORT = "8000"

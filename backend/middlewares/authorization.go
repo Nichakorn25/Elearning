@@ -5,7 +5,7 @@ import (
 
 	"strings"
 
-	"elearing/services"
+	"elearning/services"
 
 	"github.com/gin-gonic/gin"
 )

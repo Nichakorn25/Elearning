@@ -1,6 +1,8 @@
 package Admin
 
 import (
+	"elearing/entity/Profile"
+
 	"gorm.io/gorm"
 )
 type Role struct {
@@ -8,5 +10,5 @@ type Role struct {
 	RoleName  string `json:"RoleName"`
 
 	Permission []Permission `gorm:"foreignKey:RoleID"`
-	User []User `gorm:"foreignKey:RoleID"`
+	User []Profile.User `gorm:"foreignKey:RoleID"`
 }

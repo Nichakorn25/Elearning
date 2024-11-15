@@ -11,5 +11,5 @@ type Log struct {
 	CreateAt	time.Time `json:"CreateAt"`
 	
 	UserID uint `json:"UserID"`
-	User   User `gorm:"foreignKey:UserID"`
+	User Profile.User  `gorm:"foreignKey:UserID"`
 }
