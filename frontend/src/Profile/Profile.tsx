@@ -24,7 +24,7 @@ const Profile: React.FC = () => {
     console.log('Logging out...');
     navigate('/');
   };
-
+  
   return (
     <div className="profile-dashboard">
       {/* Header Section */}

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, Col, Layout, Dropdown, Menu } from 'antd';
+import { Card, Button, Row, Col, Layout} from 'antd';
 import { useNavigate } from 'react-router-dom';
 import './SelectSheet.css';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const SelectSheet: React.FC = () => {
     const navigate = useNavigate();
