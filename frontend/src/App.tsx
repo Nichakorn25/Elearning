@@ -20,7 +20,7 @@ const App: React.FC = () => {
       <div>
         <Routes>
           {/* กำหนดให้ BeforeLogin เป็นหน้าแรก */}
-          <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          <Route path="/beforelogin" element={<BeforeLogin onLoginClick={togglePopup} />} />
           {/* เส้นทางสำหรับ Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}

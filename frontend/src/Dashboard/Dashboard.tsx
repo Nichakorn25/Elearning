@@ -39,26 +39,26 @@ const Dashboard: React.FC = () => {
     <div className="dashboard">
       {/* Header Section */}
       <header className="dashboard-header">
-        <div className="header-left">
-          <button className="menu-button">☰</button>
+        <div className="dashboardheader-left">
+          <button className="dashboardmenu-button">☰</button>
           <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
+          <span className="dashboardlanguage">English (en)</span>
         </div>
-        <div className="header-right">
+        <div className="dashboardheader-right">
           {/* คลิก User ID, Name หรือ Avatar เพื่อเปิด dropdown */}
-          <div className="user-info" onClick={toggleDropdown}>
-            <span className="user-id">B6525972</span>
-            <span className="user-name">ณิชากร จันทร์ยุทา</span>
+          <div className="dashboarduser-info" onClick={toggleDropdown}>
+            <span className="dashboarduser-id">B65xxxxx</span>
+            <span className="dashboarduser-name">Username</span>
             <img
               src="https://via.placeholder.com/40"
               alt="User Avatar"
-              className="user-avatar"
+              className="dashboarduser-avatar"
             />
           </div>
 
           {/* Dropdown Menu */}
           {isDropdownVisible && (
-            <div className="dropdown-menu">
+            <div className="dashboarddropdown-menu">
               <button onClick={goToDashboard}>Dashboard</button>
               <button onClick={goToProfile}>Profile</button>
               <button onClick={goToBuySheet}>BuySheet</button>
@@ -69,9 +69,9 @@ const Dashboard: React.FC = () => {
       </header>
 
       {/* Search Bar */}
-      <div className="search-bar">
+      <div className="dashboardsearch-bar">
         <input type="text" placeholder="ค้นหารายวิชา (Search courses)" />
-        <button className="search-button">🔍</button>
+        <button className="dashboardsearch-button">🔍</button>
       </div>
 
       {/* Course Overview */}

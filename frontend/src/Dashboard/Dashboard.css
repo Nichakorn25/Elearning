@@ -17,12 +17,12 @@
     z-index: 1000;
   }
   
-  .header-left {
+  .dashboardheader-left {
     display: flex;
     align-items: center;
   }
   
-  .menu-button {
+  .dashboardmenu-button {
     background: none;
     border: none;
     font-size: 1.5em;
@@ -31,26 +31,26 @@
     margin-right: 10px;
   }
   
-  .language {
+  .dashboardlanguage {
     margin-left: 10px;
   }
   
-  .header-right {
+  .dashboardheader-right {
     display: flex;
     align-items: center;
   }
   
-  .user-id, .user-name {
+  .dashboarduser-id, .dashboarduser-name {
     margin-right: 10px;
   }
   
-  .user-avatar {
+  .dashboarduser-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
   }
   
-  .search-bar {
+  .dashboardsearch-bar {
     display: flex;
     align-items: center;
     margin: 80px 0 20px; /* เพิ่มระยะห่างจาก header */
@@ -89,13 +89,13 @@
     width: 200px;
   }
   
-  .header-right {
+  .dashboardheader-right {
     position: relative;
     display: flex;
     align-items: center;
   }
   
-  .dropdown-menu {
+  .dashboarddropdown-menu {
     position: absolute;
     top: 70px;
     right: 20px;
@@ -107,7 +107,7 @@
     overflow: hidden;
   }
   
-  .dropdown-menu button {
+  .dashboarddropdown-menu button {
     display: block;
     width: 100%;
     padding: 10px 15px;
@@ -120,12 +120,12 @@
     transition: background-color 0.3s;
   }
   
-  .dropdown-menu button:hover {
+  .dashboarddropdown-menu button:hover {
     background-color: #f0f0f0;
   }
   
   /* User Info Hover Cursor */
-  .user-info {
+  .dashboarduser-info {
     display: flex;
     align-items: center;
     gap: 10px;
