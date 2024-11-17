@@ -42,13 +42,13 @@ body {
 }
 
 
-.logo-container {
+.logo-containerbeforelogin{
   position: absolute;
   top: 10px;
   left: 10px;
 }
 
-.logo {
+.logobeforelogin {
   width: 50px;
 }
 
@@ -60,17 +60,17 @@ body {
   margin-left: 80px;
 }
 
-.header-links a {
+.header-linksbeforelogin a {
   margin-right: 20px;
   color: white;
   text-decoration: none;
 }
 
-.language-toggle {
+.language-togglebeforelogin {
   margin-right: 20px;
 }
 
-.login-button {
+.login-buttonbeforelogin {
   background-color: #ff6600;
   color: white;
   border: none;
@@ -79,7 +79,7 @@ body {
   cursor: pointer;
 }
 
-.main-content {
+.main-contentbeforelogin {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -89,12 +89,12 @@ body {
   padding: 20px;
 }
 
-.main-content h1 {
+.main-contentbeforelogin h1 {
   font-size: 4em;
   margin-bottom: 10px;
 }
 
-.main-content p {
+.main-contentbeforelogin p {
   font-size: 1.2em;
   color: #ccc;
 }

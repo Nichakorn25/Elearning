@@ -18,8 +18,8 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
       {/* ส่วนหัว */}
       <header className="headerbeforelogin">
         {/* โลโก้ */}
-        <div className="logo-container">
-          <img src={logo} alt="โลโก้" className="logo" />
+        <div className="logo-containerbeforelogin">
+          <img src={logo} alt="โลโก้" className="logobeforelogin" />
         </div>
 
         {/* ช่องค้นหา */}
@@ -30,25 +30,25 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
         />
 
         {/* ลิงก์เมนู */}
-        <div className="header-links">
+        <div className="header-linksbeforelogin">
           <a href="#">รายวิชาทั้งหมด</a>
           <a href="#">สำหรับอาจารย์</a>
           <a href="#">สำหรับนักศึกษา</a>
         </div>
 
         {/* ตัวเลือกภาษา */}
-        <div className="language-toggle">
+        <div className="language-togglebeforelogin">
           <span>TH</span> | <span>EN</span>
         </div>
 
         {/* ปุ่มเข้าสู่ระบบ */}
-        <button className="login-button" onClick={onLoginClick}>
+        <button className="login-buttonbeforelogin" onClick={onLoginClick}>
           เข้าสู่ระบบ
         </button>
       </header>
 
       {/* เนื้อหาหลัก */}
-      <main className="main-content">
+      <main className="main-contentbeforelogin">
         <h1>SUT e-Learning</h1>
         <p>ระบบบริหารจัดการเรียนการสอนผ่านเครือข่าย มหาวิทยาลัยเทคโนโลยีสุรนารี</p>
       </main>
