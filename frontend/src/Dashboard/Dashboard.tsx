@@ -30,6 +30,10 @@ const Dashboard: React.FC = () => {
     closeDropdown();
     navigate('/profile'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
   };
+  const goToBuySheet = () => {
+    closeDropdown();
+    navigate('/Buysheet'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
+  };
 
   return (
     <div className="dashboard">
@@ -57,6 +61,7 @@ const Dashboard: React.FC = () => {
             <div className="dropdown-menu">
               <button onClick={goToDashboard}>Dashboard</button>
               <button onClick={goToProfile}>Profile</button>
+              <button onClick={goToBuySheet}>BuySheet</button>
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
