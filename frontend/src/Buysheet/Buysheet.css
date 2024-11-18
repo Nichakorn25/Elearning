@@ -27,7 +27,7 @@ h2 {
   z-index: 1000;
 }
 
-.header-left {
+.sheet-header-left {
   display: flex;
   align-items: center;
 }
@@ -43,7 +43,7 @@ h2 {
   .language {
     margin-left: 10px;
   }
-  .header-right {
+  .sheet-header-right {
     display: flex;
     align-items: center;
   }
@@ -58,7 +58,7 @@ h2 {
     border-radius: 50%;
   }
   
-  .search-bar {
+  .search-bar-sheet {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,23 +67,23 @@ h2 {
     padding: 0 100px;
   }
   
-  .search-bar .ant-cascader {
+  .search-bar-sheet .ant-cascader {
     flex: 1;
     min-width: 200px;
   }
   
-  .search-bar .ant-cascader:last-child {
+  .search-bar-sheet .ant-cascader:last-child {
     margin-right: 0;
   }
   
-  .search-bar input {
+  .search-bar-sheet input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
   }
   
-  .search-button {
+  .search-sheet-button {
     background-color: #ff6b00;
     border: none;
     color: white;
@@ -95,7 +95,7 @@ h2 {
   
   /* จัดรูปแบบเมื่อมีหลายแถว */
   @media (max-width: 768px) {
-    .search-bar {
+    .search-bar-sheet {
       flex-direction: column; /* Cascader ซ้อนกันในแนวตั้งเมื่อจอเล็ก */
       align-items: flex-start; /* จัดเรียงทางซ้าย */
     }
@@ -148,13 +148,13 @@ h2 {
     }
   }
    
-  .header-right {
+  .header-sheet-right {
     position: relative;
     display: flex;
     align-items: center;
   }
   
-  .dropdown-menu {
+  .dropdown-menu-sheet {
     position: absolute;
     top: 70px;
     right: 20px;
@@ -166,7 +166,7 @@ h2 {
     overflow: hidden;
   }
   
-  .dropdown-menu button {
+  .dropdown-menu-sheet button {
     display: block;
     width: 100%;
     padding: 10px 15px;
@@ -179,7 +179,7 @@ h2 {
     transition: background-color 0.3s;
   }
   
-  .dropdown-menu button:hover {
+  .dropdown-menu-sheet button:hover {
     background-color: #f0f0f0;
   }
   

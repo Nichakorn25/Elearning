@@ -97,12 +97,12 @@ const BuySheet: React.FC = () => {
     <Layout className="sheet">
       {/* Header Section */}
       <header className="sheet-header">
-        <div className="header-left">
+        <div className="sheet-header-left">
           <button className="menu-button">☰</button>
           <h1>SUT e-Learning</h1>
           <span className="language">English (en)</span>
         </div>
-        <div className="header-right">
+        <div className="sheet-header-right">
           <div className="user-info" onClick={toggleDropdown}>
             <span className="user-id">B6525972</span>
             <span className="user-name">ณิชากร จันทร์ยุทา</span>
@@ -114,7 +114,7 @@ const BuySheet: React.FC = () => {
           </div>
 
           {isDropdownVisible && (
-            <div className="dropdown-menu">
+            <div className="dropdown-menu-sheet">
               <button onClick={goToDashboard}>Dashboard</button>
               <button onClick={goToProfile}>Profile</button>
               <button onClick={goToBuySheet}>BuySheet</button>
@@ -125,7 +125,7 @@ const BuySheet: React.FC = () => {
       </header>
 
       {/* Search Bar */}
-      <div className="search-bar">
+      <div className="search-bar-sheet">
         <Cascader
           className="cascader-major"
           options={options1}
