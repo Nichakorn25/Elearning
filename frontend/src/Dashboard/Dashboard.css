@@ -1,133 +1,180 @@
 .dashboard {
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .dashboard-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ff6b00;
-    padding: 10px 20px;
-    color: white;
-    position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-  
-  .dashboardheader-left {
-    display: flex;
-    align-items: center;
-  }
-  
-  .dashboardmenu-button {
-    background: none;
-    border: none;
-    font-size: 1.5em;
-    color: white;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .dashboardlanguage {
-    margin-left: 10px;
-  }
-  
-  .dashboardheader-right {
-    display: flex;
-    align-items: center;
-  }
-  
-  .dashboarduser-id, .dashboarduser-name {
-    margin-right: 10px;
-  }
-  
-  .dashboarduser-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
-  
+  padding: 20px;
+  font-family: "Noto Sans", "Noto Sans Thai", "Prompt", sans-serif;
+  min-height: 100vh; /* ให้เนื้อหาเต็มความสูง */
+  overflow-y: auto; /* เพิ่มการเลื่อน */
+  background-color: #f8f9fa; /* เพิ่มสีพื้นหลัง */
+}
+
+.dashboard-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ff6b00;
+  padding: 10px 20px;
+  color: white;
+  position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+
+.dashboardheader-left {
+  display: flex;
+  align-items: center;
+}
+
+.dashboardmenu-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  color: white;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.dashboardheader-right {
+  display: flex;
+  align-items: center;
+}
+
+.dashboarduser-id,
+.dashboarduser-name {
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+.dashboarduser-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.dashboardsearch-bar {
+  display: flex;
+  align-items: center;
+  margin: 100px 0 20px; /* ระยะห่างจาก header */
+  gap: 10px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-button {
+  background-color: #ff6b00;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #ff4500;
+}
+
+.course-overview {
+  margin-top: 20px;
+}
+
+.course-list {
+  display: flex;
+  flex-wrap: wrap; /* ให้คอร์สจัดเรียงในแถวถัดไปเมื่อเต็ม */
+  gap: 20px;
+}
+
+.course-card {
+  background-color: #f2f2f2;
+  padding: 15px;
+  border-radius: 8px;
+  width: calc(25% - 20px); /* ทำให้คอร์สแสดงได้ 4 คอร์สต่อแถว */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.dashboarddropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  z-index: 10;
+  width: 180px; /* เพิ่มขนาด */
+  overflow: hidden;
+}
+
+.dashboarddropdown-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  color: #003366;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.dashboarddropdown-menu button:hover {
+  background-color: #f0f0f0;
+}
+
+/* User Info Hover Cursor */
+.dashboarduser-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.dashboarduser-info:hover {
+  text-decoration: underline;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
   .dashboardsearch-bar {
-    display: flex;
-    align-items: center;
-    margin: 80px 0 20px; /* เพิ่มระยะห่างจาก header */
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
   }
-  
-  .search-bar input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .search-button {
-    background-color: #ff6b00;
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-left: 5px;
-  }
-  
-  .course-overview {
-    margin-top: 20px;
-  }
-  
-  .course-list {
-    display: flex;
-    gap: 20px;
-  }
-  
+
   .course-card {
-    background-color: #f2f2f2;
-    padding: 15px;
-    border-radius: 8px;
-    width: 200px;
+    width: calc(50% - 20px); /* 2 คอร์สต่อแถวในมือถือ */
   }
-  
-  .dashboardheader-right {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
+
   .dashboarddropdown-menu {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    z-index: 10;
-    width: 150px;
-    overflow: hidden;
+    right: 10px;
+    width: 150px; /* ขนาดเล็กลงในมือถือ */
   }
-  
-  .dashboarddropdown-menu button {
-    display: block;
-    width: 100%;
-    padding: 10px 15px;
-    background: none;
-    border: none;
-    text-align: left;
-    font-size: 16px;
-    color: #003366;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .dashboarddropdown-menu button:hover {
-    background-color: #f0f0f0;
-  }
-  
-  /* User Info Hover Cursor */
-  .dashboarduser-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-  }
+}
+
+/* Arrow Style */
+.arrow {
+  border: solid white;
+  border-width: 0 4px 4px 0;
+  display: inline-block;
+  padding: 4px;
+  margin-left: 8px;
+  transition: transform 0.3s ease;
+}
+
+/* หมุนลูกศรขึ้น */
+.arrow.up {
+  transform: rotate(-135deg); /* หมุน 45 องศา */
+}
+
+/* หมุนลูกศรลง */
+.arrow.down {
+  transform: rotate(45deg); /* หมุน 225 องศา */
+}

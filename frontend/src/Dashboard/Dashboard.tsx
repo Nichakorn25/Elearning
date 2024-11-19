@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import Sidebar from '../Component/Sidebar/Sidebar';
+
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
+
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  
   const toggleDropdown = () => {
     setDropdownVisible(!isDropdownVisible);
   };
@@ -40,10 +48,12 @@ const Dashboard: React.FC = () => {
       {/* Header Section */}
       <header className="dashboard-header">
         <div className="dashboardheader-left">
-          <button className="dashboardmenu-button">☰</button>
+        {!isSidebarVisible && (
+          <button className="dashboardmenu-button" onClick={toggleSidebar}>☰</button>
+        )}
           <h1>SUT e-Learning</h1>
-          <span className="dashboardlanguage">English (en)</span>
         </div>
+
         <div className="dashboardheader-right">
           {/* คลิก User ID, Name หรือ Avatar เพื่อเปิด dropdown */}
           <div className="dashboarduser-info" onClick={toggleDropdown}>
@@ -54,6 +64,8 @@ const Dashboard: React.FC = () => {
               alt="User Avatar"
               className="dashboarduser-avatar"
             />
+            {/* ลูกศรสำหรับ Dropdown */}
+            <i className={`arrow ${isDropdownVisible ? 'down' : 'up'}`}></i>
           </div>
 
           {/* Dropdown Menu */}
@@ -67,6 +79,9 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </header>
+
+      {/* Sidebar */}
+      <Sidebar isVisible={isSidebarVisible} />
 
       {/* Search Bar */}
       <div className="dashboardsearch-bar">

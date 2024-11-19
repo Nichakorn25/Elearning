@@ -36,11 +36,6 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
           <a href="#">สำหรับนักศึกษา</a>
         </div>
 
-        {/* ตัวเลือกภาษา */}
-        <div className="language-togglebeforelogin">
-          <span>TH</span> | <span>EN</span>
-        </div>
-
         {/* ปุ่มเข้าสู่ระบบ */}
         <button className="login-buttonbeforelogin" onClick={onLoginClick}>
           เข้าสู่ระบบ
