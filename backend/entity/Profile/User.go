@@ -1,7 +1,7 @@
 package Profile
 
 import (
-	"elearing/backend/entity/Admin"
+	"elearning/backend/entity/Admin"
 	"gorm.io/gorm"
 )
 type User struct {

@@ -1,7 +1,7 @@
 import React from 'react';
 import './BeforeLogin.css';
-import logo from '../assets/sutbranding2.jpg';
-import backgroundVideo from '../assets/loginbackground.mp4';
+import logo from '../../assets/sutbranding2.jpg';
+import backgroundVideo from '../../assets/loginbackground.mp4';
 
 interface BeforeLoginProps {
   onLoginClick: () => void;

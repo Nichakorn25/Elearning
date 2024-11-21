@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import BeforeLogin from './BeforeLogin/BeforeLogin';
-import LoginPopup from './LoginPopup/LoginPopup';
-import Dashboard from './Dashboard/Dashboard';
-import Profile from './Profile/Profile'; // นำเข้า Profile
-import BuySheet from './Buysheet/Buysheet';
-import SelectSheet from './SelectSheet/SelectSheet';
-import Cart from './Cart/Cart';
-import ClassSchedule from './ClassSchedule/ClassSchedule';
+import BeforeLogin from '../src/Pages/BeforeLogin/BeforeLogin';
+import LoginPopup from '../src/Pages/LoginPopup/LoginPopup';
+import Dashboard from '../src/Pages/Dashboard/Dashboard';
+import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profile
+import BuySheet from '../src/Pages/Buysheet/Buysheet';
+import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
+import Cart from '../src/Pages/Cart/Cart';
+import ClassSchedule from '../src/Pages/ClassSchedule/ClassSchedule';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -20,8 +20,8 @@ const App: React.FC = () => {
     <Router>
       <div>
         <Routes>
-          {/* กำหนดให้ BeforeLogin เป็นหน้าแรก */}
-          <Route path="/beforelogin" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          {/* เปลี่ยนเส้นทางของ BeforeLogin ให้เป็น path="/" */}
+          <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
           {/* เส้นทางสำหรับ Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
