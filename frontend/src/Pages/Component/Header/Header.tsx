@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar'; // Import Sidebar
 import './Header.css';
 
+interface HeaderProps {
+  onMenuClick: () => void; // รับฟังก์ชัน onMenuClick เป็น prop
+}
+
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);

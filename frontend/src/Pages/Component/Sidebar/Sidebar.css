@@ -5,12 +5,14 @@
   left: -250px; /* ซ่อน Sidebar เริ่มต้น */
   width: 250px;
   height: calc(100% - 60px); /* ความสูงลดขนาดตาม Header */
-  background-color: #333; /* สีพื้นหลังเข้ม */
-  color: white;
+  background-color: white; /* สีพื้นหลังเข้ม */
+  color: rgb(0, 0, 0);
   overflow-y: auto; /* เพิ่ม Scrollbar หากเนื้อหาเยอะ */
   transition: left 0.3s ease; /* ทำให้เลื่อนออกมาดูราบรื่น */
   z-index: 1000;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+  cursor: pointer;
+  
 }
 
 .sidebar.visible {
@@ -25,12 +27,13 @@
 
 .sidebar ul li {
   padding: 15px 20px;
-  border-bottom: 1px solid #444; /* เพิ่มเส้นแบ่ง */
   transition: background-color 0.3s ease; /* เพิ่มเอฟเฟกต์ hover */
 }
 
 .sidebar ul li:hover {
-  background-color: #555; /* สีพื้นหลังเมื่อ hover */
+  background-color: #f8f8f8; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+  color: #ff6b00; /* เปลี่ยนสีตัวอักษรเมื่อ hover */
+  padding-left: 10px; /* เพิ่มระยะเลื่อนเมื่อ hover */
 }
 
 .sidebar ul li a {
@@ -38,11 +41,6 @@
   text-decoration: none;
   font-size: 1em;
   display: block; /* เพื่อให้คลิกได้ทั้งพื้นที่ */
-}
-
-.sidebar ul li a:hover {
-  color: #ff6b00; /* เปลี่ยนสีข้อความเมื่อ hover */
-  padding-left: 10px; /* เพิ่มระยะเลื่อนเมื่อ hover */
 }
 
 /* Header */

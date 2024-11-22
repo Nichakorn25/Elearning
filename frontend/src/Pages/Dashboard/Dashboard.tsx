@@ -19,8 +19,6 @@ const Dashboard: React.FC = () => {
       {/* Sidebar */}
       {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
 
-      <button className="dashboardmenu-button" onClick={toggleSidebar}>☰</button>
-
       {/* Search Bar */}
       <div className="dashboardsearch-bar">
         <input type="text" placeholder="ค้นหารายวิชา (Search courses)" />

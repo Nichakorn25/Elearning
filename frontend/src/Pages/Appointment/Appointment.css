@@ -1,0 +1,29 @@
+.notes-month {
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .notes-month section {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .events li {
+    margin-bottom: 8px;
+  }
+  
+  .ant-badge-status {
+    display: flex;
+    align-items: center;
+  }
+  
+  .ant-badge-status-text {
+    margin-left: 8px;
+  }
+  

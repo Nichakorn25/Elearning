@@ -8,6 +8,7 @@ import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
 import ClassSchedule from '../src/Pages/ClassSchedule/ClassSchedule';
+import Appointment from './Pages/Appointment/Appointment';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -30,6 +31,7 @@ const App: React.FC = () => {
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path="/ClassSchedule" element={<ClassSchedule />} />
+          <Route path="/Appointment" element={<Appointment/>}/>
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
