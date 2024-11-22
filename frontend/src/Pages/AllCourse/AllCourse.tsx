@@ -1,17 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AllCourse.css'; // ไฟล์ CSS สำหรับหน้า AllCourses
+import { useNavigate } from 'react-router-dom'
 import HeaderBeforeLogin from '../Component/HeaderBeforeLogin/HeaderBeforeLogin'; // Import Header
+import LoginPopup from '../LoginPopup/LoginPopup'; // Import LoginPopup
 
-const AllCourses: React.FC = () => {
-  const handleLoginClick = () => {
-    console.log("Login button clicked!");
-    // คุณสามารถเพิ่มการทำงานเพิ่มเติมเมื่อปุ่ม "เข้าสู่ระบบ" ถูกกด
-  };
-
+const AllCourse: React.FC = () => {
+    const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
+    const navigate = useNavigate();
+  
+    // ฟังก์ชันแสดง Popup
+    const handleOpenLoginPopup = () => {
+      setLoginPopupVisible(true);
+    };
+  
+    // ฟังก์ชันซ่อน Popup
+    const closeLoginPopup = () => {
+      setLoginPopupVisible(false);
+    };
+  
+    // ฟังก์ชันเปลี่ยนหน้าไป BeforeLogin
+    const handleNavigateToBeforeLogin = () => {
+      navigate('/beforeLogin', { state: { showLoginPopup: true } });
+    };
   return (
     <div>
       {/* เรียกใช้ Header */}
-      <HeaderBeforeLogin onLoginClick={handleLoginClick} />
+      <HeaderBeforeLogin onLoginClick={handleOpenLoginPopup} />
 
       <div className="all-courses-container">
         <h1>SUT e-Learning</h1>
@@ -26,8 +40,8 @@ const AllCourses: React.FC = () => {
         </div>
       </div>
 
-        {/* ค้นหารายวิชา */}
-      <div className='allmajor'>
+      {/* ค้นหารายวิชา */}
+      <div className="allmajor">
         {/* รายการหมวดหมู่รายวิชา */}
         <ul className="course-list">
           <li>สำนักวิชาวิทยาศาสตร์ (Institute of Science)</li>
@@ -40,10 +54,11 @@ const AllCourses: React.FC = () => {
           <li>สำนักวิชาสาธารณสุขศาสตร์ (Institute of Public Health)</li>
         </ul>
       </div>
-        
-      
+
+      {/* แสดง LoginPopup */}
+      {isLoginPopupVisible && <LoginPopup onClose={closeLoginPopup} />}
     </div>
   );
 };
 
-export default AllCourses;
+export default AllCourse;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import BeforeLogin from '../src/Pages/BeforeLogin/BeforeLogin';
 import LoginPopup from '../src/Pages/LoginPopup/LoginPopup';
 import Dashboard from '../src/Pages/Dashboard/Dashboard';
@@ -27,6 +27,8 @@ const App: React.FC = () => {
         <Routes>
           {/* เปลี่ยนเส้นทางของ BeforeLogin ให้เป็น path="/" */}
           <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          <Route path="/beforeLogin" element={<Navigate to="/" replace />} />
+
           {/* เส้นทางสำหรับ Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
