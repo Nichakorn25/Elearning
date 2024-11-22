@@ -11,7 +11,7 @@ interface AppointmentModalProps {
   onSubmit: (values: any) => void; // ฟังก์ชันจัดการเมื่อบันทึกฟอร์ม
 }
 
-const AppointmentFrom: React.FC<AppointmentModalProps> = ({
+const AppointmentModal: React.FC<AppointmentModalProps> = ({
   visible,
   onClose,
   selectedDate,
@@ -78,4 +78,4 @@ const AppointmentFrom: React.FC<AppointmentModalProps> = ({
   );
 };
 
-export default AppointmentFrom;
+export default AppointmentModal;

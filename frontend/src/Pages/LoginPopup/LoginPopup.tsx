@@ -16,6 +16,13 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
     navigate('/dashboard');
   };
 
+  const handleForgotPassword = () => {
+    // ปิด Popup
+    onClose();
+    // นำทางไปยังหน้า ForgotPassword
+    navigate('/ForgotPassword');
+  };
+
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
@@ -28,7 +35,8 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
           <button className="google-btn">Sign in with Google</button>
         </div>
         <div className="links">
-          <a href="#">ลืมรหัสผ่าน</a> | <a href="#">สมัครสมาชิก</a>
+          {/* เพิ่ม onClick ที่ลิงก์ "ลืมรหัสผ่าน" */}
+          <a href="#" onClick={handleForgotPassword}>ลืมรหัสผ่าน</a> | <a href="#">สมัครสมาชิก</a>
         </div>
       </div>
     </div>

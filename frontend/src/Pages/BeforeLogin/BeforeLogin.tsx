@@ -1,7 +1,7 @@
 import React from 'react';
 import './BeforeLogin.css';
-import logo from '../../assets/sutbranding2.jpg';
 import backgroundVideo from '../../assets/loginbackground.mp4';
+import HeaderBeforeLogin from '../Component/HeaderBeforeLogin/HeaderBeforeLogin'; // Import Header ที่แยกไว้
 
 interface BeforeLoginProps {
   onLoginClick: () => void;
@@ -15,32 +15,8 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
         <source src={backgroundVideo} type="video/mp4" />
       </video>
 
-      {/* ส่วนหัว */}
-      <header className="headerbeforelogin">
-        {/* โลโก้ */}
-        <div className="logo-containerbeforelogin">
-          <img src={logo} alt="โลโก้" className="logobeforelogin" />
-        </div>
-
-        {/* ช่องค้นหา */}
-        <input
-          type="text"
-          placeholder="ค้นหารายวิชา"
-          className="search-barbeforelogin"
-        />
-
-        {/* ลิงก์เมนู */}
-        <div className="header-linksbeforelogin">
-          <a href="#">รายวิชาทั้งหมด</a>
-          <a href="#">สำหรับอาจารย์</a>
-          <a href="#">สำหรับนักศึกษา</a>
-        </div>
-
-        {/* ปุ่มเข้าสู่ระบบ */}
-        <button className="login-buttonbeforelogin" onClick={onLoginClick}>
-          เข้าสู่ระบบ
-        </button>
-      </header>
+      {/* ส่วน Header */}
+      <HeaderBeforeLogin onLoginClick={onLoginClick} />
 
       {/* เนื้อหาหลัก */}
       <main className="main-contentbeforelogin">
