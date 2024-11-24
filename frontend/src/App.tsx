@@ -13,6 +13,9 @@ import ResetPassword from './Pages/ResetPassword/ResetPassword';
 import VerifyOTP from './Pages/VerifyOTP/VerifyOTP';
 import ForgotPassword from './Pages/ForgotPassword/ForgotPassword';
 import AllCourse from './Pages/AllCourse/AllCourse';
+import ForTeacher from './Pages/ForTeacher/ForTeacher';
+import ForStudent from './Pages/ForStudent/ForStudent';
+import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -42,7 +45,9 @@ const App: React.FC = () => {
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
           <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
           <Route path="/AllCourse" element={<AllCourse/>}/>
-
+          <Route path="/ForTeacher" element={<ForTeacher/>}/>
+          <Route path="/ForStudent" element={<ForStudent/>}/>
+          <Route path="/RequestChangeRole" element={<RequestChangeRole/>}/>
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}

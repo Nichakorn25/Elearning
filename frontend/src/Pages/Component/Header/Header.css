@@ -1,18 +1,19 @@
 .dashboard-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ff6b00; /* สีพื้นหลัง */
-    padding: 15px 20px; /* เพิ่ม padding เพื่อให้ดูโปร่ง */
-    color: white; /* สีตัวอักษร */
-    position: fixed; /* ให้ header ติดอยู่ด้านบน */
-    top: 0;
-    left: 0;
-    z-index: 1000; /* ทำให้ header อยู่ด้านบนสุด */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาเพื่อความลึก */
-    font-family: "Noto Sans", "Noto Sans Thai", "Prompt", sans-serif;
-  }
+  position: fixed; /* ทำให้ Header อยู่ด้านบนตลอด */
+  top: 0;
+  left: 0;
+  width: 100%; /* กว้างเต็มจอ */
+  height: 60px; /* กำหนดความสูง */
+  background-color: #ff6b00;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1001; /* ให้อยู่ด้านบนสุด */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
   
   .dashboardheader-left {
     display: flex;

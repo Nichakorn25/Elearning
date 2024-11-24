@@ -8,16 +8,17 @@ const Dashboard: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setSidebarVisible(!isSidebarVisible); // เปิด/ปิด Sidebar
   };
+
 
   return (
     <div className="dashboard">
       {/* Header Section */}
       <Header />
 
-      {/* Sidebar */}
-      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
+     {/* Sidebar */}
+     <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
 
       {/* Search Bar */}
       <div className="dashboardsearch-bar">

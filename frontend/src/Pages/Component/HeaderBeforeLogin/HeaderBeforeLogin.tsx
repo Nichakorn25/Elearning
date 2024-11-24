@@ -15,6 +15,14 @@ const HeaderBeforeLogin: React.FC<HeaderBeforeLoginProps> = ({ onLoginClick }) =
         navigate('/AllCourse');
       };
 
+    const goToForTeacher = () => {
+        navigate('/ForTeacher');
+    }
+
+    const goToForStudent = () => {
+      navigate('/ForStudent');
+  }
+
   return (
     <header className="headerbeforelogin">
       {/* โลโก้ */}
@@ -32,8 +40,8 @@ const HeaderBeforeLogin: React.FC<HeaderBeforeLoginProps> = ({ onLoginClick }) =
       {/* ลิงก์เมนู */}
       <div className="header-linksbeforelogin">
         <a onClick={goToAllCourses} style={{ cursor: 'pointer' }}>รายวิชาทั้งหมด</a>
-        <a href="#">สำหรับอาจารย์</a>
-        <a href="#">สำหรับนักศึกษา</a>
+        <a onClick={goToForTeacher} style={{ cursor: 'pointer' }}>สำหรับอาจารย์</a>
+        <a onClick={goToForStudent} style={{ cursor: 'pointer' }}>สำหรับนักศึกษา</a>
       </div>
 
       {/* ปุ่มเข้าสู่ระบบ */}

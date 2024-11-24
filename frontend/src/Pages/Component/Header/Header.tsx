@@ -73,8 +73,8 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* Sidebar Component */}
-      <Sidebar isVisible={isSidebarVisible} />
+       {/* Sidebar */}
+       <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
     </>
   );
 };

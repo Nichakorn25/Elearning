@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AllCourse.css'; // ไฟล์ CSS สำหรับหน้า AllCourses
 import { useNavigate } from 'react-router-dom'
-import HeaderBeforeLogin from '../Component/HeaderBeforeLogin/HeaderBeforeLogin'; // Import Header
+import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from '../LoginPopup/LoginPopup'; // Import LoginPopup
 
 const AllCourse: React.FC = () => {
@@ -25,7 +25,7 @@ const AllCourse: React.FC = () => {
   return (
     <div>
       {/* เรียกใช้ Header */}
-      <HeaderBeforeLogin onLoginClick={handleOpenLoginPopup} />
+      <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
 
       <div className="all-courses-container">
         <h1>SUT e-Learning</h1>

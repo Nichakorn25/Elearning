@@ -1,23 +1,20 @@
-/* Sidebar */
 .sidebar {
   position: fixed;
-  top: 60px; /* เริ่มใต้ Header */
+  top: 60px;
   left: -250px; /* ซ่อน Sidebar เริ่มต้น */
   width: 250px;
-  height: calc(100% - 60px); /* ความสูงลดขนาดตาม Header */
-  background-color: white; /* สีพื้นหลังเข้ม */
-  color: rgb(0, 0, 0);
-  overflow-y: auto; /* เพิ่ม Scrollbar หากเนื้อหาเยอะ */
-  transition: left 0.3s ease; /* ทำให้เลื่อนออกมาดูราบรื่น */
-  z-index: 1000;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
-  cursor: pointer;
-  
+  height: calc(100% - 60px);
+  background-color: white;
+  color: #333;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar.visible {
   left: 0; /* แสดง Sidebar */
 }
+
 
 .sidebar ul {
   list-style: none;
@@ -27,73 +24,12 @@
 
 .sidebar ul li {
   padding: 15px 20px;
-  transition: background-color 0.3s ease; /* เพิ่มเอฟเฟกต์ hover */
+  cursor: pointer;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
 }
 
 .sidebar ul li:hover {
   background-color: #f8f8f8; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
-  color: #ff6b00; /* เปลี่ยนสีตัวอักษรเมื่อ hover */
-  padding-left: 10px; /* เพิ่มระยะเลื่อนเมื่อ hover */
-}
-
-.sidebar ul li a {
-  color: white;
-  text-decoration: none;
-  font-size: 1em;
-  display: block; /* เพื่อให้คลิกได้ทั้งพื้นที่ */
-}
-
-/* Header */
-.dashboard-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  background-color: #ff6b00;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 1001;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* ปุ่มสามขีด */
-.dashboardmenu-button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5em;
-  cursor: pointer;
-  transition: transform 0.3s ease; /* เพิ่มเอฟเฟกต์การหมุน */
-}
-
-.dashboardmenu-button:hover {
-  transform: scale(1.1); /* ขยายเมื่อ hover */
-}
-
-/* Main Content */
-.dashboard-content {
-  margin-top: 80px; /* ระยะห่างจาก Header */
-  padding: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 200px; /* ลดขนาด Sidebar สำหรับหน้าจอเล็ก */
-  }
-
-  .dashboardmenu-button {
-    font-size: 1.2em; /* ลดขนาดปุ่ม */
-  }
-
-  .sidebar ul li {
-    padding: 10px 15px; /* ลด Padding */
-  }
-
-  .sidebar ul li a {
-    font-size: 0.9em; /* ลดขนาดข้อความ */
-  }
+  color: #ff6600; /* เปลี่ยนสีตัวอักษรเมื่อ hover */
+  padding-left: 10px; /* เพิ่มการเลื่อนข้อความเมื่อ hover */
 }
