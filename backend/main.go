@@ -2,10 +2,10 @@ package main
 
 import (
 	"net/http"
-
 	"github.com/gin-gonic/gin"
-
-	"elearning/backend/config"
+	"elearning/config"
+	"elearning/middlewares"
+	"elearning/controller"
 )
 
 const PORT = "8000"
@@ -25,6 +25,15 @@ func main() {
 	r.Use(CORSMiddleware())
 
 	// Auth Route
+
+	router := r.Group("")
+  	{
+		router.Use(middlewares.Authorizes())
+
+		r.GET("/departments", controller.GetDepartments)
+		r.GET("/majors/:id", controller.GetMajorsByDepartment) // รับ ID ของ Department
+
+	}
 
 	r.GET("/", func(c *gin.Context) {
 

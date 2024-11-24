@@ -9,4 +9,7 @@ type Major struct {
 
 	User []User `gorm:"foreignKey:MajorID"`
 
+	DepartmentID uint 		`json:"DepartmentID"`
+	Department   Department 	`gorm:"foreignKey:DepartmentID"`
+
 }

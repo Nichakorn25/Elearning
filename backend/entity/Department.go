@@ -9,4 +9,6 @@ type Department struct {
 
 	User []User `gorm:"foreignKey:DepartmentID"`
 
+	Major []Major `gorm:"foreignKey:DepartmentID"`
+
 }
