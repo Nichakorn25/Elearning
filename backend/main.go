@@ -25,13 +25,14 @@ func main() {
 	r.Use(CORSMiddleware())
 
 	// Auth Route
+	r.GET("/departments", controller.GetDepartments)
+	r.GET("/majors/:id", controller.GetMajorsByDepartment) // รับ ID ของ Department
 
 	router := r.Group("")
   	{
 		router.Use(middlewares.Authorizes())
 
-		r.GET("/departments", controller.GetDepartments)
-		r.GET("/majors/:id", controller.GetMajorsByDepartment) // รับ ID ของ Department
+		
 
 	}
 

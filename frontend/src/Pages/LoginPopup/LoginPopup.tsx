@@ -16,35 +16,53 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
     navigate('/dashboard');
   };
 
-  const handleForgotPassword = () => {
-    // ปิด Popup
+  const handleForgotPassword = (e: React.MouseEvent) => {
+    e.preventDefault(); // ป้องกัน reload หน้า
     onClose();
-    // นำทางไปยังหน้า ForgotPassword
-    navigate('/ForgotPassword');
+    navigate('/ForgotPassword'); // นำทางไปยังหน้า ForgotPassword
   };
 
-  const handleSignUp = () => {
-    // ปิด Popup
+  const handleSignUp = (e: React.MouseEvent) => {
+    e.preventDefault(); // ป้องกัน reload หน้า
     onClose();
-    // นำทางไปยังหน้า ForgotPassword
-    navigate('/SignUp');
+    navigate('/SignUp'); // นำทางไปยังหน้า SignUp
   };
-
 
   return (
     <div className="popup-overlay" onClick={onClose}>
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
         <h2>SUT e-Learning</h2>
-        <input type="text" placeholder="Username" className="input-field" />
-        <input type="password" placeholder="Password" className="input-field" />
-        <button className="sign-in-btn" onClick={handleLogin}>Sign in</button>
-        <div className="social-login">
-          <button className="facebook-btn">Sign in with Facebook</button>
-          <button className="google-btn">Sign in with Google</button>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+          />
         </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+        <button className="sign-in-btn" onClick={handleLogin}>
+          Sign in
+        </button>
         <div className="links">
-          {/* เพิ่ม onClick ที่ลิงก์ "ลืมรหัสผ่าน" */}
-          <a href="#" onClick={handleForgotPassword}>ลืมรหัสผ่าน</a> | <a href="#" onClick={handleSignUp}>สมัครสมาชิก</a>
+          <a href="#" onClick={handleForgotPassword}>
+            ลืมรหัสผ่าน
+          </a>{' '}
+          |{' '}
+          <a href="#" onClick={handleSignUp}>
+            สมัครสมาชิก
+          </a>
         </div>
       </div>
     </div>

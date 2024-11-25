@@ -7,7 +7,8 @@ type User struct {
 	gorm.Model
 	Username  string `json:"Username"`
 	Password  string `json:"Password"`
-	FullName  string `json:"FullName"`
+	FirstName  string `json:"FirstName"`
+	LastName  string `json:"LastName"`
 	Email  string `json:"Email"`
 	Phone  string `json:"CourseName"`
 	
