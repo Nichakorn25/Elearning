@@ -2,8 +2,8 @@ package controller
 
 import (
     "net/http"
-    "backend/entity"
-    "backend/config"
+    "elearning/entity"
+    "elearning/config"
     "github.com/gin-gonic/gin"
 )
 
