@@ -1,5 +1,7 @@
 import axios from "axios";
-import { DepartmentInterface, MajorInterface } from "../../Interface/IUser"; // Import interfaces
+// import { DepartmentInterface, MajorInterface } from "../../Interface/IUser"; // Import interfaces
+// import { message } from "antd"; // Ant Design message for notifications
+
 
 const apiUrl = "http://localhost:8000"; // URL ของ API
 const Authorization = localStorage.getItem("token");
@@ -14,25 +16,24 @@ const requestOptions = {
 };
 
 // ฟังก์ชันดึง Departments
-export async function GetDepartments(): Promise<DepartmentInterface[]> {
+async function GetDepartments(){
   return await axios
-    .get(`${apiUrl}/departments`, requestOptions)
-    .then((res) => res.data as DepartmentInterface[]) // Return ข้อมูลในรูปแบบ DepartmentInterface[]
-    .catch((e) => {
-      console.error("Error fetching departments:", e);
-      return [];
-    });
+      .get(`${apiUrl}/departments`, requestOptions) // ปรับ URL ให้ตรงกับที่ API ใช้
+      .then((res) => res)
+      .catch((e) => e.response);
 }
 
 // ฟังก์ชันดึง Majors ตาม Department ID
-export async function GetMajors(
-  departmentId: string
-): Promise<MajorInterface[]> {
+async function GetMajors(departmentId: string){
   return await axios
-    .get(`${apiUrl}/majors?departmentId=${departmentId}`, requestOptions)
-    .then((res) => res.data as MajorInterface[]) // Return ข้อมูลในรูปแบบ MajorInterface[]
-    .catch((e) => {
-      console.error("Error fetching majors:", e);
-      return [];
-    });
+  .get(`${apiUrl}/majors/${departmentId}`, requestOptions)
+
+  .then((res) => res)
+
+  .catch((e) => e.response);
+
 }
+export{
+  GetDepartments,
+  GetMajors
+};

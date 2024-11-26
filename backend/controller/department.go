@@ -10,11 +10,13 @@ import (
 func GetDepartments(c *gin.Context) {
 	var departments []entity.Department
 
-	// ใช้ config.DB() เพื่อเข้าถึงฐานข้อมูล
-	if err := config.DB().Find(&departments).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+	db := config.DB()
+	
+	if err := db.Find(&departments).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
 
-	c.JSON(http.StatusOK, departments)
+    c.JSON(http.StatusOK, departments)
+
 }

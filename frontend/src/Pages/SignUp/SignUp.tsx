@@ -3,11 +3,13 @@ import axios from "axios";
 import "./SignUp.css";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import { UserInterface,DepartmentInterface,MajorInterface} from "../../Interface/IUser";
+import { GetDepartments,GetMajors } from "../../services/https";
 
 const SignUp: React.FC = () => {
   // State สำหรับจัดเก็บ departments และ majors
-  const [departments, setDepartments] = useState<any[]>([]);
-  const [majors, setMajors] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<DepartmentInterface[]>([]);
+  const [majors, setMajors] = useState<MajorInterface[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [formData, setFormData] = useState({
     username: "",
@@ -20,6 +22,7 @@ const SignUp: React.FC = () => {
     department: "",
     major: "",
   })
+
   
   const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
 
@@ -37,13 +40,18 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     const fetchDepartments = async () => {
       try {
-        const response = await axios.get("/api/departments");
-        console.log("Departments:", response.data); // Debug API response
-        setDepartments(response.data || []); // ตรวจสอบข้อมูลที่ส่งกลับ
+        const res = await GetDepartments(); // เรียกใช้ฟังก์ชัน GetDepartments
+        if (res.status === 200) {
+          setDepartments(res.data); // เก็บข้อมูลใน state
+          console.log(res.data);
+        } else {
+          console.error("Failed to fetch departments.");
+        }
       } catch (error) {
         console.error("Error fetching departments:", error);
       }
     };
+    
     fetchDepartments();
   }, []);
 
@@ -52,34 +60,48 @@ const SignUp: React.FC = () => {
     const fetchMajors = async () => {
       if (selectedDepartment) {
         try {
-          const response = await axios.get(
-            `/api/majors?departmentId=${selectedDepartment}`
-          );
-          console.log("Majors:", response.data); // Debug API response
-          setMajors(response.data || []);
+          console.log("Fetching majors for department:", selectedDepartment); // Debug
+          const res = await GetMajors(selectedDepartment); // เรียกใช้ GetMajors
+          if (res.status === 200) {
+            console.log("Majors API Response:", res.data); // Debug API Response
+            setMajors(res.data);
+          } else {
+            console.error("Failed to fetch majors.");
+          }
         } catch (error) {
           console.error("Error fetching majors:", error);
         }
       } else {
-        setMajors([]); // รีเซ็ต majors ถ้าไม่มี department ถูกเลือก
+        setMajors([]); // Reset majors ถ้าไม่มี department ถูกเลือก
       }
     };
     fetchMajors();
   }, [selectedDepartment]);
+  
 
   // ฟังก์ชันจัดการการเปลี่ยนค่าในฟอร์ม
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    // ถ้าเปลี่ยน Department จะตั้ง Major ให้เป็นค่าว่าง
+  
     if (name === "department") {
-      setSelectedDepartment(value);
-      setFormData({ ...formData, major: "" });
+      // อัปเดต Department และตั้ง Major เป็นค่าว่าง
+      setSelectedDepartment(value); 
+      setFormData((prev) => ({
+        ...prev,
+        department: value,
+        major: "", // Reset ค่า Major เมื่อเปลี่ยน Department
+      }));
+    } else {
+      // อัปเดตฟิลด์อื่น ๆ
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
+  
 
   // ฟังก์ชันสำหรับ Submit ฟอร์ม
   const handleSubmit = async (e: React.FormEvent) => {
@@ -113,18 +135,23 @@ const SignUp: React.FC = () => {
             name="department"
             value={formData.department}
             onChange={handleInputChange}
+            className="dropdown"
             required
           >
             <option value="">Select Department</option>
-            {Array.isArray(departments) &&
+            {departments.length > 0 ? (
               departments.map((department) => (
-                <option key={department.id} value={department.id}>
-                  {department.name}
-                </option>
-              ))}
+                  <option key={department.ID} value={department.ID}>
+                    {department.DepartmentName}
+                  </option>
+                ))
+            ) : (
+              <>
+               No data
+              </>
+            )}
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="major">Major</label>
           <select
@@ -135,12 +162,24 @@ const SignUp: React.FC = () => {
             required
           >
             <option value="">Select Major</option>
-            {Array.isArray(majors) &&
+            {majors.length > 0 ? (
+              majors.map((majors) => (
+                  <option key={majors.ID} value={majors.ID}>
+                    {majors.MajorName}
+                  </option>
+                ))
+            ) : (
+              <>
+               No data
+              </>
+            )}
+            
+            {/* {Array.isArray(majors) &&
               majors.map((major) => (
                 <option key={major.id} value={major.id}>
-                  {major.name}
+                  {major.majorname}
                 </option>
-              ))}
+              ))} */}
           </select>
         </div>
 

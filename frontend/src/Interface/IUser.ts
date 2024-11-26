@@ -15,13 +15,15 @@ export interface UserInterface{
 }
 
 export interface DepartmentInterface{
-    id?: number;
-    departmentname?: string;
+    ID?: number;
+    DepartmentName?: string;
 }
 
 export interface MajorInterface{
-    id?: number;
-    majorname?: string;
+    ID?: number;
+    MajorName?: string;
+
+    Department?: DepartmentInterface;
 }
 
 export interface RoleInterface{

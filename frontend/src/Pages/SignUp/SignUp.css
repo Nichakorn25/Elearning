@@ -51,3 +51,14 @@
     background-color: #45a049;
   }
   
+/* สไตล์สำหรับ dropdown */
+.dropdown {
+  color: black; /* สีตัวอักษรของ select */
+  background-color: white; /* สีพื้นหลัง */
+  font-size: 16px; /* ปรับขนาดฟอนต์ (ถ้าจำเป็น) */
+}
+
+/* สไตล์สำหรับ option */
+.dropdown option {
+  color: black; /* สีตัวอักษรของ option */
+}
