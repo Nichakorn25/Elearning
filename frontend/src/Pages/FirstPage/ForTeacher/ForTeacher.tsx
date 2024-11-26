@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./ForStudent.css";
+import "./ForTeacher.css";
 import { useNavigate } from "react-router-dom";
+import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from "../LoginPopup/LoginPopup";
-import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 
-const ForStudent: React.FC = () => {
+const ForTeacher: React.FC = () => {
   const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -84,7 +84,7 @@ const ForStudent: React.FC = () => {
       <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
 
       <div className="for-teacher">
-        <h1 className="title">สำหรับนักศึกษา (Student)</h1>
+        <h1 className="title">สำหรับอาจารย์ (Teacher)</h1>
         <div className="content-container">
           {data.map((item, index) => (
             <div key={index} className="content-item">
@@ -103,7 +103,7 @@ const ForStudent: React.FC = () => {
   );
 };
 
-export default ForStudent;
+export default ForTeacher;
 
     
 

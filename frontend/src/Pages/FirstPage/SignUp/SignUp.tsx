@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./SignUp.css";
 import LoginPopup from "../LoginPopup/LoginPopup";
-import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
-import { UserInterface,DepartmentInterface,MajorInterface} from "../../Interface/IUser";
-import { GetDepartments,GetMajors } from "../../services/https";
+import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import { UserInterface,DepartmentInterface,MajorInterface} from "../../../Interface/IUser";
+import { GetDepartments,GetMajors } from "../../../services/https";
 
 const SignUp: React.FC = () => {
   // State สำหรับจัดเก็บ departments และ majors

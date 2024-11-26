@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./ForgotPassword.css"; // Import CSS
 import { useNavigate } from "react-router-dom";
 import LoginPopup from "../LoginPopup/LoginPopup";
-import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AllCourse.css'; // ไฟล์ CSS สำหรับหน้า AllCourses
 import { useNavigate } from 'react-router-dom'
-import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from '../LoginPopup/LoginPopup'; // Import LoginPopup
 
 const AllCourse: React.FC = () => {

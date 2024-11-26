@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import BeforeLogin from '../src/Pages/BeforeLogin/BeforeLogin';
-import LoginPopup from '../src/Pages/LoginPopup/LoginPopup';
+import BeforeLogin from './Pages/FirstPage/BeforeLogin/BeforeLogin';
+import LoginPopup from './Pages/FirstPage/LoginPopup/LoginPopup';
 import Dashboard from '../src/Pages/Dashboard/Dashboard';
 import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profile
 import BuySheet from '../src/Pages/Buysheet/Buysheet';
@@ -9,14 +9,14 @@ import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
 import ClassSchedule from '../src/Pages/ClassSchedule/ClassSchedule';
 import Appointment from './Pages/Appointment/Appointment';
-import ResetPassword from './Pages/ResetPassword/ResetPassword';
-import VerifyOTP from './Pages/VerifyOTP/VerifyOTP';
-import ForgotPassword from './Pages/ForgotPassword/ForgotPassword';
-import AllCourse from './Pages/AllCourse/AllCourse';
-import ForTeacher from './Pages/ForTeacher/ForTeacher';
-import ForStudent from './Pages/ForStudent/ForStudent';
+import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
+import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';
+import ForgotPassword from './Pages/FirstPage/ForgotPassword/ForgotPassword';
+import AllCourse from './Pages/FirstPage/AllCourse/AllCourse';
+import ForTeacher from './Pages/FirstPage/ForTeacher/ForTeacher';
+import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
-import SignUp from './Pages/SignUp/SignUp';
+import SignUp from './Pages/FirstPage/SignUp/SignUp';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);

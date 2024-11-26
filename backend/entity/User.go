@@ -10,7 +10,7 @@ type User struct {
 	FirstName  string `json:"FirstName"`
 	LastName  string `json:"LastName"`
 	Email  string `json:"Email"`
-	Phone  string `json:"CourseName"`
+	Phone  string `json:"Phone"`
 	
 	ProfilePicture []ProfilePicture `gorm:"foreignKey:UserID"`
 	Annoucement []Annoucement `gorm:"foreignKey:UserID"`
@@ -23,7 +23,6 @@ type User struct {
 	Course []Course `gorm:"foreignKey:UserID"`
 	StudentAnswer []StudentAnswer `gorm:"foreignKey:UserID"`
 
-
 	DepartmentID uint `json:"DepartmentID"`
 	Department   Department `gorm:"foreignKey:DepartmentID"`
 
@@ -33,5 +32,4 @@ type User struct {
 	RoleID uint `json:"RoleID"`
 	Role   Role `gorm:"foreignKey:RoleID"`
 
-	
 }

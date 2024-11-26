@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ResetPassword.css"; // Import CSS
 import { useNavigate } from "react-router-dom";
-import HeaderTabBFLogin from "../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from "../LoginPopup/LoginPopup";
 
 const ResetPassword = () => {

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './BeforeLogin.css';
-import backgroundVideo from '../../assets/loginbackground.mp4';
-import HeaderBeforeLogin from '../Component/HeaderBeforeLogin/HeaderBeforeLogin'; // Import Header ที่แยกไว้
+import backgroundVideo from '../../../assets/loginbackground.mp4'
+import HeaderBeforeLogin from '../../Component/HeaderBeforeLogin/HeaderBeforeLogin'; // Import Header ที่แยกไว้
 import LoginPopup from '../LoginPopup/LoginPopup';
 
 interface BeforeLoginProps {
