@@ -238,7 +238,7 @@ func SetupDatabase() {
 
 		}
 	for _, pkg := range permissions {
-		db.FirstOrCreate(&pkg, entity.Permission{CanCreate: pkg.CanCreate})
+		db.FirstOrCreate(&pkg, entity.Permission{RoleID: pkg.ModuleID})
 	}
 	
 }
