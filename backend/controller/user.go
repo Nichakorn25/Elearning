@@ -28,8 +28,8 @@ func CreateUser(c *gin.Context) {
 	u := entity.User{
 		Username:  user.Username,  
 		Password:  hashedPassword, 
-		Firstname:  user.FirstName,
-		Lastname:  user.LastName, 
+		FirstName:  user.FirstName,
+		LastName:  user.LastName, 
 		Email: user.Email,    
 		Phone:  user.Phone,
 	}
