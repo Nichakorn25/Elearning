@@ -21,14 +21,13 @@ type (
  
     signUp struct {
         Username string `json:"username"`  // แก้เป็น backticks
-        Email     string `json:"email"`
         Password  string `json:"password"`
-        Status string `json:"status"`
-         Firstname string	`json:"firstname"`
-         Lastname string		`json:"lastname"`
-         Age string			`json:"age"`
-         Phonenumber string	`json:"phonenumber"`
-         GenderID uint 		`json:"GenderID"`
+        Firstname string	`json:"firstname"`
+        Lastname string		`json:"lastname"`
+        Email     string `json:"email"`
+        Phone string	`json:"phone"`
+        DepartmentID uint 		`json:"DepartmentID"`
+        MajorID uint 		`json:"MajorID"`
     }
 
     ResetPassword struct {
@@ -135,23 +134,19 @@ func SignUp(c *gin.Context) {
 
    user := entity.User{
 
-    Email: payload.Email,
-
     Username:  payload.Username,
 
     Password:     hashedPassword,
 
-    Status:       "User",
+    FirstName: "",
 
-    Firstname: "",
+    LastName: "",
 
-    Lastname: "",
+    Email: payload.Email,
 
-    Age: "",
+    Phone: "",
 
-    Phonenumber: "",
-
-    GenderID: 1,
+    RoleID: 1,
 
    }
    

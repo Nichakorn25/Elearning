@@ -27,6 +27,11 @@ export interface MajorInterface{
 }
 
 export interface RoleInterface{
-    id?: number;
-    rolename?: string;
+    ID?: number;
+    RoleName?: string;
+}
+
+export interface SignInInterface{
+    Username?: string;
+    Password?: string;
 }

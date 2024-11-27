@@ -28,21 +28,21 @@ func main() {
 	r.GET("/departments", controller.GetDepartments)
 	r.GET("/majors/:id", controller.GetMajorsByDepartment) // รับ ID ของ Department
 
-	r.POST("/signup", user.SignUp) //สมัคร
-    r.POST("/signin", user.SignIn) //Sign in == login 
-    r.PUT("/ResetPasswordUser", user.ResetPasswordUser) //Sign in == login 
-	r.GET("/users/:id", user.GetUser) //getOnlyID
+	r.POST("/signup", controller.SignUp) //สมัคร
+    r.POST("/signin", controller.SignIn) //Sign in == login 
+    r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login 
+	r.GET("/users/:id", controller.GetUser) //getOnlyID
 
 	router := r.Group("")
   	{
 		router.Use(middlewares.Authorizes())
 
 		// User Routes
-		router.GET("/users", user.ListUsers) 
+		router.GET("/users", controller.ListUsers) 
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
-		router.POST("/users", user.CreateUser)
-		router.PUT("/users/:id", user.UpdateUserByid)
-		router.DELETE("/users/:id", user.DeleteUser) //ไม่ได้เรียกใช้
+		router.POST("/users", controller.CreateUser)
+		router.PUT("/users/:id", controller.UpdateUserByid)
+		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้
 
 	}
 
