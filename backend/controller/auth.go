@@ -17,6 +17,12 @@ type (
     Authen struct {
         Username string `json:"username"`
         Password string `json:"password"`
+        Firstname string	`json:"firstname"`
+        Lastname string		`json:"lastname"`
+        Email     string `json:"email"`
+        Phone string	`json:"phone"`
+        DepartmentID uint 		`json:"DepartmentID"`
+        MajorID uint 		`json:"MajorID"`
     }
  
     signUp struct {

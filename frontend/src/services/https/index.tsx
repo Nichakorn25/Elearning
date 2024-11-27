@@ -35,7 +35,7 @@ async function GetMajors(departmentId: string){
 
 }
 
-async function GetUsers() {
+async function ListUsers() {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -157,7 +157,7 @@ export{
   GetDepartments,
   GetMajors,
 
-  GetUsers,
+  ListUsers,
   SignIn,
   CreateUser,
   ResetPassword,

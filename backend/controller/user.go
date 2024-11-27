@@ -51,7 +51,6 @@ func GetUser(c *gin.Context) {
 
 	db := config.DB()
 
-
 	// Query the user by ID
 	results := db.Where("id = ?", ID).First(&user)
 	if results.Error != nil {
@@ -77,7 +76,7 @@ func ListUsers(c *gin.Context) {
 	db := config.DB()
 
 	// Query the user table for basic user data
-	results := db.Select("id, username, password, firstname, lastname, email, phone ").Find(&users)
+	results := db.Select("id, username, password, firstname, lastname, email, phone").Find(&users)
 	// Check for errors in the query
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -87,6 +86,20 @@ func ListUsers(c *gin.Context) {
 	// Return the results as JSON
 	c.JSON(http.StatusOK, users)
 }
+
+// func ListUsers(c *gin.Context) {
+// 	var users []entity.User
+
+// 	db := config.DB()
+	
+// 	if err := db.Find(&users).Error; err != nil {
+//         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+//         return
+//     }
+
+//     c.JSON(http.StatusOK, users)
+
+// }
 
 
 // DELETE /users/:id
