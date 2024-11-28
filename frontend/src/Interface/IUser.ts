@@ -1,16 +1,16 @@
 export interface UserInterface{
-    id?: number;
-    username?: string;
-    password?: string;
-    firstname?: string;
-    lastname?: string;
-    email?: string;
-    DepartmentID?: string;
+    ID?: number;
+    Username?: string;
+    Password?: string;
+    FirstName?: string;
+    LastName?: string;
+    Email?: string;
+    DepartmentID?: number;
     departmentname?: string;
-    MajorID?: string;
+    MajorID?: number;
     majorname?: string;
-    phone?: string;
-    RoleID?: string;
+    Phone?: string;
+    RoleID?: number;
     rolename?: string;
 }
 

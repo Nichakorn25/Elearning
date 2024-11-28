@@ -4,7 +4,7 @@ import "./SignUp.css";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import { UserInterface,DepartmentInterface,MajorInterface} from "../../../Interface/IUser";
-import { GetDepartments,GetMajors } from "../../../services/https";
+import { GetDepartments,GetMajors,CreateUser } from "../../../services/https";
 
 const SignUp: React.FC = () => {
   // State สำหรับจัดเก็บ departments และ majors
@@ -21,6 +21,7 @@ const SignUp: React.FC = () => {
     phone: "",
     department: "",
     major: "",
+    RoleID: 2,
   })
 
   
@@ -110,9 +111,20 @@ const SignUp: React.FC = () => {
       alert("Passwords do not match!");
       return;
     }
-
+    const values: UserInterface = {
+      Username: formData.username,
+      Password: formData.password,
+      FirstName: formData.firstName,
+      LastName: formData.lastName,
+      Email: formData.email,
+      DepartmentID: Number(1), // แปลงเป็น number
+      MajorID: Number(1),           // แปลงเป็น number
+      Phone: formData.phone,
+      RoleID: formData.RoleID,
+    };
+  
     try {
-      const response = await axios.post("/api/signup", formData);
+      const response = await CreateUser(values);
       if (response.status === 201) {
         alert("Sign Up Successful!");
       }
@@ -121,6 +133,7 @@ const SignUp: React.FC = () => {
       alert("Failed to sign up. Please try again.");
     }
   };
+  
 
   return (
     <>
@@ -152,6 +165,8 @@ const SignUp: React.FC = () => {
             )}
           </select>
         </div>
+        {formData.department}
+        {formData.major}
         <div className="form-group">
           <label htmlFor="major">Major</label>
           <select

@@ -32,6 +32,9 @@ func CreateUser(c *gin.Context) {
 		LastName:  user.LastName, 
 		Email: user.Email,    
 		Phone:  user.Phone,
+		DepartmentID: user.DepartmentID,
+		MajorID: user.MajorID,
+		RoleID: user.RoleID,
 	}
 
 	// บันทึก
