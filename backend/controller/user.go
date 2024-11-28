@@ -76,7 +76,7 @@ func ListUsers(c *gin.Context) {
 	db := config.DB()
 
 	// Query the user table for basic user data
-	results := db.Select("id, username, password, firstname, lastname, email, phone").Find(&users)
+	results := db.Preload("Department").Preload("Major").Preload("Major.Department").Preload("Role").Select("id, username, password, first_name, last_name, email, phone, department_id, major_id, role_id").Find(&users)
 	// Check for errors in the query
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
