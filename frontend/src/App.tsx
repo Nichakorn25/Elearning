@@ -7,7 +7,7 @@ import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profil
 import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
-import ClassSchedule from '../src/Pages/ClassSchedule/ClassSchedule';
+import ClassSchedule from './Pages/Planner/ClassSchedule/ClassSchedule';
 import Appointment from './Pages/Appointment/Appointment';
 import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
 import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';

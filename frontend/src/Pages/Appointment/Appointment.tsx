@@ -78,7 +78,8 @@ const Appointment: React.FC = () => {
        <Header />
 
       <div className="appointment-content">
-        {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
+        {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} onClose={toggleSidebar} // เพิ่ม onClose
+/>}
 
         <div className="calendar-container">
           <h2>Appointment Calendar</h2>

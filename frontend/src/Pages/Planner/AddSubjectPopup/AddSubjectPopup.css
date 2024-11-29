@@ -1,0 +1,130 @@
+/* Overlay */
+.add-subject-popup__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  
+  /* Popup Container */
+  .add-subject-popup__container {
+    background-color: white;
+    width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+  }
+  
+  /* Header */
+  .add-subject-popup__header {
+    background-color: #ff6b00;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .add-subject-popup__header h3 {
+    margin: 0;
+  }
+  
+  .add-subject-popup__close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  
+  /* Content */
+  .add-subject-popup__content {
+    padding: 20px;
+  }
+  
+  .add-subject-popup__form-group {
+    margin-bottom: 15px;
+  }
+  
+  .add-subject-popup__form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .add-subject-popup__form-group input,
+  .add-subject-popup__form-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .add-subject-popup__warning {
+    margin-top: 10px;
+    background-color: #ffe5e5;
+    padding: 10px;
+    border-radius: 5px;
+    color: #d9534f;
+    font-size: 0.9rem;
+  }
+  
+  /* Buttons */
+  .add-subject-popup__buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .add-subject-popup__search-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-subject-popup__search-button:hover {
+    background-color: #218838;
+  }
+  
+  .add-subject-popup__help-button {
+    background-color: #ffc107;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-subject-popup__help-button:hover {
+    background-color: #e0a800;
+  }
+  
+  /* Footer */
+  .add-subject-popup__footer {
+    padding: 15px;
+    text-align: right;
+    background-color: #f1f1f1;
+  }
+  
+  .add-subject-popup__close-footer-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-subject-popup__close-footer-button:hover {
+    background-color: #c82333;
+  }
+  

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './ClassSchedule.css';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../Component/Sidebar/Sidebar';
-import Header from '../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
+import Sidebar from '../../Component/Sidebar/Sidebar';
+import Header from '../../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
+import AddSubjectPopup from '../AddSubjectPopup/AddSubjectPopup';
 
 
 const ClassSchedule: React.FC = () => {
@@ -23,12 +24,13 @@ const ClassSchedule: React.FC = () => {
   ];
 
   // ข้อมูลตารางเรียน (Days & Slots)
-  const [schedule, setSchedule] = useState(
-    ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์'].map((day) => ({
-      day,
-      slots: Array(timeslots.length).fill(''), // เตรียมช่องเวลาเปล่า
-    }))
-  );
+  const [schedule, setSchedule] = useState([
+    { day: 'จันทร์', slots: Array(timeslots.length).fill('') },
+    { day: 'อังคาร', slots: Array(timeslots.length).fill('') },
+    { day: 'พุธ', slots: Array(timeslots.length).fill('') },
+    { day: 'พฤหัส', slots: Array(timeslots.length).fill('') },
+    { day: 'ศุกร์', slots: Array(timeslots.length).fill('') },
+  ]);
 
   const handleSave = () => {
     console.log('Saving schedule...', schedule);
@@ -73,9 +75,16 @@ const ClassSchedule: React.FC = () => {
     navigate('/Buysheet');
   };
 
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
+
   return (
     <div className="dashboard">
       {/* Header Section */}
+      <Header />
       <header className="dashboard-header">
         <div className="dashboardheader-left">
           {!isSidebarVisible && (
@@ -113,25 +122,25 @@ const ClassSchedule: React.FC = () => {
       </header>
 
       {/* Sidebar */}
-      <Sidebar isVisible={isSidebarVisible} />
+      <Sidebar isVisible={isSidebarVisible} onClose={toggleSidebar} /> 
 
       {/* Schedule Table */}
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>
         <table>
           <thead>
-            <tr>
-              <th>Day</th>
-              {timeslots.map((slot, index) => (
-                <th key={index}>{slot}</th>
-              ))}
-            </tr>
+          <tr>
+            <th>Day</th>
+            {timeslots.map((slot, index) => (
+              <th key={index}>{slot}</th>
+            ))}
+          </tr>
           </thead>
           <tbody>
             {schedule.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {/* แสดงชื่อวันในคอลัมน์ Day */}
-                <td>{row.day}</td>
+                <td className="day-name" >{row.day}</td>
                 {row.slots.map((slot, slotIndex) => (
                   <td key={slotIndex}>
                     <input
@@ -156,8 +165,10 @@ const ClassSchedule: React.FC = () => {
         <button className="save-button" onClick={handleSave}>
           บันทึกตาราง
         </button>
-        <button className="add-course-button">เพิ่มวิชา</button>
+        <button className="add-course-button" onClick={togglePopup}>เพิ่มวิชา </button>
       </footer>
+
+      <AddSubjectPopup isVisible={isPopupVisible} onClose={togglePopup} />
     </div>
   );
 };
