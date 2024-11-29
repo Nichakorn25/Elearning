@@ -144,13 +144,17 @@ func SignUp(c *gin.Context) {
 
     Password:     hashedPassword,
 
-    FirstName: "",
+    FirstName: payload.Firstname,
 
-    LastName: "",
+    LastName: payload.Lastname,
 
     Email: payload.Email,
 
-    Phone: "",
+    Phone: payload.Phone,
+
+    DepartmentID: payload.DepartmentID,
+
+    MajorID: payload.MajorID,
 
     RoleID: 1,
 
