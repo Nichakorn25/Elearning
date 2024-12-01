@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../Component/Sidebar/Sidebar';
 import Header from '../../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
 import AddSubjectPopup from '../AddSubjectPopup/AddSubjectPopup';
+import CreditSummary from '../CreditSummary/CreditSummary';
 
 
 const ClassSchedule: React.FC = () => {
@@ -167,6 +168,8 @@ const ClassSchedule: React.FC = () => {
         </button>
         <button className="add-course-button" onClick={togglePopup}>เพิ่มวิชา </button>
       </footer>
+
+      <CreditSummary /> {/* ตารางหน่วยกิต */}
 
       <AddSubjectPopup isVisible={isPopupVisible} onClose={togglePopup} />
     </div>
