@@ -20,7 +20,7 @@ const SearchGuidePopup: React.FC<SearchGuidePopupProps> = ({ onClose }) => {
         </div>
         <div className="search-guide-popup__content">
           <p>
-            <strong className="text-highlight">ตัวอย่างการค้นหารายวิชา</strong>
+            <strong className="text-highlight"><h3>ตัวอย่างการค้นหารายวิชา</h3></strong>
           </p>
           <ul>
             <li>
