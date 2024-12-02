@@ -98,6 +98,8 @@ const CalendarComponent: React.FC = () => {
     <div className="calendar-container">
          {/* Header Section */}
       <Header />
+      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} onClose={toggleSidebar} // เพิ่ม onClose
+      />}
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
