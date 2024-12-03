@@ -1,128 +1,122 @@
-/* ป๊อปอัพพื้นหลัง */
 .popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* ความโปร่งใสที่เข้มขึ้น */
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
-/* กล่องป๊อปอัพ */
 .popup-container {
   width: 400px;
   padding: 30px;
-  background: white;
-  border-radius: 10px;
+  background: rgba(255, 153, 51, 0.4); /* ปรับ RGB ให้สว่างขึ้น */
+  border-radius: 16px;
   text-align: center;
-  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4); /* เงาที่ดูเด่นชัด */
-  animation: fadeIn 0.3s ease-in-out; /* แอนิเมชันสำหรับการแสดงผล */
-}
-.popup-login-button{
-  background-color: #FF6600;
-}
-/* ข้อความต้อนรับ */
-.popup-container h2 {
-  margin-bottom: 20px;
-  color: #444;
-  font-size: 1.8rem;
-  font-weight: bold;
+  animation: fadeIn 0.3s ease-in-out;
+  backdrop-filter: blur(15px); /* เพิ่มเบลอพื้นหลัง */
 }
 
-/* ฟิลด์ป้อนข้อมูล */
+
+
+.popup-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.input-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
 .input-field {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  padding: 12px 16px;
+  padding-left: 40px; /* เว้นที่สำหรับไอคอน */
+  border-radius: 25px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  color: #333;
+  outline: none;
   transition: border-color 0.3s ease;
 }
 
-.input-field:focus {
-  border-color: #FF6600; /* สีเมื่อโฟกัส */
-  outline: none;
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 14px; /* ตำแหน่งไอคอนด้านซ้าย */
+  transform: translateY(-50%);
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 18px;
 }
 
-/* ปุ่ม Sign in */
-.sign-in-btn {
+.input-field:focus {
+  border-color: #32cdd5;
+}
+
+.popup-login-button {
   width: 100%;
   padding: 12px;
-  margin-top: 10px;
-  background-color: #FF6600; /* สีหลัก */
+  margin-top: 20px;
+  background: #da9753;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 25px;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.sign-in-btn:hover {
-  background-color: #FF6600; /* สีเมื่อ hover */
+.popup-login-button:hover {
+  background: #28b8c2;
 }
 
-/* ปุ่มเข้าสู่ระบบผ่านโซเชียล */
-.social-login {
-  margin-top: 20px;
+.remember-forgot-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.facebook-btn, .google-btn {
-  width: 100%;
-  padding: 12px;
-  margin: 5px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
+.remember-me {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
 }
 
-.facebook-btn {
-  background-color: #3b5998; /* สี Facebook */
-  color: white;
-}
-
-.google-btn {
-  background-color: #db4437; /* สี Google */
-  color: white;
-}
-
-.facebook-btn:hover {
-  background-color: #2d4373;
-}
-
-.google-btn:hover {
-  background-color: #c23321;
-}
-
-/* ลิงก์ด้านล่าง */
-.links {
-  margin-top: 20px;
-  font-size: 0.9em;
-  color: #666;
-}
-
-.links a {
-  color: #007bff;
+.forgot-password {
+  color: #ffffff;
   text-decoration: none;
-  margin: 0 5px;
+  font-size: 14px;
 }
 
-.links a:hover {
+.forgot-password:hover {
   text-decoration: underline;
 }
 
-/* แอนิเมชัน fadeIn */
+.dont-have-account {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.dont-have-account a {
+  color: #da9753;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.dont-have-account a:hover {
+  text-decoration: underline;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -132,9 +126,4 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* กลุ่มฟอร์ม */
-.form-group {
-  margin-bottom: 20px;
 }
