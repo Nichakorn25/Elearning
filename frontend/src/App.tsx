@@ -19,6 +19,7 @@ import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CalendarComponent from './Pages/Appointment/CalendarComponent';
 import Admin from './Pages/Admin/Admin';
+import Announcement from './Pages/Announcement/Announcement';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -54,6 +55,7 @@ const App: React.FC = () => {
           <Route path="/SignUp" element={<SignUp/>}/>
           <Route path="/CalendarComponent" element={<CalendarComponent/>}/>
           <Route path="/Admin" element={<Admin/>}/>
+          <Route path="/Announcement" element={<Announcement/>}/>
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
