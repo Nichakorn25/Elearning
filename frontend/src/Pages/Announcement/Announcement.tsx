@@ -39,9 +39,7 @@ const Announcement: React.FC = () => {
   return (
     <div className="admin-dashboard">
       <Header />
-      <button onClick={toggleSidebar} className="toggle-sidebar-button">
-        {isSidebarVisible ? 'Close Sidebar' : 'Open Sidebar'}
-      </button>
+      
       {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
 
       <div className="announcement-content">

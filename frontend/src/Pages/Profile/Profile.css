@@ -37,6 +37,7 @@
 
 /* Profile Content */
 .profile-content {
+    margin-top: 60px;
     padding: 20px;
     flex: 1; /* ขยายคอนเทนต์ให้เต็มพื้นที่ */
     display: flex;

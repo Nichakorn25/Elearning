@@ -1,5 +1,6 @@
 /* AdminDashboard.css */
 .admin-dashboard {
+    margin-top: 60px;
     background-color: #000; /* พื้นหลังสีดำ */
     color: #fff; /* ตัวอักษรสีขาว */
     min-height: 100vh;
