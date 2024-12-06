@@ -58,11 +58,19 @@
 .sheet-content {
     padding: 24px;
     background: #fff;
+    
 }
 .sheet-card,
 .sheet-details-card {
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding-top: 30px;   /* เพิ่มระยะห่างที่ด้านบน */
+  padding-bottom: 30px; /* เพิ่มระยะห่างที่ด้านล่าง */
+}
+
+.sheet-details-card p {
+  margin-top: 10px;  /* เพิ่มระยะห่างระหว่างย่อหน้าด้านบน */
+  margin-bottom: 10px; /* เพิ่มระยะห่างระหว่างย่อหน้าด้านล่าง */
 }
 
 .sheet-card img {
@@ -105,3 +113,12 @@
     gap: 10px;
     cursor: pointer;
   }
+  .comments-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+textarea {
+    resize: none;
+}

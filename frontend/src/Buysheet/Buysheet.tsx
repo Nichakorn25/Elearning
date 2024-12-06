@@ -39,54 +39,50 @@ const BuySheet: React.FC = () => {
     { value: '2', label: '2' },
   ];
   const courses = [
-    { courseName: "Mathematics", chapterName: "Algebra Basics" },
-    { courseName: "Physics", chapterName: "Newton's Laws" },
-    { courseName: "Biology", chapterName: "Cell Structure" },
-    { courseName: "Chemistry", chapterName: "Periodic Table" },
-    { courseName: "History", chapterName: "World War II" },
+    { courseName: "Mathematics", chapterName: "Algebra Basics", purchasedCount: 12 },
+    { courseName: "Physics", chapterName: "Newton's Laws", purchasedCount: 8 },
+    { courseName: "Biology", chapterName: "Cell Structure", purchasedCount: 15 },
+    { courseName: "Chemistry", chapterName: "Periodic Table", purchasedCount: 5 },
+    { courseName: "History", chapterName: "World War II", purchasedCount: 7 },
   ];
   
 
   // Create a ref for managing canvas elements
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
 
-  useEffect(() => {
-    canvasRefs.current.forEach((canvas, index) => {
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        if (ctx) {
-          // ตั้งค่าพื้นหลัง
-          ctx.fillStyle = 'orange'; // สีฟ้าจาง
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-          // วาดกรอบสี่เหลี่ยมรอบข้อมูล
-          ctx.strokeStyle = '#ffff'; // สีเทาจาง
-          ctx.lineWidth = 2;
-          ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
-  
-          // ชื่อวิชา
-          ctx.fillStyle = '#ffff'; // สีตัวอักษรเข้ม
-          ctx.font = '24px Arial Bold';
-          ctx.textAlign = 'center';
-          ctx.fillText(courses[index].courseName, canvas.width / 2, 60);
-  
-          // เส้นคั่นกลาง
-          ctx.strokeStyle = '#ffff'; // สีเทา
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(20, 80);
-          ctx.lineTo(canvas.width - 20, 80);
-          ctx.stroke();
-  
-          // ชื่อบท
-          ctx.fillStyle = '#ffff'; // สีเทากลาง
-          ctx.font = '18px Arial';
-          ctx.fillText(courses[index].chapterName, canvas.width / 2, 120);
-  
-        }
+useEffect(() => {
+  canvasRefs.current.forEach((canvas, index) => {
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = 'orange';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#ffff';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+
+        ctx.fillStyle = '#ffff';
+        ctx.font = '24px Arial Bold';
+        ctx.textAlign = 'center';
+        ctx.fillText(courses[index].courseName, canvas.width / 2, 60);
+
+        ctx.strokeStyle = '#ffff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(20, 80);
+        ctx.lineTo(canvas.width - 20, 80);
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffff';
+        ctx.font = '18px Arial';
+        ctx.fillText(courses[index].chapterName, canvas.width / 2, 120);
+        
       }
-    });
-  }, []);
+    }
+  });
+}, []);
+
   
   const onChange: CascaderProps<Option>['onChange'] = (value, selectedOptions) => {
     console.log(value, selectedOptions);
@@ -210,10 +206,10 @@ const BuySheet: React.FC = () => {
       <div className="Sheet-overview">
         <h2>Sheet</h2>
         <div className="Sheet-list">
-          {['1', '2', '3', '4', '5'].map((cardId, index) => (
+        {courses.map((course, index) => (
             <Card
-              key={cardId}
-              style={{ width: 300 }}
+              key={index}
+              style={{ width: 300, position: 'relative' }}
               cover={
                 <canvas
                   ref={(el) => {
@@ -223,14 +219,18 @@ const BuySheet: React.FC = () => {
                   height={200}
                 />
               }
-              onMouseEnter={() => handleMouseEnter(cardId)}
+              onMouseEnter={() => handleMouseEnter(course.courseName)}
               onMouseLeave={handleMouseLeave}
               onClick={goToSelectSheet}
-              className={hoveredCard === cardId ? 'hovered' : ''}
+              className={hoveredCard === course.courseName ? 'hovered' : ''}
             >
-              <Meta title="Course Name" description="This is the description" />
+              <Meta title={course.courseName} description={`Chapter: ${course.chapterName}`} />
+              {/* เพิ่มจำนวนการซื้อ */}
+              <div className="purchased-info">{`ซื้อไปแล้ว: ${course.purchasedCount}`}</div>
             </Card>
           ))}
+
+
         </div>
       </div>
 

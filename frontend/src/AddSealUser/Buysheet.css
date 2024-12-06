@@ -1,11 +1,15 @@
 .sheet {
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  height: 100vh; /* ให้พื้นที่เต็มหน้าจอ */
+  display: flex;
+  justify-content: center; /* จัดให้ฟอร์มอยู่กลางแนวนอน */
+  align-items: center; /* จัดให้ฟอร์มอยู่กลางแนวตั้ง */
 }
-h2 {
-  padding: 10px;
-  font-size: 30px; /* ขนาดตัวอักษรเริ่มต้น */
-  margin-bottom: 20px;
+
+.form-container {
+  width: 100%;
+  max-width: 400px; /* จำกัดขนาดฟอร์มให้เล็กลง */
+  padding: 20px;
+  margin: 0 10px; /* เพิ่ม margin เพื่อให้มีพื้นที่รอบๆ ฟอร์ม */
 }
 
 .sheet-layout {

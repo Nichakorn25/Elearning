@@ -6,6 +6,8 @@ import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile'; // นำเข้า Profile
 import BuySheet from './Buysheet/Buysheet';
 import SelectSheet from './SelectSheet/SelectSheet';
+import AddSealUser from './AddSealUser/AddSealUser';
+
 import Cart from './Cart/Cart';
 
 const App: React.FC = () => {
@@ -20,14 +22,15 @@ const App: React.FC = () => {
       <div>
         <Routes>
           {/* กำหนดให้ BeforeLogin เป็นหน้าแรก */}
-          <Route path="/beforelogin" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
           {/* เส้นทางสำหรับ Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/buySheet" element={<BuySheet />} />
-          <Route path="/selectsheet" element={<SelectSheet />} />
+          <Route path="/selectsheet" element={<AddSealUser  />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route path="/AddSealUser" element={<AddSealUser />} />
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
