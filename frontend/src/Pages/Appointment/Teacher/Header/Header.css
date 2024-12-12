@@ -1,0 +1,116 @@
+/* ตั้งค่าหลักให้ตัวอักษรใน Header เป็นสีดำ */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: black; /* ทำให้ข้อความทั้งหมดใน Header เป็นสีดำ */
+  }
+  
+  .calendar-header__left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .calendar-header__menu-btn {
+    font-size: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+    color: black; /* ปุ่ม ≡ */
+  }
+  
+  .calendar-header__logo-text {
+    font-weight: bold;
+    color: black; /* ข้อความ Calendar */
+  }
+  
+  .calendar-header__today-btn {
+    background-color: #f1f3f4;
+    color: black; /* ปุ่ม Today */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  
+  .calendar-header__today-btn:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .calendar-header__navigation {
+    display: flex;
+    align-items: center;
+  }
+  
+  .calendar-header__nav-btn {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 0 5px;
+    color: black; /* ปุ่ม < และ > */
+  }
+  
+  .calendar-header__date-display {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+    color: black; /* วันที่ */
+  }
+  
+  .calendar-header__right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .calendar-header__icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    color: black; /* ไอคอน 🔍 ❓ ⚙️ */
+  }
+  
+  .calendar-header__view-selector .calendar-header__dropdown-btn {
+    background-color: #f1f3f4;
+    color: black; /* ปุ่ม Dropdown Day */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .calendar-header__dropdown-btn:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .calendar-header__profile {
+    display: flex;
+    align-items: center;
+  }
+  
+  .calendar-header__profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .calendar-sidebar__logo-icon {
+  width: 5% !important;
+  height: 5% !important;
+  margin-right: 8px;
+}
+
+  
