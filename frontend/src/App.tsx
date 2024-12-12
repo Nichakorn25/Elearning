@@ -18,8 +18,6 @@ import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CalendarComponent from './Pages/Appointment/CalendarComponent';
-import TeacherCalendar from './Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar';
-import StudentCalendarComponent from './Pages/Appointment/Student/StudentCalendarComponent';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -54,9 +52,6 @@ const App: React.FC = () => {
           <Route path="/RequestChangeRole" element={<RequestChangeRole/>}/>
           <Route path="/SignUp" element={<SignUp/>}/>
           <Route path="/CalendarComponent" element={<CalendarComponent/>}/>
-          <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
-          <Route path="/StudentCalendarComponent" element={<StudentCalendarComponent/>}/>
-
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
