@@ -107,4 +107,6 @@
   .calendar-sidebar__add-calendar-btn:hover {
     color: #357ae8;
   }
-  
+  .calendar-sidebar__list-label{
+    color: black;
+  }

@@ -32,3 +32,65 @@
     background-color: #0056b3;
   }
   
+
+/* ปรับสไตล์ปุ่ม Today */
+.fc-today-button {
+  background-color: #007bff; /* สีพื้นหลัง */
+  color: white; /* สีตัวอักษร */
+  border: none; /* ลบเส้นขอบ */
+  border-radius: 50px; /* ทำให้ปุ่มเป็นวงรี */
+  padding: 8px 20px; /* เพิ่มพื้นที่ในปุ่ม */
+  font-size: 14px; /* ขนาดตัวอักษร */
+  cursor: pointer; /* เปลี่ยนเมาส์เป็นรูป pointer */
+  transition: background-color 0.3s ease; /* เพิ่มเอฟเฟกต์เปลี่ยนสีเมื่อ hover */
+}
+
+/* เปลี่ยนสีปุ่มเมื่อ hover */
+.fc-today-button:hover {
+  background-color: #0056b3; /* สีพื้นหลังเมื่อ hover */
+}
+
+/* เปลี่ยนสไตล์ปุ่มเมื่อกด */
+.fc-today-button:active {
+  background-color: #003f7f; /* สีพื้นหลังเมื่อกด */
+}
+
+/* ตั้งค่าให้ตัวหนังสือทั้งหมดเป็นสีดำ */
+.calendar-container {
+  color: black; /* ตั้งค่าสีตัวอักษรใน container ทั้งหมด */
+}
+
+/* ปรับตัวหนังสือในปฏิทิน */
+.fc {
+  color: black; /* ตั้งค่าสีตัวอักษรของ FullCalendar */
+}
+
+/* ปรับ Header ของ FullCalendar */
+.fc-toolbar-title {
+  color: black; /* ตัวอักษรใน Header ของ FullCalendar */
+}
+
+/* ปรับปุ่มใน FullCalendar */
+.fc-button {
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.fc-button:hover {
+  background-color: #f0f0f0;
+}
+
+/* ปรับ Title ของ Event */
+.fc-event-title {
+  color: black; /* สีตัวอักษรใน Events */
+}
+
+/* ปรับวันที่ */
+.fc-daygrid-day-number {
+  color: black; /* ตัวเลขวันที่ใน Calendar */
+}
+
+/* ปรับชื่อวันในหัวตาราง */
+.fc-col-header-cell {
+  color: black; /* ชื่อวัน เช่น Sun, Mon */
+}

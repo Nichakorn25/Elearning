@@ -1,9 +1,8 @@
 import React from "react";
 import "./Header.css";
-//import calendarIcon from "../../../../assets/calendar.png"; // ใช้ import SVG เป็น URL
-import { Dropdown, Menu } from "antd"; // นำเข้า Dropdown จาก Ant Design
+import { Dropdown, Menu } from "antd"; // ใช้ Dropdown จาก Ant Design
 import { DownOutlined } from "@ant-design/icons";
-import dayjs from "dayjs";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth"; // ใช้ Material UI Icon
 
 const Header: React.FC = () => {
   const currentDate = new Date(); // วันที่ปัจจุบัน
@@ -55,17 +54,14 @@ const Header: React.FC = () => {
   return (
     <header className="calendar-header">
       <div className="calendar-header__left">
-        <button className="calendar-header__menu-btn">≡</button>
-        {/* <div className="calendar-header__logo">
-          <img src={calendarIcon} alt="Calendar Icon" className="calendar-header__logo-icon" />
-          <span className="calendar-header__logo-text">Calendar</span>
-        </div> */}
+        <h1 className="calendar-header__title">
+          <CalendarMonthIcon className="calendar-header__icon" /> My Calendar
+        </h1>
         <button className="calendar-header__today-btn">Today</button>
         <div className="calendar-header__navigation">
           <button className="calendar-header__nav-btn">{"<"}</button>
           <button className="calendar-header__nav-btn">{">"}</button>
         </div>
-        {/* ใช้วันที่แบบไดนามิก */}
         <span className="calendar-header__date-display">{formattedDate}</span>
       </div>
       <div className="calendar-header__right">
@@ -78,13 +74,6 @@ const Header: React.FC = () => {
               Day <DownOutlined />
             </button>
           </Dropdown>
-        </div>
-        <div className="calendar-header__profile">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Profile"
-            className="calendar-header__profile-img"
-          />
         </div>
       </div>
     </header>

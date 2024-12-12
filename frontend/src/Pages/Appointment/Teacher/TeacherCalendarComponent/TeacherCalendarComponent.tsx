@@ -36,6 +36,22 @@ const TeacherCalendarComponent: React.FC = () => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "dayGridMonth,timeGridWeek,timeGridDay",
+        }}
+        customButtons={{
+          today: {
+            text: "Today", // เปลี่ยนชื่อปุ่มเป็น Today
+            click: () => {
+              const calendarApi = document.querySelector(".fc")?.calendarApi;
+              if (calendarApi) {
+                calendarApi.today();
+              }
+            },
+          },
+        }}
         selectable
         editable
         events={events}
