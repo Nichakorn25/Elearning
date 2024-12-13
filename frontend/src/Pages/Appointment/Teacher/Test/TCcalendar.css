@@ -93,7 +93,8 @@ html {
     flex: 1;
     flex-direction: row;
     overflow-y: hidden; /* ซ่อน Scroll Bar ของ Layout */
-    height: 100vh; /* ใช้พื้นที่เต็มหน้าจอ */
+    height: 100%; /* ใช้พื้นที่เต็มหน้าจอ */
+    width: 100%;
     padding: 0;
     margin: 0;
     gap: 0;
@@ -116,7 +117,6 @@ html {
 }
 .calendar-sidebar::-webkit-scrollbar-thumb {
     background: #bbb;
-    border-radius: 3px;
 }
 .sidebar-header button {
     background-color: #007bff;
@@ -160,7 +160,6 @@ html {
     background-color: #f8f9fa;
     height: calc(100vh - 61px); /* ลบความสูงของ Header */
     overflow: hidden; /* ซ่อน Scrollbar ของ Calendar Container */
-    min-height: 100vh;
     margin: 0%;
     margin-right: 0;
     width: 100%;
@@ -179,18 +178,19 @@ html {
     color: black;
     height: 100%;
     padding: 20px;
-   
+    box-shadow: none !important; /* ลบเงา */
 }
 
 /* ทำให้กรอบของปฏิทินทั้งหมดมีมุมโค้ง */
 .fc-view {
     border-radius: 20px; /* ปรับมุมโค้ง */
-    border: none; /* ลบขอบของ View */
+    border: none !important; /* ลบขอบของ View */
     overflow: hidden; /* ซ่อนเนื้อหาเกิน */
     background-color: white; /* พื้นหลังของปฏิทิน */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
     margin: 0; /* เพิ่มระยะห่างรอบปฏิทิน */
     margin-top: 0;
+    height: 100%;
 }
 
 /* ซ่อน scrollbar ของ FullCalendar */
