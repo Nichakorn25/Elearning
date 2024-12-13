@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -7,6 +7,7 @@ import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import "./TeacherCalendarComponent.css";
 
 const TeacherCalendarComponent: React.FC = () => {
+  const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     { id: "1", title: "Meeting", start: "2024-12-12T10:00:00", end: "2024-12-12T11:00:00" },
   ]);
@@ -32,25 +33,15 @@ const TeacherCalendarComponent: React.FC = () => {
   };
 
   return (
-    <div className="calendar-container">
+    <div className="teacher-calendar-fullscreen">
       <FullCalendar
+        ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         headerToolbar={{
           left: "prev,next today",
           center: "title",
           right: "dayGridMonth,timeGridWeek,timeGridDay",
-        }}
-        customButtons={{
-          today: {
-            text: "Today", // เปลี่ยนชื่อปุ่มเป็น Today
-            click: () => {
-              const calendarApi = document.querySelector(".fc")?.calendarApi;
-              if (calendarApi) {
-                calendarApi.today();
-              }
-            },
-          },
         }}
         selectable
         editable

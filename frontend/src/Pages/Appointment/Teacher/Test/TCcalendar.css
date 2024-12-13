@@ -1,0 +1,253 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: black;
+    height: 100%;
+    overflow-y: scroll; /* ยังคงเลื่อนเนื้อหาได้ */
+    scrollbar-width: none; /* ซ่อน scrollbar */
+}
+body::-webkit-scrollbar {
+    display: none; /* ซ่อน scrollbar บน Chrome */
+}
+
+html {
+    height: 100%; /* เพิ่มความสูงให้ html */
+}
+
+/* Layout */
+.teacher-calendar-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: auto;
+    overflow: hidden; /* ซ่อน scroll bar */
+    margin-top: 60px;
+}
+
+/* Header */
+.teacher-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    position: sticky; /* Header อยู่ด้านบนเสมอ */
+    top: 0;
+    z-index: 10;
+}
+
+/* Header Left */
+.header-left h1 {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    color: black;
+}
+.calendar-icon {
+    margin-right: 10px;
+    font-size: 24px;
+    color: #ff9800;
+}
+
+/* Header Center */
+.header-center {
+    display: flex;
+    align-items: center;
+}
+.today-btn,
+.nav-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 5px 15px;
+    margin: 0 5px;
+    cursor: pointer;
+    color: black;
+}
+.current-date {
+    font-weight: bold;
+    margin-left: 10px;
+    color: black;
+}
+
+/* Header Right */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+.header-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    color: black;
+}
+
+/* Main Layout */
+.teacher-calendar-main {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    overflow-y: hidden; /* ซ่อน Scroll Bar ของ Layout */
+    height: 100vh; /* ใช้พื้นที่เต็มหน้าจอ */
+    padding: 0;
+    margin: 0;
+    gap: 0;
+}
+
+/* Sidebar */
+.calendar-sidebar {
+    margin:0;
+    height: 100%;
+    width: 300px;
+    background-color:  #f8f9fa;
+    padding: 10px;
+    overflow-y: auto; /* เพิ่ม Scroll เฉพาะ Sidebar */
+    scrollbar-width: thin; /* Scroll แบบบาง */
+    box-shadow: none !important; /* ลบเงาออกทั้งหมด */
+    border: none !important; /* ลบขอบออกทั้งหมด */
+}
+.calendar-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.calendar-sidebar::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 3px;
+}
+.sidebar-header button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.sidebar-header button:hover {
+    background-color: #0056b3;
+}
+.mini-calendar {
+    margin-top: 20px;
+    background: none !important; /* ลบพื้นหลัง */
+    border: none !important; /* ลบกรอบ */
+    box-shadow: none !important; /* ลบเงา */
+    padding: 0 !important; /* ลบระยะห่างภายใน */
+}
+
+.sidebar-section h3 {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+}
+.sidebar-section ul li {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+.sidebar-section ul li input {
+    margin-right: 10px;
+}
+
+/* Calendar Container */
+.calendar-container {
+    flex: 1;
+    padding: 0;
+    background-color: #f8f9fa;
+    height: calc(100vh - 61px); /* ลบความสูงของ Header */
+    overflow: hidden; /* ซ่อน Scrollbar ของ Calendar Container */
+    min-height: 100vh;
+    margin: 0%;
+    margin-right: 0;
+    width: 100%;
+    height: 100%;
+}
+.calendar-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* FullCalendar Adjustments */
+
+.fc {
+    flex: 1;
+    overflow: hidden; /* Prevent internal scroll in FullCalendar */
+    background-color: #f8f9fa;
+    color: black;
+    height: 100%;
+    padding: 20px;
+   
+}
+
+/* ทำให้กรอบของปฏิทินทั้งหมดมีมุมโค้ง */
+.fc-view {
+    border-radius: 20px; /* ปรับมุมโค้ง */
+    border: none; /* ลบขอบของ View */
+    overflow: hidden; /* ซ่อนเนื้อหาเกิน */
+    background-color: white; /* พื้นหลังของปฏิทิน */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    margin: 0; /* เพิ่มระยะห่างรอบปฏิทิน */
+    margin-top: 0;
+}
+
+/* ซ่อน scrollbar ของ FullCalendar */
+.fc .fc-scroller {
+    overflow: hidden !important; /* ซ่อน Scrollbar */
+    overflow-y: auto; /* เปิดการเลื่อนขึ้นลง */
+    scrollbar-width: none; /* ซ่อน scrollbar บน Firefox */
+}
+
+.fc-toolbar-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+}
+.fc-daygrid-day-number {
+    color: black;
+    font-weight: bold;
+    border-radius: 50%; /* ทำให้ตัวเลขวงรี */
+    background-color: #e6f7ff; /* พื้นหลังอ่อน */
+    padding: 5px 8px;
+    display: inline-block;
+}
+.fc-event {
+    background-color: #00a676; /* สีเขียวเข้มสำหรับอีเวนต์ */
+    color: white;
+    border: none;
+    border-radius: 20px; /* ขอบโค้งสำหรับอีเวนต์ */
+    padding: 5px 10px;
+    font-size: 12px;
+}
+.fc-event:hover {
+    background-color: #008060; /* สีเขียวเข้มขึ้นเมื่อ hover */
+}
+
+.fc-col-header-cell {
+    color: black; /* ชื่อวัน */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Today Highlight */
+.fc-day-today {
+    background-color: #fff5e6; /* พื้นหลังไฮไลต์วันที่วันนี้ */
+    border-radius: 10px;
+    
+}
+.fc .fc-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+.fc .fc-button:hover {
+    background-color: #0056b3;
+}
+.fc .fc-button:active {
+    background-color: #003f7f;
+}
