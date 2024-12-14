@@ -9,6 +9,8 @@ import "react-calendar/dist/Calendar.css"; // Import Mini Calendar CSS
 import "./TCcalendar.css"; // Custom CSS File
 import Sidebar from "../../../Component/Sidebar/Sidebar";
 import Header from "../../../Component/Header/Header";
+import { Dropdown, Menu } from "antd";
+import { DownOutlined } from "@ant-design/icons";
 
 const TCcalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
@@ -29,7 +31,10 @@ const TCcalendar: React.FC = () => {
       ]);
     }
   };
-
+  const [view, setView] = useState("timeGridWeek");
+  const currentDate = new Date();
+  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   
     const toggleSidebar = () => {
@@ -41,6 +46,31 @@ const TCcalendar: React.FC = () => {
       setEvents(events.filter((event) => event.id !== clickInfo.event.id));
     }
   };
+
+  const menu = (
+    <Menu
+      onClick={(e) => {
+        if (e.key === "1") setView("timeGridDay");
+        else if (e.key === "2") setView("timeGridWeek");
+        else if (e.key === "3") setView("dayGridMonth");
+        else if (e.key === "4") setView("yearGrid"); // Placeholder for year view
+      }}
+    >
+      <Menu.Item key="1">
+        <span>Day</span>
+      </Menu.Item>
+      <Menu.Item key="2">
+        <span>Week</span>
+      </Menu.Item>
+      <Menu.Item key="3">
+        <span>Month</span>
+      </Menu.Item>
+      <Menu.Item key="4">
+        <span>Year</span>
+      </Menu.Item>
+    </Menu>
+  );
+
 
   return (
     <div className="teacher-calendar-layout">
@@ -54,20 +84,29 @@ const TCcalendar: React.FC = () => {
       />
       <header className="teacher-calendar-header">
         <div className="header-left">
-          <h1>
+          <div>
             <span className="calendar-icon">📅</span> My Calendar
-          </h1>
+          </div>
         </div>
         <div className="header-center">
           <button className="today-btn">Today</button>
           <button className="nav-btn">{"<"}</button>
           <button className="nav-btn">{">"}</button>
-          <span className="current-date">December 13, 2024</span>
+          <span className="current-date">{formattedDate}</span>
         </div>
         <div className="header-right">
-          <button className="header-btn">🔍</button>
-          <button className="header-btn">❓</button>
-          <button className="header-btn">⚙️</button>
+        <Dropdown overlay={menu} trigger={["click"]}>
+            <button className="calendar-header__dropdown-btn">
+              {view === "timeGridDay"
+                ? "Day"
+                : view === "timeGridWeek"
+                ? "Week"
+                : view === "dayGridMonth"
+                ? "Month"
+                : "Year"}{" "}
+              <DownOutlined />
+            </button>
+          </Dropdown>
         </div>
       </header>
 
@@ -109,7 +148,7 @@ const TCcalendar: React.FC = () => {
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView="timeGridWeek"
+            initialView={view}
             headerToolbar={{
               left: "",
               center: "",
