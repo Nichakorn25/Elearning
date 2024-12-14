@@ -4,19 +4,22 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
-import Calendar from "react-calendar"; // Mini Calendar
-import "react-calendar/dist/Calendar.css"; // Import Mini Calendar CSS
-import "./TCcalendar.css"; // Custom CSS File
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "./TCcalendar.css";
 import Sidebar from "../../../Component/Sidebar/Sidebar";
 import Header from "../../../Component/Header/Header";
 import { Dropdown, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import DynamicCalendarIcon from "./DynamicCalendarIcon";
+
 
 const TCcalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     { id: "1", title: "Meeting", start: "2024-12-12T10:00:00", end: "2024-12-12T11:00:00" },
   ]);
+  const [currentView, setCurrentView] = useState("dayGridMonth");
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const title = prompt("Enter a title for your event:");
@@ -31,15 +34,15 @@ const TCcalendar: React.FC = () => {
       ]);
     }
   };
-  const [view, setView] = useState("timeGridWeek");
+
   const currentDate = new Date();
   const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-  
-    const toggleSidebar = () => {
-      setSidebarVisible(!isSidebarVisible); // เปิด/ปิด Sidebar
-    };
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (window.confirm(`Are you sure you want to delete '${clickInfo.event.title}'?`)) {
@@ -47,63 +50,74 @@ const TCcalendar: React.FC = () => {
     }
   };
 
+  const handleMenuClick = (e: any) => {
+    setCurrentView(e.key);
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.changeView(e.key);
+    }
+  };
+
   const menu = (
-    <Menu
-      onClick={(e) => {
-        if (e.key === "1") setView("timeGridDay");
-        else if (e.key === "2") setView("timeGridWeek");
-        else if (e.key === "3") setView("dayGridMonth");
-        else if (e.key === "4") setView("yearGrid"); // Placeholder for year view
-      }}
-    >
-      <Menu.Item key="1">
-        <span>Day</span>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <span>Week</span>
-      </Menu.Item>
-      <Menu.Item key="3">
-        <span>Month</span>
-      </Menu.Item>
-      <Menu.Item key="4">
-        <span>Year</span>
-      </Menu.Item>
+    <Menu onClick={handleMenuClick}>
+      <Menu.Item key="dayGridMonth">Month</Menu.Item>
+      <Menu.Item key="timeGridWeek">Week</Menu.Item>
+      <Menu.Item key="timeGridDay">Day</Menu.Item>
     </Menu>
   );
 
+  const handleTodayClick = () => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.today();
+    }
+  };
+
+  const handlePrevClick = () => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.prev();
+    }
+  };
+
+  const handleNextClick = () => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.next();
+    }
+  };
 
   return (
     <div className="teacher-calendar-layout">
+      <Header/>
       {/* Header */}
-       {/* Header Section */}
-       <Header />
-       {/* Sidebar */}
-      <Sidebar
-        isVisible={isSidebarVisible}
-        onClose={() => setSidebarVisible(false)}
-      />
       <header className="teacher-calendar-header">
         <div className="header-left">
-          <div>
-            <span className="calendar-icon">📅</span> My Calendar
-          </div>
+          <h1 className="calendar-title">
+            <DynamicCalendarIcon />
+            <span className="mycalendar">Calendar</span>
+          </h1>
         </div>
         <div className="header-center">
-          <button className="today-btn">Today</button>
-          <button className="nav-btn">{"<"}</button>
-          <button className="nav-btn">{">"}</button>
+          <button className="today-btn" onClick={handleTodayClick}>
+            Today
+          </button>
+          <button className="nav-btn" onClick={handlePrevClick}>
+            {"<"}
+          </button>
+          <button className="nav-btn" onClick={handleNextClick}>
+            {">"}
+          </button>
           <span className="current-date">{formattedDate}</span>
         </div>
         <div className="header-right">
-        <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown overlay={menu} trigger={["click"]}>
             <button className="calendar-header__dropdown-btn">
-              {view === "timeGridDay"
+              {currentView === "timeGridDay"
                 ? "Day"
-                : view === "timeGridWeek"
+                : currentView === "timeGridWeek"
                 ? "Week"
-                : view === "dayGridMonth"
-                ? "Month"
-                : "Year"}{" "}
+                : "Month"}{" "}
               <DownOutlined />
             </button>
           </Dropdown>
@@ -121,7 +135,7 @@ const TCcalendar: React.FC = () => {
             <Calendar />
           </div>
           <div className="sidebar-section">
-            <h3>My Calendars</h3>
+            <h3>My Tasks</h3>
             <ul>
               <li>
                 <input type="checkbox" defaultChecked />
@@ -138,7 +152,7 @@ const TCcalendar: React.FC = () => {
             </ul>
           </div>
           <div className="sidebar-section">
-            <h3>Other Calendars</h3>
+            <h3>Other Task</h3>
             <button>+</button>
           </div>
         </aside>
@@ -148,12 +162,8 @@ const TCcalendar: React.FC = () => {
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            initialView={view}
-            headerToolbar={{
-              left: "",
-              center: "",
-              right: "",
-            }}
+            initialView={currentView}
+            headerToolbar={false} // ซ่อน header toolbar ของ FullCalendar
             selectable
             editable
             events={events}

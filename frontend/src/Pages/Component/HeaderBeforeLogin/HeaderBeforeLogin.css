@@ -5,6 +5,8 @@
     align-items: center;
     padding: 10px 20px;
     background-color: #1B1B1B; /* สีดำทึบ */
+    z-index: 1001;
+    position: fixed;
   }
   
   .logo-containerbeforelogin {

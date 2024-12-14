@@ -5,6 +5,7 @@ body {
     height: 100%;
     overflow-y: scroll; /* ยังคงเลื่อนเนื้อหาได้ */
     scrollbar-width: none; /* ซ่อน scrollbar */
+    background-color: #f8f9fa; /* ตั้งค่าพื้นหลังเป็นสีเทา */
     
 }
 
@@ -41,6 +42,19 @@ html {
     border-bottom: none; /* ลบเส้นกั้นด้านล่าง */
 }
 
+.calendar-title {
+    display: flex; /* ใช้ Flexbox */
+    align-items: center; /* จัดให้แนวตั้งอยู่ตรงกลาง */
+    gap: 10px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.mycalendar {
+    font-weight: 400; /* น้ำหนักฟอนต์ */
+    font-size: 30px; /* ขนาดตัวอักษร */
+    color: black;
+    margin-left: 10px;
+}
+
 /* Header Left */
 .header-left  {
     font-size: 24px;
@@ -54,6 +68,9 @@ html {
     margin-right: 10px;
     font-size: 24px;
     color: #ff9800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Header Center */
@@ -78,11 +95,17 @@ html {
 .nav-btn {
     background: none;
     border: none;
+    border-radius: 50%;
     font-size: 18px; /* ขนาดปุ่ม */
     cursor: pointer;
     color: black; /* สีปุ่ม */
-    padding: 0 10px; /* เพิ่มระยะห่างภายในปุ่ม */
+    padding: 10px; /* เพิ่มระยะห่างภายในปุ่ม */
     margin: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* เพิ่ม transition */
+}
+
+.nav-btn:hover {
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ hover */
 }
 
 .current-date {
@@ -102,9 +125,23 @@ html {
     background: none;
     border: none;
     font-size: 20px;
-    margin: 0 5px;
+    margin-left: 100px;
     cursor: pointer;
     color: black;
+}
+
+.calendar-header__dropdown-btn{
+    margin-left: 10px;
+    padding: 10px 20px; /* เพิ่ม padding ให้ดูใหญ่ขึ้น */
+    border: 1px solid #ddd;
+    border-radius: 20px; /* เพิ่มความโค้งให้เป็นวงรี */
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px; /* ปรับขนาดตัวอักษร */
+    color: black; /* สีตัวอักษร */
+    transition: all 0.3s ease; /* เพิ่ม transition สำหรับเอฟเฟกต์ */
+    background-color: #f5f5f5; /* เพิ่มสีพื้นหลังเมื่อ hover */
+    border-color: #ccc; /* เปลี่ยนสีขอบเมื่อ hover */
 }
 
 /* Main Layout */
@@ -123,8 +160,10 @@ html {
 /* Sidebar */
 .calendar-sidebar {
     margin:0;
+    margin-left: 20px;
+    margin-right: 20px;
     height: 100%;
-    width: 300px;
+    width: 280px;
     background-color:  #f8f9fa;
     padding: 10px;
     overflow-y: auto; /* เพิ่ม Scroll เฉพาะ Sidebar */
@@ -147,7 +186,7 @@ html {
     border: 1px solid #ddd; /* ขอบสีเทาอ่อน */
     border-radius: 20px; /* มุมโค้งเหมือนตัวอย่าง */
     padding: 10px 20px; /* ระยะห่างภายใน */
-    font-weight: bold; /* ตัวหนาสำหรับข้อความ */
+    font-weight: Thin; /* ตัวหนาสำหรับข้อความ */
     cursor: pointer; /* แสดง cursor แบบ pointer */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเบาๆ */
     transition: all 0.3s ease; /* เพิ่ม Transition เพื่อให้การเปลี่ยนแปลงดูนุ่มนวล */
