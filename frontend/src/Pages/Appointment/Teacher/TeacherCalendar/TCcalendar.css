@@ -224,6 +224,21 @@ html {
     margin-right: 10px;
 }
 
+.create-btn {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    color: black;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .create-btn:hover {
+    background-color: #ff9800;
+    color: white;
+    border-color: #ff9800;
+  }
+  
+
 /* Calendar Container */
 .calendar-container {
     flex: 1;

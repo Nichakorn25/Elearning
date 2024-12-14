@@ -7,20 +7,24 @@ import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./TCcalendar.css";
-import Sidebar from "../../../Component/Sidebar/Sidebar";
 import Header from "../../../Component/Header/Header";
-import { Dropdown, Menu } from "antd";
+import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
-
+import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 
 const TCcalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
-    { id: "1", title: "Meeting", start: "2024-12-12T10:00:00", end: "2024-12-12T11:00:00" },
+    {
+      id: "1",
+      title: "Meeting",
+      start: "2024-12-12T10:00:00",
+      end: "2024-12-12T11:00:00",
+    },
   ]);
   const [currentView, setCurrentView] = useState("dayGridMonth");
-
+  const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const title = prompt("Enter a title for your event:");
     const calendarApi = selectInfo.view.calendar;
@@ -30,13 +34,22 @@ const TCcalendar: React.FC = () => {
     if (title) {
       setEvents([
         ...events,
-        { id: String(events.length + 1), title, start: selectInfo.startStr, end: selectInfo.endStr },
+        {
+          id: String(events.length + 1),
+          title,
+          start: selectInfo.startStr,
+          end: selectInfo.endStr,
+        },
       ]);
     }
   };
 
   const currentDate = new Date();
-  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
 
@@ -45,7 +58,11 @@ const TCcalendar: React.FC = () => {
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (window.confirm(`Are you sure you want to delete '${clickInfo.event.title}'?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to delete '${clickInfo.event.title}'?`
+      )
+    ) {
       setEvents(events.filter((event) => event.id !== clickInfo.event.id));
     }
   };
@@ -58,7 +75,7 @@ const TCcalendar: React.FC = () => {
     }
   };
 
-  const menu = (
+  const viewmenu = (
     <Menu onClick={handleMenuClick}>
       <Menu.Item key="dayGridMonth">Month</Menu.Item>
       <Menu.Item key="timeGridWeek">Week</Menu.Item>
@@ -87,9 +104,33 @@ const TCcalendar: React.FC = () => {
     }
   };
 
+  // เปิด Popup
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // ปิด Popup
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+  };
+
+  // เมื่อส่งข้อมูลจาก Popup
+  const handleSubmitAppointment = (values: any) => {
+    console.log("Appointment Data:", values);
+    // Logic สำหรับเพิ่มข้อมูลใน FullCalendar หรือฐานข้อมูล
+  };
+
+  const createMenu = (
+    <Menu>
+      <Menu.Item key="event">Event</Menu.Item>
+      <Menu.Item key="task">Task</Menu.Item>
+      <Menu.Item key="appointment">Appointment Schedule</Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="teacher-calendar-layout">
-      <Header/>
+      <Header />
       {/* Header */}
       <header className="teacher-calendar-header">
         <div className="header-left">
@@ -111,7 +152,7 @@ const TCcalendar: React.FC = () => {
           <span className="current-date">{formattedDate}</span>
         </div>
         <div className="header-right">
-          <Dropdown overlay={menu} trigger={["click"]}>
+          <Dropdown overlay={viewmenu} trigger={["click"]}>
             <button className="calendar-header__dropdown-btn">
               {currentView === "timeGridDay"
                 ? "Day"
@@ -129,8 +170,20 @@ const TCcalendar: React.FC = () => {
         {/* Sidebar */}
         <aside className="calendar-sidebar">
           <div className="sidebar-header">
-            <button className="create-btn">+ Create</button>
+            <Dropdown overlay={createMenu} trigger={["click"]}>
+              <Button className="create-btn">
+                + Create <DownOutlined />
+              </Button>
+            </Dropdown>
           </div>
+
+          {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
+          <CreateAppointmentPopup
+            isVisible={isModalVisible}
+            onClose={handleCloseModal}
+            onSubmit={handleSubmitAppointment}
+          />
+
           <div className="mini-calendar">
             <Calendar />
           </div>
@@ -166,6 +219,13 @@ const TCcalendar: React.FC = () => {
             headerToolbar={false} // ซ่อน header toolbar ของ FullCalendar
             selectable
             editable
+            views={{
+              listYear: {
+                type: "list",
+                duration: { years: 1 },
+                buttonText: "Year",
+              },
+            }}
             events={events}
             select={handleDateSelect}
             eventClick={handleEventClick}
