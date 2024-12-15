@@ -12,6 +12,7 @@ import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
+import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
 const TCcalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
@@ -122,11 +123,31 @@ const TCcalendar: React.FC = () => {
 
   const createMenu = (
     <Menu className="createdropdown">
-      <Menu.Item key="event">Event</Menu.Item>
-      <Menu.Item key="task">Task</Menu.Item>
+      {/* <Menu.Item key="event">Event</Menu.Item> */}
+      <Menu.Item key="task" onClick={showModal}>
+        Task
+      </Menu.Item>
       <Menu.Item key="appointment">Appointment Schedule</Menu.Item>
     </Menu>
   );
+
+  const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+
+  // เปิด Popup
+  const showTaskModal = () => {
+    setIsTaskModalVisible(true);
+  };
+
+  // ปิด Popup
+  const handleCloseTaskModal = () => {
+    setIsTaskModalVisible(false);
+  };
+
+  // เมื่อส่งข้อมูล Task
+  const handleSubmitTask = (values: any) => {
+    console.log("Task Data:", values);
+    setIsTaskModalVisible(false);
+  };
 
   return (
     <div className="teacher-calendar-layout">
@@ -178,10 +199,16 @@ const TCcalendar: React.FC = () => {
           </div>
 
           {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
-          <CreateAppointmentPopup
+          {/* <CreateAppointmentPopup
             isVisible={isModalVisible}
             onClose={handleCloseModal}
             onSubmit={handleSubmitAppointment}
+          /> */}
+
+          <CreateTaskPopup
+            isVisible={isModalVisible}
+            onClose={handleCloseModal}
+            onSubmit={handleSubmitTask}
           />
 
           <div className="mini-calendar">

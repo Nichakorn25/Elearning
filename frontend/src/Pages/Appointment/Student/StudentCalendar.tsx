@@ -122,7 +122,7 @@ const StudentCalendar: React.FC = () => {
 
   const createMenu = (
     <Menu className="createdropdown">
-      <Menu.Item key="event">Event</Menu.Item>
+      {/* <Menu.Item key="event">Event</Menu.Item> */}
       <Menu.Item key="task">Task</Menu.Item>
       <Menu.Item key="appointment">Appointment Schedule</Menu.Item>
     </Menu>

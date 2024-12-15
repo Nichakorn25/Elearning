@@ -1,0 +1,20 @@
+/* Taskpopup.css */
+
+/* กำหนดขนาด Modal */
+.custom-task-modal .ant-modal-content {
+    border-radius: 8px;
+    padding: 24px;
+  }
+  
+  /* Title Input */
+  .title-input {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  /* Button Save */
+  .ant-btn-primary {
+    background-color: #4285f4;
+    border-color: #4285f4;
+  }
+  
