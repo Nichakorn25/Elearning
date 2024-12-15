@@ -76,7 +76,7 @@ const TCcalendar: React.FC = () => {
   };
 
   const viewmenu = (
-    <Menu onClick={handleMenuClick}>
+    <Menu onClick={handleMenuClick} className="createdropdown">
       <Menu.Item key="dayGridMonth">Month</Menu.Item>
       <Menu.Item key="timeGridWeek">Week</Menu.Item>
       <Menu.Item key="timeGridDay">Day</Menu.Item>
@@ -121,7 +121,7 @@ const TCcalendar: React.FC = () => {
   };
 
   const createMenu = (
-    <Menu>
+    <Menu className="createdropdown">
       <Menu.Item key="event">Event</Menu.Item>
       <Menu.Item key="task">Task</Menu.Item>
       <Menu.Item key="appointment">Appointment Schedule</Menu.Item>

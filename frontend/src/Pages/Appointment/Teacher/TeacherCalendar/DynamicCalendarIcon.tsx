@@ -31,7 +31,7 @@ const DynamicCalendarIcon: React.FC = () => {
         borderRadius: "10px",
         position: "relative",
         fontFamily: "Arial, sans-serif",
-        color: "white",
+        color: "black",
       }}
     >
       {/* ด้านบน */}
