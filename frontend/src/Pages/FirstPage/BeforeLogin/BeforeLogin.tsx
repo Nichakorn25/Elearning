@@ -36,7 +36,7 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
 
       {/* เนื้อหาหลัก */}
       <main className="main-contentbeforelogin">
-        <h1>SUT e-Learning</h1>
+        <h1 className="h1bflogin">SUT e-Learning</h1>
         <p>ระบบบริหารจัดการเรียนการสอนผ่านเครือข่าย มหาวิทยาลัยเทคโนโลยีสุรนารี</p>
       </main>
       {/* แสดง LoginPopup หากเปิด */}

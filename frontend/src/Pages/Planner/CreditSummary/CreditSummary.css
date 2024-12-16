@@ -1,0 +1,72 @@
+.credit-summary {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    color: black;
+  }
+  
+  .credit-summary h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .credit-summary table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .credit-summary th,
+  .credit-summary td {
+    text-align: left;
+    padding: 10px;
+    border:  1px solid #ddd;
+  }
+  
+  .credit-summary th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+  }
+  
+  .credit-summary tr:nth-child(even) {
+    background-color: #f4f4f4;
+  }
+  
+  .credit-summary tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .credit-summary .note {
+    color: #888;
+    font-size: 12px;
+  }
+  
+  .info-btn,
+  .delete-btn {
+    display: inline-block; /* ทำให้ปุ่มเรียงในแนวนอน */
+    margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .info-btn {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .info-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c82333;
+  }
+  

@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
 
       {/* Profile Content */}
       <main className="profile-content">
-        <h2 className="profile-title">My Profile</h2>
+        
         <div className="profile-card">
           <img
             className="profile-avatar"

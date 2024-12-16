@@ -1,9 +1,9 @@
-import React from 'react';
-import { Form, Input, message } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import './LoginPopup.css';
-import { SignInInterface } from '../../../Interface/IUser';
-import { SignIn, GetUserById } from '../../../services/https';
+import React from "react";
+import { Form, Input, message } from "antd";
+import { useNavigate } from "react-router-dom";
+import "./LoginPopup.css";
+import { SignInInterface } from "../../../Interface/IUser";
+import { SignIn, GetUserById } from "../../../services/https";
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -29,18 +29,16 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
 
       if (userResponse.status === 200) {
         const user = userResponse.data;
-
+        localStorage.setItem("role", user.RoleID.toString());
         setTimeout(() => {
           if (user.RoleID === 1) {
             message.success("You are a student!");
             navigate("/Dashboard");
-          } 
-          else if (user.RoleID === 2) {
+          } else if (user.RoleID === 2) {
             message.success("You are a teacher!");
             navigate("/Dashboard");
-          } 
-          else if (user.RoleID === 3)  {
-            message.success("You are an Admin!")
+          } else if (user.RoleID === 3) {
+            message.success("You are an Admin!");
             navigate("/Dashboard");
           }
         }, 1000);
@@ -52,44 +50,84 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
     }
   };
 
+  const handleForgotPassword = () => {
+    onClose();
+    navigate("/ForgotPassword");
+  };
+
   return (
     <div className="popup-overlay" onClick={onClose}>
       {contextHolder}
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
-        <h2>SUT e-Learning</h2>
+        <h2 className="popup-title">SUT e-Learning</h2>
         <Form
           name="login"
           onFinish={onFinish}
           className="popup-form"
           requiredMark={false}
         >
-          <Form.Item
-            name="username"
-            rules={[{ required: true, message: 'Please enter your Username!' }]}
-          >
-            <Input placeholder="Username" />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: 'Please enter your Password!' }]}
-          >
-            <Input.Password placeholder="Password" />
-          </Form.Item>
-          <Form.Item>
-            <button className="popup-login-button" type="submit">
-              เข้าสู่ระบบ
-            </button>
-          </Form.Item>
+          <div className="input-box">
+            <Form.Item
+              name="username"
+              rules={[
+                { required: true, message: "Please input your Username!" },
+              ]}
+            >
+              <Input
+                type="text"
+                placeholder="Username"
+                className="input-field"
+              />
+            </Form.Item>
+            <i className="bx bxs-user input-icon"></i>
+          </div>
+          <div className="input-box">
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Please input your Password!" },
+              ]}
+            >
+              <Input.Password
+                type="password"
+                placeholder="Password"
+                className="input-field"
+              />
+            </Form.Item>
+            <i className="bx bxs-lock-alt input-icon"></i>
+          </div>
+          <div className="remember-forgot-box">
+            <div className="remember-me">
+              <Input type="checkbox" id="remember-me" />
+              <label htmlFor="remember-me">Remember me</label>
+            </div>
+            <a
+              href="#"
+              className="forgot-password"
+              onClick={(e) => {
+                e.preventDefault();
+                handleForgotPassword();
+              }}
+            >
+              Forgot password?
+            </a>
+          </div>
+          <button className="popup-login-button" type="submit">
+            Login
+          </button>
+          <div className="dont-have-account">
+            Don't have an account?{" "}
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/Signup");
+              }}
+            >
+              Register
+            </a>
+          </div>
         </Form>
-        <div className="popup-links">
-          <a href="#" onClick={(e) => { e.preventDefault(); onClose(); navigate('/ForgotPassword'); }}>
-            ลืมรหัสผ่าน
-          </a>{' '}
-          |{' '}
-          <a href="#" onClick={(e) => { e.preventDefault(); onClose(); navigate('/SignUp'); }}>
-            สมัครสมาชิก
-          </a>
-        </div>
       </div>
     </div>
   );
