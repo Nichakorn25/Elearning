@@ -17,6 +17,11 @@ import ForTeacher from './Pages/FirstPage/ForTeacher/ForTeacher';
 import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
+import Admin from './Pages/Admin/Admin';
+import Announcement from './Pages/Announcement/Announcement'
+import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
+import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
+import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
 import CalendarComponent from './Pages/Appointment/CalendarComponent';
 //import TeacherCalendar from './Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar';
 import TCcalendar from './Pages/Appointment/Teacher/TeacherCalendar/TCcalendar';
@@ -40,6 +45,10 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/Admin"element={<ProtectedRoute> <Admin /></ProtectedRoute> } />
+          <Route path="/Announcement"element={<ProtectedRoute> <Announcement /></ProtectedRoute> } />
+          <Route path="/ConfirmTransfer" element={<ProtectedRoute> <ConfirmTransfer /></ProtectedRoute>} />
+          <Route path="/ManageRoleRequests" element={<ProtectedRoute> <ManageRoleRequests /></ProtectedRoute>} />
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />

@@ -5,7 +5,7 @@ import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
 
 const Admin: React.FC = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
@@ -13,7 +13,15 @@ const Admin: React.FC = () => {
   };
 
   const goToAnnouncement = () => {
-    navigate('/Announcement'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
+    navigate('/Announcement'); // เปลี่ยนเส้นทางไปหน้า Announcement
+  };
+
+  const goToConfirmTransfer = () => {
+    navigate('/ConfirmTransfer'); // เปลี่ยนเส้นทางไปหน้า Confirm Transfer
+  };
+
+  const goToManageRoleRequests = () => {
+    navigate('/ManageRoleRequests');
   };
 
   return (
@@ -22,26 +30,34 @@ const Admin: React.FC = () => {
 
       {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
 
-      <div className="admin-search-bar">
-        <input type="text" placeholder="ค้นหารายวิชา (Search courses)" />
-        <button className="admin-search-button" >🔍</button>
-      </div>
-
       <div className="admin-overview">
-        <h2>Course overview</h2>
+        <h2>Admin Dashboard</h2>
         <div className="admin-course-list">
           <div className="admin-course-card">
             <h3>ENG23 3054 Operating Systems</h3>
             <p>Asst. Dr. Prof...</p>
           </div>
-          <div className="admin-course-card" >
+          <div className="admin-course-card">
             <h3>ENG23 4041 CYBER SECURITY FUNDAMENTALS</h3>
             <p>02/2567 ...</p>
           </div>
         </div>
+
+        {/* Buttons Section */}
+      <div className="admin-buttons">
+        <button onClick={goToAnnouncement} className="admin-button">Announcement</button>
+        <button onClick={goToConfirmTransfer} className="admin-button confirm-transfer-button">
+          Confirm Payment Transfers
+        </button>
+        <button onClick={goToManageRoleRequests} className="admin-button manage-role-requests-button">
+          Manage Role Change Requests
+        </button>
       </div>
-      <button onClick={goToAnnouncement}>Announcement</button>
+      </div>
+
+      
     </div>
+
   );
 };
 

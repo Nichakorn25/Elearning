@@ -43,7 +43,7 @@ const Announcement: React.FC = () => {
       {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
 
       <div className="announcement-content">
-        <h1>Manage Announcements</h1>
+        <h2>Manage Announcements</h2>
         <button  onClick={handleOpenModal}>
           Create New Announcement
         </button>
