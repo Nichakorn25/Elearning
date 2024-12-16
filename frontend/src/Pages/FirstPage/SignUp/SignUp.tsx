@@ -21,7 +21,7 @@ const SignUp: React.FC = () => {
     phone: "",
     department: "",
     major: "",
-    RoleID: 2,
+    RoleID: 1,
   })
 
   
@@ -73,14 +73,14 @@ const SignUp: React.FC = () => {
           console.error("Error fetching majors:", error);
         }
       } else {
-        setMajors([]); // Reset majors ถ้าไม่มี department ถูกเลือก
+        setMajors([]); // Reset majors ถ้าไม่มี department ถี่กเลือก
       }
     };
     fetchMajors();
   }, [selectedDepartment]);
   
 
-  // ฟังก์ชันจัดการการเปลี่ยนค่าในฟอร์ม
+  // ฟังก์ชันจัดการกลับการเปลี่ยนค่าในฟอร์ม
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -165,8 +165,6 @@ const SignUp: React.FC = () => {
             )}
           </select>
         </div>
-        {formData.department}
-        {formData.major}
         <div className="form-group">
           <label htmlFor="major">Major</label>
           <select
@@ -185,16 +183,9 @@ const SignUp: React.FC = () => {
                 ))
             ) : (
               <>
-               No data
+               No data available
               </>
             )}
-            
-            {/* {Array.isArray(majors) &&
-              majors.map((major) => (
-                <option key={major.id} value={major.id}>
-                  {major.majorname}
-                </option>
-              ))} */}
           </select>
         </div>
 
