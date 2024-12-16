@@ -61,6 +61,7 @@ func SetupDatabase() {
 		&entity.Test{},
 		&entity.TransactionLog{},
 		&entity.User{},
+		&entity.StudyTime{},
 	)
 	departments := []entity.Department{
 		{DepartmentName: "สำนักวิชาวิทยาศาสตร์ (Institute of Science)"},
@@ -251,5 +252,22 @@ func SetupDatabase() {
 	for _, pkg := range DayofWeek {
 		db.FirstOrCreate(&pkg, entity.DayofWeek{DayName: pkg.DayName})
 	}
+
+	Category := []entity.Category{
+		{CategoryID: 1, CategoryName: "วิทยาศาสตร์"},
+		{CategoryID: 2, CategoryName: "เทคโนโยยีสังคม"},
+		{CategoryID: 3, CategoryName: "เทคโนโยยีการเกษตร"},
+		{CategoryID: 4, CategoryName: "แพทยศาสตร์"},
+		{CategoryID: 5, CategoryName: "วิศวกรรมศาสตร์"},
+		{CategoryID: 6, CategoryName: "พยาบาลศาสตร์"},
+		{CategoryID: 7, CategoryName: "ทันตแพทยศาสตร์"},
+		{CategoryID: 8, CategoryName: "สาธารณสุขศาสตร์"},
+		{CategoryID: 9, CategoryName: "ศาสตร์และศิลป์ดิจิทัล"},
+	}
+
+	for _, pkg := range Category {
+		db.FirstOrCreate(&pkg, entity.Category{CategoryID: pkg.CategoryID})
+	}
+
 
 }
