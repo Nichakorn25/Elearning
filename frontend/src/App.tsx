@@ -17,6 +17,7 @@ import ForTeacher from './Pages/FirstPage/ForTeacher/ForTeacher';
 import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
+import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -50,6 +51,7 @@ const App: React.FC = () => {
           <Route path="/ForStudent" element={<ForStudent/>}/>
           <Route path="/RequestChangeRole" element={<RequestChangeRole/>}/>
           <Route path="/SignUp" element={<SignUp/>}/>
+          <Route path="/CreateCourse" element={<CreateCourse/>}/>
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
