@@ -207,6 +207,24 @@ html {
   padding: 0 !important; /* ลบระยะห่างภายใน */
 }
 
+.sidebar-section{
+  color: black;
+}
+
+.sidebar-section button{
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 10px !important;
+  color: black !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+.sidebar-section button:hover {
+  background-color: #ff9800 !important;
+  color: black !important;
+  border-color: #ff9800 !important;
+}
+
 .sidebar-section h3 {
   margin-top: 20px;
   font-size: 16px;

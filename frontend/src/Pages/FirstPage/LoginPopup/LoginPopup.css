@@ -89,7 +89,7 @@
 .remember-me {
   display: flex;
   align-items: center;
-  gap: 8px;
+  flex-direction: row ;
 }
 
 .forgot-password {
