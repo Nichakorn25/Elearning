@@ -346,7 +346,6 @@ html {
 /* Today Highlight */
 .fc-day-today {
   background-color: #fff5e6; /* พื้นหลังไฮไลต์วันที่วันนี้ */
-  border-radius: 10px;
 }
 .fc .fc-button {
   background-color: #007bff;
