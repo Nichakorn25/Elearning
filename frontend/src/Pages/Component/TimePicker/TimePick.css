@@ -1,0 +1,21 @@
+.time_pick {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* ระยะห่างระหว่างแต่ละชุดของฟอร์ม */
+    max-height: 400px; /* ความสูงสูงสุดของ container */
+    overflow-y: auto; /* เปิดการเลื่อนในแนวตั้ง */
+    border: 1px solid #ddd; /* เส้นขอบสำหรับ container */
+    border-radius: 8px; /* เพิ่มมุมโค้ง */
+    padding: 16px; /* ระยะห่างภายใน container */
+  }
+  
+  .sub_1 {
+    display: flex;
+    gap: 16px; /* ระยะห่างระหว่างฟิลด์ */
+    align-items: center; /* จัดให้ฟอร์มอยู่ในแนวเดียวกัน */
+  }
+  
+  button {
+    align-self: flex-start; /* จัดปุ่มเพิ่มวันที่เรียนให้อยู่ชิดบนสุด */
+  }
+  
