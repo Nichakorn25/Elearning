@@ -10,8 +10,6 @@ type Course struct {
 	CourseDate	time.Time `json:"CourseDate"`
 	Credit 		uint `json:"Credit"`
 	Description string `json:"Description"`
-	StartTime float32 `json:"StartTime"`
-	EndTime	  float32 `json:"EndTime"`
 
 	ExamSchedule []ExamSchedule `gorm:"foreignKey:CourseID"`
 
