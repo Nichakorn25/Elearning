@@ -50,6 +50,16 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
     }
   };
 
+  const handleLogin = () => {
+    onClose();
+    navigate('/dashboard');
+  };
+
+  const handleForgotPassword = () => {
+    onClose();
+    navigate('/ForgotPassword');
+  };
+
   return (
     <div className="popup-overlay" onClick={onClose}>
       {contextHolder}
@@ -62,39 +72,53 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
           requiredMark={false}
         >
           <div className="input-box">
-  <Input
-    type="text"
-    name="username"
-    placeholder="Username"
-    className="input-field"
-  />
-  <i className="bx bxs-user input-icon"></i> {/* ไอคอนคน */}
-</div>
-<div className="input-box">
-  <Input.Password
-    type="password"
-    name="password"
-    placeholder="Password"
-    className="input-field"
-  />
-  <i className="bx bxs-lock-alt input-icon"></i> {/* ไอคอนกุญแจ */}
-</div>
-
+            <Form.Item
+              name="username"
+              rules={[{ required: true, message: 'Please input your Username!' }]}
+            >
+              <Input
+                type="text"
+                placeholder="Username"
+                className="input-field"
+              />
+            </Form.Item>
+            <i className="bx bxs-user input-icon"></i>
+          </div>
+          <div className="input-box">
+            <Form.Item
+              name="password"
+              rules={[{ required: true, message: 'Please input your Password!' }]}
+            >
+              <Input.Password
+                type="password"
+                placeholder="Password"
+                className="input-field"
+              />
+            </Form.Item>
+            <i className="bx bxs-lock-alt input-icon"></i>
+          </div>
           <div className="remember-forgot-box">
             <div className="remember-me">
               <Input type="checkbox" id="remember-me" />
               <label htmlFor="remember-me">Remember me</label>
             </div>
-            <a href="#" className="forgot-password">
+            <a
+              href="#"
+              className="forgot-password"
+              onClick={(e) => {
+                e.preventDefault();
+                handleForgotPassword();
+              }}
+            >
               Forgot password?
             </a>
           </div>
-          <button className="popup-login-button" type="submit">
+          <button className="popup-login-button" type="submit" onClick={handleLogin}>
             Login
           </button>
           <div className="dont-have-account">
             Don't have an account?{' '}
-            <a href="#" onClick={(e) => e.preventDefault()}>
+            <a href="#" onClick={(e) => e.preventDefault()} >
               Register
             </a>
           </div>
