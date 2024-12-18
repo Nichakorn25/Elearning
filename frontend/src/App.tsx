@@ -8,7 +8,6 @@ import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
 import ClassSchedule from './Pages/Planner/ClassSchedule/ClassSchedule';
-import Appointment from './Pages/Appointment/Appointment';
 import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
 import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';
 import ForgotPassword from './Pages/FirstPage/ForgotPassword/ForgotPassword';
@@ -18,6 +17,8 @@ import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
+import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
+import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar"
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,8 +42,6 @@ const App: React.FC = () => {
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
-          <Route path="/ClassSchedule" element={<ClassSchedule />} />
-          <Route path="/Appointment" element={<Appointment/>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
           <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
@@ -52,6 +51,10 @@ const App: React.FC = () => {
           <Route path="/RequestChangeRole" element={<RequestChangeRole/>}/>
           <Route path="/SignUp" element={<SignUp/>}/>
           <Route path="/CreateCourse" element={<CreateCourse/>}/>
+          <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
+          <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
+          <Route path="/ClassSchedule" element={<ClassSchedule/>}/>
+
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
