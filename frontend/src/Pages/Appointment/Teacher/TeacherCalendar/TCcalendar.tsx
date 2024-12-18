@@ -26,6 +26,9 @@ const TCcalendar: React.FC = () => {
   ]);
   const [currentView, setCurrentView] = useState("dayGridMonth");
   const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
+  const [isAppointmentModalVisible, setIsAppointmentModalVisible] =
+    useState(false); // สำหรับ Popup
+
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const title = prompt("Enter a title for your event:");
     const calendarApi = selectInfo.view.calendar;
@@ -115,6 +118,16 @@ const TCcalendar: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  // เปิด Appointment Popup
+  const showAppointmentModal = () => {
+    setIsAppointmentModalVisible(true);
+  };
+
+  // ปิด Appointment Popup
+  const handleCloseAppointmentModal = () => {
+    setIsAppointmentModalVisible(false);
+  };
+
   // เมื่อส่งข้อมูลจาก Popup
   const handleSubmitAppointment = (values: any) => {
     console.log("Appointment Data:", values);
@@ -127,7 +140,9 @@ const TCcalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment">Appointment Schedule</Menu.Item>
+      <Menu.Item key="appointment" onClick={showAppointmentModal}>
+        Appointment Schedule
+      </Menu.Item>
     </Menu>
   );
 
@@ -209,6 +224,12 @@ const TCcalendar: React.FC = () => {
             isVisible={isModalVisible}
             onClose={handleCloseModal}
             onSubmit={handleSubmitTask}
+          />
+
+          <CreateAppointmentPopup
+            isVisible={isAppointmentModalVisible}
+            onClose={handleCloseAppointmentModal}
+            onSubmit={handleSubmitAppointment}
           />
 
           <div className="mini-calendar">
