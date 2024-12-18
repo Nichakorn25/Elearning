@@ -7,11 +7,13 @@ import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./StudentCalendar.css";
-import Header from "../../Component/Header/Header";
-import { Menu, Dropdown, Button } from "antd";
+import Header from "../../../Component/Header/Header";
+import { Menu, Dropdown, Button , Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import DynamicCalendarIcon from "../Teacher/TeacherCalendar/DynamicCalendarIcon";
+import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIcon";
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
+import StudentBooking from "../StudentBooking/StudentBooking";
+import CreateTaskPopup from "../../Teacher/Taskpopup/Taskpopup";
 
 const StudentCalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
@@ -25,6 +27,9 @@ const StudentCalendar: React.FC = () => {
   ]);
   const [currentView, setCurrentView] = useState("dayGridMonth");
   const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
+  const [isBookingVisible, setIsBookingVisible] = useState(false);
+  const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const title = prompt("Enter a title for your event:");
     const calendarApi = selectInfo.view.calendar;
@@ -114,17 +119,31 @@ const StudentCalendar: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  // เมื่อส่งข้อมูลจาก Popup
-  const handleSubmitAppointment = (values: any) => {
-    console.log("Appointment Data:", values);
-    // Logic สำหรับเพิ่มข้อมูลใน FullCalendar หรือฐานข้อมูล
+  const showBooking = () => {
+    setIsBookingVisible(true);
+  };
+
+  const handleCloseBooking = () => {
+    setIsBookingVisible(false);
+  };
+
+  const showTaskModal = () => {
+    setIsTaskModalVisible(true);
+  };
+
+  const handleCloseTaskModal = () => {
+    setIsTaskModalVisible(false);
   };
 
   const createMenu = (
     <Menu className="createdropdown">
       {/* <Menu.Item key="event">Event</Menu.Item> */}
-      <Menu.Item key="task">Task</Menu.Item>
-      <Menu.Item key="appointment">Appointment Schedule</Menu.Item>
+      <Menu.Item key="task" onClick={showTaskModal}>
+        Task
+      </Menu.Item>
+      <Menu.Item key="appointment" onClick={showBooking}>
+        Make an Appointment
+      </Menu.Item>
     </Menu>
   );
 
@@ -176,6 +195,25 @@ const StudentCalendar: React.FC = () => {
               </Button>
             </Dropdown>
           </div>
+
+          {isBookingVisible && <StudentBooking />}
+          {isTaskModalVisible && (
+            <CreateTaskPopup
+              isVisible={isTaskModalVisible}
+              onClose={handleCloseTaskModal}
+              onSubmit={() => console.log("Task Submitted")}
+            />
+          )}
+
+          <Modal
+            title="Make an Appointment"
+            visible={isBookingVisible}
+            onCancel={handleCloseBooking}
+            footer={null}
+            centered
+          >
+            <StudentBooking />
+          </Modal>
 
           {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
           {/* <CreateAppointmentPopup

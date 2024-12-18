@@ -18,7 +18,7 @@ import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
-import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar"
+import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
