@@ -6,7 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./TCcalendar.css";
+import "./StudentCalendar.css";
 import Header from "../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
