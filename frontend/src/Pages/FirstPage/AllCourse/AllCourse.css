@@ -15,7 +15,7 @@ body{
   
   /* หัวข้อ */
   .all-courses-container h1 {
-    font-size: 28px;
+    font-size: 34px;
     color: #333; /* สีข้อความ */
     margin-bottom: 10px;
     font-family: 'Open Sans', sans-serif;

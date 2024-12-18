@@ -11,6 +11,7 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
 }
 
 .sidebar.visible {
