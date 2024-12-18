@@ -11,7 +11,7 @@ body {
     background-attachment: fixed;
     background-color: rgba(0, 0, 0, 0.5);
     position: relative;
-    font: normal 1.25em 'Prompt', sans-serif;
+    font: normal 1.25em 'Open Sans', sans-serif;
   }
 
 .Header{

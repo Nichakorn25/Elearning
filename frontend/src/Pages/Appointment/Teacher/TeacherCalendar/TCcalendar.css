@@ -6,6 +6,7 @@ body {
   overflow-y: scroll; /* ยังคงเลื่อนเนื้อหาได้ */
   scrollbar-width: none; /* ซ่อน scrollbar */
   background-color: #f8f9fa; /* ตั้งค่าพื้นหลังเป็นสีเทา */
+  font-family: 'Open Sans', sans-serif;
 }
 
 body::-webkit-scrollbar {
