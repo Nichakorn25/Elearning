@@ -1,12 +1,31 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import BeforeLogin from './BeforeLogin/BeforeLogin';
-import LoginPopup from './LoginPopup/LoginPopup';
-import Dashboard from './Dashboard/Dashboard';
-import Profile from './Profile/Profile'; // นำเข้า Profile
-import BuySheet from './Buysheet/Buysheet';
-import SelectSheet from './SelectSheet/SelectSheet';
-import Cart from './Cart/Cart';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import BeforeLogin from './Pages/FirstPage/BeforeLogin/BeforeLogin';
+import LoginPopup from './Pages/FirstPage/LoginPopup/LoginPopup';
+import Dashboard from '../src/Pages/Dashboard/Dashboard';
+import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profile
+import BuySheet from '../src/Pages/Buysheet/Buysheet';
+import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
+import Cart from '../src/Pages/Cart/Cart';
+import ClassSchedule from './Pages/Planner/ClassSchedule/ClassSchedule';
+import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
+import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';
+import ForgotPassword from './Pages/FirstPage/ForgotPassword/ForgotPassword';
+import AllCourse from './Pages/FirstPage/AllCourse/AllCourse';
+import ForTeacher from './Pages/FirstPage/ForTeacher/ForTeacher';
+import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
+import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
+import SignUp from './Pages/FirstPage/SignUp/SignUp';
+import CreateCourse from "./Pages/CreateCourse/CreateCourse";
+import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
+import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
+import MainSealSheet from './MainSealSheet/MainSealSheet';
+import AddSealUser from './AddSealUser/AddSealUser';
+import AddSheet from './AddSheet/AddSheet';
+import EditSealUser from './EditSealUser/EditSealUser';
+import EditSheet from './EditSheet/EditSheet';
+import IncomeHistory from './IncomeHistory/IncomeHistory';
+import PaymentPage from './Payment/Payment';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -28,7 +47,7 @@ const App: React.FC = () => {
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
           <Route path="/buySheet" element={<BuySheet />} />
-          <Route path="/selectsheet" element={<SelectSheet  />} />
+          <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
@@ -42,7 +61,6 @@ const App: React.FC = () => {
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
           <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
           <Route path="/ClassSchedule" element={<ClassSchedule/>}/>
-
           <Route path="/AddSealUser" element={<AddSealUser />} /> 
           <Route path="/MainSealSheet" element={<MainSealSheet />} />
           <Route path="/AddSheet" element={<AddSheet />} />
@@ -51,6 +69,7 @@ const App: React.FC = () => {
           <Route path="/EditSheet" element={<EditSheet />} />
           <Route path="/IncomeHistory" element={<IncomeHistory />} />
           <Route path="/Payment" element={<PaymentPage />} />
+
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
