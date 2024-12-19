@@ -1,17 +1,37 @@
-.sheet {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-}
+
 h2 {
   padding: 10px;
   font-size: 30px; /* ขนาดตัวอักษรเริ่มต้น */
   margin-bottom: 20px;
 }
 
-.sheet-layout {
-  min-height: 100vh;
-  background-color: #ffffff;
+.sheet {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  transition: margin-left 0.3s ease; /* Smooth transition for content margin */
 }
+
+/* CSS สำหรับพื้นที่เนื้อหาหลัก */
+.sheet .ant-layout {
+  margin-left: 0; /* ค่าเริ่มต้นเมื่อ sidebar ซ่อนอยู่ */
+  transition: margin-left 0.3s ease, width 0.3s ease; /* การเปลี่ยนแปลงที่ราบรื่น */
+  width: calc(100%); /* ความกว้างเต็มขอบเขตเมื่อ sidebar ซ่อนอยู่ */
+}
+
+/* ปรับเมื่อ sidebar แสดง */
+.sheet.sidebar-visible .ant-layout {
+  position: fixed;
+  margin-left: 250px; /* ขยับตามความกว้างของ sidebar */
+  width: calc(100% - 250px); /* ปรับความกว้างเมื่อ sidebar แสดง */
+}
+
+@media (max-width: 768px) {
+  .sheet.sidebar-visible .ant-layout {
+    margin-left: 0; /* ลบขอบเขตในหน้าจอขนาดเล็ก */
+    width: 100%; /* ความกว้างเต็มขอบเขตในหน้าจอขนาดเล็ก */
+  }
+}
+
 
 .sheet-header {
   width: 100%;
@@ -240,4 +260,11 @@ h2 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* เงา */
     z-index: 1; /* ทำให้มองเห็นได้ชัดเจน */
   }
-  
+  .sidebar-fixed {
+    position: fixed;
+    height: 100vh;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 250px; /* Adjust width as needed */
+  }

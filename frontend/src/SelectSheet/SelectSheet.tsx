@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card, Button, Row, Col, Layout, Input, List, Form, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './SelectSheet.css';
 
 const { Content } = Layout;
@@ -9,6 +11,7 @@ const { TextArea } = Input;
 const SelectSheet: React.FC = () => {
     const navigate = useNavigate();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
     const [comments, setComments] = useState<string[]>([]);
     const [commentInput, setCommentInput] = useState('');
 
@@ -61,33 +64,8 @@ const SelectSheet: React.FC = () => {
 
     return (
         <Layout className="sheet">
-            {/* Header Section */}
-            <header className="sheet-header">
-                <div className="header-left">
-                    <button className="menu-button">☰</button>
-                    <h1>SUT e-Learning</h1>
-                    <span className="language">English (en)</span>
-                </div>
-                <div className="header-right">
-                    <div className="user-info" onClick={toggleDropdown}>
-                        <span className="user-id">B6525972</span>
-                        <span className="user-name">ณิชากร จันทร์ยุทา</span>
-                        <img
-                            src="https://via.placeholder.com/40"
-                            alt="User Avatar"
-                            className="user-avatar"
-                        />
-                    </div>
-                    {isDropdownVisible && (
-                        <div className="dropdown-menu">
-                            <button onClick={goToDashboard}>Dashboard</button>
-                            <button onClick={goToProfile}>Profile</button>
-                            <button onClick={goToBuySheet}>BuySheet</button>
-                            <button onClick={handleLogout}>Logout</button>
-                        </div>
-                    )}
-                </div>
-            </header>
+            <Header />
+            <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
 
             {/* Main Content */}
             <Content className="sheet-content">

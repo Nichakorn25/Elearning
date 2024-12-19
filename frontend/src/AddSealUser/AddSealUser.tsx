@@ -1,113 +1,71 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { Card, Layout, Button, Input, Form, message, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
+import './AddSealUser.css';
 
 const { Content } = Layout;
 const { Option } = Select;
 
-const AddSealUser: React.FC = () => {
+const AddSealUser = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [password, setPassword] = useState('');
-  const [bank, setBank] = useState<string | undefined>(undefined);
-  const [accountNumber, setAccountNumber] = useState('');
+  const [form] = Form.useForm();
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
-  // ฟังก์ชันสำหรับการบันทึกข้อมูลผู้ใช้ใหม่
-  const handleCreateUser = () => {
-    if (!username || !email || !phoneNumber || !password || !bank || !accountNumber) {
-      message.warning('กรุณากรอกข้อมูลให้ครบถ้วน');
-      return;
+  const handleCreateUser = async () => {
+    try {
+      await form.validateFields();
+      const values = form.getFieldsValue();
+      // Additional validations can be performed here
+      message.success('ผู้ใช้ถูกสร้างเรียบร้อยแล้ว!');
+      navigate('/dashboard');
+    } catch (errorInfo) {
+      console.error('Failed:', errorInfo);
     }
-
-    // Validate email format
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(email)) {
-      message.warning('กรุณากรอกอีเมลให้ถูกต้อง');
-      return;
-    }
-
-    // Validate phone number format (simple validation for 10 digits)
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      message.warning('กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง');
-      return;
-    }
-
-    // สมมุติว่าเก็บข้อมูลผู้ใช้ได้ที่นี่
-    message.success('ผู้ใช้ถูกสร้างเรียบร้อยแล้ว!');
-    navigate('/dashboard'); // หลังจากสร้างผู้ใช้เสร็จ, ไปยังหน้า dashboard
   };
 
   return (
-    <Layout className="sheet">
-      <header className="sheet-header">
-        <div className="header-left">
-          <button className="menu-button">☰</button>
-          <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
-        </div>
-        <div className="header-right"></div>
-      </header>
-      <Content className="sheet-content">
-        <div className="form-container">
-          <Card title="สร้างผู้ใช้ใหม่" bordered={false} className="seal-sheet-card">
-            <Form layout="vertical" onFinish={handleCreateUser}>
+    <Layout className="addsealer">
+      <Header />
+      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
+      <Content className="addsealer-content">
+        <Card className="form-container" title="สร้างผู้ใช้ใหม่" bordered={false}>
+          <Form form={form} layout="vertical" onFinish={handleCreateUser}>
               <Form.Item
                 label="ชื่อผู้ใช้"
                 name="username"
                 rules={[{ required: true, message: 'กรุณากรอกชื่อผู้ใช้' }]}
               >
-                <Input
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="กรอกชื่อผู้ใช้"
-                />
+                <Input placeholder="กรอกชื่อผู้ใช้" />
               </Form.Item>
               <Form.Item
                 label="อีเมล"
                 name="email"
                 rules={[{ required: true, message: 'กรุณากรอกอีเมล' }]}
               >
-                <Input
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="กรอกอีเมล"
-                />
+                <Input placeholder="กรอกอีเมล" />
               </Form.Item>
               <Form.Item
                 label="เบอร์โทรศัพท์"
                 name="phoneNumber"
                 rules={[{ required: true, message: 'กรุณากรอกเบอร์โทรศัพท์' }]}
               >
-                <Input
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  placeholder="กรอกเบอร์โทรศัพท์"
-                />
+                <Input placeholder="กรอกเบอร์โทรศัพท์" />
               </Form.Item>
               <Form.Item
                 label="รหัสผ่าน"
                 name="password"
                 rules={[{ required: true, message: 'กรุณากรอกรหัสผ่าน' }]}
               >
-                <Input.Password
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="กรอกรหัสผ่าน"
-                />
+                <Input.Password placeholder="กรอกรหัสผ่าน" />
               </Form.Item>
               <Form.Item
-                label="เลือกธนาคาร"
+                label="เลือกธนาคาร"  
                 name="bank"
                 rules={[{ required: true, message: 'กรุณาเลือกธนาคาร' }]}
               >
-                <Select
-                  value={bank}
-                  onChange={(value) => setBank(value)}
-                  placeholder="เลือกธนาคาร"
-                >
+                <Select placeholder="เลือกธนาคาร">
                   <Option value="ธนาคารกรุงเทพ">ธนาคารกรุงเทพ</Option>
                   <Option value="ธนาคารกสิกรไทย">ธนาคารกสิกรไทย</Option>
                   <Option value="ธนาคารไทยพาณิชย์">ธนาคารไทยพาณิชย์</Option>
@@ -119,20 +77,15 @@ const AddSealUser: React.FC = () => {
                 name="accountNumber"
                 rules={[{ required: true, message: 'กรุณากรอกเลขบัญชีธนาคาร' }]}
               >
-                <Input
-                  value={accountNumber}
-                  onChange={(e) => setAccountNumber(e.target.value)}
-                  placeholder="กรอกเลขบัญชีธนาคาร"
-                />
+                <Input placeholder="กรอกเลขบัญชีธนาคาร" />
               </Form.Item>
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  สร้างผู้ใช้
-                </Button>
-              </Form.Item>
-            </Form>
-          </Card>
-        </div>
+            <Form.Item className="form-button-item">
+              <Button type="primary" htmlType="submit">
+                สร้างผู้ใช้
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
       </Content>
     </Layout>
   );

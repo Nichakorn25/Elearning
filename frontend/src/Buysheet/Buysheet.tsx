@@ -3,6 +3,8 @@ import { Cascader, Card, Layout, Button, Badge } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { CascaderProps, GetProp } from 'antd';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './buysheet.css';
 
 type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
@@ -17,6 +19,7 @@ const BuySheet: React.FC = () => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [cartItemCount, setCartItemCount] = useState<number>(2);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { Meta } = Card;
 
   const options1: Option[] = [
@@ -94,34 +97,6 @@ useEffect(() => {
         (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
     );
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
-
-  const closeDropdown = () => {
-    setDropdownVisible(false);
-  };
-
-  const goToDashboard = () => {
-    closeDropdown();
-    navigate('/dashboard');
-  };
-
-  const handleLogout = () => {
-    console.log('Logging out...');
-    closeDropdown();
-    navigate('/'); // Go to the main page
-  };
-
-  const goToProfile = () => {
-    closeDropdown();
-    navigate('/profile'); // Go to the profile page
-  };
-
-  const goToBuySheet = () => {
-    closeDropdown();
-    navigate('/Buysheet'); // Go to BuySheet page
-  };
 
   const handleMouseEnter = (id: string) => {
     setHoveredCard(id);
@@ -141,35 +116,11 @@ useEffect(() => {
 
   return (
     <Layout className="sheet">
-      {/* Header Section */}
-      <header className="sheet-header">
-        <div className="header-left">
-          <button className="menu-button">☰</button>
-          <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
-        </div>
-        <div className="header-right">
-          <div className="user-info" onClick={toggleDropdown}>
-            <span className="user-id">B6525972</span>
-            <span className="user-name">ณิชากร จันทร์ยุทา</span>
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User Avatar"
-              className="user-avatar"
-            />
-          </div>
+    {/* Header Section */}
+    <Header />
 
-          {isDropdownVisible && (
-            <div className="dropdown-menu">
-              <button onClick={goToDashboard}>Dashboard</button>
-              <button onClick={goToProfile}>Profile</button>
-              <button onClick={goToBuySheet}>BuySheet</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
-      </header>
-
+    {/* Sidebar */}
+    <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
       {/* Search Bar */}
       <div className="search-bar">
         <Cascader
@@ -244,7 +195,7 @@ useEffect(() => {
           />
         </Badge>
       </div>
-    </Layout>
+      </Layout>
   );
 };
 
