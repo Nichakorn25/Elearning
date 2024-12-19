@@ -6,14 +6,6 @@ import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile'; // นำเข้า Profile
 import BuySheet from './Buysheet/Buysheet';
 import SelectSheet from './SelectSheet/SelectSheet';
-import MainSealSheet from './MainSealSheet/MainSealSheet';
-import AddSealUser from './AddSealUser/AddSealUser';
-import AddSheet from './AddSheet/AddSheet';
-import EditSealUser from './EditSealUser/EditSealUser';
-import EditSheet from './EditSheet/EditSheet';
-import IncomeHistory from './IncomeHistory/IncomeHistory';
-import PaymentPage from './Payment/Payment';
-
 import Cart from './Cart/Cart';
 
 const App: React.FC = () => {
@@ -27,8 +19,10 @@ const App: React.FC = () => {
     <Router>
       <div>
         <Routes>
-          {/* กำหนดให้ BeforeLogin เป็นหน้าแรก */}
+          {/* เปลี่ยนเส้นทางของ BeforeLogin ให้เป็น path="/" */}
           <Route path="/" element={<BeforeLogin onLoginClick={togglePopup} />} />
+          <Route path="/beforeLogin" element={<Navigate to="/" replace />} />
+
           {/* เส้นทางสำหรับ Dashboard */}
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
@@ -36,6 +30,19 @@ const App: React.FC = () => {
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet  />} />
           <Route path="/Cart" element={<Cart />} />
+          <Route path="/ResetPassword" element={<ResetPassword/>}/>
+          <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
+          <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
+          <Route path="/AllCourse" element={<AllCourse/>}/>
+          <Route path="/ForTeacher" element={<ForTeacher/>}/>
+          <Route path="/ForStudent" element={<ForStudent/>}/>
+          <Route path="/RequestChangeRole" element={<RequestChangeRole/>}/>
+          <Route path="/SignUp" element={<SignUp/>}/>
+          <Route path="/CreateCourse" element={<CreateCourse/>}/>
+          <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
+          <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
+          <Route path="/ClassSchedule" element={<ClassSchedule/>}/>
+
           <Route path="/AddSealUser" element={<AddSealUser />} /> 
           <Route path="/MainSealSheet" element={<MainSealSheet />} />
           <Route path="/AddSheet" element={<AddSheet />} />

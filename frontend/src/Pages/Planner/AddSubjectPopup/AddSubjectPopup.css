@@ -1,0 +1,131 @@
+/* Overlay */
+.add-subject-popup__overlay {
+  position: fixed;
+  top: 60px; /* ปรับให้เริ่มต้นใต้ Header (สมมติ Header สูง 60px) */
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px); /* ลดความสูงเท่ากับ Header */
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-start; /* จัดป๊อปอัปให้อยู่ด้านบน */
+  justify-content: center;
+  z-index: 1000;
+  overflow-y: auto; /* เพิ่มการเลื่อนในกรณีที่หน้าจอเล็ก */
+}
+
+/* Container */
+.add-subject-popup__container {
+  background-color: #ffffff;
+  width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Header */
+.add-subject-popup__header {
+  padding: 15px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+}
+
+.add-subject-popup__close-button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Content */
+.add-subject-popup__content {
+  padding: 20px;
+}
+
+.add-subject-popup__form-group {
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+.add-subject-popup__form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: black;
+}
+
+.add-subject-popup__form-group input,
+.add-subject-popup__form-group select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Buttons */
+.add-subject-popup__buttons {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.btn-search {
+  background-color: #28a745;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-guide {
+  background-color: #ffc107;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Alert */
+.add-subject-popup__alert {
+  font-size: 14px;
+  color: #dc3545;
+  margin-top: 10px;
+}
+
+.add-subject-popup__alert a {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+/* Footer */
+.add-subject-popup__footer {
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #ddd;
+  background-color: #f8f9fa;
+}
+
+.btn-close {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-subject-popup__form-inline {
+  display: flex; /* ใช้ Flexbox สำหรับจัดเรียง */
+  gap: 15px; /* เว้นระยะห่างระหว่างช่อง */
+  margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่าง */
+}

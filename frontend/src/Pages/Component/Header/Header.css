@@ -1,0 +1,133 @@
+.dashboard-header {
+  position: fixed; /* ทำให้ Header อยู่ด้านบนตลอด */
+  top: 0;
+  left: 0;
+  width: 100%; /* กว้างเต็มจอ */
+  height: 60px; /* กำหนดความสูง */
+  background-color: #ff6b00;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1001; /* ให้อยู่ด้านบนสุด */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: 'Open Sans', sans-serif;
+}
+
+  
+  .dashboardheader-left {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+  }
+  
+  .dashboardmenu-button {
+    background: none;
+    border: none;
+    font-size: 1.8em; /* ขนาดใหญ่ขึ้น */
+    color: white;
+    cursor: pointer;
+    margin-right: 15px; /* เพิ่มระยะห่าง */
+    transition: transform 0.3s ease;
+  }
+  
+  .dashboardmenu-button:hover {
+    transform: scale(1.1); /* ขยายเมื่อ hover */
+  }
+  
+  .dashboardheader-right {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* เพิ่มช่องว่างระหว่างไอเท็ม */
+  }
+  
+  .dashboarduser-id,
+  .dashboarduser-name {
+    font-size: 1em;
+    font-weight: bold;
+  }
+  
+  .dashboarduser-avatar {
+    width: 45px; /* ขยายขนาด */
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover; /* ให้ภาพไม่ผิดสัดส่วน */
+    border: 2px solid white; /* เพิ่มกรอบ */
+  }
+  
+  .dashboarddropdown-menu {
+    position: absolute;
+    top: 70px; /* ระยะห่างจาก header */
+    right: 20px; /* ชิดขวา */
+    background-color: white; /* สีพื้นหลัง */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* เงาที่นุ่มขึ้น */
+    border-radius: 8px; /* มุมโค้ง */
+    z-index: 10;
+    width: 200px; /* กำหนดขนาดกว้าง */
+    overflow: hidden;
+  }
+  
+  .dashboarddropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 12px 15px; /* เพิ่ม padding */
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    color: #003366; /* สีตัวอักษร */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .dashboarddropdown-menu button:hover {
+    background-color: #f8f8f8; /* เปลี่ยนสีพื้นหลังเมื่อ hover */
+    color: #ff6b00; /* เปลี่ยนสีตัวอักษรเมื่อ hover */
+  }
+  
+  /* Arrow Style */
+  .arrow {
+    border: solid white;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 4px;
+    margin-left: 8px;
+    transition: transform 0.3s ease, color 0.3s;
+  }
+  
+  /* หมุนลูกศรขึ้น */
+  .arrow.up {
+    transform: rotate(-135deg);
+  }
+  
+  /* หมุนลูกศรลง */
+  .arrow.down {
+    transform: rotate(45deg);
+  }
+  
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-wrap: wrap; /* ให้ไอเท็มเรียงแถวใหม่เมื่อพื้นที่ไม่พอ */
+      justify-content: center; /* จัดให้อยู่กลาง */
+      padding: 10px 15px; /* ลด padding */
+    }
+  
+    .dashboardmenu-button {
+      font-size: 1.5em; /* ขนาดเล็กลง */
+      margin-right: 0;
+    }
+  
+    .dashboardheader-right {
+      flex-direction: column;
+      gap: 5px; /* ลดช่องว่าง */
+      margin-top: 10px; /* เพิ่มระยะห่างบน */
+    }
+  
+    .dashboarddropdown-menu {
+      right: 10px; /* ลดระยะขอบในมือถือ */
+      width: 160px; /* ขนาดเล็กลง */
+    }
+  }
+  

@@ -1,0 +1,58 @@
+.for-teacher {
+    font-family: 'Noto Sans Thai', Arial;
+    padding: 20px;
+    background-color: #f9f9f9;
+    text-align: left;
+    
+  }
+  
+  .title {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: left;
+  }
+  
+  .content-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+  }
+  
+  .content-item {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 25%;
+  }
+  
+  .content-image {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+  
+  .content-details {
+    text-align: center;
+  }
+  
+  .content-title {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  
+  .content-description {
+    font-size: 1em;
+    color: #666;
+    text-align: left;
+  }
+  
