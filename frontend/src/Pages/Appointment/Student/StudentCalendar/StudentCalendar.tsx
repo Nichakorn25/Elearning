@@ -8,7 +8,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./StudentCalendar.css";
 import Header from "../../../Component/Header/Header";
-import { Menu, Dropdown, Button , Modal } from "antd";
+import { Menu, Dropdown, Button, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIcon";
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
@@ -120,7 +120,7 @@ const StudentCalendar: React.FC = () => {
   };
 
   const showBooking = () => {
-    setIsBookingVisible(true);
+    setIsBookingVisible(true); // ให้แสดง Modal เฉพาะเมื่อเรียกใช้ฟังก์ชันนี้
   };
 
   const handleCloseBooking = () => {
@@ -134,6 +134,7 @@ const StudentCalendar: React.FC = () => {
   const handleCloseTaskModal = () => {
     setIsTaskModalVisible(false);
   };
+
 
   const createMenu = (
     <Menu className="createdropdown">
@@ -196,7 +197,6 @@ const StudentCalendar: React.FC = () => {
             </Dropdown>
           </div>
 
-          {isBookingVisible && <StudentBooking />}
           {isTaskModalVisible && (
             <CreateTaskPopup
               isVisible={isTaskModalVisible}
@@ -205,15 +205,11 @@ const StudentCalendar: React.FC = () => {
             />
           )}
 
-          <Modal
-            title="Make an Appointment"
-            visible={isBookingVisible}
-            onCancel={handleCloseBooking}
-            footer={null}
-            centered
-          >
-            <StudentBooking />
-          </Modal>
+          <StudentBooking
+            isVisible={isBookingVisible}
+            onClose={handleCloseBooking}
+            onSubmit={() => console.log("Task Submitted")}
+          />
 
           {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
           {/* <CreateAppointmentPopup

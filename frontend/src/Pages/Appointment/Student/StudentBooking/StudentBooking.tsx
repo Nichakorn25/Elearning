@@ -1,43 +1,76 @@
 import React, { useState } from "react";
-import "./StudentBooking.css";
+import { Input, Button } from "antd";
+import "./StudentBookingPopup.css";
 
-const StudentBooking: React.FC = () => {
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+const StudentBookingPopup = ({ isVisible, onClose, onSubmit }) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
 
-  const timeSlots = ["10:00", "11:00", "13:00", "14:00", "15:00", "16:00"];
-
-  const handleTimeClick = (time: string) => {
-    setSelectedTime(time);
+  const handleBooking = () => {
+    // Call onSubmit with the input data
+    onSubmit({
+      firstName,
+      lastName,
+      email,
+      studentId,
+    });
+    onClose(); // Close the modal
   };
 
-  const handleConfirmBooking = () => {
-    if (selectedTime) {
-      alert(`Your appointment for ${selectedTime} has been booked!`);
-    } else {
-      alert("Please select a time slot before confirming.");
-    }
-  };
+  if (!isVisible) {
+    return null;
+  }
 
   return (
-    <div className="booking-container">
-      <h2 className="booking-title">Mentor Slot</h2>
-      <p className="booking-subtitle">60 min appointments</p>
-      <div className="time-slots">
-        {timeSlots.map((time) => (
-          <button
-            key={time}
-            className={`time-slot ${selectedTime === time ? "selected" : ""}`}
-            onClick={() => handleTimeClick(time)}
-          >
-            {time}
-          </button>
-        ))}
+    <div className="student-booking-popup">
+      <div className="popup-content">
+        <h3 className="popup-title">Mentor Slot</h3>
+        <p>Wednesday, July 19, 09:00 - 09:30</p>
+        <p>(GMT+07:00) Indochina Time - Bangkok</p>
+        <p className="info-note">
+          Google Meet video conference info added after booking
+        </p>
+
+        <div className="form-group">
+          <Input
+            placeholder="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            style={{ marginBottom: "16px" }}
+          />
+          <Input
+            placeholder="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            style={{ marginBottom: "16px" }}
+          />
+          <Input
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{ marginBottom: "16px" }}
+          />
+          <Input
+            placeholder="Student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+            style={{ marginBottom: "16px" }}
+          />
+        </div>
+
+        <div className="form-actions">
+          <Button type="default" onClick={onClose} style={{ marginRight: "8px" }}>
+            Cancel
+          </Button>
+          <Button type="primary" onClick={handleBooking}>
+            Book
+          </Button>
+        </div>
       </div>
-      <button className="confirm-button" onClick={handleConfirmBooking}>
-        Confirm Booking
-      </button>
     </div>
   );
 };
 
-export default StudentBooking;
+export default StudentBookingPopup;
