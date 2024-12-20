@@ -12,6 +12,10 @@ const Profile: React.FC = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
+  const handleEditProfileClick = () => {
+    navigate('/EditProfile');
+  };
+
   return (
     <div className="profile-dashboard">
       {/* Header Section */}
@@ -53,7 +57,7 @@ const Profile: React.FC = () => {
           </div>
         </div>
         <div className="profile-actions">
-          <button className="profile-button">Edit Profile</button>
+          <button className="profile-button" onClick={handleEditProfileClick}>Edit Profile</button>
         </div>
       </main>
     </div>

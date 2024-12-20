@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import BeforeLogin from './Pages/FirstPage/BeforeLogin/BeforeLogin';
 import LoginPopup from './Pages/FirstPage/LoginPopup/LoginPopup';
 import Dashboard from '../src/Pages/Dashboard/Dashboard';
-import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profile
+import Profile from '../src/Pages/Profile/Profile'; 
+import EditProfile from './Pages/Profile/edit/EditProfile';
 import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Admin"element={<ProtectedRoute> <Admin /></ProtectedRoute> } />
           <Route path="/AdminFillDetails" element={<ProtectedRoute><AdminFillDetails /></ProtectedRoute>} />
           <Route path="/Announcement"element={<ProtectedRoute> <Announcement /></ProtectedRoute> } />
