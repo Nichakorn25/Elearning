@@ -6,14 +6,21 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const Taskpopup = ({ isVisible, onClose, onSubmit }) => {
+  // สร้าง state สำหรับเก็บค่าจากฟอร์ม
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState(null);
+  const [time, setTime] = useState(null);
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("งานของฉัน");
+
   const handleSave = () => {
     // ส่งข้อมูลกลับเมื่อกด Save
     onSubmit({
-      title: "", // ตัวอย่าง: รับค่าจากช่อง Input Title
-      date: null, // ตัวอย่าง: รับค่าจาก DatePicker
-      time: null, // ตัวอย่าง: รับค่าจาก TimePicker
-      description: "", // ตัวอย่าง: รับค่าจาก TextArea
-      category: "งานของฉัน", // ตัวอย่าง: รับค่าจาก Dropdown
+      title, // ค่า Title
+      date, // ค่า Date
+      time, // ค่า Time
+      description, // ค่า Description
+      category, // ค่า Category
     });
     onClose(); // ปิด Popup
   };
@@ -29,6 +36,8 @@ const Taskpopup = ({ isVisible, onClose, onSubmit }) => {
       <Input
         placeholder="Add title"
         className="title-input"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)} // อัปเดตค่า title
         style={{ marginBottom: "16px" }}
       />
 
@@ -41,24 +50,39 @@ const Taskpopup = ({ isVisible, onClose, onSubmit }) => {
           marginBottom: "16px",
         }}
       >
-        <DatePicker placeholder="Select Date" style={{ flex: 1 }} />
-        <TimePicker placeholder="Select Time" style={{ flex: 1 }} format="h:mm a" />
+        <DatePicker
+          placeholder="Select Date"
+          value={date}
+          onChange={(value) => setDate(value)} // อัปเดตค่า date
+          style={{ flex: 1 }}
+        />
+        <TimePicker
+          placeholder="Select Time"
+          value={time}
+          onChange={(value) => setTime(value)} // อัปเดตค่า time
+          style={{ flex: 1 }}
+          format="h:mm a"
+        />
       </div>
 
       {/* Description */}
       <TextArea
         placeholder="Add description"
         rows={4}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)} // อัปเดตค่า description
         style={{ marginBottom: "16px" }}
       />
 
       {/* Dropdown */}
       <Select
         placeholder="งานของฉัน"
+        value={category}
+        onChange={(value) => setCategory(value)} // อัปเดตค่า category
         style={{ width: "100%", marginBottom: "16px" }}
       >
         <Option value="mywork">งานของฉัน</Option>
-        <Option value="other">อื่นๆ</Option>
+        <Option value="otherwork">งานอื่นๆ</Option>
       </Select>
 
       {/* Save Button */}

@@ -1,20 +1,158 @@
-/* Taskpopup.css */
-
-/* กำหนดขนาด Modal */
+/* Modal Styling */
 .custom-task-modal .ant-modal-content {
-    border-radius: 8px;
-    padding: 24px;
-  }
-  
-  /* Title Input */
-  .title-input {
-    font-size: 16px;
-    font-weight: bold;
-  }
-  
-  /* Button Save */
-  .ant-btn-primary {
-    background-color: #4285f4;
-    border-color: #4285f4;
-  }
-  
+  width: 100%;
+  max-width: 1200px; /* ปรับความกว้างของ Modal ให้กว้างขึ้น */
+  border-radius: 25px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: none;
+  background: #ffffff; /* ปรับสีพื้นหลังให้เป็นสีขาว */
+  font-family: 'Open Sans', sans-serif;
+  max-width: 100%; /* กำหนดความกว้างสูงสุด 80% ของหน้าจอ */
+  width: auto; /* กำหนดให้ปรับตามเนื้อหา */
+}
+
+/* Title Input Styling */
+.title-input {
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid #d9d9d9;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  padding: 8px 0;
+  outline: none;
+  background-color: transparent;
+  color: #202124; /* สีข้อความหลัก */
+  transition: border-color 0.3s ease;
+}
+
+.title-input::placeholder {
+  color: #5f6368; /* สีข้อความ Placeholder */
+}
+
+.title-input:focus {
+  border-bottom: 2px solid #4285f4; /* ใช้แค่เส้นล่าง */
+  outline: none; /* ไม่มีกรอบ focus */
+  box-shadow: none; /* เอากรอบสีฟ้าหรือแสงออก */
+}
+
+/* DatePicker and TimePicker */
+.ant-picker {
+  width: 100%;
+  border: 1px solid #d9d9d9; /* เพิ่มกรอบ */
+  border-radius: 4px; /* ปรับมุมให้มน */
+  background: #ffffff; /* สีพื้นหลัง */
+  padding: 8px;
+  margin-bottom: 16px;
+  color: #202124;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* เพิ่มเอฟเฟกต์ */
+  outline: none;
+}
+
+.ant-picker-input > input {
+  font-size: 16px;
+  color: #202124;
+}
+
+.ant-picker:hover,
+.ant-picker-focused {
+  border: none;
+  border-bottom: 1px solid #4285f4; /* เปลี่ยนสีกรอบเมื่อ hover หรือ focus */
+  /* box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2); เพิ่มเงาสีฟ้า */
+}
+
+/* TextArea Styling */
+.ant-input-textarea {
+  border: none;
+  border-bottom: 2px solid #d9d9d9;
+  padding: 8px 0;
+  resize: none;
+  background: transparent;
+  transition: border-color 0.3s ease;
+  margin-bottom: 16px;
+  color: #202124;
+  outline: none;
+}
+
+.ant-input-textarea::placeholder {
+  color: #5f6368;
+  box-shadow: none;
+}
+
+.ant-input-textarea:focus {
+  border-bottom: 2px solid #4285f4;
+}
+
+/* Dropdown Selector */
+.ant-select-selector {
+  border: none;
+  border-bottom: 2px solid #d9d9d9;
+  background: transparent;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  height: auto;
+  color: #202124;
+  outline: none;
+}
+
+.ant-select-selector:hover,
+.ant-select-focused {
+  border-bottom: 2px solid #4285f4;
+  box-shadow: none;
+}
+
+.ant-select-selection-placeholder {
+  color: #5f6368; /* สี Placeholder */
+}
+
+/* Save Button */
+.ant-btn-primary {
+  background-color: #4285f4;
+  border-color: #4285f4;
+  color: white;
+  height: 40px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 0 24px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.ant-btn-primary:hover {
+  background-color: #3367d6;
+  border-color: #3367d6;
+}
+
+/* Icon Styling */
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.icon-wrapper .icon {
+  font-size: 18px;
+  color: #5f6368;
+}
+
+.icon-wrapper:hover .icon {
+  color: #4285f4;
+}
+
+/* General Enhancements */
+.task-popup {
+  max-width: 600px;
+  margin: auto;
+  padding: 16px;
+  background-color: #ffffff; /* ปรับพื้นหลังให้เป็นสีขาว */
+  border-radius: 8px;
+}
+
+.hidden-label {
+  display: none;
+}

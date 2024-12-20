@@ -8,7 +8,9 @@ import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
 import ClassSchedule from './Pages/Planner/ClassSchedule/ClassSchedule';
-import Appointment from './Pages/Appointment/Appointment';
+import TeacherCalendar from './Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar';
+import CreateAppointment from './Pages/Appointment/Teacher/CreateAppointment/CreateAppointment';
+import StudentCalendar from './Pages/Appointment/Student/StudentCalendar/StudentCalendar';
 import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
 import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';
 import ForgotPassword from './Pages/FirstPage/ForgotPassword/ForgotPassword';
@@ -43,7 +45,9 @@ const App: React.FC = () => {
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
           <Route path="/ClassSchedule" element={<ClassSchedule />} />
-          <Route path="/Appointment" element={<Appointment/>}/>
+          <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
+          <Route path="/CreateAppointment" element={<CreateAppointment/>}/>
+          <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
           <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
