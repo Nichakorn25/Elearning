@@ -19,13 +19,13 @@ import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
 import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
-import MainSealSheet from './MainSealSheet/MainSealSheet';
-import AddSealUser from './AddSealUser/AddSealUser';
-import AddSheet from './AddSheet/AddSheet';
-import EditSealUser from './EditSealUser/EditSealUser';
-import EditSheet from './EditSheet/EditSheet';
-import IncomeHistory from './IncomeHistory/IncomeHistory';
-import PaymentPage from './Payment/Payment';
+import MainSealSheet from './Pages/MainSealSheet/MainSealSheet';
+import AddSealUser from './Pages/AddSealUser/AddSealUser';
+import AddSheet from './Pages/AddSheet/AddSheet';
+import EditSealUser from './Pages/EditSealUser/EditSealUser';
+import EditSheet from './Pages/EditSheet/EditSheet';
+import IncomeHistory from './Pages/IncomeHistory/IncomeHistory';
+import PaymentPage from './Pages/Payment/Payment';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);

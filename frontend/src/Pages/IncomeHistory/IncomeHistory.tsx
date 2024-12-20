@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Table, Card, Layout, Typography } from 'antd';
 import './IncomeHistory.css';
-import Sidebar from '../Component/Sidebar/Sidebar';
-import Header from '../Component/Header/Header';
+import Sidebar from '../../Component/Sidebar/Sidebar';
+import Header from '../../Component/Header/Header';
 
 const { Content } = Layout;
 const { Title } = Typography;

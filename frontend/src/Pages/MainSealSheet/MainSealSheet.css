@@ -4,32 +4,6 @@
   margin-top: 50px;
 }
 
-/* Header Section */
-.mainseal-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ff6b00;
-  padding: 10px 20px;
-  color: white;
-  position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-.mainseal-header-left {
-  display: flex;
-  align-items: center;
-}
-
-.mainseal-header-right {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 .logoContainer {
   display: flex;
   align-items: center;

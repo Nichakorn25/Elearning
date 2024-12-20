@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { Button, Typography, Card, Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./MainSealSheet.css";
-import Sidebar from '../Component/Sidebar/Sidebar';
-import Header from '../Component/Header/Header';
+import Sidebar from '../../Component/Sidebar/Sidebar';
+import Header from '../../Component/Header/Header';
 
 const { Content } = Layout;
 const { Title, Text } = Typography;

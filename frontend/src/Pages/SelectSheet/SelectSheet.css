@@ -2,26 +2,7 @@
     padding: 20px;
     font-family: Arial, sans-serif;
   }
-  
-  .sheet-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #ff6b00;
-    padding: 10px 20px;
-    color: white;
-    position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-    top: 0;
-    left: 0;
-    z-index: 1000;
-  }
-  
-  .header-left {
-    display: flex;
-    align-items: center;
-  }
-  
+
   .menu-button {
     background: none;
     border: none;
@@ -34,12 +15,6 @@
   .language {
     margin-left: 10px;
   }
-  
-  .header-right {
-    display: flex;
-    align-items: center;
-  }
-  
   .user-id, .user-name {
     margin-right: 10px;
   }

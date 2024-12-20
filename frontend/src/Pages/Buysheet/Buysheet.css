@@ -30,27 +30,7 @@ h2 {
     width: 100%; /* ความกว้างเต็มขอบเขตในหน้าจอขนาดเล็ก */
   }
 }
-
-
-.sheet-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ff6b00;
-  padding: 10px 20px;
-  color: white;
-  position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-  top: 0;
-  left: 0;
-  z-index: 1000;
-}
-
-.sheet-header-left {
-  display: flex;
-  align-items: center;
-}
-  
+ 
   .menu-button {
     background: none;
     border: none;
@@ -62,11 +42,6 @@ h2 {
   .language {
     margin-left: 10px;
   }
-  .sheet-header-right {
-    display: flex;
-    align-items: center;
-  }
-  
   .user-id, .user-name {
     margin-right: 10px;
   }
@@ -167,12 +142,6 @@ h2 {
     }
   }
    
-  .header-sheet-right {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
   .dropdown-menu-sheet {
     position: absolute;
     top: 70px;

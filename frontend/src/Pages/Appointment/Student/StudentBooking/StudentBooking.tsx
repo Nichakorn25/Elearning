@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input, Button } from "antd";
-import "./StudentBookingPopup.css";
+import "./StudentBooking.css";
 
 const StudentBookingPopup = ({ isVisible, onClose, onSubmit }) => {
   const [firstName, setFirstName] = useState("");
