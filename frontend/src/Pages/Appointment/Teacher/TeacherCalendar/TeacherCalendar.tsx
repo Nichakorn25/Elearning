@@ -6,7 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./TCcalendar.css";
+import "./TeacherCalendar.css";
 import Header from "../../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
@@ -14,7 +14,7 @@ import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
-const TCcalendar: React.FC = () => {
+const TeacherCalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     {
@@ -226,7 +226,8 @@ const TCcalendar: React.FC = () => {
             onSubmit={handleSubmitTask}
           />
 
-          <CreateAppointmentPopup
+           {/* Appointment Popup */}
+           <CreateAppointmentPopup
             isVisible={isAppointmentModalVisible}
             onClose={handleCloseAppointmentModal}
             onSubmit={handleSubmitAppointment}
@@ -286,4 +287,4 @@ const TCcalendar: React.FC = () => {
   );
 };
 
-export default TCcalendar;
+export default TeacherCalendar;

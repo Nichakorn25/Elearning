@@ -17,7 +17,7 @@ import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
 import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
-import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
+import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar"
 import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
 
 const App: React.FC = () => {

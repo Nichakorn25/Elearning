@@ -1,113 +1,163 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, DatePicker, Select, Radio, Checkbox, Button } from "antd";
+import { Modal, Input, Select, TimePicker, Checkbox, Button } from "antd";
+import dayjs from "dayjs";
+import "./CreateAppointment.css";
 
-const { RangePicker } = DatePicker;
 const { Option } = Select;
+const { RangePicker } = TimePicker;
 
-interface CreateAppointmentPopupProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSubmit: (values: any) => void;
-}
+const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
+  const [title, setTitle] = useState("");
+  const [duration, setDuration] = useState("1 hour");
+  const [daysAvailability, setDaysAvailability] = useState([
+    { day: "Sunday", start: null, end: null, unavailable: true },
+    { day: "Monday", start: "09:00", end: "17:00", unavailable: false },
+    { day: "Tuesday", start: "09:00", end: "17:00", unavailable: false },
+    { day: "Wednesday", start: "09:00", end: "17:00", unavailable: false },
+    { day: "Thursday", start: "09:00", end: "17:00", unavailable: false },
+    { day: "Friday", start: "09:00", end: "17:00", unavailable: false },
+    { day: "Saturday", start: null, end: null, unavailable: true },
+  ]);
+  const [bufferTime, setBufferTime] = useState(30);
+  const [maxBookings, setMaxBookings] = useState(4);
 
-const CreateAppointmentPopup: React.FC<CreateAppointmentPopupProps> = ({
-  isVisible,
-  onClose,
-  onSubmit,
-}) => {
-  const [form] = Form.useForm();
+  const handleSave = () => {
+    // ส่งข้อมูลเมื่อกด Save
+    onSubmit({
+      title,
+      duration,
+      daysAvailability,
+      bufferTime,
+      maxBookings,
+    });
+    onClose(); // ปิด Modal
+  };
 
-  const handleFinish = (values: any) => {
-    onSubmit(values); // ส่งค่ากลับไปยังไฟล์หลัก
-    form.resetFields(); // รีเซ็ตฟอร์มหลังจากส่งข้อมูล
-    onClose(); // ปิด Popup
+  const handleDayChange = (index, unavailable) => {
+    const updatedDays = [...daysAvailability];
+    updatedDays[index].unavailable = unavailable;
+    if (unavailable) {
+      updatedDays[index].start = null;
+      updatedDays[index].end = null;
+    }
+    setDaysAvailability(updatedDays);
+  };
+
+  const handleTimeChange = (index, times) => {
+    const updatedDays = [...daysAvailability];
+    updatedDays[index].start = times ? times[0].format("HH:mm") : null;
+    updatedDays[index].end = times ? times[1].format("HH:mm") : null;
+    setDaysAvailability(updatedDays);
   };
 
   return (
     <Modal
-      title="Create Appointment Schedule"
       visible={isVisible}
       onCancel={onClose}
       footer={null}
+      className="custom-appointment-modal"
     >
-      <Form layout="vertical" form={form} onFinish={handleFinish}>
-        {/* Appointment Title */}
-        <Form.Item
-          label="Appointment Title"
-          name="title"
-          rules={[{ required: true, message: "Please input the appointment title!" }]}
+      <h2>Bookable Appointment Schedule</h2>
+
+      {/* Title */}
+      <Input
+        placeholder="Add title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        style={{ marginBottom: "16px" }}
+      />
+
+      {/* Appointment Duration */}
+      <div style={{ marginBottom: "16px" }}>
+        <label>Appointment Duration:</label>
+        <Select
+          value={duration}
+          style={{ width: "100%" }}
+          onChange={(value) => setDuration(value)}
         >
-          <Input placeholder="Enter title (e.g., Consultation)" />
-        </Form.Item>
+          <Option value="1 hour">1 hour</Option>
+          <Option value="30 minutes">30 minutes</Option>
+        </Select>
+      </div>
 
-        {/* Date and Time Range */}
-        <Form.Item
-          label="Date and Time Range"
-          name="dateTimeRange"
-          rules={[{ required: true, message: "Please select date and time range!" }]}
+      {/* General Availability */}
+      <div style={{ marginBottom: "16px" }}>
+        <h3>General Availability:</h3>
+        {daysAvailability.map((day, index) => (
+          <div key={index} className="availability-row">
+            <span style={{ width: "100px", display: "inline-block" }}>
+              {day.day}:
+            </span>
+            <Checkbox
+              checked={!day.unavailable}
+              onChange={(e) => handleDayChange(index, !e.target.checked)}
+            >
+              {day.unavailable ? "Unavailable" : "Available"}
+            </Checkbox>
+            {!day.unavailable && (
+              <RangePicker
+                format="HH:mm"
+                value={
+                  day.start && day.end
+                    ? [dayjs(day.start, "HH:mm"), dayjs(day.end, "HH:mm")]
+                    : null
+                }
+                onChange={(times) => handleTimeChange(index, times)}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Buffer Time and Maximum Bookings */}
+      <div style={{ marginBottom: "16px" }}>
+        <h3>Booked Appointment Settings:</h3>
+        <Checkbox
+          checked={bufferTime > 0}
+          onChange={(e) => setBufferTime(e.target.checked ? 30 : 0)}
         >
-          <RangePicker showTime format="YYYY-MM-DD HH:mm" style={{ width: "100%" }} />
-        </Form.Item>
+          Buffer Time
+        </Checkbox>
+        {bufferTime > 0 && (
+          <Input
+            type="number"
+            min={0}
+            value={bufferTime}
+            onChange={(e) => setBufferTime(Number(e.target.value))}
+            addonAfter="minutes"
+            style={{ width: "150px", marginLeft: "16px" }}
+          />
+        )}
+        <div style={{ marginTop: "16px" }}>
+          <Checkbox
+            checked={maxBookings > 0}
+            onChange={(e) => setMaxBookings(e.target.checked ? 4 : 0)}
+          >
+            Maximum Bookings Per Day
+          </Checkbox>
+          {maxBookings > 0 && (
+            <Input
+              type="number"
+              min={1}
+              value={maxBookings}
+              onChange={(e) => setMaxBookings(Number(e.target.value))}
+              style={{ width: "150px", marginLeft: "16px" }}
+            />
+          )}
+        </div>
+      </div>
 
-        {/* Duration */}
-        <Form.Item
-          label="Duration of Each Appointment (Minutes)"
-          name="duration"
-          rules={[{ required: true, message: "Please select the duration!" }]}
-        >
-          <Select placeholder="Select duration">
-            {[15, 30, 45, 60].map((d) => (
-              <Option key={d} value={d}>{`${d} minutes`}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        {/* Repeat Schedule */}
-        <Form.Item label="Repeat Schedule" name="repeat">
-          <Radio.Group>
-            <Radio value="none">No Repeat</Radio>
-            <Radio value="daily">Daily</Radio>
-            <Radio value="weekly">Weekly</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        {/* Buffer Time */}
-        <Form.Item label="Buffer Time Between Appointments (Minutes)" name="bufferTime">
-          <Select placeholder="Select buffer time">
-            {[0, 10, 15, 30].map((buffer) => (
-              <Option key={buffer} value={buffer}>{`${buffer} minutes`}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        {/* Location */}
-        <Form.Item
-          label="Location"
-          name="location"
-          rules={[{ required: true, message: "Please input the location!" }]}
-        >
-          <Input placeholder="Enter location (e.g., Onsite, Google Meet)" />
-        </Form.Item>
-
-        {/* Notes */}
-        <Form.Item label="Description / Notes" name="notes">
-          <Input.TextArea rows={4} placeholder="Additional notes or description about the appointment" />
-        </Form.Item>
-
-        {/* Confirmation Email Checkbox */}
-        <Form.Item name="confirmationEmail" valuePropName="checked">
-          <Checkbox>Require email confirmation</Checkbox>
-        </Form.Item>
-
-        {/* Submit Button */}
-        <Form.Item>
-          <Button type="primary" htmlType="submit" block>
-            Create Appointment Schedule
-          </Button>
-        </Form.Item>
-      </Form>
+      {/* Save Button */}
+      <div style={{ textAlign: "right" }}>
+        <Button onClick={onClose} style={{ marginRight: "8px" }}>
+          Cancel
+        </Button>
+        <Button onClick={handleSave} type="primary">
+          Save
+        </Button>
+      </div>
     </Modal>
   );
 };
 
-export default CreateAppointmentPopup;
+export default CreateAppointment;

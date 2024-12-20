@@ -13,12 +13,14 @@
 
 .popup-content {
   text-align: center;
+  color: black;
 }
 
 .popup-title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 16px;
+  color: black;
 }
 
 .info-note {
