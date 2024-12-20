@@ -87,7 +87,12 @@ const Cart: React.FC = () => {
         </div>
         <div className="cart-total">
           <h3>Total Price: {totalPrice} THB</h3>
-          <Button type="primary">Checkout</Button>
+          <Button 
+            type="primary" 
+            onClick={() => navigate('/payment')}
+          >
+            Checkout
+          </Button>
         </div>
       </div>
     </Layout>
