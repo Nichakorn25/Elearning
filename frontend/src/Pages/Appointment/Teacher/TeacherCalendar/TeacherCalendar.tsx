@@ -9,12 +9,18 @@ import "react-calendar/dist/Calendar.css";
 import "./TeacherCalendar.css";
 import Header from "../../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
 const TeacherCalendar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCreateAppointment = () => {
+    navigate("/CreateAppointment");
+  };
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     {
@@ -140,7 +146,7 @@ const TeacherCalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={showAppointmentModal}>
+      <Menu.Item key="appointment" onClick={() => navigate("/CreateAppointment")}>
         Appointment Schedule
       </Menu.Item>
     </Menu>

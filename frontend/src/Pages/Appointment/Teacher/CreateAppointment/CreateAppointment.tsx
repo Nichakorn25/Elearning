@@ -3,10 +3,15 @@ import { Modal, Input, Select, TimePicker, Checkbox, Button, Collapse } from "an
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 
 const { Option } = Select;
 const { RangePicker } = TimePicker;
 const { Panel } = Collapse;
+
 
 const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
   const [title, setTitle] = useState("");
@@ -56,6 +61,18 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
     updatedDays[index].end = times ? times[1].format("HH:mm") : null;
     setDaysAvailability(updatedDays);
   };
+
+  const [events, setEvents] = useState([]);
+  const handleEventAdd = (info) => {
+    const newEvent = {
+      title: title || "New Appointment",
+      start: info.startStr,
+      end: info.endStr,
+    };
+    setEvents([...events, newEvent]);
+  };
+
+  
 
   return (
     <Modal
@@ -216,6 +233,23 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
           </Checkbox>
         </Panel>
       </Collapse>
+
+      {/* Slot ด้านขวา */}
+      <div style={{ flex: 2, background: "#f9f9f9", borderRadius: "8px", padding: "16px", boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)" }}>
+        <FullCalendar
+          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+          initialView="timeGridWeek"
+          editable={true}
+          selectable={true}
+          events={events}
+          select={handleEventAdd}
+          headerToolbar={{
+            start: "title",
+            center: "",
+            end: "prev,next today",
+          }}
+        />
+      </div>
 
       <div style={{ textAlign: "right", marginTop: "16px" }}>
         <Button onClick={onClose} style={{ marginRight: "8px" }}>

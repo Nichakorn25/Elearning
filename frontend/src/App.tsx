@@ -26,6 +26,7 @@ import Announcement from './Pages/Announcement/Announcement'
 import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
 import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
 import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
+import CreateAppointment from './Pages/Appointment/Teacher/CreateAppointment/CreateAppointment';
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -67,6 +68,7 @@ const App: React.FC = () => {
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
           <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
           <Route path="/ClassSchedule" element={<ClassSchedule/>}/>
+          <Route path="/CreateAppointment" element={<CreateAppointment/>}/>
 
         </Routes>
 
