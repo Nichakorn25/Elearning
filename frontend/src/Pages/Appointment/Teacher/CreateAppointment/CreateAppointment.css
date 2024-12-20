@@ -1,23 +1,107 @@
-.appointment-schedule {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 24px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    color: black;
-    
+.create-appointment-modal .appointment-container {
+  padding: 16px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.input-title {
+  margin-bottom: 16px;
+}
+
+.section {
+  margin-bottom: 16px;
+}
+
+.availability-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.availability-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer {
+  text-align: right;
+}
+
+.footer button {
+  margin-left: 8px;
+}
+
+.create-appointment-modal {
+    display: flex;
+    justify-content: flex-start; /* Align modal content to the left */
+    gap: 16px;
+    padding: 16px;
   }
   
-  .appointment-schedule h2 {
-    text-align: center;
-    margin-bottom: 24px;
+  .modal-content {
+    flex: 3; /* Make modal content take more space */
+  }
+  
+  .time-slots {
+    flex: 2; /* Adjust the width for time slots */
+    background-color: #f9f9f9; /* Light background for visual separation */
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .input-title {
+    margin-bottom: 16px;
+  }
+  
+  .section {
+    margin-bottom: 16px;
+  }
+  
+  .availability-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   
   .availability-row {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+  }
+  
+  .footer {
+    text-align: right;
+  }
+  
+  .footer button {
+    margin-left: 8px;
+  }
+  
+  /* Style for time slots */
+  .time-slots .slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
     margin-bottom: 8px;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background-color: #fff;
+  }
+  
+  .time-slots .slot:hover {
+    background-color: #f0f0f0;
   }
   

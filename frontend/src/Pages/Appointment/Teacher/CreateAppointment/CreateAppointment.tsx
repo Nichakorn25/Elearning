@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Modal, Input, Select, TimePicker, Checkbox, Button } from "antd";
+import { Modal, Input, Select, TimePicker, Checkbox, Button, Collapse } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
 
 const { Option } = Select;
 const { RangePicker } = TimePicker;
+const { Panel } = Collapse;
 
 const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
   const [title, setTitle] = useState("");
@@ -21,6 +22,13 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
   ]);
   const [bufferTime, setBufferTime] = useState(30);
   const [maxBookings, setMaxBookings] = useState(4);
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [bookingFormFields, setBookingFormFields] = useState({
+    firstName: true,
+    lastName: true,
+    email: true,
+  });
 
   const handleSave = () => {
     onSubmit({
@@ -29,7 +37,7 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
       description,
       bookingFormFields,
     });
-    onClose(); // ปิด Modal หลังจากบันทึก
+    onClose();
   };
 
   const handleDayChange = (index, unavailable) => {
@@ -49,15 +57,6 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
     setDaysAvailability(updatedDays);
   };
 
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [bookingFormFields, setBookingFormFields] = useState({
-    firstName: true,
-    lastName: true,
-    email: true,
-  });
-
-
   return (
     <Modal
       visible={isVisible}
@@ -67,159 +66,158 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
     >
       <h2>Bookable Appointment Schedule</h2>
 
-      {/* Title */}
-      <Input
-        placeholder="Add title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        style={{ marginBottom: "16px" }}
-      />
+      <Collapse defaultActiveKey={["1"]}>
+        {/* Title Section */}
+        <Panel header="Title & Duration" key="1">
+          <Input
+            placeholder="Add title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            style={{ marginBottom: "16px" }}
+          />
+          <Select
+            value={duration}
+            style={{ width: "100%", marginBottom: "16px" }}
+            onChange={(value) => setDuration(value)}
+          >
+            <Option value="15 minutes">15 minutes</Option>
+            <Option value="30 minutes">30 minutes</Option>
+            <Option value="45 minutes">45 minutes</Option>
+            <Option value="1 hour">1 hour</Option>
+            <Option value="2 hours">2 hours</Option>
+          </Select>
+        </Panel>
 
-      {/* Appointment Duration */}
-      <div style={{ marginBottom: "16px" }}>
-        <label>Appointment Duration:</label>
-        <Select
-          value={duration}
-          style={{ width: "100%" }}
-          onChange={(value) => setDuration(value)}
-        >
-          <Option value="1 hour">1 hour</Option>
-          <Option value="30 minutes">30 minutes</Option>
-        </Select>
-      </div>
+        {/* General Availability Section */}
+        <Panel header="General Availability" key="2">
+          {daysAvailability.map((day, index) => (
+            <div key={index} className="availability-row">
+              <span style={{ width: "100px", display: "inline-block" }}>
+                {day.day}:
+              </span>
+              <Checkbox
+                checked={!day.unavailable}
+                onChange={(e) => handleDayChange(index, !e.target.checked)}
+              >
+                {day.unavailable ? "Unavailable" : "Available"}
+              </Checkbox>
+              {!day.unavailable && (
+                <RangePicker
+                  format="HH:mm"
+                  value={
+                    day.start && day.end
+                      ? [dayjs(day.start, "HH:mm"), dayjs(day.end, "HH:mm")]
+                      : null
+                  }
+                  onChange={(times) => handleTimeChange(index, times)}
+                />
+              )}
+            </div>
+          ))}
+        </Panel>
 
-      {/* General Availability */}
-      <div style={{ marginBottom: "16px" }}>
-        <h3>General Availability:</h3>
-        {daysAvailability.map((day, index) => (
-          <div key={index} className="availability-row">
-            <span style={{ width: "100px", display: "inline-block" }}>
-              {day.day}:
-            </span>
+        {/* Settings Section */}
+        <Panel header="Booked Appointment Settings" key="3">
+          <div style={{ marginBottom: "16px" }}>
             <Checkbox
-              checked={!day.unavailable}
-              onChange={(e) => handleDayChange(index, !e.target.checked)}
+              checked={bufferTime > 0}
+              onChange={(e) => setBufferTime(e.target.checked ? 30 : 0)}
             >
-              {day.unavailable ? "Unavailable" : "Available"}
+              Buffer Time
             </Checkbox>
-            {!day.unavailable && (
-              <RangePicker
-                format="HH:mm"
-                value={
-                  day.start && day.end
-                    ? [dayjs(day.start, "HH:mm"), dayjs(day.end, "HH:mm")]
-                    : null
-                }
-                onChange={(times) => handleTimeChange(index, times)}
+            {bufferTime > 0 && (
+              <Input
+                type="number"
+                min={0}
+                value={bufferTime}
+                onChange={(e) => setBufferTime(Number(e.target.value))}
+                addonAfter="minutes"
+                style={{ width: "150px", marginLeft: "16px" }}
               />
             )}
           </div>
-        ))}
-      </div>
+          <div>
+            <Checkbox
+              checked={maxBookings > 0}
+              onChange={(e) => setMaxBookings(e.target.checked ? 4 : 0)}
+            >
+              Maximum Bookings Per Day
+            </Checkbox>
+            {maxBookings > 0 && (
+              <Input
+                type="number"
+                min={1}
+                value={maxBookings}
+                onChange={(e) => setMaxBookings(Number(e.target.value))}
+                style={{ width: "150px", marginLeft: "16px" }}
+              />
+            )}
+          </div>
+        </Panel>
 
-      {/* Buffer Time and Maximum Bookings */}
-      <div style={{ marginBottom: "16px" }}>
-        <h3>Booked Appointment Settings:</h3>
-        <Checkbox
-          checked={bufferTime > 0}
-          onChange={(e) => setBufferTime(e.target.checked ? 30 : 0)}
-        >
-          Buffer Time
-        </Checkbox>
-        {bufferTime > 0 && (
-          <Input
-            type="number"
-            min={0}
-            value={bufferTime}
-            onChange={(e) => setBufferTime(Number(e.target.value))}
-            addonAfter="minutes"
-            style={{ width: "150px", marginLeft: "16px" }}
-          />
-        )}
-        <div style={{ marginTop: "16px" }}>
-          <Checkbox
-            checked={maxBookings > 0}
-            onChange={(e) => setMaxBookings(e.target.checked ? 4 : 0)}
+        {/* Location & Conferencing Section */}
+        <Panel header="Location & Conferencing" key="4">
+          <Select
+            placeholder="Select how and where to meet"
+            value={location}
+            style={{ width: "100%" }}
+            onChange={(value) => setLocation(value)}
           >
-            Maximum Bookings Per Day
+            <Option value="inPerson">In-person meeting</Option>
+            <Option value="videoCall">Video conferencing</Option>
+            <Option value="phoneCall">Phone call</Option>
+          </Select>
+        </Panel>
+
+        {/* Description Section */}
+        <Panel header="Description" key="5">
+          <TextArea
+            placeholder="Add description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={4}
+          />
+        </Panel>
+
+        {/* Booking Form */}
+        <Panel header="Booking Form" key="6">
+          <Checkbox
+            checked={bookingFormFields.firstName}
+            onChange={(e) =>
+              setBookingFormFields((prev) => ({
+                ...prev,
+                firstName: e.target.checked,
+              }))
+            }
+          >
+            First Name
           </Checkbox>
-          {maxBookings > 0 && (
-            <Input
-              type="number"
-              min={1}
-              value={maxBookings}
-              onChange={(e) => setMaxBookings(Number(e.target.value))}
-              style={{ width: "150px", marginLeft: "16px" }}
-            />
-          )}
-        </div>
-      </div>
+          <Checkbox
+            checked={bookingFormFields.lastName}
+            onChange={(e) =>
+              setBookingFormFields((prev) => ({
+                ...prev,
+                lastName: e.target.checked,
+              }))
+            }
+          >
+            Last Name
+          </Checkbox>
+          <Checkbox
+            checked={bookingFormFields.email}
+            onChange={(e) =>
+              setBookingFormFields((prev) => ({
+                ...prev,
+                email: e.target.checked,
+              }))
+            }
+          >
+            Email Address
+          </Checkbox>
+        </Panel>
+      </Collapse>
 
-      {/* Location */}
-      <div style={{ marginBottom: "16px" }}>
-        <label>Location and Conferencing:</label>
-        <Select
-          placeholder="Select how and where to meet"
-          value={location}
-          style={{ width: "100%" }}
-          onChange={(value) => setLocation(value)}
-        >
-          <Option value="inPerson">Onsite</Option>
-          <Option value="videoCall">Online</Option>
-        </Select>
-      </div>
-
-      {/* Description */}
-      <div style={{ marginBottom: "16px" }}>
-        <label>Description:</label>
-        <TextArea
-          placeholder="Add description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={4}
-        />
-      </div>
-
-      {/* Booking Form */}
-      <div style={{ marginBottom: "16px" }}>
-        <h3>Booking Form</h3>
-        <Checkbox
-          checked={bookingFormFields.firstName}
-          onChange={(e) =>
-            setBookingFormFields((prev) => ({
-              ...prev,
-              firstName: e.target.checked,
-            }))
-          }
-        >
-          First Name
-        </Checkbox>
-        <Checkbox
-          checked={bookingFormFields.lastName}
-          onChange={(e) =>
-            setBookingFormFields((prev) => ({
-              ...prev,
-              lastName: e.target.checked,
-            }))
-          }
-        >
-          Last Name
-        </Checkbox>
-        <Checkbox
-          checked={bookingFormFields.email}
-          onChange={(e) =>
-            setBookingFormFields((prev) => ({
-              ...prev,
-              email: e.target.checked,
-            }))
-          }
-        >
-          Email Address
-        </Checkbox>
-      </div>
-
-      {/* Save Button */}
-      <div style={{ textAlign: "right" }}>
+      <div style={{ textAlign: "right", marginTop: "16px" }}>
         <Button onClick={onClose} style={{ marginRight: "8px" }}>
           Cancel
         </Button>
