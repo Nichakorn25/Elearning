@@ -232,13 +232,6 @@ const TeacherCalendar: React.FC = () => {
             onSubmit={handleSubmitTask}
           />
 
-           {/* Appointment Popup */}
-           <CreateAppointmentPopup
-            isVisible={isAppointmentModalVisible}
-            onClose={handleCloseAppointmentModal}
-            onSubmit={handleSubmitAppointment}
-          />
-
           <div className="mini-calendar">
             <Calendar />
           </div>
