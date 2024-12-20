@@ -135,6 +135,18 @@ const StudentCalendar: React.FC = () => {
     setIsTaskModalVisible(false);
   };
 
+  const handleSubmitTask = (values) => {
+    const newEvent = {
+      id: String(events.length + 1),
+      title: values.title,
+      start:
+        values.date.format("YYYY-MM-DD") + "T" + values.time.format("HH:mm:ss"),
+      description: values.description,
+      category: values.category,
+    };
+    setEvents([...events, newEvent]);
+    setIsModalVisible(false); // ปิด Popup
+  };
 
   const createMenu = (
     <Menu className="createdropdown">
@@ -199,9 +211,9 @@ const StudentCalendar: React.FC = () => {
 
           {isTaskModalVisible && (
             <CreateTaskPopup
-              isVisible={isTaskModalVisible}
-              onClose={handleCloseTaskModal}
-              onSubmit={() => console.log("Task Submitted")}
+              isVisible={isModalVisible}
+              onClose={handleCloseModal}
+              onSubmit={handleSubmitTask}
             />
           )}
 

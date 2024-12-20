@@ -165,10 +165,18 @@ const TeacherCalendar: React.FC = () => {
   };
 
   // เมื่อส่งข้อมูล Task
-  const handleSubmitTask = (values: any) => {
-    console.log("Task Data:", values);
-    setIsTaskModalVisible(false);
+  const handleSubmitTask = (values) => {
+  const newEvent = {
+    id: String(events.length + 1),
+    title: values.title,
+    start: values.date.format("YYYY-MM-DD") + "T" + values.time.format("HH:mm:ss"),
+    description: values.description,
+    category: values.category,
   };
+  setEvents([...events, newEvent]);
+  setIsModalVisible(false); // ปิด Popup
+};
+
 
   return (
     <div className="teacher-calendar-layout">
