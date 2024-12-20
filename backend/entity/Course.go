@@ -1,14 +1,14 @@
 package entity
 
 import (
-	"time"
 	"gorm.io/gorm"
 )
+
 type Course struct {
 	gorm.Model
 	CourseName  string `json:"CourseName"`
-	CourseDate	time.Time `json:"CourseDate"`
-	Credit 		uint `json:"Credit"`
+	CourseCode  string `json:"CourseCode"`
+	Credit      uint   `json:"Credit"`
 	Description string `json:"Description"`
 
 	ExamSchedule []ExamSchedule `gorm:"foreignKey:CourseID"`
@@ -21,15 +21,15 @@ type Course struct {
 
 	Assignment []Assignment `gorm:"foreignKey:CourseID"`
 
-	CategoryID uint `json:"CategoryID"`
+	CategoryID uint     `json:"CategoryID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
 
-	SemesterID uint `json:"SemesterID"`
+	SemesterID uint     `json:"SemesterID"`
 	Semester   Semester `gorm:"foreignKey:SemesterID"`
 
-	DayofWeekID uint `json:"DayofWeekID"`
+	DayofWeekID uint      `json:"DayofWeekID"`
 	DayofWeek   DayofWeek `gorm:"foreignKey:DayofWeekID"`
 }

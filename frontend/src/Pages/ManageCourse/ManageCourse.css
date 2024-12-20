@@ -19,20 +19,33 @@
     padding-left: 20px;
 }
 
-.topic{
+.MainCss{
     background-color: #ffffff; 
     padding: 10px; 
     margin: 20px ; 
     width: 97.5%; 
     padding-top: 20px;
     padding-left: 40px;
-    padding-right: 0%;
+    padding-right: 2%;
     padding-bottom: 100%;
     box-shadow: 0 2px 8px rgba(0.1, 0.1, 0.1, 0.1);
     color: black;
     font-size: 20px;
 }
 
+.topic{
+    display: flex;
+}
+
 .h1 {
     font: bold 1.5em 'Prompt', sans-serif; 
 }
+
+.Option{
+    gap: 60px;
+}
+
+.ButtonLayer{
+    display: flex;
+}
+

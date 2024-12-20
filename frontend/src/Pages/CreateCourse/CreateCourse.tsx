@@ -85,7 +85,7 @@ const CreateCourse: React.FC = () => {
                             },
                         }}
                         onClick={() => setOpen(true)}
-                        >📖สร้างบทเรียน</Button> 
+                        >📖สร้างคอร์สเรียน</Button> 
 
                         <Modal open={open} onClose={() => setOpen(false)}>
                             
@@ -103,6 +103,8 @@ const CreateCourse: React.FC = () => {
 
 
             <div className='CardLists'>
+                <Card/> 
+                <Card/> 
                 <Card/> 
                 <Card/> 
                 <Card/> 

@@ -43,6 +43,7 @@ func main() {
 		router.POST("/users", controller.CreateUser)
 		router.PUT("/users/:id", controller.UpdateUserByid)
 		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้
+		router.GET("/createcoures/")
 
 	}
 

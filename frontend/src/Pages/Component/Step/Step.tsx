@@ -67,7 +67,7 @@ export default function HorizontalLinearStepper() {
           <>
             <h4>Step 1</h4>
             <FormControl required>
-              <FormLabel className="custom-form-label">ชื่อบทเรียน</FormLabel>
+              <FormLabel className="custom-form-label">ชื่อคอร์ส</FormLabel>
               <Input autoFocus required placeholder="กรอกชื่อบทเรียน"/>
             </FormControl>
             <FormControl required>

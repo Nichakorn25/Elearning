@@ -3,6 +3,7 @@ package config
 import (
 	"elearning/entity"
 	"fmt"
+	"time"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -269,5 +270,29 @@ func SetupDatabase() {
 		db.FirstOrCreate(&pkg, entity.Category{CategoryID: pkg.CategoryID})
 	}
 
+	startDate1 := time.Date(2024, time.September, 2, 0, 0, 0, 0, time.UTC)
+	endDate1 := time.Date(2025, time.January, 23, 0, 0, 0, 0, time.UTC)
+
+	startDate2 := time.Date(2024, time.September, 5, 0, 0, 0, 0, time.UTC)
+	endDate2 := time.Date(2025, time.January, 20, 0, 0, 0, 0, time.UTC)
+
+	Semester := []entity.Semester{
+		{Year: 2567, Term: 1, StartDate: startDate1, EndDate: endDate1},
+		{Year: 2567, Term: 1, StartDate: startDate2, EndDate: endDate2},
+	}
+
+	for _, pkg := range Semester {
+		db.FirstOrCreate(&pkg, entity.Semester{Year: pkg.Year})
+	}
+
+	Course := []entity.Course{
+		{CourseName: "Operating System", CourseCode: "ENG23 0000", Credit: 4, Description: "OS", CategoryID: 5, UserID: 1, SemesterID: 1, DayofWeekID: 1},
+		{CourseName: "Software Engineering", CourseCode: "ENG23 0001", Credit: 4, Description: "SE", CategoryID: 5, UserID: 1, SemesterID: 2, DayofWeekID: 1},
+	
+	}
+
+	for _, pkg := range Course {
+		db.FirstOrCreate(&pkg, entity.Course{CourseName: pkg.CourseName})
+	}
 
 }
