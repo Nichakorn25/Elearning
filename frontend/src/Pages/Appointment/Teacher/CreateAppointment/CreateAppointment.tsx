@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Input, Select, TimePicker, Checkbox, Button } from "antd";
 import dayjs from "dayjs";
+import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
 
 const { Option } = Select;
@@ -22,15 +23,13 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
   const [maxBookings, setMaxBookings] = useState(4);
 
   const handleSave = () => {
-    // ส่งข้อมูลเมื่อกด Save
     onSubmit({
       title,
-      duration,
-      daysAvailability,
-      bufferTime,
-      maxBookings,
+      location,
+      description,
+      bookingFormFields,
     });
-    onClose(); // ปิด Modal
+    onClose(); // ปิด Modal หลังจากบันทึก
   };
 
   const handleDayChange = (index, unavailable) => {
@@ -49,6 +48,15 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
     updatedDays[index].end = times ? times[1].format("HH:mm") : null;
     setDaysAvailability(updatedDays);
   };
+
+  const [location, setLocation] = useState("");
+  const [description, setDescription] = useState("");
+  const [bookingFormFields, setBookingFormFields] = useState({
+    firstName: true,
+    lastName: true,
+    email: true,
+  });
+
 
   return (
     <Modal
@@ -145,6 +153,69 @@ const CreateAppointment = ({ isVisible, onClose, onSubmit }) => {
             />
           )}
         </div>
+      </div>
+
+      {/* Location */}
+      <div style={{ marginBottom: "16px" }}>
+        <label>Location and Conferencing:</label>
+        <Select
+          placeholder="Select how and where to meet"
+          value={location}
+          style={{ width: "100%" }}
+          onChange={(value) => setLocation(value)}
+        >
+          <Option value="inPerson">Onsite</Option>
+          <Option value="videoCall">Online</Option>
+        </Select>
+      </div>
+
+      {/* Description */}
+      <div style={{ marginBottom: "16px" }}>
+        <label>Description:</label>
+        <TextArea
+          placeholder="Add description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+        />
+      </div>
+
+      {/* Booking Form */}
+      <div style={{ marginBottom: "16px" }}>
+        <h3>Booking Form</h3>
+        <Checkbox
+          checked={bookingFormFields.firstName}
+          onChange={(e) =>
+            setBookingFormFields((prev) => ({
+              ...prev,
+              firstName: e.target.checked,
+            }))
+          }
+        >
+          First Name
+        </Checkbox>
+        <Checkbox
+          checked={bookingFormFields.lastName}
+          onChange={(e) =>
+            setBookingFormFields((prev) => ({
+              ...prev,
+              lastName: e.target.checked,
+            }))
+          }
+        >
+          Last Name
+        </Checkbox>
+        <Checkbox
+          checked={bookingFormFields.email}
+          onChange={(e) =>
+            setBookingFormFields((prev) => ({
+              ...prev,
+              email: e.target.checked,
+            }))
+          }
+        >
+          Email Address
+        </Checkbox>
       </div>
 
       {/* Save Button */}
