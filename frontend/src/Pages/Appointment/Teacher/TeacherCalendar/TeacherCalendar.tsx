@@ -146,7 +146,7 @@ const TeacherCalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={() => navigate("/CreateAppointment")}>
+      <Menu.Item key="appointment" onClick={handleCreateAppointment}>
         Appointment Schedule
       </Menu.Item>
     </Menu>
