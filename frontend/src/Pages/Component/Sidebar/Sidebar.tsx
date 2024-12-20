@@ -20,10 +20,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
       <ul>
         <li onClick={() => navigateTo("/dashboard")}>Dashboard</li>
         <li onClick={() => navigateTo("/ClassSchedule")}>Class Schedule</li>
-        <li onClick={() => navigateTo("/TCcalendar")}>Calendar</li>
+        <li onClick={() => navigateTo("/TeacherCalendar")}>Calendar</li>
         <li onClick={() => navigateTo("/profile")}>Courses Open</li>
         <li onClick={() => navigateTo("/TeacherSchedule")}>Teacher Schedule</li>
         <li onClick={() => navigateTo("/Buysheet")}>Buy Sheet</li>
+        <li onClick={() => navigateTo("/MainSealSheet")}>Seal Sheet</li>
         <li onClick={() => navigateTo("/RequestChangeRole")}>Request for Change Role</li>
       </ul>
     </div>

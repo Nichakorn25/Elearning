@@ -1,0 +1,29 @@
+/* MainSealSheet.css */
+.sheet {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+  }
+  
+  .sealsheet-content {
+    padding: 24px;
+    background-color: #ffffff;
+    overflow: auto;
+  }
+  
+  .card-title {
+    font-size: 24px;
+    color: #1890ff; /* Blue color for the card title */
+    text-align: center;
+    margin-bottom: 20px; /* Additional bottom space */
+  }
+  
+  .form-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  

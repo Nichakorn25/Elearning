@@ -1,0 +1,55 @@
+/* Layout */
+
+/* Card */
+.card {
+    width: 100vw; /* ความกว้างเต็มหน้าจอ */
+    height: 100vh; /* ความสูงเต็มหน้าจอ */
+    margin: 0; /* ไม่มีระยะขอบ */
+    padding: 24px; /* ระยะห่างภายใน */
+    box-shadow: none; /* ลบเงา */
+    border-radius: 0; /* ไม่มีมุมโค้ง */
+    background-color: #ffffff; /* สีพื้นหลัง */
+}
+
+/* Table */
+.ant-table {
+    margin-bottom: 20px; /* Add space below the table */
+}
+
+/* Total container */
+.total-container {
+    display: flex;
+    justify-content: space-between; /* Align items horizontally */
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Bank details */
+.bank-details {
+    background-color: #f9f9f9; /* Light background */
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Upload container */
+.upload-container {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Button container */
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+/* General Button Styling */
+.paymentbutton {
+    width: 100%;
+    max-width: 200px;
+}

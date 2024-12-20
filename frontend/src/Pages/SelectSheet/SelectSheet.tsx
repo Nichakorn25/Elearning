@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { Card, Button, Row, Col, Layout} from 'antd';
+import { Card, Button, Row, Col, Layout, Input, List, Form, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './SelectSheet.css';
 
 const { Content } = Layout;
+const { TextArea } = Input;
 
 const SelectSheet: React.FC = () => {
     const navigate = useNavigate();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
+    const [isSidebarVisible, setSidebarVisible] = useState(false);
+    const [comments, setComments] = useState<string[]>([]);
+    const [commentInput, setCommentInput] = useState('');
 
     const sheetDetails = {
         name: "Example Sheet",
@@ -18,66 +24,49 @@ const SelectSheet: React.FC = () => {
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
-      };
-    
-      const closeDropdown = () => {
+    };
+
+    const closeDropdown = () => {
         setDropdownVisible(false);
-      };
-    
-      const goToDashboard = () => {
+    };
+
+    const goToDashboard = () => {
         closeDropdown();
         navigate('/dashboard');
-      };
-    
-      const handleLogout = () => {
+    };
+
+    const handleLogout = () => {
         console.log('Logging out...');
         closeDropdown();
-        navigate('/'); // เปลี่ยนเส้นทางไปหน้าแรก
-      };
-    
-      const goToProfile = () => {
-        closeDropdown();
-        navigate('/profile'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
-      };
-    
-      const goToBuySheet = () => {
-        closeDropdown();
-        navigate('/Buysheet'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
-      };
+        navigate('/');
+    };
 
+    const goToProfile = () => {
+        closeDropdown();
+        navigate('/profile');
+    };
+
+    const goToBuySheet = () => {
+        closeDropdown();
+        navigate('/Buysheet');
+    };
+
+    const handleAddComment = () => {
+        if (!commentInput.trim()) {
+            message.warning('Please enter a valid comment.');
+            return;
+        }
+
+        setComments([...comments, commentInput]);
+        setCommentInput('');
+        message.success('Comment added successfully!');
+    };
 
     return (
         <Layout className="sheet">
-            {/* Header Section */}
-            <header className="sheet-header">
-        <div className="header-left">
-          <button className="menu-button">☰</button>
-          <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
-        </div>
-        <div className="header-right">
-          {/* คลิก User ID, Name หรือ Avatar เพื่อเปิด dropdown */}
-          <div className="user-info" onClick={toggleDropdown}>
-            <span className="user-id">B6525972</span>
-            <span className="user-name">ณิชากร จันทร์ยุทา</span>
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User Avatar"
-              className="user-avatar"
-            />
-          </div>
+            <Header />
+            <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
 
-          {/* Dropdown */}
-          {isDropdownVisible && (
-            <div className="dropdown-menu">
-              <button onClick={goToDashboard}>Dashboard</button>
-              <button onClick={goToProfile}>Profile</button>
-              <button onClick={goToBuySheet}>BuySheet</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
-      </header>
             {/* Main Content */}
             <Content className="sheet-content">
                 <Row gutter={[16, 16]} justify="center" align="middle">
@@ -85,7 +74,7 @@ const SelectSheet: React.FC = () => {
                         <Card
                             cover={<img alt="Sheet Cover" src={sheetDetails.coverImage} />}
                             className="sheet-card"
-                        />  
+                        />
                     </Col>
                     <Col xs={24} md={16}>
                         <Card title="Sheet Details" bordered={false} className="sheet-details-card">
@@ -96,6 +85,34 @@ const SelectSheet: React.FC = () => {
                         </Card>
                     </Col>
                 </Row>
+                                        {/* Comment Section */}
+                                        <Card title="Comments" className="comments-card" style={{ marginTop: '20px' }}>
+                            <Form layout="vertical" onFinish={handleAddComment}>
+                                <Form.Item label="Comment">
+                                    <TextArea
+                                        rows={4}
+                                        value={commentInput}
+                                        onChange={(e) => setCommentInput(e.target.value)}
+                                        placeholder="Write your comment here..."
+                                    />
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" onClick={handleAddComment}>
+                                        Comment
+                                    </Button>
+                                </Form.Item>
+                            </Form>
+
+                            {/* Display Comments */}
+                            <List
+                                bordered
+                                dataSource={comments}
+                                renderItem={(comment, index) => (
+                                    <List.Item key={index}>{comment}</List.Item>
+                                )}
+                                locale={{ emptyText: 'No comments yet. Be the first to comment!' }}
+                            />
+                        </Card>
             </Content>
         </Layout>
     );

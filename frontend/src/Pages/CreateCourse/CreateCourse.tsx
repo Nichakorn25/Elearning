@@ -71,7 +71,7 @@ const CreateCourse: React.FC = () => {
                         className='CreateButton'
                         sx={{
                             fontSize: '15px', // ขนาดของข้อความหรือไอคอน
-                            fontFamily: 'Prompt, sans-serif',
+                            fontFamily: 'Open Sans , sans-serif',
                             backgroundColor: '#ff6b00', // สีพื้นหลัง
                             color: 'white', // สีของข้อความหรือไอคอน
                             padding: '8px 15px', // ระยะห่างภายในปุ่ม

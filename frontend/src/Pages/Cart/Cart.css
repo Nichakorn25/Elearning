@@ -1,6 +1,5 @@
 .sheet {
   padding: 20px;
-  font-family: 'Arial', sans-serif;
 }
 
 h2 {
@@ -13,26 +12,6 @@ h2 {
 .sheet-layout {
   min-height: 100vh;
   background-color: #f8f8f8;
-}
-
-.sheet-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ff6b00;
-  padding: 10px 20px;
-  color: white;
-  position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ Header */
-}
-
-.sheet-header-left {
-  display: flex;
-  align-items: center;
 }
 
 .menu-button {
@@ -52,13 +31,6 @@ h2 {
 .language {
   margin-left: 10px;
 }
-
-.sheet-header-right {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
 .user-id,
 .user-name {
   margin-right: 10px;

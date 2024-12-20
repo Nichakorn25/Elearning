@@ -3,11 +3,11 @@
     padding: 20px;
     background-color: #f9f9f9;
     text-align: left;
-    
+
   }
   
   .title {
-    font-size: 2.5em;
+    font-size: 2em;
     margin-bottom: 30px;
     color: #333;
     text-align: left;
@@ -19,6 +19,7 @@
     justify-content: center;
     align-items: flex-start;
     gap: 60px;
+   
   }
   
   .content-item {
@@ -44,14 +45,14 @@
   }
   
   .content-title {
-    font-size: 1.5em;
+    font-size: 1em;
     color: #333;
     margin-bottom: 10px;
     text-align: left;
   }
   
   .content-description {
-    font-size: 1em;
+    font-size: 16px;
     color: #666;
     text-align: left;
   }

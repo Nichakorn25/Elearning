@@ -38,12 +38,12 @@
 /* Profile Content */
 .profile-content {
     margin-top: 60px;
-    padding: 20px;
+    padding: 5px;
     flex: 1; /* ขยายคอนเทนต์ให้เต็มพื้นที่ */
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px; /* เพิ่มช่องว่างระหว่างองค์ประกอบ */
+    gap: 0px; /* เพิ่มช่องว่างระหว่างองค์ประกอบ */
     overflow-y: auto; /* ให้เลื่อนเนื้อหาได้ถ้ามันเกินพื้นที่ */
 }
 
@@ -55,40 +55,68 @@
     margin-bottom: 15px; /* เพิ่มช่องว่างระหว่างหัวข้อและการ์ด */
 }
 
-/* Profile Card */
+/* Profile Card (Outer Box) */
 .profile-card {
-    background: #ffffff; /* พื้นหลังการ์ดสีขาว */
-    padding: 30px;
+    background: #ffffff; /* Background color */
+    padding: 40px;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    align-items: center;
-    gap: 40px; /* เพิ่มช่องว่างระหว่างรูปและข้อมูล */
+    flex-direction: column; /* Align items in a column */
+    gap: 20px;
     width: 100%;
-    max-width: 800px; /* ขยายขนาดการ์ด */
-    margin: 20px 0; /* เพิ่มช่องว่างระหว่างการ์ดและขอบของหน้าจอ */
-}
-
-/* Profile Avatar */
-.profile-avatar {
-    width: 150px; /* ขยายขนาดรูปโปรไฟล์ */
+    max-width: 95vw; /* Make the card responsive */
+    margin: 10px 0; /* Margin between cards */
+  }
+  
+  /* Profile Avatar */
+  .profile-avatar {
+    width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 3px solid #ff6b00; /* กรอบรูปสีเดิม */
-}
-
-/* Profile Details */
-.profile-details h3 {
-    font-size: 24px; /* ขยายฟอนต์ของชื่อ */
+    border: 3px solid #ff6b00;
+  }
+  
+  /* Profile Details */
+  .profile-details h3 {
+    font-size: 24px;
     margin: 0 0 10px;
-    color: #ff6b00; /* สีหัวข้อ */
-}
-
-.profile-details p {
-    font-size: 18px; /* ขยายขนาดฟอนต์ของข้อมูล */
+    color: #ff6b00;
+  }
+  
+  .profile-details p {
+    font-size: 18px;
     margin: 5px 0;
     color: #555;
-}
+  }
+  
+  /* Nested Boxes */
+  .nested-boxes {
+    display: flex;
+    flex-wrap: wrap; /* Allow boxes to wrap if space is limited */
+    gap: 20px; /* Space between nested boxes */
+  }
+  
+  .nested-box {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 48%; /* Adjust width to fit two boxes per row */
+    border: 1px solid #d0d0d0; /* Add a border with color matching the theme */
+  }
+  
+  .nested-box h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ff6b00;
+  }
+  
+  .nested-box p {
+    font-size: 16px;
+    color: #555;
+  }
+  
 
 /* Profile Actions */
 .profile-actions {
