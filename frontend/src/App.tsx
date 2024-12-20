@@ -20,6 +20,13 @@ import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar"
 import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
+import MainSealSheet from './Pages/MainSealSheet/MainSealSheet';
+import AddSealUser from './Pages/AddSealUser/AddSealUser';
+import AddSheet from './Pages/AddSheet/AddSheet';
+import EditSealUser from './Pages/EditSealUser/EditSealUser';
+import EditSheet from './Pages/EditSheet/EditSheet';
+import IncomeHistory from './Pages/IncomeHistory/IncomeHistory';
+import PaymentPage from './Pages/Payment/Payment';
 import Admin from './Pages/Admin/Admin';
 import AdminFillDetails from './Pages/AdminFillDetails/AdminFillDetails';
 import Announcement from './Pages/Announcement/Announcement'
@@ -68,6 +75,14 @@ const App: React.FC = () => {
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
           <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
           <Route path="/ClassSchedule" element={<ClassSchedule/>}/>
+          <Route path="/AddSealUser" element={<AddSealUser />} /> 
+          <Route path="/MainSealSheet" element={<MainSealSheet />} />
+          <Route path="/AddSheet" element={<AddSheet />} />
+          <Route path="/AddSheet" element={<AddSheet />} />
+          <Route path="/EditSealUser" element={<EditSealUser />} />
+          <Route path="/EditSheet" element={<EditSheet />} />
+          <Route path="/IncomeHistory" element={<IncomeHistory />} />
+          <Route path="/Payment" element={<PaymentPage />} />
           <Route path="/CreateAppointment" element={<CreateAppointment/>}/>
 
         </Routes>

@@ -24,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
         <li onClick={() => navigateTo("/profile")}>Courses Open</li>
         <li onClick={() => navigateTo("/TeacherSchedule")}>Teacher Schedule</li>
         <li onClick={() => navigateTo("/Buysheet")}>Buy Sheet</li>
+        <li onClick={() => navigateTo("/MainSealSheet")}>Seal Sheet</li>
         <li onClick={() => navigateTo("/RequestChangeRole")}>Request for Change Role</li>
       </ul>
     </div>

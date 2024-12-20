@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Cascader, Card, Layout, Button, Badge } from 'antd';
-import { ShoppingCartOutlined } from '@ant-design/icons'; // ใช้ไอคอนจาก Ant Design
+import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import type { CascaderProps, GetProp } from 'antd';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './buysheet.css';
 
 type DefaultOptionType = GetProp<CascaderProps, 'options'>[number];
@@ -15,8 +17,9 @@ interface Option {
 const BuySheet: React.FC = () => {
   const navigate = useNavigate();
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null); 
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [cartItemCount, setCartItemCount] = useState<number>(2);
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
   const { Meta } = Card;
 
   const options1: Option[] = [
@@ -38,55 +41,73 @@ const BuySheet: React.FC = () => {
     { value: '1', label: '1' },
     { value: '2', label: '2' },
   ];
+  const courses = [
+    { courseName: "Mathematics", chapterName: "Algebra Basics", purchasedCount: 12 },
+    { courseName: "Physics", chapterName: "Newton's Laws", purchasedCount: 8 },
+    { courseName: "Biology", chapterName: "Cell Structure", purchasedCount: 15 },
+    { courseName: "Chemistry", chapterName: "Periodic Table", purchasedCount: 5 },
+    { courseName: "History", chapterName: "World War II", purchasedCount: 7 },
+  ];
+  
 
+  // Create a ref for managing canvas elements
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+
+useEffect(() => {
+  canvasRefs.current.forEach((canvas, index) => {
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = 'orange';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#ffff';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(15, 15, canvas.width - 30, canvas.height - 30);
+
+        ctx.fillStyle = '#ffff';
+        ctx.font = '24px Arial Bold';
+        ctx.textAlign = 'center';
+        ctx.fillText(courses[index].courseName, canvas.width / 2, 60);
+
+        ctx.strokeStyle = '#ffff';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(20, 80);
+        ctx.lineTo(canvas.width - 20, 80);
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffff';
+        ctx.font = '18px Arial';
+        ctx.fillText(courses[index].chapterName, canvas.width / 2, 120);
+        
+      }
+    }
+  });
+}, []);
+
+  
   const onChange: CascaderProps<Option>['onChange'] = (value, selectedOptions) => {
     console.log(value, selectedOptions);
   };
 
   const filter = (inputValue: string, path: DefaultOptionType[]) =>
     path.some(
-      (option) => (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
+      (option) =>
+        (option.label as string).toLowerCase().indexOf(inputValue.toLowerCase()) > -1,
     );
 
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
-
-  const closeDropdown = () => {
-    setDropdownVisible(false);
-  };
-
-  const goToDashboard = () => {
-    closeDropdown();
-    navigate('/dashboard');
-  };
-
-  const handleLogout = () => {
-    console.log('Logging out...');
-    closeDropdown();
-    navigate('/'); // เปลี่ยนเส้นทางไปหน้าแรก
-  };
-
-  const goToProfile = () => {
-    closeDropdown();
-    navigate('/profile'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
-  };
-
-  const goToBuySheet = () => {
-    closeDropdown();
-    navigate('/Buysheet'); // เปลี่ยนเส้นทางไปหน้าโปรไฟล์
-  };
 
   const handleMouseEnter = (id: string) => {
-    setHoveredCard(id); // เมื่อเมาส์วางจะตั้งค่า id ของการ์ดที่ถูกวาง
+    setHoveredCard(id);
   };
 
   const handleMouseLeave = () => {
-    setHoveredCard(null); // เมื่อเมาส์ออกจากการ์ดให้รีเซ็ตสถานะ
+    setHoveredCard(null);
   };
 
   const goToSelectSheet = () => {
-    navigate('/selectsheet'); // เมื่อคลิกการ์ด จะนำทางไปหน้าที่กำหนด
+    navigate('/selectsheet');
   };
 
   const goToCart = () => {
@@ -95,37 +116,13 @@ const BuySheet: React.FC = () => {
 
   return (
     <Layout className="sheet">
-      {/* Header Section */}
-      <header className="sheet-header">
-        <div className="sheet-header-left">
-          <button className="menu-button">☰</button>
-          <h1>SUT e-Learning</h1>
-          <span className="language">English (en)</span>
-        </div>
-        <div className="sheet-header-right">
-          <div className="user-info" onClick={toggleDropdown}>
-            <span className="user-id">B6525972</span>
-            <span className="user-name">ณิชากร จันทร์ยุทา</span>
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User Avatar"
-              className="user-avatar"
-            />
-          </div>
+    {/* Header Section */}
+    <Header />
 
-          {isDropdownVisible && (
-            <div className="dropdown-menu-sheet">
-              <button onClick={goToDashboard}>Dashboard</button>
-              <button onClick={goToProfile}>Profile</button>
-              <button onClick={goToBuySheet}>BuySheet</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
-      </header>
-
+    {/* Sidebar */}
+    <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
       {/* Search Bar */}
-      <div className="search-bar-sheet">
+      <div className="search-bar">
         <Cascader
           className="cascader-major"
           options={options1}
@@ -160,41 +157,45 @@ const BuySheet: React.FC = () => {
       <div className="Sheet-overview">
         <h2>Sheet</h2>
         <div className="Sheet-list">
-          {['1', '2', '3', '4', '5'].map((cardId) => (
+        {courses.map((course, index) => (
             <Card
-              key={cardId}
-              style={{ width: 300 }}
+              key={index}
+              style={{ width: 300, position: 'relative' }}
               cover={
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                <canvas
+                  ref={(el) => {
+                    canvasRefs.current[index] = el;
+                  }}
+                  width={300}
+                  height={200}
                 />
               }
-              onMouseEnter={() => handleMouseEnter(cardId)}
+              onMouseEnter={() => handleMouseEnter(course.courseName)}
               onMouseLeave={handleMouseLeave}
               onClick={goToSelectSheet}
-              className={hoveredCard === cardId ? 'hovered' : ''}
+              className={hoveredCard === course.courseName ? 'hovered' : ''}
             >
-              <Meta
-                title="Course Name"
-                description="This is the description"
-              />
+              <Meta title={course.courseName} description={`Chapter: ${course.chapterName}`} />
+              {/* เพิ่มจำนวนการซื้อ */}
+              <div className="purchased-info">{`ซื้อไปแล้ว: ${course.purchasedCount}`}</div>
             </Card>
           ))}
+
+
         </div>
       </div>
 
       {/* Shopping Cart Icon */}
-    <div className="cart-icon" onClick={goToCart}>
-      <Badge count={cartItemCount} overflowCount={99}>
-        <Button
-          shape="circle"
-          icon={<ShoppingCartOutlined style={{ fontSize: '30px' }} />}
-          size="large"
-        />
-      </Badge>
-    </div>
-    </Layout>
+      <div className="cart-icon" onClick={goToCart}>
+        <Badge count={cartItemCount} overflowCount={99}>
+          <Button
+            shape="circle"
+            icon={<ShoppingCartOutlined style={{ fontSize: '30px' }} />}
+            size="large"
+          />
+        </Badge>
+      </div>
+      </Layout>
   );
 };
 

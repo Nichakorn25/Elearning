@@ -1,37 +1,36 @@
-.sheet {
-  padding: 20px;
-  font-family: 'Open Sans', sans-serif;
-}
 h2 {
   padding: 10px;
   font-size: 30px; /* ขนาดตัวอักษรเริ่มต้น */
   margin-bottom: 20px;
 }
 
-.sheet-layout {
-  min-height: 100vh;
-  background-color: #ffffff;
+.sheet {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+  transition: margin-left 0.3s ease; /* Smooth transition for content margin */
 }
 
-.sheet-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #ff6b00;
-  padding: 10px 20px;
-  color: white;
-  position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
-  top: 0;
-  left: 0;
-  z-index: 1000;
+/* CSS สำหรับพื้นที่เนื้อหาหลัก */
+.sheet .ant-layout {
+  margin-left: 0; /* ค่าเริ่มต้นเมื่อ sidebar ซ่อนอยู่ */
+  transition: margin-left 0.3s ease, width 0.3s ease; /* การเปลี่ยนแปลงที่ราบรื่น */
+  width: calc(100%); /* ความกว้างเต็มขอบเขตเมื่อ sidebar ซ่อนอยู่ */
 }
 
-.sheet-header-left {
-  display: flex;
-  align-items: center;
+/* ปรับเมื่อ sidebar แสดง */
+.sheet.sidebar-visible .ant-layout {
+  position: fixed;
+  margin-left: 250px; /* ขยับตามความกว้างของ sidebar */
+  width: calc(100% - 250px); /* ปรับความกว้างเมื่อ sidebar แสดง */
 }
-  
+
+@media (max-width: 768px) {
+  .sheet.sidebar-visible .ant-layout {
+    margin-left: 0; /* ลบขอบเขตในหน้าจอขนาดเล็ก */
+    width: 100%; /* ความกว้างเต็มขอบเขตในหน้าจอขนาดเล็ก */
+  }
+}
+ 
   .menu-button {
     background: none;
     border: none;
@@ -43,11 +42,6 @@ h2 {
   .language {
     margin-left: 10px;
   }
-  .sheet-header-right {
-    display: flex;
-    align-items: center;
-  }
-  
   .user-id, .user-name {
     margin-right: 10px;
   }
@@ -148,12 +142,6 @@ h2 {
     }
   }
    
-  .header-sheet-right {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
   .dropdown-menu-sheet {
     position: absolute;
     top: 70px;
@@ -227,4 +215,24 @@ h2 {
     padding: 5px 10px; /* เพิ่มขนาดของเลข */
     font-size: 14px; /* ขนาดตัวอักษร */
   }
-  
+  .purchased-info {
+    position: absolute;
+    bottom: 10px; /* ระยะห่างจากด้านล่าง */
+    right: 10px; /* ระยะห่างจากด้านขวา */
+    background-color: #ff9800; /* สีพื้นหลัง */
+    color: white; /* สีตัวอักษร */
+    font-size: 11px;
+    font-weight: bold;
+    padding: 5px 10px; /* ช่องว่างภายใน */
+    border-radius: 8px; /* มุมมน */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* เงา */
+    z-index: 1; /* ทำให้มองเห็นได้ชัดเจน */
+  }
+  .sidebar-fixed {
+    position: fixed;
+    height: 100vh;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 250px; /* Adjust width as needed */
+  }
