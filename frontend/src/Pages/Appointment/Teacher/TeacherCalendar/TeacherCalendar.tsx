@@ -6,15 +6,21 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./TCcalendar.css";
+import "./TeacherCalendar.css";
 import Header from "../../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
-const TCcalendar: React.FC = () => {
+const TeacherCalendar: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCreateAppointment = () => {
+    navigate("/CreateAppointment");
+  };
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     {
@@ -140,7 +146,7 @@ const TCcalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={showAppointmentModal}>
+      <Menu.Item key="appointment" onClick={handleCreateAppointment}>
         Appointment Schedule
       </Menu.Item>
     </Menu>
@@ -226,12 +232,6 @@ const TCcalendar: React.FC = () => {
             onSubmit={handleSubmitTask}
           />
 
-          <CreateAppointmentPopup
-            isVisible={isAppointmentModalVisible}
-            onClose={handleCloseAppointmentModal}
-            onSubmit={handleSubmitAppointment}
-          />
-
           <div className="mini-calendar">
             <Calendar />
           </div>
@@ -286,4 +286,4 @@ const TCcalendar: React.FC = () => {
   );
 };
 
-export default TCcalendar;
+export default TeacherCalendar;
