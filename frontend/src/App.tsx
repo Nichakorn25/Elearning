@@ -19,6 +19,11 @@ import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import TeacherCalendar from "./Pages/Appointment/Teacher/TeacherCalendar/TCcalendar"
 import StudentCalendar from "./Pages/Appointment/Student/StudentCalendar/StudentCalendar"
+import Admin from './Pages/Admin/Admin';
+import Announcement from './Pages/Announcement/Announcement'
+import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
+import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
+import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -39,6 +44,10 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/Admin"element={<ProtectedRoute> <Admin /></ProtectedRoute> } />
+          <Route path="/Announcement"element={<ProtectedRoute> <Announcement /></ProtectedRoute> } />
+          <Route path="/ConfirmTransfer" element={<ProtectedRoute> <ConfirmTransfer /></ProtectedRoute>} />
+          <Route path="/ManageRoleRequests" element={<ProtectedRoute> <ManageRoleRequests /></ProtectedRoute>} />
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
