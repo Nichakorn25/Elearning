@@ -16,7 +16,7 @@ const Profile: React.FC = () => {
     <div className="profile-dashboard">
       {/* Header Section */}
       <Header />
-      
+
       {/* Sidebar Section */}
       <Sidebar isVisible={isSidebarVisible} />
 
@@ -24,6 +24,7 @@ const Profile: React.FC = () => {
       <main className="profile-content">
         
         <div className="profile-card">
+        <div className='nested-boxes'>
           <img
             className="profile-avatar"
             src="https://via.placeholder.com/120"
@@ -35,6 +36,20 @@ const Profile: React.FC = () => {
             <p>Email: nichakorn@example.com</p>
             <p>Faculty: Engineering</p>
             <p>Program: Computer Engineering</p>
+          </div>
+        </div>
+        </div>
+        <div className="profile-card">
+          
+          <div className="nested-boxes">
+            <div className="nested-box">
+              <h4>Box 1</h4>
+              <p>This is a smaller box.</p>
+            </div>
+            <div className="nested-box">
+              <h4>Box 2</h4>
+              <p>This is another smaller box.</p>
+            </div>
           </div>
         </div>
         <div className="profile-actions">

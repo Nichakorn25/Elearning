@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   if (!userId || userRole !== "3") {
     message.destroy(); // Clear any existing messages
     message.error("You do not have permission to access this page.");
-    return <Navigate to="/Dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
