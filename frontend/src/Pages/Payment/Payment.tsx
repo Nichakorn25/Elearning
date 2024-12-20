@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Layout, Table, Input, Button, Upload, message, Card } from 'antd';
+import { useState } from 'react';
+import { Layout, Table,  Button, Upload, message, Card } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import './Payment.css';
-import Sidebar from '../../Component/Sidebar/Sidebar';
-import Header from '../../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 
 const { Content } = Layout;
 
@@ -64,7 +64,6 @@ const PaymentPage = () => {
         </Content>
     </Layout>
 </Layout>
-
         </Layout>
     );
 };

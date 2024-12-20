@@ -1,8 +1,8 @@
 import  { useState } from 'react';
 import { Card, Layout, Button, Input, Form, message, Select } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../Component/Sidebar/Sidebar';
-import Header from '../../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './AddSealUser.css';
 
 const { Content } = Layout;

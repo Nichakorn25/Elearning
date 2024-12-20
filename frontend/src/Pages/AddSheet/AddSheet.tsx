@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button, Typography, Card, Layout, Form, Input, Select, DatePicker, Upload, message } from "antd";
 import { InboxOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
-import Sidebar from '../../Component/Sidebar/Sidebar';
-import Header from '../../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './AddSheet.css';
 
 const { Content } = Layout;

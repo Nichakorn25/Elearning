@@ -1,13 +1,4 @@
 /* Layout */
-.site-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-    padding: 20px; /* Add padding for breathing room */
-}
 
 /* Card */
 .card {
@@ -58,7 +49,7 @@
 }
 
 /* General Button Styling */
-button {
+.paymentbutton {
     width: 100%;
-    max-width: 300px;
+    max-width: 200px;
 }

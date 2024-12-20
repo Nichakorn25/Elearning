@@ -3,8 +3,8 @@ import { Button, Typography, Card, Layout, Form, Input, Select, DatePicker, Uplo
 import { InboxOutlined } from '@ant-design/icons';
 import { useNavigate } from "react-router-dom";
 import moment from 'moment';
-import Sidebar from '../../Component/Sidebar/Sidebar';
-import Header from '../../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
 import './EditSheet.css';
 
 const { Content } = Layout;
