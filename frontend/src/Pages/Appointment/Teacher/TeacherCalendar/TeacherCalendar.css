@@ -47,6 +47,8 @@ html {
   gap: 10px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
 }
 
+
+
 .mycalendar {
   font-weight: 400; /* น้ำหนักฟอนต์ */
   font-size: 30px; /* ขนาดตัวอักษร */
@@ -158,6 +160,7 @@ html {
 
 /* Sidebar */
 .calendar-sidebar {
+  flex-shrink: 0; /* Sidebar ไม่หดตัว */
   margin: 0;
   margin-left: 20px;
   margin-right: 20px;
@@ -288,13 +291,19 @@ html {
   overflow: hidden; /* ซ่อน Scrollbar ของ Calendar Container */
   margin: 0%;
   margin-right: 0;
+  margin-left: 0;
   width: 100% !important;
+  transition: margin-left 0.3s ease; /* เพิ่ม Transition */
   height: 100%;
   gap: 0;
   margin-top: 0;
 }
 .calendar-container::-webkit-scrollbar {
   display: none;
+}
+
+.sidebar-visible .calendar-container {
+  margin-left: 280px; /* ขยับ Calendar เมื่อ Sidebar แสดง */
 }
 
 /* FullCalendar Adjustments */
