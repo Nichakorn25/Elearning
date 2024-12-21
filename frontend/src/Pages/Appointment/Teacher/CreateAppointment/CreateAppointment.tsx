@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input, Select, TimePicker, Checkbox, Button, Collapse } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
@@ -14,6 +15,13 @@ const { RangePicker } = TimePicker;
 const { Panel } = Collapse;
 
 const CreateAppointment: React.FC = () => {
+  const navigate = useNavigate();
+
+  // ฟังก์ชันสำหรับปิดฟอร์มและกลับไปที่หน้า TeacherCalendar
+  const handleClose = () => {
+    navigate("/TeacherCalendar"); // กลับไปหน้า TeacherCalendar
+  };
+
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("1 hour");
   const [daysAvailability, setDaysAvailability] = useState([
@@ -80,8 +88,12 @@ const CreateAppointment: React.FC = () => {
       <Header />
       {/* Left Panel */}
       <div className="left-panel">
+      <button className="close-button" onClick={handleClose}>
+          X
+        </button>
         <h2>Bookable Appointment Schedule</h2>
-        <Collapse defaultActiveKey={["1"]}>
+     
+        <Collapse defaultActiveKey={["1"]} className="createappointmentcontent">
           {/* Title Section */}
           <Panel header="Title & Duration" key="1">
             <Input
