@@ -1,17 +1,24 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Modal, Input, Select, DatePicker, TimePicker, Button } from "antd";
 import "./Taskpopup.css";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const Taskpopup = ({ isVisible, onClose, onSubmit }) => {
+const Taskpopup = ({ isVisible, onClose, onSubmit , selectedDate }) => {
   // สร้าง state สำหรับเก็บค่าจากฟอร์ม
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("งานของฉัน");
+
+  useEffect(() => {
+    if (selectedDate) {
+      setDate(dayjs(selectedDate)); // อัปเดตวันที่เมื่อ selectedDate เปลี่ยน
+    }
+  }, [selectedDate]);
 
   const handleSave = () => {
     // ส่งข้อมูลกลับเมื่อกด Save

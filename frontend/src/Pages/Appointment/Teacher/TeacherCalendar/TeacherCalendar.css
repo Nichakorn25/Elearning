@@ -156,6 +156,7 @@ html {
   padding: 0;
   margin: 0;
   gap: 0;
+  overflow: hidden !important; 
 }
 
 /* Sidebar */
@@ -179,6 +180,11 @@ html {
 .calendar-sidebar::-webkit-scrollbar-thumb {
   background: #bbb;
 }
+
+.sidebar-visible .calendar-container {
+  margin: 0; /* ขยายเต็มเมื่อ Sidebar ซ่อน */
+}
+
 .sidebar-header button {
   display: flex; /* จัดการให้ไอคอนและข้อความอยู่ในบรรทัดเดียวกัน */
   align-items: center; /* จัดแนวไอคอนและข้อความให้อยู่กึ่งกลาง */
@@ -288,7 +294,7 @@ html {
   flex: 1;
   padding: 0;
   background-color: #f8f9fa;
-  overflow: hidden; /* ซ่อน Scrollbar ของ Calendar Container */
+  /* overflow: hidden; ซ่อน Scrollbar ของ Calendar Container */
   margin: 0%;
   margin-right: 0;
   margin-left: 0;
@@ -297,6 +303,7 @@ html {
   height: 100%;
   gap: 0;
   margin-top: 0;
+  overflow: visible; /* อนุญาตให้ Calendar แสดงผลเต็ม */
 }
 .calendar-container::-webkit-scrollbar {
   display: none;
