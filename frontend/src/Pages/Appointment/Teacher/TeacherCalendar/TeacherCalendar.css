@@ -217,6 +217,18 @@ html {
   padding: 0 !important; /* ลบระยะห่างภายใน */
 }
 
+.react-calendar__month-view__weekdays {
+  color: black;
+  font-size: 12px;
+  border: none; /* ลบขอบ */
+  text-decoration: none; /* ลบเส้นใต้ */
+}
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none; /* ลบจุดไข่ปลาจาก abbr */
+  border: none; /* ลบขอบใน abbr */
+}
+
+
 .sidebar-section{
   color: black;
 }
