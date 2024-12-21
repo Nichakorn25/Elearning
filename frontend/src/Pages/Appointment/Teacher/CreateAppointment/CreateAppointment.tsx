@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Select, TimePicker, Checkbox, Button, Collapse } from "antd";
+import { Modal, Input, Select, TimePicker, Checkbox, Button, Collapse } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import FullCalendar from "@fullcalendar/react";
@@ -14,7 +14,7 @@ const { Option } = Select;
 const { RangePicker } = TimePicker;
 const { Panel } = Collapse;
 
-const CreateAppointment: React.FC = () => {
+const CreateAppointment: React.FC = ({ isVisible, onClose }) => {
   const navigate = useNavigate();
 
   // ฟังก์ชันสำหรับปิดฟอร์มและกลับไปที่หน้า TeacherCalendar
