@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import './ClassSchedule.css';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from '../../Component/Sidebar/Sidebar';
 import Header from '../../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
 import AddSubjectPopup from '../AddSubjectPopup/AddSubjectPopup';
 import CreditSummary from '../CreditSummary/CreditSummary';
@@ -38,44 +37,6 @@ const ClassSchedule: React.FC = () => {
     alert('ตารางเรียนถูกบันทึก!');
   };
 
-  const navigate = useNavigate();
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!isDropdownVisible);
-  };
-
-  const closeDropdown = () => {
-    setDropdownVisible(false);
-  };
-
-  const goToDashboard = () => {
-    closeDropdown();
-    navigate('/dashboard');
-  };
-
-  const handleLogout = () => {
-    console.log('Logging out...');
-    closeDropdown();
-    navigate('/');
-  };
-
-  const goToProfile = () => {
-    closeDropdown();
-    navigate('/profile');
-  };
-
-  const goToBuySheet = () => {
-    closeDropdown();
-    navigate('/Buysheet');
-  };
-
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const togglePopup = () => {
@@ -86,45 +47,6 @@ const ClassSchedule: React.FC = () => {
     <div className="dashboard">
       {/* Header Section */}
       <Header />
-      <header className="dashboard-header">
-        <div className="dashboardheader-left">
-          {!isSidebarVisible && (
-            <button className="dashboardmenu-button" onClick={toggleSidebar}>
-              ☰
-            </button>
-          )}
-          <h1>SUT e-Learning</h1>
-        </div>
-
-        <div className="dashboardheader-right">
-          {/* คลิก User ID, Name หรือ Avatar เพื่อเปิด dropdown */}
-          <div className="dashboarduser-info" onClick={toggleDropdown}>
-            <span className="dashboarduser-id">B65xxxxx</span>
-            <span className="dashboarduser-name">Username</span>
-            <img
-              src="https://via.placeholder.com/40"
-              alt="User Avatar"
-              className="dashboarduser-avatar"
-            />
-            {/* ลูกศรสำหรับ Dropdown */}
-            <i className={`arrow ${isDropdownVisible ? 'down' : 'up'}`}></i>
-          </div>
-
-          {/* Dropdown Menu */}
-          {isDropdownVisible && (
-            <div className="dashboarddropdown-menu">
-              <button onClick={goToDashboard}>Dashboard</button>
-              <button onClick={goToProfile}>Profile</button>
-              <button onClick={goToBuySheet}>BuySheet</button>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
-        </div>
-      </header>
-
-      {/* Sidebar */}
-      <Sidebar isVisible={isSidebarVisible} onClose={toggleSidebar} /> 
-
       {/* Schedule Table */}
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>

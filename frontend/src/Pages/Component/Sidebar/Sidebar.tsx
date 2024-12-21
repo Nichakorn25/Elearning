@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -14,6 +14,18 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     navigate(path); // เปลี่ยนหน้า
     onClose(); // ปิด Sidebar
   };
+
+  useEffect(() => {
+    // ปรับ margin-left ของ #root ตามสถานะ Sidebar
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      rootElement.style.transition = "margin-left 0.3s ease";
+      rootElement.style.marginLeft = isVisible ? "250px" : "0";
+    }
+    return () => {
+      if (rootElement) rootElement.style.marginLeft = "0"; // รีเซ็ตเมื่อ Component ถูกถอด
+    };
+  }, [isVisible]);
 
   return (
     <div className={`sidebar ${isVisible ? "visible" : ""}`}>

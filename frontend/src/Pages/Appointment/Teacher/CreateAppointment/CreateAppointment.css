@@ -125,7 +125,7 @@
 }
 
 .left-panel::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3); /* สี scrollbar */
+  background: rgba(152, 150, 150, 0.3); /* สี scrollbar */
   border-radius: 10px; /* ทำให้ scrollbar โค้งมน */
   min-height: 10px; /* ความยาวขั้นต่ำของ scrollbar thumb */
 }
