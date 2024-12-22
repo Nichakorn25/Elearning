@@ -1,170 +1,76 @@
-.fullscreen-container {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  background: #f9f9f9;
-  overflow: hidden;
-  margin-top: 5%;
-}
-
-.left-panel {
-  margin-top: 10px;
-  margin-left: 10px;
-  flex: 1;
-  padding: 24px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
+.create-appointment-modal .ant-modal-content {
   border-radius: 20px;
-  overflow: hidden; /* เพื่อทำให้ขอบมนกับเนื้อหา */
-}
-
-
-.left-panel h2 {
-  margin-top: 5%;
-  font-size: 24px;
-}
-
-.right-panel {
-  flex: 2;
-  padding: 16px;
-  background: #f9f9f9;
-  border: none;
-  overflow-y: auto;
-}
-
-.section-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-.input-field {
-  margin-bottom: 16px;
-}
-
-.availability-section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.availability-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer {
-  margin-top: 24px;
-  text-align: right;
-}
-
-.footer button {
-  margin-left: 8px;
-}
-
-.time-slots {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-}
-
-.time-slot {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px;
-  margin-bottom: 8px;
-  border: 1px solid #dcdcdc;
-  border-radius: 4px;
-  background: #ffffff;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.time-slot:hover {
-  background: #f0f0f0;
-}
-
-.left-panel {
-  position: relative;
-  margin-top: 10px;
-  margin-left: 10px;
-  flex: 1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 24px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  border-radius: 20px;
-  border: none;
-  outline: none;
+  font-family: 'Open Sans', sans-serif;
 }
 
-.left-panel:before,
-.left-panel:after {
-  content: '';
+.create-appointment-section {
+  margin-bottom: 24px;
+}
+
+.create-appointment-section-label {
   display: block;
-  height: 50px; /* ความสูงพื้นที่ว่าง */
-}
-
-.left-panel:before {
-  margin-top: -50px; /* เพิ่มพื้นที่ว่างด้านบน */
-}
-
-.left-panel:after {
-  margin-bottom: -50px; /* เพิ่มพื้นที่ว่างด้านล่าง */
-}
-
-
-/* Custom Scrollbar */
-.left-panel::-webkit-scrollbar {
-  width: 10px; /* ความกว้างของ scrollbar */
-  height: 10px;
-}
-
-.left-panel::-webkit-scrollbar-thumb {
-  background: rgba(152, 150, 150, 0.3); /* สี scrollbar */
-  border-radius: 10px; /* ทำให้ scrollbar โค้งมน */
-  min-height: 10px; /* ความยาวขั้นต่ำของ scrollbar thumb */
-}
-
-.left-panel::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.5); /* สีเมื่อ hover */
-}
-
-.left-panel::-webkit-scrollbar-track {
-  background: #ffffff; /* สีพื้นหลัง scrollbar */
-  border-radius: 10px;
-  margin-top: 50px; /* เว้นพื้นที่ด้านบนของ track */
-  margin-bottom: 50px; /* เว้นพื้นที่ด้านล่างของ track */
-}
-
-
-
-.left-panel .header {
-  display: flex;
-  justify-content: center; /* ให้หัวข้ออยู่ตรงกลาง */
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding: 16px;
-  position: relative;
-}
-
-.left-panel .close-button {
-  position: absolute; /* จัดตำแหน่งปุ่มให้อยู่ที่มุมขวาบน */
-  top: 16px; /* ระยะจากด้านบน */
-  right: 10px; /* ระยะจากด้านขวา */
-  background: none;
-  border: none;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-  color: #888;
-  transition: color 0.3s ease;
+  margin-bottom: 8px;
+  color: #202124;
 }
 
-.left-panel .close-button:hover {
-  color: #ff6b00; /* เปลี่ยนสีเมื่อ hover */
+.create-appointment-availability-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px; /* เพิ่มระยะห่างระหว่างองค์ประกอบ */
+  margin-bottom: 12px;
+}
+
+.create-appointment-day {
+  width: 100px;
+  font-size: 14px;
+  color: #202124;
+}
+
+.create-appointment-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+}
+
+.create-appointment-cancel-button {
+  background: none;
+  border: 1px solid #dadce0;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #5f6368;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-appointment-cancel-button:hover {
+  background-color: #f8f9fa;
+}
+
+.create-appointment-save-button {
+  background: #1a73e8;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-appointment-save-button:hover {
+  background-color: #174ea6;
+}
+
+.ant-input, .ant-select-selector, .ant-picker {
+  border-radius: 8px;
+}
+
+.ant-picker {
+  width: 100%; /* ทำให้ picker เต็มพื้นที่ */
 }
