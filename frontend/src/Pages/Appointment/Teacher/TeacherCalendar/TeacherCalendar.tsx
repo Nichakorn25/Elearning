@@ -12,7 +12,7 @@ import { Menu, Dropdown, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
-import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
+import CreateAppointment from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
 const TeacherCalendar: React.FC = () => {
@@ -125,7 +125,7 @@ const TeacherCalendar: React.FC = () => {
   };
 
   // ปิด Appointment Popup
-  const handleCloseAppointmentModal = () => {
+  const closeAppointmentModal = () => {
     setIsAppointmentModalVisible(false);
   };
 
@@ -168,7 +168,7 @@ const TeacherCalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showTaskModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={handleCreateAppointment}>
+      <Menu.Item key="appointment" onClick={showAppointmentModal}>
         Appointment Schedule
       </Menu.Item>
     </Menu>
@@ -244,6 +244,11 @@ const TeacherCalendar: React.FC = () => {
             onClose={handleCloseTaskModal}
             onSubmit={handleSubmitTask}
             selectedDate={selectedDate}
+          />
+
+          <CreateAppointment
+            isVisible={isAppointmentModalVisible}
+            onClose={closeAppointmentModal}
           />
 
           <div className="mini-calendar">

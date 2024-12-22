@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ClassSchedule.css';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Header from '../../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
 import AddSubjectPopup from '../AddSubjectPopup/AddSubjectPopup';
 import CreditSummary from '../CreditSummary/CreditSummary';
