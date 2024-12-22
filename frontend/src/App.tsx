@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import BeforeLogin from './Pages/FirstPage/BeforeLogin/BeforeLogin';
 import LoginPopup from './Pages/FirstPage/LoginPopup/LoginPopup';
 import Dashboard from '../src/Pages/Dashboard/Dashboard';
-import Profile from '../src/Pages/Profile/Profile'; // นำเข้า Profile
 import BuySheet from '../src/Pages/Buysheet/Buysheet';
 import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
@@ -21,6 +20,16 @@ import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import MangeCourse from "./Pages/ManageCourse/ManageCourse";
+import Profile from '../src/Pages/Profile/Profile'; 
+import EditProfile from './Pages/Profile/edit/EditProfile';
+import Admin from './Pages/Admin/Admin';
+import AdminFillDetails from './Pages/AdminFillDetails/AdminFillDetails';
+import Announcement from './Pages/Announcement/Announcement'
+import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
+import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
+import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
+
+
 
 const App: React.FC = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -41,6 +50,12 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           {/* เส้นทางสำหรับ Profile */}
           <Route path="/profile" element={<Profile />} />
+          <Route path="/EditProfile" element={<EditProfile />} />
+          <Route path="/Admin"element={<ProtectedRoute> <Admin /></ProtectedRoute> } />
+          <Route path="/AdminFillDetails" element={<ProtectedRoute><AdminFillDetails /></ProtectedRoute>} />
+          <Route path="/Announcement"element={<ProtectedRoute> <Announcement /></ProtectedRoute> } />
+          <Route path="/ConfirmTransfer" element={<ProtectedRoute> <ConfirmTransfer /></ProtectedRoute>} />
+          <Route path="/ManageRoleRequests" element={<ProtectedRoute> <ManageRoleRequests /></ProtectedRoute>} />
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />

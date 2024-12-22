@@ -8,8 +8,14 @@ const Header: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-  // Get user role from localStorage
+  // Get user role and user data from localStorage
   const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  // Extract user data or set default values
+  const username = user?.username || "N/A";
+  const firstName = user?.FirstName || "N/A";
+  const lastName = user?.LastName || "N/A";
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -45,7 +51,6 @@ const Header: React.FC = () => {
     navigate("/");
   };
 
-  // Add onClick to navigate when clicking the title
   const handleTitleClick = () => {
     navigate("/dashboard");
   };
@@ -57,16 +62,15 @@ const Header: React.FC = () => {
           <button className="dashboardmenu-button" onClick={toggleSidebar}>
             ☰
           </button>
-          {/* Add onClick to navigate to the dashboard */}
-          <h1 onClick={handleTitleClick} style={{ cursor: 'pointer' }}>
+          <h1 onClick={handleTitleClick} style={{ cursor: "pointer" }}>
             SUT e-Learning
           </h1>
         </div>
 
         <div className="dashboardheader-right">
           <div className="dashboarduser-info" onClick={toggleDropdown}>
-            <span className="dashboarduser-id">B65xxxxx</span>
-            <span className="dashboarduser-name">Username</span>
+            <span className="dashboarduser-id">{username}</span>
+            <span className="dashboarduser-name">{`${firstName} ${lastName}`}</span>
             <img
               src="https://via.placeholder.com/40"
               alt="User Avatar"
@@ -79,17 +83,13 @@ const Header: React.FC = () => {
             <div className="dashboarddropdown-menu">
               <button onClick={goToDashboard}>Dashboard</button>
               <button onClick={goToProfile}>Profile</button>
-
-              {/* Render Admin Button if userRole is '3' (Admin) */}
               {userRole === "3" && <button onClick={goToAdmin}>Admin</button>}
-
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>
       </header>
 
-      {/* Sidebar */}
       <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
     </>
   );

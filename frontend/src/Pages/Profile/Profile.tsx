@@ -1,20 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
+import { GetUserById } from '../../services/https';
+import { UserInterface } from '../../Interface/IUser';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserInterface | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const userId = localStorage.getItem('id');
+      if (!userId) {
+        navigate('/Login');
+        return;
+      }
+
+      try {
+        const response = await GetUserById(userId);
+        if (response.status === 200) {
+          setUserProfile(response.data);
+        } else {
+          console.error('Failed to fetch user profile:', response.data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [navigate]);
+
   const handleEditProfileClick = () => {
     navigate('/EditProfile');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profile-dashboard">
@@ -35,11 +68,13 @@ const Profile: React.FC = () => {
             alt="User Avatar"
           />
           <div className="profile-details">
-            <h3>ณิชากร จันทร์ยุทา</h3>
-            <p>User ID: B6525972</p>
-            <p>Email: nichakorn@example.com</p>
-            <p>Faculty: Engineering</p>
-            <p>Program: Computer Engineering</p>
+          <h3>
+                {userProfile?.FirstName || 'N/A'} {userProfile?.LastName || 'N/A'}
+              </h3>
+              <p>Username: {userProfile?.Username || 'N/A'}</p>
+              <p>User ID: {userProfile?.ID || 'N/A'}</p>
+              
+              
           </div>
         </div>
         </div>
@@ -48,11 +83,14 @@ const Profile: React.FC = () => {
           <div className="nested-boxes">
             <div className="nested-box">
               <h4>Box 1</h4>
-              <p>This is a smaller box.</p>
+              <p>Email: {userProfile?.Email || 'N/A'}</p>
+              <p>Phone: {userProfile?.Phone || 'N/A'}</p>
             </div>
             <div className="nested-box">
               <h4>Box 2</h4>
-              <p>This is another smaller box.</p>
+              <p>Department: {userProfile?.departmentname || 'N/A'}</p>
+              <p>Major: {userProfile?.majorname || 'N/A'}</p>
+              <p>Role: {userProfile?.rolename || 'N/A'}</p>
             </div>
           </div>
         </div>

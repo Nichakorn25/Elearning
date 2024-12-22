@@ -30,6 +30,14 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
       if (userResponse.status === 200) {
         const user = userResponse.data;
         localStorage.setItem("role", user.RoleID.toString());
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            username: user.Username,
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+          })
+        );
         setTimeout(() => {
           if (user.RoleID === 1) {
             message.success("You are a student!");
