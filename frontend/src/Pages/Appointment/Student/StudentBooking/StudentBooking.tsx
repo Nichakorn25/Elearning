@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./StudentBooking.css";
 import { Select, Input } from "antd";
 import Header from "../../../Component/Header/Header";
+import Calendar from "react-calendar";
 
 const { Option } = Select;
 
@@ -81,7 +82,8 @@ const StudentBooking: React.FC = () => {
           <div className="student-booking__title">
             <h1>test</h1>
             <p className="student-booking__subtitle">
-              <span className="student-booking__icon">⏰</span> 60 min appointments
+              <span className="student-booking__icon">⏰</span> 60 min
+              appointments
             </p>
           </div>
         </div>
@@ -138,33 +140,21 @@ const StudentBooking: React.FC = () => {
             ))}
           </Select>
         </div>
-
-        {/* <h1 className="student-booking__title">test</h1> */}
-        <p className="student-booking__subtitle">60 min appointments</p>
-        <p className="student-booking__timezone">
-          (GMT+07:00) Indochina Time - Bangkok
-        </p>
       </header>
       <main className="student-booking__main">
-        <section className="student-booking__calendar-section">
-          <h2 className="student-booking__calendar-title">December 2024</h2>
-          <div className="student-booking__calendar-grid">
-            {dates.map((date) => (
-              <button
-                key={date}
-                className={`student-booking__calendar-date ${
-                  selectedDate === date
-                    ? "student-booking__calendar-date--selected"
-                    : ""
-                }`}
-                onClick={() => handleDateClick(date)}
-              >
-                {date}
-              </button>
-            ))}
+        {/* Mini Calendar */}
+        <section className="student-booking__mini-calendar">
+          <div className="mini-calendar-container">
+            <Calendar
+              onChange={(date: Date) => setSelectedDate(date.getDate())}
+              value={new Date()}
+            />
           </div>
         </section>
+
+        {/* Time Slots */}
         <section className="student-booking__timeslots-section">
+          <h2 className="student-booking__timeslots-title">Available Slots</h2>
           <div className="student-booking__timeslots-grid">
             {timeSlots.map((slot, index) => (
               <button
@@ -182,6 +172,7 @@ const StudentBooking: React.FC = () => {
           </div>
         </section>
       </main>
+
       <footer className="student-booking__footer">
         <button
           className="student-booking__confirm-btn"

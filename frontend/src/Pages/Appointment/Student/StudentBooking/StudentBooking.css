@@ -53,8 +53,8 @@
 
 .student-booking__main {
   display: flex;
-  justify-content: center;
-  gap: 40px;
+  justify-content: space-between;
+  gap: 20px;
   width: 100%;
 }
 
@@ -214,4 +214,151 @@
   margin: 0 auto; /* จัดตรงกลาง */
 }
 
+.student-booking__main {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+  padding: 20px;
+}
 
+.student-booking__mini-calendar {
+  flex: 0 0 250px; /* ให้ Mini Calendar มีขนาดคงที่ */
+  text-align: center;
+}
+
+.student-booking__calendar-title {
+  font-size: 18px;
+  color: #202124;
+  margin-bottom: 10px;
+}
+
+.student-booking__calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.student-booking__calendar-date {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dfe1e5;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.student-booking__calendar-date:hover {
+  background-color: #f1f3f4;
+}
+
+.student-booking__calendar-date--selected {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border-color: #174ea6;
+}
+
+.student-booking__timeslots-section {
+  flex: 2; /* Time Slots ครองพื้นที่ฝั่งขวา */
+  text-align: center;
+}
+
+.student-booking__timeslots-title {
+  font-size: 18px;
+  color: #202124;
+  margin-bottom: 10px;
+}
+
+.student-booking__timeslots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* จัด Slots ให้เป็น 3 คอลัมน์ */
+  gap: 10px;
+}
+
+.student-booking__timeslot {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dfe1e5;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.student-booking__timeslot:hover {
+  background-color: #f1f3f4;
+}
+
+.student-booking__timeslot--selected {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border-color: #174ea6;
+}
+
+.mini-calendar-container {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 250px; /* กำหนดความกว้าง */
+  text-align: center; /* จัดข้อความตรงกลาง */
+
+  margin-top: 20px;
+  background: none !important; /* ลบพื้นหลัง */
+  border: none !important; /* ลบกรอบ */
+  box-shadow: none !important; /* ลบเงา */
+  padding: 0 !important; /* ลบระยะห่างภายใน */
+}
+
+.mini-calendar-container .react-calendar {
+  width: 100%;
+  border: none;
+}
+
+.mini-calendar-container .react-calendar__tile {
+  max-width: 100%;
+  text-align: center;
+  padding: 5px; /* ลดขนาด padding */
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+  font-size: 14px; /* ลดขนาดตัวอักษร */
+}
+
+.mini-calendar-container .react-calendar__tile--now {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+  font-weight: bold;
+}
+
+.mini-calendar-container .react-calendar__tile--active {
+  background-color: #1a73e8;
+  color: white;
+  font-weight: bold;
+}
+
+.mini-calendar-container .react-calendar__month-view__days__day--weekend {
+  color: red; /* กำหนดสีวันหยุด */
+}
+
+.mini-calendar-container .react-calendar__navigation {
+  display: flex;
+  justify-content: center; /* จัดปุ่มและชื่อเดือนให้อยู่ตรงกลาง */
+  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
+  margin-bottom: 10px;
+}
+
+.mini-calendar-container .react-calendar__navigation button {
+  background: none;
+  border: none;
+  font-size: 14px; /* ขนาดปุ่ม */
+  cursor: pointer;
+  color: #1a73e8;
+  margin: 0 5px; /* ระยะห่างระหว่างปุ่ม */
+  padding: 5px;
+}
+
+.mini-calendar-container .react-calendar__navigation button:hover {
+  background-color: #e8f0fe;
+  border-radius: 50%;
+}
