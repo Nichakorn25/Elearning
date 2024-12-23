@@ -14,8 +14,10 @@ import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIc
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 import StudentBooking from "../StudentBooking/StudentBooking";
 import CreateTaskPopup from "../../Teacher/Taskpopup/Taskpopup";
+import { useNavigate } from "react-router-dom";
 
 const StudentCalendar: React.FC = () => {
+  const navigate = useNavigate(); // เพิ่ม useNavigate
   const calendarRef = useRef<FullCalendar>(null);
   const [events, setEvents] = useState([
     {
@@ -25,28 +27,28 @@ const StudentCalendar: React.FC = () => {
       end: "2024-12-12T11:00:00",
     },
   ]);
+
+  // Navigate ไปหน้า StudentBooking
+  const handleNavigateToBooking = () => {
+    navigate("/StudentBooking"); // ระบุ path ของ StudentBooking
+  };
+
   const [currentView, setCurrentView] = useState("dayGridMonth");
   const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
-  const [isBookingVisible, setIsBookingVisible] = useState(false);
+  // const [isBookingVisible, setIsBookingVisible] = useState(false);
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = prompt("Enter a title for your event:");
+    const { startStr } = selectInfo;
+
+    // เปิด TaskPopup และส่งวันที่ที่เลือกไป
+    setSelectedDate(startStr);
+    setIsTaskModalVisible(true);
+
+    // Unselect วันที่ใน FullCalendar
     const calendarApi = selectInfo.view.calendar;
-
     calendarApi.unselect();
-
-    if (title) {
-      setEvents([
-        ...events,
-        {
-          id: String(events.length + 1),
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-        },
-      ]);
-    }
   };
 
   const currentDate = new Date();
@@ -56,11 +58,11 @@ const StudentCalendar: React.FC = () => {
     day: "numeric",
   };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  // const [isSidebarVisible, setSidebarVisible] = useState(false);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+  // const toggleSidebar = () => {
+  //   setSidebarVisible(!isSidebarVisible);
+  // };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (
@@ -110,22 +112,22 @@ const StudentCalendar: React.FC = () => {
   };
 
   // เปิด Popup
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
 
   // ปิด Popup
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
+  // const handleCloseModal = () => {
+  //   setIsModalVisible(false);
+  // };
 
-  const showBooking = () => {
-    setIsBookingVisible(true); // ให้แสดง Modal เฉพาะเมื่อเรียกใช้ฟังก์ชันนี้
-  };
+  // const showBooking = () => {
+  //   setIsBookingVisible(true); // ให้แสดง Modal เฉพาะเมื่อเรียกใช้ฟังก์ชันนี้
+  // };
 
-  const handleCloseBooking = () => {
-    setIsBookingVisible(false);
-  };
+  // const handleCloseBooking = () => {
+  //   setIsBookingVisible(false);
+  // };
 
   const showTaskModal = () => {
     setIsTaskModalVisible(true);
@@ -135,7 +137,7 @@ const StudentCalendar: React.FC = () => {
     setIsTaskModalVisible(false);
   };
 
-  const handleSubmitTask = (values) => {
+  const handleSubmitTask = (values:any) => {
     const newEvent = {
       id: String(events.length + 1),
       title: values.title,
@@ -154,7 +156,7 @@ const StudentCalendar: React.FC = () => {
       <Menu.Item key="task" onClick={showTaskModal}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={showBooking}>
+      <Menu.Item key="appointment" onClick={handleNavigateToBooking}>
         Make an Appointment
       </Menu.Item>
     </Menu>
@@ -209,19 +211,18 @@ const StudentCalendar: React.FC = () => {
             </Dropdown>
           </div>
 
-          {isTaskModalVisible && (
-            <CreateTaskPopup
-              isVisible={isModalVisible}
-              onClose={handleCloseModal}
-              onSubmit={handleSubmitTask}
-            />
-          )}
+          <CreateTaskPopup
+            isVisible={isTaskModalVisible}
+            onClose={handleCloseTaskModal}
+            onSubmit={handleSubmitTask}
+            selectedDate={selectedDate}
+          />
 
-          <StudentBooking
+          {/* <StudentBooking
             isVisible={isBookingVisible}
             onClose={handleCloseBooking}
             onSubmit={() => console.log("Task Submitted")}
-          />
+          /> */}
 
           {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
           {/* <CreateAppointmentPopup

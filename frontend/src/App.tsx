@@ -8,7 +8,7 @@ import SelectSheet from '../src/Pages/SelectSheet/SelectSheet';
 import Cart from '../src/Pages/Cart/Cart';
 import ClassSchedule from './Pages/Planner/ClassSchedule/ClassSchedule';
 import TeacherCalendar from './Pages/Appointment/Teacher/TeacherCalendar/TeacherCalendar';
-import CreateAppointment from './Pages/Appointment/Teacher/CreateAppointment/CreateAppointment';
+// import CreateAppointment from './Pages/Appointment/Teacher/CreateAppointment/CreateAppointment';
 import StudentCalendar from './Pages/Appointment/Student/StudentCalendar/StudentCalendar';
 import ResetPassword from './Pages/FirstPage/ResetPassword/ResetPassword';
 import VerifyOTP from './Pages/FirstPage/VerifyOTP/VerifyOTP';
@@ -20,6 +20,7 @@ import RequestChangeRole from './Pages/RequestChangeRole/RequestChangeRole';
 import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import CreateCourse from "./Pages/CreateCourse/CreateCourse";
 import MangeCourse from "./Pages/ManageCourse/ManageCourse";
+import StudentBooking from './Pages/Appointment/Student/StudentBooking/StudentBooking';
 import Profile from '../src/Pages/Profile/Profile'; 
 import EditProfile from './Pages/Profile/edit/EditProfile';
 import Admin from './Pages/Admin/Admin';
@@ -28,7 +29,6 @@ import Announcement from './Pages/Announcement/Announcement'
 import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
 import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
 import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
-
 
 
 const App: React.FC = () => {
@@ -61,7 +61,7 @@ const App: React.FC = () => {
           <Route path="/Cart" element={<Cart />} />
           <Route path="/ClassSchedule" element={<ClassSchedule />} />
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
-          <Route path="/CreateAppointment" element={<CreateAppointment/>}/>
+          {/* <Route path="/CreateAppointment" element={<CreateAppointment/>}/> */}
           <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
@@ -73,6 +73,7 @@ const App: React.FC = () => {
           <Route path="/SignUp" element={<SignUp/>}/>
           <Route path="/CreateCourse" element={<CreateCourse/>}/>
           <Route path="/ManageCourse" element={<MangeCourse/>}/>
+          <Route path="/StudentBooking" element={<StudentBooking/>}/>
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
