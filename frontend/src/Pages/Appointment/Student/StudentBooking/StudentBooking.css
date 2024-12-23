@@ -1,47 +1,160 @@
-.student-booking-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 400px;
-  padding: 24px;
-  z-index: 1000;
+.student-booking__container {
+  width: 100vw;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-top: 5%;
 }
 
-.popup-content {
+.student-booking__header {
   text-align: center;
-  color: black;
+  margin-bottom: 20px;
 }
 
-.popup-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 16px;
-  color: black;
+.student-booking__title {
+  font-size: 24px;
+  color: #202124;
 }
 
-.info-note {
+.student-booking__subtitle {
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.student-booking__timezone {
   font-size: 12px;
-  color: #666;
-  margin-bottom: 16px;
+  color: #70757a;
 }
 
-.form-group input {
-  width: 100%;
-  border-radius: 4px;
-  padding: 8px;
-}
-
-.form-actions {
-  margin-top: 16px;
+.student-booking__main {
   display: flex;
   justify-content: center;
+  gap: 40px;
+  width: 100%;
 }
 
-.form-actions .ant-btn-primary {
-  background-color: #4285f4;
-  border-color: #4285f4;
+.student-booking__calendar-section {
+  flex: 1;
 }
+
+.student-booking__calendar-title {
+  text-align: center;
+  font-size: 18px;
+  color: #202124;
+  margin-bottom: 10px;
+}
+
+.student-booking__calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.student-booking__calendar-date {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dfe1e5;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.student-booking__calendar-date:hover {
+  background-color: #f1f3f4;
+}
+
+.student-booking__calendar-date--selected {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border-color: #174ea6;
+}
+
+.student-booking__timeslots-section {
+  flex: 1;
+}
+
+.student-booking__timeslots-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.student-booking__timeslot {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid #dfe1e5;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.student-booking__timeslot:hover {
+  background-color: #f1f3f4;
+}
+
+.student-booking__timeslot--selected {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border-color: #174ea6;
+}
+
+.student-booking__footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.student-booking__confirm-btn {
+  padding: 10px 20px;
+  background-color: #1a73e8;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.student-booking__confirm-btn:hover {
+  background-color: #174ea6;
+}
+
+.student-booking__confirm-btn:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.student-booking__user-info {
+  position: absolute; /* วางตำแหน่งแบบ absolute */
+  top: 20px; /* ระยะจากด้านบน */
+  left: 20px; /* ระยะจากด้านซ้าย */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-booking__user-avatar {
+  background-color: #1a73e8;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.student-booking__user-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #202124;
+}
+
+

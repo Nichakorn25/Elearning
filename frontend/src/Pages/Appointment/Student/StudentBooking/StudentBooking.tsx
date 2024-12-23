@@ -1,76 +1,97 @@
 import React, { useState } from "react";
-import { Input, Button } from "antd";
 import "./StudentBooking.css";
+import Header from "../../../Component/Header/Header";
 
-const StudentBookingPopup = ({ isVisible, onClose, onSubmit }) => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [studentId, setStudentId] = useState("");
+const StudentBooking: React.FC = () => {
+  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const handleBooking = () => {
-    // Call onSubmit with the input data
-    onSubmit({
-      firstName,
-      lastName,
-      email,
-      studentId,
-    });
-    onClose(); // Close the modal
+  const dates = Array.from({ length: 31 }, (_, i) => i + 1);
+  const timeSlots = [
+    "9:00am",
+    "10:00am",
+    "11:00am",
+    "12:00pm",
+    "1:00pm",
+    "2:00pm",
+    "3:00pm",
+  ];
+
+  const username = "Nichakorn Chanyutha"; // เปลี่ยนชื่อให้ตรงกับผู้ใช้งานที่ล็อกอิน
+
+  const handleDateClick = (date: number) => {
+    setSelectedDate(date);
   };
 
-  if (!isVisible) {
-    return null;
-  }
+  const handleTimeClick = (time: string) => {
+    setSelectedTime(time);
+  };
+
+  const handleConfirm = () => {
+    if (selectedDate && selectedTime) {
+      alert(`Appointment booked on ${selectedDate} at ${selectedTime}`);
+    } else {
+      alert("Please select a date and time.");
+    }
+  };
 
   return (
-    <div className="student-booking-popup">
-      <div className="popup-content">
-        <h3 className="popup-title">Mentor Slot</h3>
-        <p>Wednesday, July 19, 09:00 - 09:30</p>
-        <p>(GMT+07:00) Indochina Time - Bangkok</p>
-        <p className="info-note">
-          Google Meet video conference info added after booking
-        </p>
-
-        <div className="form-group">
-          <Input
-            placeholder="First name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            style={{ marginBottom: "16px" }}
-          />
-          <Input
-            placeholder="Last name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            style={{ marginBottom: "16px" }}
-          />
-          <Input
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ marginBottom: "16px" }}
-          />
-          <Input
-            placeholder="Student ID"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            style={{ marginBottom: "16px" }}
-          />
+    <div className="student-booking__container">
+      <Header/>
+      <header className="student-booking__header">
+        {/* ส่วนแสดงชื่อ Username */}
+        <div className="student-booking__user-info">
+          <span className="student-booking__user-avatar">N</span>
+          <span className="student-booking__user-name">{username}</span>
         </div>
-
-        <div className="form-actions">
-          <Button type="default" onClick={onClose} style={{ marginRight: "8px" }}>
-            Cancel
-          </Button>
-          <Button type="primary" onClick={handleBooking}>
-            Book
-          </Button>
-        </div>
-      </div>
+        <h1 className="student-booking__title">test</h1>
+        <p className="student-booking__subtitle">60 min appointments</p>
+        <p className="student-booking__timezone">(GMT+07:00) Indochina Time - Bangkok</p>
+      </header>
+      <main className="student-booking__main">
+        <section className="student-booking__calendar-section">
+          <h2 className="student-booking__calendar-title">December 2024</h2>
+          <div className="student-booking__calendar-grid">
+            {dates.map((date) => (
+              <button
+                key={date}
+                className={`student-booking__calendar-date ${
+                  selectedDate === date ? "student-booking__calendar-date--selected" : ""
+                }`}
+                onClick={() => handleDateClick(date)}
+              >
+                {date}
+              </button>
+            ))}
+          </div>
+        </section>
+        <section className="student-booking__timeslots-section">
+          <div className="student-booking__timeslots-grid">
+            {timeSlots.map((slot, index) => (
+              <button
+                key={index}
+                className={`student-booking__timeslot ${
+                  selectedTime === slot ? "student-booking__timeslot--selected" : ""
+                }`}
+                onClick={() => handleTimeClick(slot)}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+        </section>
+      </main>
+      <footer className="student-booking__footer">
+        <button
+          className="student-booking__confirm-btn"
+          onClick={handleConfirm}
+          disabled={!selectedDate || !selectedTime}
+        >
+          Confirm Appointment
+        </button>
+      </footer>
     </div>
   );
 };
 
-export default StudentBookingPopup;
+export default StudentBooking;
