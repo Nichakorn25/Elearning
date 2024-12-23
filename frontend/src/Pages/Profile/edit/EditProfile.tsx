@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './EditProfile.css';
 import Sidebar from '../../Component/Sidebar/Sidebar';
 import Header from '../../Component/Header/Header';
+import { GetUserById, UpdateUserByid } from '../../../services/https'; // Import API functions
+import { UserInterface } from '../../../Interface/IUser'; // Import UserInterface
 
 const EditProfile: React.FC = () => {
   const navigate = useNavigate();
@@ -13,35 +15,84 @@ const EditProfile: React.FC = () => {
   };
 
   // User profile states
-  const [name, setName] = useState('');
-  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [faculty, setFaculty] = useState('');
-  const [program, setProgram] = useState('');
+  const [phone, setPhone] = useState('');
+  const [departmentname, setDepartmentname] = useState('');
+  const [majorname, setMajorname] = useState('');
+  const [role, setRole] = useState('');
+  const [userId, setUserId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const userIdFromLocalStorage = localStorage.getItem('userId'); // Get userId from localStorage or auth context
 
-  // Fetch user data from API (or session/localStorage)
   useEffect(() => {
-    // Mock API call or replace with real API
-    const fetchUserData = async () => {
-      // Replace with actual API call
-      const response = await fetch('/api/user-profile'); // Example endpoint
-      const userData = await response.json();
-
-      setName(userData.name);
-      setUserId(userData.userId);
-      setEmail(userData.email);
-      setFaculty(userData.faculty);
-      setProgram(userData.program);
-    };
-
-    fetchUserData();
-  }, []);
+    console.log('Fetching data...');
+    if (userIdFromLocalStorage) {
+      // Fetch the user data from API
+      GetUserById(userIdFromLocalStorage)
+        .then((response) => {
+            console.log('User data:', response.data); // Log the response data
+          if (response.status === 200) {
+            console.log('User data:', response.data); 
+            const data = response.data;
+            setUsername(data.Username || '');
+            setFirstName(data.FirstName || '');
+            setLastName(data.LastName || '');
+            setEmail(data.Email || '');
+            setPhone(data.Phone || '');
+            setDepartmentname(data.departmentname || '');
+            setMajorname(data.majorname || '');
+            setRole(data.rolename || '');
+            setUserId(data.ID?.toString() || '');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user data', error);
+        })
+        .finally(() => setLoading(false)); // Stop loading once data is fetched
+    }
+  }, [userIdFromLocalStorage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here, send the updated profile data to the backend API
-    console.log('Profile updated', { name, userId, email, faculty, program });
+
+    // Create the user data object for updating
+    const updatedData: UserInterface = {
+        Username: username,
+        FirstName: firstName,
+        LastName: lastName,
+        Email: email,
+        Phone: phone,
+        DepartmentID: 1, // Assuming you have logic to fetch DepartmentID
+        departmentname, // Can be updated dynamically
+        MajorID: 1, // Assuming you have logic to fetch MajorID
+        majorname, // Can be updated dynamically
+        RoleID: 1, // Assuming you have logic to fetch RoleID
+        rolename: role, // Can be updated dynamically
+    };
+
+    // Call the UpdateUserByid API function to update the user's profile
+    if (userIdFromLocalStorage) {
+      UpdateUserByid(userIdFromLocalStorage, updatedData)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('Profile updated successfully');
+            navigate('/profile'); // Navigate back to profile page after update
+          }
+        })
+        .catch((error) => {
+          console.error('Error updating user data', error);
+        });
+    }
   };
+
+  // If loading, show a loading state
+  if (loading) {
+    return <div>Loading...</div>; // Check if this part renders.
+  }
+  
 
   return (
     <div className="profile-dashboard">
@@ -57,22 +108,30 @@ const EditProfile: React.FC = () => {
           <h2>Edit Profile</h2>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="username">Username</label>
               <input
                 type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
             </div>
             <div className="form-group">
-              <label htmlFor="userId">User ID</label>
+              <label htmlFor="firstName">First Name</label>
               <input
                 type="text"
-                id="userId"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-                disabled
+                id="firstName"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div className="form-group">
@@ -85,25 +144,45 @@ const EditProfile: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="faculty">Faculty</label>
+              <label htmlFor="phone">Phone</label>
               <input
                 type="text"
-                id="faculty"
-                value={faculty}
-                onChange={(e) => setFaculty(e.target.value)}
+                id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </div>
             <div className="form-group">
-              <label htmlFor="program">Program</label>
+              <label htmlFor="departmentname">Department</label>
               <input
                 type="text"
-                id="program"
-                value={program}
-                onChange={(e) => setProgram(e.target.value)}
+                id="departmentname"
+                value={departmentname}
+                onChange={(e) => setDepartmentname(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="majorname">Major</label>
+              <input
+                type="text"
+                id="majorname"
+                value={majorname}
+                onChange={(e) => setMajorname(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="role">Role</label>
+              <input
+                type="text"
+                id="role"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
               />
             </div>
             <div className="form-actions">
-              <button type="submit" className="submit-btn">Save Changes</button>
+              <button type="submit" className="submit-btn">
+                Save Changes
+              </button>
             </div>
           </form>
         </div>
