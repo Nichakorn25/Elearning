@@ -1,10 +1,41 @@
 import React, { useState } from "react";
 import "./StudentBooking.css";
+import { Select, Input } from "antd";
 import Header from "../../../Component/Header/Header";
+
+const { Option } = Select;
 
 const StudentBooking: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [faculty, setFaculty] = useState<string | null>(null);
+  const [department, setDepartment] = useState<string | null>(null);
+  const [professor, setProfessor] = useState<string | null>(null);
+  const [searchProfessor, setSearchProfessor] = useState<string>("");
+
+  const faculties = ["Engineering", "Science", "Arts"];
+  const departments = [
+    "Computer Science",
+    "Mechanical Engineering",
+    "Mathematics",
+  ];
+  const professors = ["Dr. A", "Dr. B", "Dr. C"];
+
+  const handleFacultyChange = (value: string) => {
+    setFaculty(value);
+  };
+
+  const handleDepartmentChange = (value: string) => {
+    setDepartment(value);
+  };
+
+  const handleProfessorChange = (value: string) => {
+    setProfessor(value);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchProfessor(e.target.value);
+  };
 
   const dates = Array.from({ length: 31 }, (_, i) => i + 1);
   const timeSlots = [
@@ -37,16 +68,82 @@ const StudentBooking: React.FC = () => {
 
   return (
     <div className="student-booking__container">
-      <Header/>
+      <Header />
       <header className="student-booking__header">
         {/* ส่วนแสดงชื่อ Username */}
         <div className="student-booking__user-info">
           <span className="student-booking__user-avatar">N</span>
-          <span className="student-booking__user-name">{username}</span>
+          <div className="student-booking__user-details">
+            <span className="student-booking__user-name">Nichakorn</span>
+            <span className="student-booking__user-surname">Chanyutha</span>
+          </div>
+          {/* ส่วน Title */}
+          <div className="student-booking__title">
+            <h1>test</h1>
+            <p className="student-booking__subtitle">
+              <span className="student-booking__icon">⏰</span> 60 min appointments
+            </p>
+          </div>
         </div>
-        <h1 className="student-booking__title">test</h1>
+
+        <div className="student-booking__search">
+          {/* Search Bar */}
+          <div className="student-booking__search">
+            <Input
+              placeholder="Search Professor by Name"
+              value={searchProfessor}
+              onChange={handleSearchChange}
+              className="student-booking__search-input"
+            />
+          </div>
+        </div>
+        {/* Dropdowns */}
+        <div className="student-booking__dropdowns">
+          <Select
+            placeholder="Select Faculty"
+            value={faculty}
+            onChange={handleFacultyChange}
+            className="student-booking__select"
+          >
+            {faculties.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+
+          <Select
+            placeholder="Select Department"
+            value={department}
+            onChange={handleDepartmentChange}
+            className="student-booking__select"
+          >
+            {departments.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+
+          <Select
+            placeholder="Select Professor"
+            value={professor}
+            onChange={handleProfessorChange}
+            className="student-booking__select"
+          >
+            {professors.map((item) => (
+              <Option key={item} value={item}>
+                {item}
+              </Option>
+            ))}
+          </Select>
+        </div>
+
+        {/* <h1 className="student-booking__title">test</h1> */}
         <p className="student-booking__subtitle">60 min appointments</p>
-        <p className="student-booking__timezone">(GMT+07:00) Indochina Time - Bangkok</p>
+        <p className="student-booking__timezone">
+          (GMT+07:00) Indochina Time - Bangkok
+        </p>
       </header>
       <main className="student-booking__main">
         <section className="student-booking__calendar-section">
@@ -56,7 +153,9 @@ const StudentBooking: React.FC = () => {
               <button
                 key={date}
                 className={`student-booking__calendar-date ${
-                  selectedDate === date ? "student-booking__calendar-date--selected" : ""
+                  selectedDate === date
+                    ? "student-booking__calendar-date--selected"
+                    : ""
                 }`}
                 onClick={() => handleDateClick(date)}
               >
@@ -71,7 +170,9 @@ const StudentBooking: React.FC = () => {
               <button
                 key={index}
                 className={`student-booking__timeslot ${
-                  selectedTime === slot ? "student-booking__timeslot--selected" : ""
+                  selectedTime === slot
+                    ? "student-booking__timeslot--selected"
+                    : ""
                 }`}
                 onClick={() => handleTimeClick(slot)}
               >
