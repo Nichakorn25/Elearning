@@ -29,24 +29,18 @@ const StudentCalendar: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
   const [isBookingVisible, setIsBookingVisible] = useState(false);
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = prompt("Enter a title for your event:");
+    const { startStr } = selectInfo;
+
+    // เปิด TaskPopup และส่งวันที่ที่เลือกไป
+    setSelectedDate(startStr);
+    setIsTaskModalVisible(true);
+
+    // Unselect วันที่ใน FullCalendar
     const calendarApi = selectInfo.view.calendar;
-
     calendarApi.unselect();
-
-    if (title) {
-      setEvents([
-        ...events,
-        {
-          id: String(events.length + 1),
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-        },
-      ]);
-    }
   };
 
   const currentDate = new Date();
@@ -209,13 +203,12 @@ const StudentCalendar: React.FC = () => {
             </Dropdown>
           </div>
 
-          {isTaskModalVisible && (
-            <CreateTaskPopup
-              isVisible={isModalVisible}
-              onClose={handleCloseModal}
-              onSubmit={handleSubmitTask}
-            />
-          )}
+          <CreateTaskPopup
+            isVisible={isTaskModalVisible}
+            onClose={handleCloseTaskModal}
+            onSubmit={handleSubmitTask}
+            selectedDate={selectedDate}
+          />
 
           <StudentBooking
             isVisible={isBookingVisible}
