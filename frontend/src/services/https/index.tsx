@@ -2,6 +2,7 @@ import axios from "axios";
 // import { DepartmentInterface, MajorInterface } from "../../Interface/IUser"; // Import interfaces
 // import { message } from "antd"; // Ant Design message for notifications
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
+import { AnnouncementInterface } from "../../Interface/Admin";
 
 
 const apiUrl = "http://localhost:8000"; // URL ของ API
@@ -15,6 +16,46 @@ const requestOptions = {
     Authorization: `${Bearer} ${Authorization}`,
   },
 };
+
+// Get all announcements
+async function ListAnnouncements() {
+  return axios
+    .get(`${apiUrl}/announcements`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Get announcement by ID
+async function GetAnnouncementById(id: string) {
+  return axios
+    .get(`${apiUrl}/announcements/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Create a new announcement
+async function CreateAnnouncement(data: AnnouncementInterface) {
+  return axios
+    .post(`${apiUrl}/announcements`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Update an existing announcement
+async function UpdateAnnouncementById(id: string, data: AnnouncementInterface) {
+  return axios
+    .put(`${apiUrl}/announcements/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Delete an announcement
+async function DeleteAnnouncementById(id: string) {
+  return axios
+    .delete(`${apiUrl}/announcements/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
 // ฟังก์ชันดึง Departments
 async function GetDepartments(){
@@ -156,7 +197,11 @@ return res;
 export{
   GetDepartments,
   GetMajors,
-
+  ListAnnouncements,
+  GetAnnouncementById,
+  CreateAnnouncement,
+  UpdateAnnouncementById,
+  DeleteAnnouncementById,
   ListUsers,
   SignIn,
   CreateUser,

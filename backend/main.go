@@ -44,6 +44,12 @@ func main() {
 		router.PUT("/users/:id", controller.UpdateUserByid)
 		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้
 
+		// Announcement Routes
+		router.GET("/announcements", controller.ListAnnouncements)
+		router.GET("/announcements/:id", controller.GetAnnouncement)
+		router.POST("/announcements", controller.CreateAnnouncement)
+		router.PUT("/announcements/:id", controller.UpdateAnnouncement)
+		router.DELETE("/announcements/:id", controller.DeleteAnnouncement)
 	}
 
 	r.GET("/", func(c *gin.Context) {

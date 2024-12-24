@@ -13,7 +13,7 @@ type User struct {
 	Phone  string `json:"Phone"`
 	
 	ProfilePicture []ProfilePicture `gorm:"foreignKey:UserID"`
-	Annoucement []Annoucement `gorm:"foreignKey:UserID"`
+	Announcement []Announcement `gorm:"foreignKey:UserID"`
 	Log []Log `gorm:"foreignKey:UserID"`
 	Review []Review `gorm:"foreignKey:UserID"`
 	Purchase []Purchase `gorm:"foreignKey:UserID"`

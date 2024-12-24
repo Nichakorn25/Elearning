@@ -26,7 +26,7 @@ func ConnectionDB() {
 // Set Database เริ่มต้น
 func SetupDatabase() {
 	db.AutoMigrate(
-		&entity.Annoucement{},
+		&entity.Announcement{},
 		&entity.AnswerOption{},
 		&entity.Assignment{},
 		&entity.Attachment{},

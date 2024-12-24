@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Profile.css';
 import Sidebar from '../Component/Sidebar/Sidebar';
@@ -59,43 +59,41 @@ const Profile: React.FC = () => {
 
       {/* Profile Content */}
       <main className="profile-content">
-        
         <div className="profile-card">
-        <div className='nested-boxes'>
-          <img
-            className="profile-avatar"
-            src="https://via.placeholder.com/120"
-            alt="User Avatar"
-          />
-          <div className="profile-details">
-          <h3>
+          <div className="nested-boxes">
+            <img
+              className="profile-avatar"
+              src="https://via.placeholder.com/120"
+              alt="User Avatar"
+            />
+            <div className="profile-details">
+              <h3>
                 {userProfile?.FirstName || 'N/A'} {userProfile?.LastName || 'N/A'}
               </h3>
               <p>Username: {userProfile?.Username || 'N/A'}</p>
               <p>User ID: {userProfile?.ID || 'N/A'}</p>
-              
-              
+            </div>
           </div>
         </div>
-        </div>
         <div className="profile-card">
-          
           <div className="nested-boxes">
             <div className="nested-box">
-              <h4>Box 1</h4>
+              <h4>Contact Info</h4>
               <p>Email: {userProfile?.Email || 'N/A'}</p>
               <p>Phone: {userProfile?.Phone || 'N/A'}</p>
             </div>
             <div className="nested-box">
-              <h4>Box 2</h4>
-              <p>Department: {userProfile?.departmentname || 'N/A'}</p>
-              <p>Major: {userProfile?.majorname || 'N/A'}</p>
-              <p>Role: {userProfile?.rolename || 'N/A'}</p>
+              <h4>Details</h4>
+              <p>Department: {userProfile?.Department?.DepartmentName || 'N/A'}</p>
+              <p>Major: {userProfile?.Major?.MajorName || 'N/A'}</p>
+              <p>Role: {userProfile?.Role?.RoleName || 'N/A'}</p>
             </div>
           </div>
         </div>
         <div className="profile-actions">
-          <button className="profile-button" onClick={handleEditProfileClick}>Edit Profile</button>
+          <button className="profile-button" onClick={handleEditProfileClick}>
+            Edit Profile
+          </button>
         </div>
       </main>
     </div>
