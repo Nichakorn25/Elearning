@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./StudentBooking.css";
 import { Select, Input } from "antd";
 import Header from "../../../Component/Header/Header";
 import Calendar from "react-calendar";
+import {
+  GetDepartments,
+  GetMajors,
+  GetUsersByFilters,
+} from "../../../../services/https";
 
 const { Option } = Select;
 
@@ -13,27 +18,84 @@ const StudentBooking: React.FC = () => {
   const [department, setDepartment] = useState<string | null>(null);
   const [professor, setProfessor] = useState<string | null>(null);
   const [searchProfessor, setSearchProfessor] = useState<string>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
+    null
+  );
+  const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
 
-  const faculties = ["Engineering", "Science", "Arts"];
-  const departments = [
-    "Computer Science",
-    "Mechanical Engineering",
-    "Mathematics",
-  ];
-  const professors = ["Dr. A", "Dr. B", "Dr. C"];
+  // State สำหรับข้อมูล
+  const [faculties, setFaculties] = useState<any[]>([]);
+  const [departments, setDepartments] = useState<any[]>([]);
+  const [professors, setProfessors] = useState<any[]>([]);
+
+  // ดึงข้อมูล Faculties
+  useEffect(() => {
+    const fetchFaculties = async () => {
+      const response = await GetDepartments();
+      if (response && response.status === 200) {
+        setFaculties(response.data);
+      }
+    };
+    fetchFaculties();
+  }, []);
+
+  // ดึงข้อมูล Departments ตาม Faculty ที่เลือก
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      if (faculty) {
+        const response = await GetMajors(faculty);
+        if (response && response.status === 200) {
+          setDepartments(response.data);
+        }
+      } else {
+        setDepartments([]);
+      }
+    };
+    fetchDepartments();
+  }, [faculty]);
+
+  useEffect(() => {
+    const fetchProfessors = async () => {
+      if (selectedDepartment && selectedMajor) {
+        try {
+          const response = await GetUsersByFilters({
+            RoleID: 2, // ดึงข้อมูล RoleID สำหรับอาจารย์
+            DepartmentID: selectedDepartment,
+            MajorID: selectedMajor,
+          });
+  
+          if (response && response.status === 200) {
+            setProfessors(response.data); // ตั้งค่า State สำหรับ Professors
+          } else {
+            setProfessors([]); // ถ้าไม่มีข้อมูล
+          }
+        } catch (error) {
+          console.error("Error fetching professors:", error);
+          setProfessors([]); // ถ้าเกิด Error
+        }
+      } else {
+        setProfessors([]); // ถ้าไม่มีการเลือก Department หรือ Major
+      }
+    };
+  
+    fetchProfessors();
+  }, [selectedDepartment, selectedMajor]); // ดึงข้อมูลใหม่เมื่อ Department หรือ Major เปลี่ยน
+  
 
   const handleFacultyChange = (value: string) => {
     setFaculty(value);
+    setDepartment(null);
+    setProfessor(null);
   };
 
   const handleDepartmentChange = (value: string) => {
     setDepartment(value);
+    setProfessor(null);
   };
 
   const handleProfessorChange = (value: string) => {
     setProfessor(value);
   };
-
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchProfessor(e.target.value);
   };
@@ -108,8 +170,8 @@ const StudentBooking: React.FC = () => {
             className="student-booking__select"
           >
             {faculties.map((item) => (
-              <Option key={item} value={item}>
-                {item}
+              <Option key={item.ID} value={item.ID}>
+                {item.DepartmentName}
               </Option>
             ))}
           </Select>
@@ -119,10 +181,11 @@ const StudentBooking: React.FC = () => {
             value={department}
             onChange={handleDepartmentChange}
             className="student-booking__select"
+            disabled={!faculty}
           >
             {departments.map((item) => (
-              <Option key={item} value={item}>
-                {item}
+              <Option key={item.ID} value={item.ID}>
+                {item.MajorName}
               </Option>
             ))}
           </Select>
@@ -132,18 +195,25 @@ const StudentBooking: React.FC = () => {
             value={professor}
             onChange={handleProfessorChange}
             className="student-booking__select"
+            disabled={!selectedDepartment || !selectedMajor}
           >
-            {professors.map((item) => (
-              <Option key={item} value={item}>
-                {item}
-              </Option>
-            ))}
+            {professors.length > 0 ? (
+              professors.map((item) => (
+                <Option key={item.ID} value={item.ID}>
+                  {item.FirstName} {item.LastName}
+                </Option>
+              ))
+            ) : (
+              <Option disabled>No professors available</Option>
+            )}
           </Select>
         </div>
       </header>
+
       <main className="student-booking__main">
         {/* Mini Calendar */}
         <section className="student-booking__mini-calendar">
+          <h3 className="selectappointment">Select an appointment time</h3>
           <div className="mini-calendar-container">
             <Calendar
               onChange={(date: Date) => setSelectedDate(date.getDate())}
@@ -154,7 +224,6 @@ const StudentBooking: React.FC = () => {
 
         {/* Time Slots */}
         <section className="student-booking__timeslots-section">
-          <h2 className="student-booking__timeslots-title">Available Slots</h2>
           <div className="student-booking__timeslots-grid">
             {timeSlots.map((slot, index) => (
               <button
@@ -172,16 +241,6 @@ const StudentBooking: React.FC = () => {
           </div>
         </section>
       </main>
-
-      <footer className="student-booking__footer">
-        <button
-          className="student-booking__confirm-btn"
-          onClick={handleConfirm}
-          disabled={!selectedDate || !selectedTime}
-        >
-          Confirm Appointment
-        </button>
-      </footer>
     </div>
   );
 };
