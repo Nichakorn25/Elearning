@@ -55,6 +55,30 @@ async function ListUsers() {
   return res;
 }
 
+async function GetUsersByFilters(filters: {
+  RoleID: number;
+  DepartmentID?: string;
+  MajorID?: string;
+}) {
+  const { RoleID, DepartmentID, MajorID } = filters;
+  const params = new URLSearchParams();
+
+  if (RoleID) params.append("RoleID", RoleID.toString());
+  if (DepartmentID) params.append("DepartmentID", DepartmentID);
+  if (MajorID) params.append("MajorID", MajorID);
+
+  const response = await axios
+    .get(`${apiUrl}/users`, {
+      params, // ส่งค่าพารามิเตอร์ไปใน URL
+    })
+    .then((res) => res)
+    .catch((err) => err.response);
+
+  return response;
+}
+
+
+
 async function SignIn(data: SignInInterface) {
 
   return await axios
@@ -158,6 +182,7 @@ export{
   GetMajors,
 
   ListUsers,
+  GetUsersByFilters,
   SignIn,
   CreateUser,
   ResetPassword,
