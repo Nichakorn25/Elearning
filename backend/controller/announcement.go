@@ -22,11 +22,23 @@ func CreateAnnouncement(c *gin.Context) {
 		return
 	}
 
+	if announcement.UserID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
+		return
+	}	
+
+	// Check if announce_date is zero (invalid)
+	if announcement.AnnounceDate.IsZero() {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid announce date"})
+		return
+	}
+
 	a := entity.Announcement{
 		Title:        announcement.Title,
 		Content:      announcement.Content,
-		AnnounceDate: announcement.AnnounceDate,
 		UserID:       announcement.UserID,
+		AnnounceDate: announcement.AnnounceDate,
+		
 	}
 
 	// Save the announcement to the database
@@ -37,6 +49,7 @@ func CreateAnnouncement(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Announcement created successfully", "data": a})
 }
+
 
 // GET /announcements/:id
 func GetAnnouncement(c *gin.Context) {

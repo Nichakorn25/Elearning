@@ -19,7 +19,7 @@ const Announcement: React.FC = () => {
   const [newAnnouncement, setNewAnnouncement] = useState<{
     title: string;
     content: string;
-    date: moment.Moment | null;  // รองรับค่า null
+    date: string | null;  // รองรับค่า null
   }>({ title: '', content: '', date: null });
   const [editingAnnouncement, setEditingAnnouncement] = useState<any>(null);
   const [announcements, setAnnouncements] = useState([]);
@@ -65,16 +65,26 @@ const Announcement: React.FC = () => {
   };
 
   const handleSaveAnnouncement = async () => {
-    const data = {
-    title: newAnnouncement.title,
-    content: newAnnouncement.content,
-    announce_date: newAnnouncement.date ? newAnnouncement.date.format('YYYY-MM-DD HH:mm:ss+00:00') : null,
-  };
+    if (!newAnnouncement.date || !newAnnouncement.title || !newAnnouncement.content) {
+      message.error('Please fill in all fields.');
+      return;
+    }
 
-    console.log('Data to save:', data);  // ตรวจสอบว่า data ถูกต้องหรือไม่
+    const date = new Date(newAnnouncement.date);
+    date.setHours(date.getHours() + 7);  // เพิ่ม 7 ชั่วโมง
+    const formattedDate = date.toISOString();  // แปลงเป็น ISO string
+
+    console.log('Formatted date:', formattedDate);
+    const data: AnnouncementInterface = {
+      title: newAnnouncement.title,
+      content: newAnnouncement.content,
+      announce_date: formattedDate,
+      user_id: Number(localStorage.getItem('id')),
+    };
+
+    console.log('Data to save:', data);
 
     if (editingAnnouncement) {
-      // อัปเดตประกาศ
       const response = await UpdateAnnouncementById(editingAnnouncement.id, data);
       if (response.status === 200) {
         message.success('Announcement updated successfully');
@@ -84,7 +94,6 @@ const Announcement: React.FC = () => {
         message.error('Failed to update announcement');
       }
     } else {
-      // สร้างประกาศใหม่
       const response = await CreateAnnouncement(data);
       if (response.status === 201) {
         message.success('Announcement created successfully');
@@ -95,6 +104,12 @@ const Announcement: React.FC = () => {
       }
     }
   };
+
+
+
+
+
+
 
   const handleDeleteAnnouncement = async (id: string) => {
     const response = await DeleteAnnouncementById(id);
@@ -107,7 +122,7 @@ const Announcement: React.FC = () => {
   };
 
   return (
-    <div className="admin-dashboard">
+    <div className="announcement-container">
       <Header />
 
       {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
@@ -120,14 +135,15 @@ const Announcement: React.FC = () => {
         <div className="announcement-list">
           {announcements.map((announcement: any) => (
             <div key={announcement.ID} className="announcement-item">
-              <h3>{announcement.Title}</h3>
-              <p>{announcement.Content}</p>
+              <h3>{announcement.title}</h3>
+              <p>{announcement.content}</p>
               <p>
                 <strong>Publish Date:</strong>
-                {announcement.AnnounceDate && announcement.AnnounceDate !== '0001-01-01T00:00:00Z'
-                  ? new Date(announcement.AnnounceDate).toLocaleDateString()
-                  : new Date(announcement.CreatedAt).toLocaleDateString()}
+                {announcement.announce_date
+                  ? moment(announcement.announce_date).format('DD MMM YYYY')
+                  : 'No date available'}
               </p>
+
               <Button onClick={() => handleOpenModal(announcement)}>Edit</Button>
               <Button danger onClick={() => handleDeleteAnnouncement(announcement.ID)}>
                 Delete
@@ -159,10 +175,14 @@ const Announcement: React.FC = () => {
           rows={4}
         />
         <DatePicker
-          value={newAnnouncement.date ? newAnnouncement.date : null}
-          onChange={(date) => setNewAnnouncement({ ...newAnnouncement, date })}
+          value={newAnnouncement.date ? moment(newAnnouncement.date) : null}
+          onChange={(date) => {
+            console.log('Selected Date:', date); // Ensure this is a valid date
+            setNewAnnouncement({ ...newAnnouncement, date: date ? date.toISOString() : null });
+          }}
           style={{ marginTop: '1rem', width: '100%' }}
         />
+
       </Modal>
     </div>
   );

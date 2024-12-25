@@ -28,6 +28,7 @@ import AdminFillDetails from './Pages/AdminFillDetails/AdminFillDetails';
 import Announcement from './Pages/Announcement/Announcement'
 import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
 import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
+import ManageUsers from "./Pages/ManageUsers/ManageUsers";
 import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
 
 
@@ -56,6 +57,7 @@ const App: React.FC = () => {
           <Route path="/Announcement"element={<ProtectedRoute> <Announcement /></ProtectedRoute> } />
           <Route path="/ConfirmTransfer" element={<ProtectedRoute> <ConfirmTransfer /></ProtectedRoute>} />
           <Route path="/ManageRoleRequests" element={<ProtectedRoute> <ManageRoleRequests /></ProtectedRoute>} />
+          <Route path="/ManageUsers" element={<ProtectedRoute> <ManageUsers /></ProtectedRoute>} />
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="/selectsheet" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />

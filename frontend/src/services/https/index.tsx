@@ -76,24 +76,12 @@ async function GetMajors(departmentId: string){
 
 }
 
+// Get all users
 async function ListUsers() {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  let res = await fetch(`${apiUrl}/users`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return res.json();
-      } else {
-        return false;
-      }
-    });
-
-  return res;
+  return axios
+    .get(`${apiUrl}/users`, requestOptions) // Using axios with the authorization header
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 async function GetUsersByFilters(filters: {

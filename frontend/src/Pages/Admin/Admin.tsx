@@ -24,6 +24,10 @@ const Admin: React.FC = () => {
     navigate('/ManageRoleRequests'); // Navigate to Manage Role Requests page
   };
 
+  const goToManageUsers = () => {
+    navigate('/ManageUsers'); // Navigate to Manage Users page
+  };
+
   const goToAdminFillDetails = () => {
     navigate('/AdminFillDetails'); // Navigate to Admin Fill Details page
   };
@@ -46,12 +50,15 @@ const Admin: React.FC = () => {
             <p>02/2567 ...</p>
           </div>
         </div>
-        
+
         {/* Buttons Section */}
         <div className="admin-buttons">
           <button onClick={goToAnnouncement} className="admin-button">Announcement</button>
           <button onClick={goToConfirmTransfer} className="admin-button confirm-transfer-button">
             Confirm Payment Transfers
+          </button>
+          <button onClick={goToManageUsers} className="admin-button manage-users-button">
+            Manage Users
           </button>
           <button onClick={goToManageRoleRequests} className="admin-button manage-role-requests-button">
             Manage Role Change Requests

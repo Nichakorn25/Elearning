@@ -1,3 +1,10 @@
+.announcement-container {
+  padding: 20px;
+  margin-top: 60px;
+  color: black;
+  
+}
+
 .announcement-content {
     padding: 20px;
   }
@@ -11,6 +18,7 @@
     padding: 1rem;
     margin-bottom: 1rem;
     display: flex;
+    border-radius: 4px;
     justify-content: space-between;
     align-items: center;
   }
