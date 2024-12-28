@@ -9,20 +9,23 @@ import "react-calendar/dist/Calendar.css";
 import "./TeacherCalendar.css";
 import Header from "../../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
-import { useNavigate } from "react-router-dom";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointment from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
 
 const TeacherCalendar: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleCreateAppointment = () => {
-    navigate("/CreateAppointment");
-  };
   const calendarRef = useRef<FullCalendar>(null);
-  const [events, setEvents] = useState([
+  type Event = {
+    id: string;
+    title: string;
+    start: string;
+    end?: string; // Optional field
+    description?: string;
+    category?: string;
+  };
+
+  const [events, setEvents] = useState<Event[]>([
     {
       id: "1",
       title: "Meeting",
@@ -30,8 +33,8 @@ const TeacherCalendar: React.FC = () => {
       end: "2024-12-12T11:00:00",
     },
   ]);
+
   const [currentView, setCurrentView] = useState("dayGridMonth");
-  const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
   const [isAppointmentModalVisible, setIsAppointmentModalVisible] =
     useState(false); // สำหรับ Popup
 
@@ -56,11 +59,7 @@ const TeacherCalendar: React.FC = () => {
     day: "numeric",
   };
   const formattedDate = currentDate.toLocaleDateString("en-US", options);
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+  const [isSidebarVisible] = useState(false);
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (
@@ -76,7 +75,7 @@ const TeacherCalendar: React.FC = () => {
     setCurrentView(e.key);
     if (calendarRef.current) {
       const calendarApi = calendarRef.current.getApi();
-      calendarApi.changeView(e.key);
+      calendarApi.changeView(e.key); // เปลี่ยนมุมมอง
     }
   };
 
@@ -109,39 +108,37 @@ const TeacherCalendar: React.FC = () => {
     }
   };
 
-  // เปิด Popup
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  // ปิด Popup
-  const handleCloseModal = () => {
-    setIsModalVisible(false);
-  };
-
   // เปิด Appointment Popup
-  const showAppointmentModal = () => {
-    setIsAppointmentModalVisible(true);
-  };
+  // const showAppointmentModal = () => {
+  //   setIsAppointmentModalVisible(true);
+  // };
 
   // ปิด Appointment Popup
-  const closeAppointmentModal = () => {
-    setIsAppointmentModalVisible(false);
-  };
+  // const closeAppointmentModal = () => {
+  //   setIsAppointmentModalVisible(false);
+  // };
 
   // เมื่อส่งข้อมูลจาก Popup
   const handleSubmitAppointment = (values: any) => {
-    console.log("Appointment Data:", values);
-    // Logic สำหรับเพิ่มข้อมูลใน FullCalendar หรือฐานข้อมูล
+    const newEvent = {
+      id: String(events.length + 1),
+      title: values.title,
+      start: `${values.startDate}T${values.startTime}`,
+      end: `${values.startDate}T${values.endTime}`,
+      location: values.location,
+      description: values.description,
+    };
+    setEvents([...events, newEvent]);
+    setIsAppointmentModalVisible(false);
   };
 
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
 
   // เปิด Popup
-  const showTaskModal = () => {
-    setSelectedDate(null); // ตั้งค่า selectedDate เป็น null เพื่อไม่ให้มีวันที่เริ่มต้น
-    setIsTaskModalVisible(true); // เปิด TaskPopup
-  };
+  // const showTaskModal = () => {
+  //   setSelectedDate(null); // ตั้งค่า selectedDate เป็น null เพื่อไม่ให้มีวันที่เริ่มต้น
+  //   setIsTaskModalVisible(true); // เปิด TaskPopup
+  // };
 
   // ปิด Popup
   const handleCloseTaskModal = () => {
@@ -149,35 +146,45 @@ const TeacherCalendar: React.FC = () => {
   };
 
   // เมื่อส่งข้อมูล Task
-  const handleSubmitTask = (values) => {
+  const handleSubmitTask = (values: any) => {
+    // ตรวจสอบว่าค่า date และ time มีอยู่และอยู่ในรูปแบบที่ถูกต้อง
+    if (!values.date || !values.time) {
+      console.error("Date or Time is missing!");
+      return;
+    }
+
+    // สร้าง Task ใหม่
     const newEvent = {
       id: String(events.length + 1),
-      title: values.title,
-      start:
-        values.date.format("YYYY-MM-DD") + "T" + values.time.format("HH:mm:ss"),
-      description: values.description,
-      category: values.category,
+      title: values.title || "Untitled Task",
+      start: `${values.date}T${values.time}`,
+      description: values.description || "No description provided",
+      category: values.category || "General",
     };
-    setEvents([...events, newEvent]);
-    setIsModalVisible(false); // ปิด Popup
+
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
+    setIsTaskModalVisible(false);
+    console.log("New Task Added:", newEvent);
   };
 
   const createMenu = (
     <Menu className="createdropdown">
-      {/* <Menu.Item key="event">Event</Menu.Item> */}
-      <Menu.Item key="task" onClick={showTaskModal}>
+      {/* Task Menu */}
+      <Menu.Item key="task" onClick={() => setIsTaskModalVisible(true)}>
         Task
       </Menu.Item>
-      <Menu.Item key="appointment" onClick={showAppointmentModal}>
+      {/* Appointment Menu */}
+      <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
         Appointment Schedule
       </Menu.Item>
     </Menu>
   );
+  
 
   useEffect(() => {
     if (calendarRef.current) {
       setTimeout(() => {
-        const calendarApi = calendarRef.current.getApi();
+        const calendarApi = calendarRef.current!.getApi(); // หรือใช้ calendarRef.current?.getApi()
         calendarApi.updateSize();
       }, 300); // รอให้ Transition ของ Sidebar เสร็จสิ้น
     }
@@ -248,7 +255,8 @@ const TeacherCalendar: React.FC = () => {
 
           <CreateAppointment
             isVisible={isAppointmentModalVisible}
-            onClose={closeAppointmentModal}
+            onClose={() => setIsAppointmentModalVisible(false)}
+            onSubmit={handleSubmitAppointment}
           />
 
           <div className="mini-calendar">

@@ -11,11 +11,13 @@ const { RangePicker } = TimePicker;
 interface CreateAppointmentProps {
   isVisible: boolean;
   onClose: () => void;
+  onSubmit: (values:any) => void;
 }
 
 const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   isVisible,
   onClose,
+  onSubmit,
 }) => {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState("1 hour");
@@ -34,7 +36,7 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   const [description, setDescription] = useState("");
 
   const handleSave = () => {
-    console.log("Saved Data:", {
+    const appointmentData = {
       title,
       duration,
       daysAvailability,
@@ -42,8 +44,10 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
       maxBookings,
       location,
       description,
-    });
-    onClose(); // ปิด Popup หลังบันทึก
+    };
+    console.log("Saved Data:", appointmentData);
+    onSubmit(appointmentData); // เรียกใช้ onSubmit พร้อมส่งข้อมูล
+    onClose(); // ปิด Modal หลังบันทึก
   };
 
   const handleDayChange = (index: number, unavailable: boolean) => {
