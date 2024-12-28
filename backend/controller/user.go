@@ -94,6 +94,34 @@ func ListUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// GET http://localhost:8000/users/filter?departmentId=4&majorId=16&roleId=2
+func ListUsersFilters(c *gin.Context) {
+    var users []entity.User
+
+    // ดึงค่าจาก Query Parameters
+    departmentId := c.Query("departmentId")
+    majorId := c.Query("majorId")
+    roleId := c.Query("roleId")
+
+    // Query โดยใช้เงื่อนไข
+    db := config.DB()
+    results := db.Preload("Department").
+        Preload("Major").
+        Preload("Role").
+        Where("department_id = ? AND major_id = ? AND role_id = ?", departmentId, majorId, roleId).
+        Find(&users)
+
+    if results.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, users)
+}
+
+
+
+
 // func ListUsers(c *gin.Context) {
 // 	var users []entity.User
 
@@ -147,51 +175,6 @@ func GetUsersByFilters(c *gin.Context) {
 
     // ส่งข้อมูลกลับในรูปแบบ JSON
     c.JSON(http.StatusOK, users)
-}
-
-func GetProfessorsByFilters(c *gin.Context) {
-	// ดึงค่าจาก Query Parameters
-	roleID := c.Query("RoleID")
-	departmentID := c.Query("DepartmentID")
-	majorID := c.Query("MajorID")
-	searchQuery := c.Query("SearchQuery")
-
-	// ตัวแปรสำหรับเก็บข้อมูลผู้ใช้
-	var professors []entity.User
-
-	// เริ่มการ Query
-	db := config.DB()
-	query := db.Preload("Department").Preload("Major").Where("role_id = ?", roleID)
-
-	// เพิ่มเงื่อนไขถ้ามี departmentID
-	if departmentID != "" {
-		query = query.Where("department_id = ?", departmentID)
-	}
-
-	// เพิ่มเงื่อนไขถ้ามี majorID
-	if majorID != "" {
-		query = query.Where("major_id = ?", majorID)
-	}
-
-	// เพิ่มเงื่อนไขการค้นหาชื่อหรือชื่อสกุล
-	if searchQuery != "" {
-		query = query.Where("first_name LIKE ? OR last_name LIKE ?", "%"+searchQuery+"%", "%"+searchQuery+"%")
-	}
-
-	// ค้นหาข้อมูล
-	if err := query.Find(&professors).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			// ถ้าไม่พบข้อมูล
-			c.JSON(http.StatusNotFound, gin.H{"error": "No professors found"})
-		} else {
-			// ถ้าเกิดข้อผิดพลาดอื่นๆ
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-		return
-	}
-
-	// ส่งข้อมูลกลับในรูปแบบ JSON
-	c.JSON(http.StatusOK, professors)
 }
 
 
