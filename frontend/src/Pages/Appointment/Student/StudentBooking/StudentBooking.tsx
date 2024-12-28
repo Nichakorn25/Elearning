@@ -16,89 +16,93 @@ const StudentBooking: React.FC = () => {
   const [currentWeek, setCurrentWeek] = useState(0);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
-  const [faculty, setFaculty] = useState<string | null>(null);
-  const [department, setDepartment] = useState<string | null>(null);
-  const [professor, setProfessor] = useState<string | null>(null);
-  const [searchProfessor, setSearchProfessor] = useState<string>("");
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
     null
   );
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
-
-  // State สำหรับข้อมูล
-  const [faculties, setFaculties] = useState<any[]>([]);
+  const [professor, setProfessor] = useState<string | null>(null);
+  const [searchProfessor, setSearchProfessor] = useState<string>(""); // ใช้ searchProfessor แทน
   const [departments, setDepartments] = useState<any[]>([]);
+  const [majors, setMajors] = useState<any[]>([]);
   const [professors, setProfessors] = useState<any[]>([]);
 
-  // ดึงข้อมูล Faculties
-  useEffect(() => {
-    const fetchFaculties = async () => {
-      const response = await GetDepartments();
-      if (response && response.status === 200) {
-        setFaculties(response.data);
-      }
-    };
-    fetchFaculties();
-  }, []);
-
-  // ดึงข้อมูล Departments ตาม Faculty ที่เลือก
+  // ดึงข้อมูล Departments
   useEffect(() => {
     const fetchDepartments = async () => {
-      if (faculty) {
-        const response = await GetMajors(faculty);
+      try {
+        const response = await GetDepartments();
         if (response && response.status === 200) {
           setDepartments(response.data);
         }
-      } else {
-        setDepartments([]);
+      } catch (error) {
+        console.error("Error fetching departments:", error);
       }
     };
-    fetchDepartments();
-  }, [faculty]);
 
+    fetchDepartments();
+  }, []);
+
+  // ดึงข้อมูล Majors ตาม Department ที่เลือก
+  useEffect(() => {
+    const fetchMajors = async () => {
+      if (selectedDepartment) {
+        try {
+          const response = await GetMajors(selectedDepartment);
+          if (response && response.status === 200) {
+            setMajors(response.data);
+          } else {
+            setMajors([]);
+          }
+        } catch (error) {
+          console.error("Error fetching majors:", error);
+          setMajors([]);
+        }
+      } else {
+        setMajors([]);
+      }
+    };
+
+    fetchMajors();
+  }, [selectedDepartment]);
+
+  // ดึงข้อมูล Professors ตาม Major ที่เลือก
   useEffect(() => {
     const fetchProfessors = async () => {
-      if (selectedDepartment && selectedMajor) {
+      if (selectedMajor) {
         try {
           const response = await GetUsersByFilters({
-            RoleID: 2, // ดึงข้อมูล RoleID สำหรับอาจารย์
-            DepartmentID: selectedDepartment,
+            RoleID: 2, // กำหนด Role สำหรับอาจารย์
             MajorID: selectedMajor,
           });
-
           if (response && response.status === 200) {
-            setProfessors(response.data); // ตั้งค่า State สำหรับ Professors
+            setProfessors(response.data);
           } else {
-            setProfessors([]); // ถ้าไม่มีข้อมูล
+            setProfessors([]);
           }
         } catch (error) {
           console.error("Error fetching professors:", error);
-          setProfessors([]); // ถ้าเกิด Error
+          setProfessors([]);
         }
       } else {
-        setProfessors([]); // ถ้าไม่มีการเลือก Department หรือ Major
+        setProfessors([]);
       }
     };
 
     fetchProfessors();
-  }, [selectedDepartment, selectedMajor]); // ดึงข้อมูลใหม่เมื่อ Department หรือ Major เปลี่ยน
+  }, [selectedMajor]);
 
-  const handleFacultyChange = (value: string) => {
-    setFaculty(value);
-    setDepartment(null);
-    setProfessor(null);
+  // ฟังก์ชันกรองข้อมูลอาจารย์
+  const getFilteredProfessors = () => {
+    if (!searchProfessor) return professors; // หากไม่มีการค้นหา ให้แสดงทั้งหมด
+    return professors.filter((prof) =>
+      `${prof.FirstName} ${prof.LastName}`
+        .toLowerCase()
+        .includes(searchProfessor.toLowerCase())
+    );
   };
-
-  const handleDepartmentChange = (value: string) => {
-    setDepartment(value);
-    setProfessor(null);
-  };
-
+  
   const handleProfessorChange = (value: string) => {
-    setProfessor(value);
-  };
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchProfessor(e.target.value);
+    setProfessor(value); // บันทึกค่าที่เลือกใน state
   };
 
   const timeSlots = [
@@ -112,23 +116,23 @@ const StudentBooking: React.FC = () => {
     "9:00am",
   ];
 
-  const username = "Nichakorn Chanyutha"; // เปลี่ยนชื่อให้ตรงกับผู้ใช้งานที่ล็อกอิน
+  // const username = "Nichakorn Chanyutha"; // เปลี่ยนชื่อให้ตรงกับผู้ใช้งานที่ล็อกอิน
 
-  const handleDateClick = (date: number) => {
-    setSelectedDate(date);
-  };
+  // const handleDateClick = (date: number) => {
+  //   setSelectedDate(date);
+  // };
 
-  const handleTimeClick = (time: string) => {
-    setSelectedTime(time);
-  };
+  // const handleTimeClick = (time: string) => {
+  //   setSelectedTime(time);
+  // };
 
-  const handleConfirm = () => {
-    if (selectedDate && selectedTime) {
-      alert(`Appointment booked on ${selectedDate} at ${selectedTime}`);
-    } else {
-      alert("Please select a date and time.");
-    }
-  };
+  // const handleConfirm = () => {
+  //   if (selectedDate && selectedTime) {
+  //     alert(`Appointment booked on ${selectedDate} at ${selectedTime}`);
+  //   } else {
+  //     alert("Please select a date and time.");
+  //   }
+  // };
 
   const getDatesForWeek = (weekOffset: number) => {
     const now = new Date();
@@ -169,53 +173,55 @@ const StudentBooking: React.FC = () => {
 
         <div className="student-booking__search">
           {/* Search Bar */}
-          <div className="student-booking__search">
-            <Input
-              placeholder="Search Professor by Name"
-              value={searchProfessor}
-              onChange={handleSearchChange}
-              className="student-booking__search-input"
-            />
-          </div>
+          <Input
+            placeholder="Search Professor by Name"
+            value={searchProfessor}
+            onChange={(e) => setSearchProfessor(e.target.value)}
+            className="student-booking__search-input"
+          />
         </div>
+
         {/* Dropdowns */}
         <div className="student-booking__dropdowns">
+          {/* Department Dropdown */}
           <Select
-            placeholder="Select Faculty"
-            value={faculty}
-            onChange={handleFacultyChange}
+            placeholder="Select Department"
+            value={selectedDepartment}
+            onChange={(value) => setSelectedDepartment(value)}
             className="student-booking__select"
           >
-            {faculties.map((item) => (
+            {departments.map((item) => (
               <Option key={item.ID} value={item.ID}>
                 {item.DepartmentName}
               </Option>
             ))}
           </Select>
 
+          {/* Major Dropdown */}
           <Select
-            placeholder="Select Department"
-            value={department}
-            onChange={handleDepartmentChange}
+            placeholder="Select Major"
+            value={selectedMajor}
+            onChange={(value) => setSelectedMajor(value)}
             className="student-booking__select"
-            disabled={!faculty}
+            disabled={!selectedDepartment}
           >
-            {departments.map((item) => (
+            {majors.map((item) => (
               <Option key={item.ID} value={item.ID}>
                 {item.MajorName}
               </Option>
             ))}
           </Select>
 
+          {/* Professor Dropdown */}
           <Select
             placeholder="Select Professor"
             value={professor}
-            onChange={handleProfessorChange}
+            onChange={handleProfessorChange} // เชื่อมกับฟังก์ชันนี้
             className="student-booking__select"
-            disabled={!selectedDepartment || !selectedMajor}
+            disabled={!selectedMajor} // ถ้าไม่มี Major จะ disabled
           >
-            {professors.length > 0 ? (
-              professors.map((item) => (
+            {getFilteredProfessors().length > 0 ? (
+              getFilteredProfessors().map((item) => (
                 <Option key={item.ID} value={item.ID}>
                   {item.FirstName} {item.LastName}
                 </Option>
@@ -244,11 +250,17 @@ const StudentBooking: React.FC = () => {
           {/* Header (Calendar Header with Navigation) */}
           <div className="student-bookingcalendar-container">
             <div className="student-bookingcalendar-header">
-              <button className="student-bookingcalendar-nav" onClick={handlePrevWeek}>
+              <button
+                className="student-bookingcalendar-nav"
+                onClick={handlePrevWeek}
+              >
                 &lt;
               </button>
               {dates.map((date, index) => (
-                <div key={index} className="student-bookingcalendar-day-container">
+                <div
+                  key={index}
+                  className="student-bookingcalendar-day-container"
+                >
                   <div
                     className={`student-bookingcalendar-day ${
                       selectedDate === date.getDate()
@@ -282,7 +294,10 @@ const StudentBooking: React.FC = () => {
                   </div>
                 </div>
               ))}
-              <button className="student-bookingcalendar-nav" onClick={handleNextWeek}>
+              <button
+                className="student-bookingcalendar-nav"
+                onClick={handleNextWeek}
+              >
                 &gt;
               </button>
             </div>
