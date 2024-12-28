@@ -8,6 +8,7 @@
   /* align-items: center; */
   padding: 20px;
   margin-top: 5%;
+  overflow: auto; /* เพิ่ม Scrollbar กรณีเนื้อหายาวเกิน */
 }
 
 .student-booking__header {
@@ -54,11 +55,12 @@
   display:flex;
   justify-content: space-between;
   gap: 20px;
-  width: 100%;
+  width: 97%;
   height: 100%;
+  margin: auto;
   margin-top: 0;
-  border: #70757a solid 1px;
-  border-radius: 25px;
+  border-top: #70757a solid 1px;
+
 }
 
 .student-booking__appointment-container {
@@ -113,17 +115,17 @@
 
 .student-booking__timeslots-section {
   flex: 1;
-  margin-top: 60px;
 }
 
 .student-booking__timeslots-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(7, 1fr); /* 7 วัน แต่ละวันมี Time Slots ใต้ตัวเอง */
   gap: 10px;
 }
 
 .student-booking__timeslot {
-  padding: 10px;
+  padding: 15px;
+  width: 100%; /* ขยายให้เต็มความกว้างของคอลัมน์ */
   text-align: center;
   border: 1px solid #dfe1e5;
   background-color: #ffffff;
@@ -217,11 +219,14 @@
 }
 
 .selectappointment{
+  display: flex; /* ใช้ flexbox */
+  justify-content: center; /* จัดให้อยู่ตรงกลางในแนวนอน */
+  align-items: center; /* จัดให้อยู่ตรงกลางในแนวตั้ง */
   color: black;
-  margin: 20px;
-  margin-top:30px;
-  flex-direction: row;
-  font-size: 18px;
+  font-size: 20px;
+  margin: 30px 0; /* เว้นระยะบน-ล่าง */
+  margin-bottom: 50px;
+
 }
 
 .student-booking__mini-calendar {
@@ -232,16 +237,113 @@
   width: 300px;
   height: 300px;
   margin-left: 20px;
-  margin-right: 20px;
+  margin-right: 0px;
   margin-top: 0;
 }
 
 .mini-calendar-container {
-  margin-top: 0px;
+  margin-top: 10px;
   background: none !important; /* ลบพื้นหลัง */
   border: none !important; /* ลบกรอบ */
   box-shadow: none !important; /* ลบเงา */
   padding: 0 !important; /* ลบระยะห่างภายใน */
   width: 250px; /* ลดขนาด */
   height: 250px;
+}
+
+.student-booking__dates-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 วัน */
+  text-align: center;
+  font-weight: bold;
+  margin-top: 65px;
+  margin-bottom: 20px;
+  margin-left: 0;
+}
+
+.student-booking__date {
+  text-align: center;
+  font-size: 16px;
+  color: #202124;
+}
+
+.student-booking__date--selected {
+  background-color: #1a73e8;
+  color: white;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.student-bookingcalendar-container {
+  margin-left: 50px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto repeat(7, 1fr) auto; /* 7 วันและปุ่มนำทาง */
+  align-items: center;
+  justify-items: center; /* จัดให้อยู่ตรงกลาง */
+  text-align: center;
+  gap: 10px; /* ระยะห่างระหว่างคอลัมน์ */
+  background-color: #ffffff;
+  padding: 20px 0; /* เพิ่มระยะด้านบนและล่าง */
+}
+
+
+.student-bookingcalendar-day-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* ระยะห่างระหว่างวันและ Time Slots */
+  width: 100%; /* ขยายเต็มพื้นที่ */
+}
+
+.student-bookingcalendar-header {
+  display: grid;
+  grid-template-columns: auto repeat(7, 1fr) auto;
+  align-items: center;
+  text-align: center;
+  /* width: 100%; */
+  gap: 10px;
+  padding: 10px 0;
+  color: black;
+}
+
+.student-bookingcalendar-nav {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #5f6368;
+}
+
+.student-bookingcalendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.3s;
+  border-radius: 25px;
+
+}
+
+.student-bookingcalendar-day:hover {
+  background-color: #e8f0fe;
+  border-radius: 4px;
+}
+
+.student-bookingcalendar-day--selected {
+  background-color: #1a73e8;
+  color: #ffffff;
+  border-radius: 4px;
+}
+
+.student-bookingcalendar-timeslots {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* ระยะห่างระหว่าง Time Slots */
+  width: 90%; /* ขยายให้เกือบเต็มพื้นที่ */
+  margin: auto; /* จัดให้อยู่กึ่งกลาง */
 }

@@ -10,8 +10,10 @@ import {
 } from "../../../../services/https";
 
 const { Option } = Select;
+const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 const StudentBooking: React.FC = () => {
+  const [currentWeek, setCurrentWeek] = useState(0);
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [faculty, setFaculty] = useState<string | null>(null);
@@ -63,7 +65,7 @@ const StudentBooking: React.FC = () => {
             DepartmentID: selectedDepartment,
             MajorID: selectedMajor,
           });
-  
+
           if (response && response.status === 200) {
             setProfessors(response.data); // ตั้งค่า State สำหรับ Professors
           } else {
@@ -77,10 +79,9 @@ const StudentBooking: React.FC = () => {
         setProfessors([]); // ถ้าไม่มีการเลือก Department หรือ Major
       }
     };
-  
+
     fetchProfessors();
   }, [selectedDepartment, selectedMajor]); // ดึงข้อมูลใหม่เมื่อ Department หรือ Major เปลี่ยน
-  
 
   const handleFacultyChange = (value: string) => {
     setFaculty(value);
@@ -100,7 +101,6 @@ const StudentBooking: React.FC = () => {
     setSearchProfessor(e.target.value);
   };
 
-  const dates = Array.from({ length: 31 }, (_, i) => i + 1);
   const timeSlots = [
     "9:00am",
     "10:00am",
@@ -109,6 +109,7 @@ const StudentBooking: React.FC = () => {
     "1:00pm",
     "2:00pm",
     "3:00pm",
+    "9:00am",
   ];
 
   const username = "Nichakorn Chanyutha"; // เปลี่ยนชื่อให้ตรงกับผู้ใช้งานที่ล็อกอิน
@@ -128,6 +129,22 @@ const StudentBooking: React.FC = () => {
       alert("Please select a date and time.");
     }
   };
+
+  const getDatesForWeek = (weekOffset: number) => {
+    const now = new Date();
+    const startOfWeek = new Date(
+      now.setDate(now.getDate() - now.getDay() + weekOffset * 7)
+    );
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(startOfWeek);
+      date.setDate(date.getDate() + i);
+      return date;
+    });
+  };
+
+  const dates = getDatesForWeek(currentWeek);
+  const handlePrevWeek = () => setCurrentWeek((prev) => prev - 1);
+  const handleNextWeek = () => setCurrentWeek((prev) => prev + 1);
 
   return (
     <div className="student-booking__container">
@@ -213,7 +230,7 @@ const StudentBooking: React.FC = () => {
       <main className="student-booking__main">
         {/* Mini Calendar */}
         <section className="student-booking__mini-calendar">
-          <h3 className="selectappointment">Select an appointment time</h3>
+          <div className="selectappointment">Select an appointment time</div>
           <div className="mini-calendar-container">
             <Calendar
               onChange={(date: Date) => setSelectedDate(date.getDate())}
@@ -223,23 +240,54 @@ const StudentBooking: React.FC = () => {
         </section>
 
         {/* Time Slots */}
-        <section className="student-booking__timeslots-section">
-          <div className="student-booking__timeslots-grid">
-            {timeSlots.map((slot, index) => (
-              <button
-                key={index}
-                className={`student-booking__timeslot ${
-                  selectedTime === slot
-                    ? "student-booking__timeslot--selected"
-                    : ""
-                }`}
-                onClick={() => handleTimeClick(slot)}
-              >
-                {slot}
+        <div>
+          {/* Header (Calendar Header with Navigation) */}
+          <div className="student-bookingcalendar-container">
+            <div className="student-bookingcalendar-header">
+              <button className="student-bookingcalendar-nav" onClick={handlePrevWeek}>
+                &lt;
               </button>
-            ))}
+              {dates.map((date, index) => (
+                <div key={index} className="student-bookingcalendar-day-container">
+                  <div
+                    className={`student-bookingcalendar-day ${
+                      selectedDate === date.getDate()
+                        ? "student-bookingcalendar-day--selected"
+                        : ""
+                    }`}
+                    onClick={() => setSelectedDate(date.getDate())}
+                  >
+                    <span>{daysOfWeek[index]}</span>
+                    <span>{date.getDate()}</span>
+                  </div>
+                  {/* Time Slots */}
+                  <div className="student-bookingcalendar-timeslots">
+                    {timeSlots.map((slot, slotIndex) => (
+                      <button
+                        key={`${index}-${slotIndex}`}
+                        className={`student-booking__timeslot ${
+                          selectedDate === date.getDate() &&
+                          selectedTime === slot
+                            ? "student-booking__timeslot--selected"
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setSelectedDate(date.getDate());
+                          setSelectedTime(slot);
+                        }}
+                      >
+                        {slot}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <button className="student-bookingcalendar-nav" onClick={handleNextWeek}>
+                &gt;
+              </button>
+            </div>
           </div>
-        </section>
+        </div>
       </main>
     </div>
   );
