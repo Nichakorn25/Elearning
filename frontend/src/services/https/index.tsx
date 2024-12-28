@@ -106,6 +106,35 @@ async function GetUsersByFilters(filters: {
   return response;
 }
 
+// ฟังก์ชันดึงข้อมูลอาจารย์ตามเงื่อนไข
+async function GetProfessorsByFilters(filters: {
+  RoleID: number;
+  DepartmentID?: string;
+  MajorID?: string;
+  SearchQuery?: string;
+}) {
+  const params = new URLSearchParams();
+
+  // ส่งพารามิเตอร์
+  if (filters.RoleID) params.append("RoleID", filters.RoleID.toString());
+  if (filters.DepartmentID) params.append("DepartmentID", filters.DepartmentID);
+  if (filters.MajorID) params.append("MajorID", filters.MajorID);
+  if (filters.SearchQuery) params.append("SearchQuery", filters.SearchQuery);
+
+  try {
+    // เรียก API
+    const response = await axios.get(`${apiUrl}/professors`, {
+      ...requestOptions,
+      params,
+    });
+
+    return response;
+  } catch (error: any) {
+    console.error("Error fetching professors:", error.response?.data || error.message);
+    return error.response;
+  }
+}
+
 
 
 async function SignIn(data: SignInInterface) {
@@ -216,6 +245,7 @@ export{
   DeleteAnnouncementById,
   ListUsers,
   GetUsersByFilters,
+  GetProfessorsByFilters,
   SignIn,
   CreateUser,
   ResetPassword,

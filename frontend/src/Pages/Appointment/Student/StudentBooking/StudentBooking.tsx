@@ -68,15 +68,23 @@ const StudentBooking: React.FC = () => {
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
   useEffect(() => {
     const fetchProfessors = async () => {
-      if (selectedMajor) {
+      if (selectedDepartment && selectedMajor) {
         try {
+          console.log("Selected Department:", selectedDepartment);
+          console.log("Selected Major:", selectedMajor);
+  
           const response = await GetUsersByFilters({
             RoleID: 2, // กำหนด Role สำหรับอาจารย์
+            DepartmentID: selectedDepartment,
             MajorID: selectedMajor,
           });
+  
+          console.log("API Response:", response); // แสดงข้อมูลที่ได้จาก API
+  
           if (response && response.status === 200) {
             setProfessors(response.data);
           } else {
+            console.error("No professors found");
             setProfessors([]);
           }
         } catch (error) {
@@ -84,13 +92,16 @@ const StudentBooking: React.FC = () => {
           setProfessors([]);
         }
       } else {
+        console.log("No Department or Major selected");
         setProfessors([]);
       }
     };
-
+  
     fetchProfessors();
-  }, [selectedMajor]);
-
+  }, [selectedDepartment, selectedMajor]); // ดึงข้อมูลใหม่เมื่อ Department หรือ Major เปลี่ยน
+  
+  
+  
   // ฟังก์ชันกรองข้อมูลอาจารย์
   const getFilteredProfessors = () => {
     if (!searchProfessor) return professors; // หากไม่มีการค้นหา ให้แสดงทั้งหมด
