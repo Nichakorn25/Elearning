@@ -8,11 +8,10 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./StudentCalendar.css";
 import Header from "../../../Component/Header/Header";
-import { Menu, Dropdown, Button, Modal } from "antd";
+import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIcon";
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
-import StudentBooking from "../StudentBooking/StudentBooking";
 import CreateTaskPopup from "../../Teacher/Taskpopup/Taskpopup";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +33,7 @@ const StudentCalendar: React.FC = () => {
   };
 
   const [currentView, setCurrentView] = useState("dayGridMonth");
-  const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
+  // const [isModalVisible, setIsModalVisible] = useState(false); // สำหรับ Popup
   // const [isBookingVisible, setIsBookingVisible] = useState(false);
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -137,18 +136,21 @@ const StudentCalendar: React.FC = () => {
     setIsTaskModalVisible(false);
   };
 
-  const handleSubmitTask = (values:any) => {
+  const handleSubmitTask = (values: any) => {
     const newEvent = {
       id: String(events.length + 1),
-      title: values.title,
-      start:
-        values.date.format("YYYY-MM-DD") + "T" + values.time.format("HH:mm:ss"),
-      description: values.description,
-      category: values.category,
+      title: values.title || "Untitled Task",
+      start: `${values.date.format("YYYY-MM-DD")}T${values.time.format("HH:mm:ss")}`,
+      end: `${values.date.format("YYYY-MM-DD")}T${values.time
+        .add(1, "hour") // เพิ่มเวลาสิ้นสุดอัตโนมัติ
+        .format("HH:mm:ss")}`,
+      description: values.description || "No description",
+      category: values.category || "General",
     };
-    setEvents([...events, newEvent]);
-    setIsModalVisible(false); // ปิด Popup
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
+    setIsTaskModalVisible(false);
   };
+  
 
   const createMenu = (
     <Menu className="createdropdown">

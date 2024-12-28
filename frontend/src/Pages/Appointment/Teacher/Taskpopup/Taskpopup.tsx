@@ -1,98 +1,98 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Select, DatePicker, TimePicker, Button } from "antd";
+import dayjs, { Dayjs } from "dayjs";
 import "./Taskpopup.css";
-import dayjs from "dayjs";
 
 const { TextArea } = Input;
 const { Option } = Select;
 
-const Taskpopup = ({ isVisible, onClose, onSubmit , selectedDate }) => {
-  // สร้าง state สำหรับเก็บค่าจากฟอร์ม
-  const [title, setTitle] = useState("");
-  const [date, setDate] = useState(null);
-  const [time, setTime] = useState(null);
-  const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("งานของฉัน");
+interface TaskPopupProps {
+  isVisible: boolean;
+  onClose: () => void;
+  onSubmit: (values: {
+    title: string;
+    date: Dayjs | null;
+    time: Dayjs | null;
+    description: string;
+    category: string;
+  }) => void;
+  selectedDate?: string | null;
+}
+
+const TaskPopup: React.FC<TaskPopupProps> = ({
+  isVisible,
+  onClose,
+  onSubmit,
+  selectedDate,
+}) => {
+  const [title, setTitle] = useState<string>("");
+  const [date, setDate] = useState<Dayjs | null>(null); // รองรับ Dayjs | null
+  const [time, setTime] = useState<Dayjs | null>(null); // รองรับ Dayjs | null
+  const [description, setDescription] = useState<string>("");
+  const [category, setCategory] = useState<string>("งานของฉัน");
 
   useEffect(() => {
     if (selectedDate) {
-      setDate(dayjs(selectedDate)); // อัปเดตวันที่เมื่อ selectedDate เปลี่ยน
+      setDate(dayjs(selectedDate)); // แปลง selectedDate เป็น Dayjs
     }
   }, [selectedDate]);
 
   const handleSave = () => {
-    // ส่งข้อมูลกลับเมื่อกด Save
     onSubmit({
-      title, // ค่า Title
-      date, // ค่า Date
-      time, // ค่า Time
-      description, // ค่า Description
-      category, // ค่า Category
+      title,
+      date,
+      time,
+      description,
+      category,
     });
-    onClose(); // ปิด Popup
+    onClose();
   };
 
   return (
     <Modal
       visible={isVisible}
       onCancel={onClose}
-      footer={null} // ซ่อน Footer ของ Ant Design
+      footer={null}
       className="custom-task-modal"
     >
-      {/* Title */}
       <Input
         placeholder="Add title"
         className="title-input"
         value={title}
-        onChange={(e) => setTitle(e.target.value)} // อัปเดตค่า title
+        onChange={(e) => setTitle(e.target.value)}
         style={{ marginBottom: "16px" }}
       />
-
-      {/* Date & Time */}
-      <div
-        style={{
-          display: "flex",
-          gap: "16px",
-          alignItems: "center",
-          marginBottom: "16px",
-        }}
-      >
+      <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
         <DatePicker
           placeholder="Select Date"
           value={date}
-          onChange={(value) => setDate(value)} // อัปเดตค่า date
+          onChange={(value) => setDate(value)} // รับค่าเป็น Dayjs
           style={{ flex: 1 }}
         />
         <TimePicker
           placeholder="Select Time"
           value={time}
-          onChange={(value) => setTime(value)} // อัปเดตค่า time
+          onChange={(value) => setTime(value)} // รับค่าเป็น Dayjs
           style={{ flex: 1 }}
           format="h:mm a"
         />
       </div>
-
-      {/* Description */}
       <TextArea
         placeholder="Add description"
         rows={4}
         value={description}
-        onChange={(e) => setDescription(e.target.value)} // อัปเดตค่า description
+        onChange={(e) => setDescription(e.target.value)}
         style={{ marginBottom: "16px" }}
       />
-
-      {/* Dropdown */}
       <Select
         placeholder="งานของฉัน"
         value={category}
-        onChange={(value) => setCategory(value)} // อัปเดตค่า category
+        onChange={(value) => setCategory(value)}
         style={{ width: "100%", marginBottom: "16px" }}
       >
         <Option value="mywork">งานของฉัน</Option>
         <Option value="otherwork">งานอื่นๆ</Option>
       </Select>
-
-      {/* Save Button */}
       <div style={{ textAlign: "right" }}>
         <Button type="primary" onClick={handleSave}>
           Save
@@ -102,4 +102,4 @@ const Taskpopup = ({ isVisible, onClose, onSubmit , selectedDate }) => {
   );
 };
 
-export default Taskpopup;
+export default TaskPopup;

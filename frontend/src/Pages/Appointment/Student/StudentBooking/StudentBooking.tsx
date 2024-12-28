@@ -100,7 +100,7 @@ const StudentBooking: React.FC = () => {
         .includes(searchProfessor.toLowerCase())
     );
   };
-  
+
   const handleProfessorChange = (value: string) => {
     setProfessor(value); // บันทึกค่าที่เลือกใน state
   };
@@ -238,10 +238,7 @@ const StudentBooking: React.FC = () => {
         <section className="student-booking__mini-calendar">
           <div className="selectappointment">Select an appointment time</div>
           <div className="mini-calendar-container">
-            <Calendar
-              onChange={(date: Date) => setSelectedDate(date.getDate())}
-              value={new Date()}
-            />
+            <Calendar />
           </div>
         </section>
 
