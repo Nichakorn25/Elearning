@@ -83,28 +83,29 @@ async function ListUsers() {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
 //ไม่ใช้
-async function GetUsersByFilters(filters: {
-  RoleID: number;
-  DepartmentID?: string;
-  MajorID?: string;
-}) {
-  const { RoleID, DepartmentID, MajorID } = filters;
-  const params = new URLSearchParams();
+// async function GetUsersByFilters(filters: {
+//   RoleID: number;
+//   DepartmentID?: string;
+//   MajorID?: string;
+// }) {
+//   const { RoleID, DepartmentID, MajorID } = filters;
+//   const params = new URLSearchParams();
 
-  if (RoleID) params.append("RoleID", RoleID.toString());
-  if (DepartmentID) params.append("DepartmentID", DepartmentID);
-  if (MajorID) params.append("MajorID", MajorID);
+//   if (RoleID) params.append("RoleID", RoleID.toString());
+//   if (DepartmentID) params.append("DepartmentID", DepartmentID);
+//   if (MajorID) params.append("MajorID", MajorID);
 
-  const response = await axios
-    .get(`${apiUrl}/users`, {
-      params, // ส่งค่าพารามิเตอร์ไปใน URL
-    })
-    .then((res) => res)
-    .catch((err) => err.response);
+//   const response = await axios
+//     .get(`${apiUrl}/users`, {
+//       params, // ส่งค่าพารามิเตอร์ไปใน URL
+//     })
+//     .then((res) => res)
+//     .catch((err) => err.response);
 
-  return response;
-}
+//   return response;
+// }
 
 
 //Filters
@@ -227,7 +228,7 @@ export{
   UpdateAnnouncementById,
   DeleteAnnouncementById,
   ListUsers,
-  GetUsersByFilters,
+  // GetUsersByFilters,
   SignIn,
   CreateUser,
   ResetPassword,

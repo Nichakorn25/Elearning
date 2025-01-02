@@ -109,43 +109,68 @@ func ListUsers(c *gin.Context) {
 // }
 
 // ดึงข้อมูลผู้ใช้ตาม RoleID, DepartmentID และ MajorID
-func GetUsersByFilters(c *gin.Context) {
-    // ดึงค่าจาก Query Parameters
-    roleID := c.Query("RoleID")
-    departmentID := c.Query("DepartmentID")
-    majorID := c.Query("MajorID")
+// func GetUsersByFilters(c *gin.Context) {
+//     // ดึงค่าจาก Query Parameters
+//     roleID := c.Query("RoleID")
+//     departmentID := c.Query("DepartmentID")
+//     majorID := c.Query("MajorID")
 
-    // กำหนดตัวแปรสำหรับเก็บข้อมูลผู้ใช้
+//     // กำหนดตัวแปรสำหรับเก็บข้อมูลผู้ใช้
+//     var users []entity.User
+
+//     // เริ่มการ Query
+//     db := config.DB()
+//     query := db.Preload("Department").Preload("Major").Where("role_id = ?", roleID)
+
+//     // เพิ่มเงื่อนไขถ้ามี departmentID
+//     if departmentID != "" {
+//         query = query.Where("department_id = ?", departmentID)
+//     }
+
+//     // เพิ่มเงื่อนไขถ้ามี majorID
+//     if majorID != "" {
+//         query = query.Where("major_id = ?", majorID)
+//     }
+
+//     // ค้นหาข้อมูล
+//     results := query.Find(&users)
+//     if results.Error != nil {
+//         if errors.Is(results.Error, gorm.ErrRecordNotFound) {
+//             // ถ้าไม่พบข้อมูล
+//             c.JSON(http.StatusNotFound, gin.H{"error": "Users not found"})
+//         } else {
+//             // ถ้าเกิดข้อผิดพลาดอื่นๆ
+//             c.JSON(http.StatusInternalServerError, gin.H{"error": results.Error.Error()})
+//         }
+//         return
+//     }
+
+//     // ส่งข้อมูลกลับในรูปแบบ JSON
+//     c.JSON(http.StatusOK, users)
+// }
+
+// GET http://localhost:8000/users/filter?departmentId=4&majorId=16&roleId=2
+func ListUsersFilters(c *gin.Context) {
     var users []entity.User
 
-    // เริ่มการ Query
+    // ดึงค่าจาก Query Parameters
+    departmentId := c.Query("departmentId")
+    majorId := c.Query("majorId")
+    roleId := c.Query("roleId")
+
+    // Query โดยใช้เงื่อนไข
     db := config.DB()
-    query := db.Preload("Department").Preload("Major").Where("role_id = ?", roleID)
+    results := db.Preload("Department").
+        Preload("Major").
+        Preload("Role").
+        Where("department_id = ? AND major_id = ? AND role_id = ?", departmentId, majorId, roleId).
+        Find(&users)
 
-    // เพิ่มเงื่อนไขถ้ามี departmentID
-    if departmentID != "" {
-        query = query.Where("department_id = ?", departmentID)
-    }
-
-    // เพิ่มเงื่อนไขถ้ามี majorID
-    if majorID != "" {
-        query = query.Where("major_id = ?", majorID)
-    }
-
-    // ค้นหาข้อมูล
-    results := query.Find(&users)
     if results.Error != nil {
-        if errors.Is(results.Error, gorm.ErrRecordNotFound) {
-            // ถ้าไม่พบข้อมูล
-            c.JSON(http.StatusNotFound, gin.H{"error": "Users not found"})
-        } else {
-            // ถ้าเกิดข้อผิดพลาดอื่นๆ
-            c.JSON(http.StatusInternalServerError, gin.H{"error": results.Error.Error()})
-        }
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
         return
     }
 
-    // ส่งข้อมูลกลับในรูปแบบ JSON
     c.JSON(http.StatusOK, users)
 }
 

@@ -6,8 +6,9 @@ import Calendar from "react-calendar";
 import {
   GetDepartments,
   GetMajors,
-  GetUsersByFilters,
+  ListUsersFilters,
 } from "../../../../services/https";
+import { UserInterface } from "../../../../Interface/IUser";
 
 const { Option } = Select;
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -24,7 +25,7 @@ const StudentBooking: React.FC = () => {
   const [searchProfessor, setSearchProfessor] = useState<string>(""); // ใช้ searchProfessor แทน
   const [departments, setDepartments] = useState<any[]>([]);
   const [majors, setMajors] = useState<any[]>([]);
-  const [professors, setProfessors] = useState<any[]>([]);
+  const [professors, setProfessors] = useState<UserInterface[]>([]);
 
   // ดึงข้อมูล Departments
   useEffect(() => {
@@ -66,55 +67,21 @@ const StudentBooking: React.FC = () => {
   }, [selectedDepartment]);
 
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
-  useEffect(() => {
-    const fetchProfessors = async () => {
-      if (selectedDepartment && selectedMajor) {
-        try {
-          console.log("Selected Department:", selectedDepartment);
-          console.log("Selected Major:", selectedMajor);
-  
-          const response = await GetUsersByFilters({
-            RoleID: 2, // กำหนด Role สำหรับอาจารย์
-            DepartmentID: selectedDepartment,
-            MajorID: selectedMajor,
-          });
-  
-          console.log("API Response:", response); // แสดงข้อมูลที่ได้จาก API
-  
-          if (response && response.status === 200) {
-            setProfessors(response.data);
-          } else {
-            console.error("No professors found");
-            setProfessors([]);
-          }
-        } catch (error) {
-          console.error("Error fetching professors:", error);
-          setProfessors([]);
-        }
-      } else {
-        console.log("No Department or Major selected");
-        setProfessors([]);
+  const test = async (value: string) => {
+    setSelectedMajor(value);
+    try {
+      const response = await ListUsersFilters(String(selectedDepartment),String(selectedMajor),String(2))
+      if (response.status === 200) {
+        setProfessors(response.data);
+        console.log(response.data)
       }
-    };
-  
-    fetchProfessors();
-  }, [selectedDepartment, selectedMajor]); // ดึงข้อมูลใหม่เมื่อ Department หรือ Major เปลี่ยน
-  
-  
-  
-  // ฟังก์ชันกรองข้อมูลอาจารย์
-  const getFilteredProfessors = () => {
-    if (!searchProfessor) return professors; // หากไม่มีการค้นหา ให้แสดงทั้งหมด
-    return professors.filter((prof) =>
-      `${prof.FirstName} ${prof.LastName}`
-        .toLowerCase()
-        .includes(searchProfessor.toLowerCase())
-    );
-  };
+    } catch (error) {
+      console.error("Error fetching professors:", error);
+      setProfessors([]);
+    }
+  }
 
-  const handleProfessorChange = (value: string) => {
-    setProfessor(value); // บันทึกค่าที่เลือกใน state
-  };
+
 
   const timeSlots = [
     "9:00am",
@@ -212,7 +179,7 @@ const StudentBooking: React.FC = () => {
           <Select
             placeholder="Select Major"
             value={selectedMajor}
-            onChange={(value) => setSelectedMajor(value)}
+            onChange={(value) => test(value)}
             className="student-booking__select"
             disabled={!selectedDepartment}
           >
@@ -227,18 +194,18 @@ const StudentBooking: React.FC = () => {
           <Select
             placeholder="Select Professor"
             value={professor}
-            onChange={handleProfessorChange} // เชื่อมกับฟังก์ชันนี้
+            onChange={(value) => setProfessor(value)} // เชื่อมกับฟังก์ชันนี้
             className="student-booking__select"
             disabled={!selectedMajor} // ถ้าไม่มี Major จะ disabled
           >
-            {getFilteredProfessors().length > 0 ? (
-              getFilteredProfessors().map((item) => (
+            {professors.length > 0 ? (
+              professors.map((item) => (
                 <Option key={item.ID} value={item.ID}>
                   {item.FirstName} {item.LastName}
                 </Option>
               ))
             ) : (
-              <Option disabled>No professors available</Option>
+              <Option disabled>Select Professors</Option>
             )}
           </Select>
         </div>
