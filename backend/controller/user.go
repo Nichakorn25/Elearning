@@ -94,6 +94,34 @@ func ListUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// GET http://localhost:8000/users/filter?departmentId=4&majorId=16&roleId=2
+func ListUsersFilters(c *gin.Context) {
+    var users []entity.User
+
+    // ดึงค่าจาก Query Parameters
+    departmentId := c.Query("departmentId")
+    majorId := c.Query("majorId")
+    roleId := c.Query("roleId")
+
+    // Query โดยใช้เงื่อนไข
+    db := config.DB()
+    results := db.Preload("Department").
+        Preload("Major").
+        Preload("Role").
+        Where("department_id = ? AND major_id = ? AND role_id = ?", departmentId, majorId, roleId).
+        Find(&users)
+
+    if results.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, users)
+}
+
+
+
+
 // func ListUsers(c *gin.Context) {
 // 	var users []entity.User
 

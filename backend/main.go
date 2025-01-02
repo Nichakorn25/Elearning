@@ -40,6 +40,7 @@ func main() {
 
 		// User Routes
 		router.GET("/users", controller.ListUsers) 
+		router.GET("/users/filter", controller.ListUsersFilters)
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
 		router.POST("/appointments", controller.CreateTeacherAppointment)
 		router.GET("/searchProfessors", controller.SearchProfessors)
