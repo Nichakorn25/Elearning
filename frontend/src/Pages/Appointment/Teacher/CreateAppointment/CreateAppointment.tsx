@@ -23,7 +23,7 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   onSubmit,
 }) => {
   const [title, setTitle] = useState("");
-  const [duration, setDuration] = useState("1 hour");
+  const [duration, setDuration] = useState(1);
   const [daysAvailability, setDaysAvailability] = useState([
     { day: "Sunday", start: null, end: null, unavailable: true },
     { day: "Monday", start: "09:00", end: "17:00", unavailable: false },
@@ -37,56 +37,37 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   const [maxBookings, setMaxBookings] = useState(4);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const userId = localStorage.getItem("id");
 
   const handleSave = async () => {
+    if (!userId) {
+      message.error("UserID ไม่พบ กรุณาเข้าสู่ระบบอีกครั้ง");
+      return;
+    }
+
+    if (!title || !duration || daysAvailability.length === 0) {
+      message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
+    const values: TeacherAppointmentInterface = {
+      title: title,
+      appointment_duration: duration,
+      buffer_time: bufferTime,
+      max_bookings: maxBookings,
+      location: location,
+      description: description,
+      UserID: Number(userId),
+      availability_id: 0,
+    };
+    console.log(userId);
+    console.log(title);
+    console.log(duration);
+    console.log(bufferTime);
+    console.log(maxBookings);
+    console.log(location);
+    console.log(description);
     try {
-      const userId = localStorage.getItem("id");
-      if (!userId) {
-        message.error("UserID ไม่พบ กรุณาเข้าสู่ระบบอีกครั้ง");
-        return;
-      }
-  
-      if (!title || !duration || daysAvailability.length === 0) {
-        message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
-        return;
-      }
-  
-      // สร้าง Availability สำหรับทุกวัน
-      const availabilityIds: number[] = [];
-      for (const day of daysAvailability) {
-        const availabilityData = {
-          day: day.day,
-          start_time: day.start, // เวลาเริ่มต้น เช่น "09:00"
-          end_time: day.end, // เวลาสิ้นสุด เช่น "17:00"
-          is_available: !day.unavailable,
-          user_id: parseInt(userId), // User ID จาก localStorage
-        };
-  
-        // ส่งคำขอสร้าง Availability ไปยัง Backend
-        const availabilityResponse = await SaveAvailability(availabilityData);
-  
-        if (availabilityResponse.status === 201) {
-          console.log("Created Availability:", availabilityResponse.data);
-          availabilityIds.push(availabilityResponse.data.id); // เก็บ ID ของ Availability ที่สร้างสำเร็จ
-        } else {
-          throw new Error("Failed to create availability");
-        }
-      }
-  
-      // สร้าง TeacherAppointment
-      const appointmentData = {
-        title,
-        appointment_duration: parseInt(duration), // แปลง duration ให้เป็นตัวเลข
-        buffer_time: bufferTime,
-        max_bookings: maxBookings,
-        location,
-        description,
-        user_id: parseInt(userId), // แปลง UserID เป็นตัวเลข
-        availability_id: availabilityIds[0], // ใช้ AvailabilityID อันแรก (สามารถปรับให้เหมาะสม)
-      };
-  
-      const appointmentResponse = await SaveAppointment(appointmentData);
-  
+      const appointmentResponse = await SaveAppointment(values);
       if (appointmentResponse.status === 201) {
         message.success("Appointment created successfully!");
         onClose();
@@ -146,10 +127,10 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
             style={{ width: "100%" }}
             onChange={(value) => setDuration(value)}
           >
-            <Option value="15 minutes">15 minutes</Option>
-            <Option value="30 minutes">30 minutes</Option>
-            <Option value="1 hour">1 hour</Option>
-            <Option value="2 hours">2 hours</Option>
+            <Option value={15}>15 minutes</Option>
+            <Option value={30}>30 minutes</Option>
+            <Option value={60}>1 hour</Option>
+            <Option value={120}>2 hours</Option>
           </Select>
         </div>
 
