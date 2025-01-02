@@ -44,7 +44,7 @@ func main() {
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
 		router.POST("/appointments", controller.CreateTeacherAppointment)
 		router.GET("/searchProfessors", controller.SearchProfessors)
-		router.GET("/users/filter", controller.ListUsersFilters)
+		//router.GET("/users/filter", controller.ListUsersFilters)
 		router.POST("/users", controller.CreateUser)
 		router.PUT("/users/:id", controller.UpdateUserByid)
 		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้

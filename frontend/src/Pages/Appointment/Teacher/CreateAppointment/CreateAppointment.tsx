@@ -39,7 +39,7 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
 
   const handleSave = async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("id");
       if (!userId) {
         message.error("UserID ไม่พบ กรุณาเข้าสู่ระบบอีกครั้ง");
         return;

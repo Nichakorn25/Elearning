@@ -78,14 +78,6 @@ const StudentBooking: React.FC = () => {
         setProfessors(response.data); // เก็บผลลัพธ์ที่ค้นพบ
       } else {
         setProfessors([]); // หากไม่พบข้อมูล
-  // ดึงข้อมูล Professors ตาม Major ที่เลือก
-  const test = async (value: string) => {
-    setSelectedMajor(value);
-    try {
-      const response = await ListUsersFilters(String(selectedDepartment),String(selectedMajor),String(2))
-      if (response.status === 200) {
-        setProfessors(response.data);
-        console.log(response.data)
       }
     } catch (error) {
       console.error("Error fetching professors:", error);
@@ -231,7 +223,7 @@ const StudentBooking: React.FC = () => {
             {professors.length > 0 ? (
               professors.map((item) => (
                 <Option key={item.ID} value={item.ID}>
-                  {item.FirstName},{item.LastName}
+                  {item.FirstName} {item.LastName}
                 </Option>
               ))
             ) : (
