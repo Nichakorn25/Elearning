@@ -3,6 +3,7 @@ import axios from "axios";
 // import { message } from "antd"; // Ant Design message for notifications
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
 import { AnnouncementInterface } from "../../Interface/Admin";
+import {TeacherAppointmentInterface} from "../../Interface/IAppointment";
 
 
 const apiUrl = "http://localhost:8000"; // URL ของ API
@@ -137,37 +138,60 @@ async function ListUsersFilters(departmentId: string, majorId: string, roleId: s
       throw e;
     });
 }
-
-// Save Appointment
-async function SaveAppointment(
-  title: string,
-  duration: string,
-  bufferTime: number,
-  maxBookings: number,
-  location: string,
-  description: string,
-  daysAvailability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>,
-  userId: number
-) {
-  const appointmentData = {
-    title,
-    duration,
-    buffer_time: bufferTime,
-    max_bookings: maxBookings,
-    location,
-    description,
-    days_availability: daysAvailability,
-    user_id: userId,
-  };
-
-  return await axios
-    .post(`${apiUrl}/appointments`, appointmentData, requestOptions)
-    .then((res) => res.data)
+async function SaveAvailability(data: {
+  day: string;
+  start_time: string | null;
+  end_time: string | null;
+  is_available: boolean;
+}) {
+  return axios
+    .post(`${apiUrl}/availabilities`, data, requestOptions)
+    .then((res) => res)
     .catch((e) => {
-      console.error("Error saving appointment:", e.response?.data || e.message);
+      console.error("Error saving availability:", e.response?.data || e.message);
       throw e;
     });
 }
+
+async function SaveAppointment(data: TeacherAppointmentInterface) {
+  return axios
+    .post(`${apiUrl}/appointments`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+// Save Appointment
+// async function SaveAppointment(
+//   title: string,
+//   duration: string,
+//   buffer_time: number,
+//   max_bookings: number,
+//   location: string,
+//   description: string,
+//   days_availability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>,
+//   user_id: number,
+//   data: any = {} // Default value
+// ) {
+//   const appointmentData = {
+//     title,
+//     duration,
+//     buffer_time,
+//     max_bookings,
+//     location,
+//     description,
+//     days_availability,
+//     user_id,
+//     ...data // Merge additional data if provided
+//   };
+
+//   return await axios
+//     .post(`${apiUrl}/appointments`, appointmentData, requestOptions)
+//     .then((res) => res.data)
+//     .catch((e) => {
+//       console.error("Error saving appointment:", e.response?.data || e.message);
+//       throw e;
+//     });
+// }
+
 
 
 async function SignIn(data: SignInInterface) {
@@ -289,4 +313,5 @@ export{
   ListUsersFilters,
   SearchProfessors,
   SaveAppointment,
+  SaveAvailability,
 };

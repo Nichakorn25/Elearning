@@ -4,7 +4,8 @@ import { Modal, Input, Select, TimePicker, Checkbox, Button , message } from "an
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
-import {SaveAppointment} from "../../../../services/https/index"
+import {SaveAppointment , SaveAvailability} from "../../../../services/https/index"
+import { TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
 
 
 const { Option } = Select;
@@ -45,20 +46,53 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
         return;
       }
   
-      const response = await SaveAppointment(
+      if (!title || !duration || daysAvailability.length === 0) {
+        message.error("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+  
+      // สร้าง Availability สำหรับทุกวัน
+      const availabilityIds: number[] = [];
+      for (const day of daysAvailability) {
+        const availabilityData = {
+          day: day.day,
+          start_time: day.start, // เวลาเริ่มต้น เช่น "09:00"
+          end_time: day.end, // เวลาสิ้นสุด เช่น "17:00"
+          is_available: !day.unavailable,
+          user_id: parseInt(userId), // User ID จาก localStorage
+        };
+  
+        // ส่งคำขอสร้าง Availability ไปยัง Backend
+        const availabilityResponse = await SaveAvailability(availabilityData);
+  
+        if (availabilityResponse.status === 201) {
+          console.log("Created Availability:", availabilityResponse.data);
+          availabilityIds.push(availabilityResponse.data.id); // เก็บ ID ของ Availability ที่สร้างสำเร็จ
+        } else {
+          throw new Error("Failed to create availability");
+        }
+      }
+  
+      // สร้าง TeacherAppointment
+      const appointmentData = {
         title,
-        duration,
-        bufferTime,
-        maxBookings,
+        appointment_duration: parseInt(duration), // แปลง duration ให้เป็นตัวเลข
+        buffer_time: bufferTime,
+        max_bookings: maxBookings,
         location,
         description,
-        daysAvailability,
-        parseInt(userId) // ส่ง UserID
-      );
+        user_id: parseInt(userId), // แปลง UserID เป็นตัวเลข
+        availability_id: availabilityIds[0], // ใช้ AvailabilityID อันแรก (สามารถปรับให้เหมาะสม)
+      };
   
-      message.success("Appointment created successfully!");
-      onSubmit(response.data);
-      onClose();
+      const appointmentResponse = await SaveAppointment(appointmentData);
+  
+      if (appointmentResponse.status === 201) {
+        message.success("Appointment created successfully!");
+        onClose();
+      } else {
+        message.error("Failed to create appointment.");
+      }
     } catch (error) {
       console.error("Error saving appointment:", error);
       message.error("Failed to create appointment. Please try again.");
