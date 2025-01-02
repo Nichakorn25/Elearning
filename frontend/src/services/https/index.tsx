@@ -146,7 +146,8 @@ async function SaveAppointment(
   maxBookings: number,
   location: string,
   description: string,
-  daysAvailability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>
+  daysAvailability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>,
+  userId: number
 ) {
   const appointmentData = {
     title,
@@ -156,16 +157,18 @@ async function SaveAppointment(
     location,
     description,
     days_availability: daysAvailability,
+    user_id: userId,
   };
 
   return await axios
     .post(`${apiUrl}/appointments`, appointmentData, requestOptions)
-    .then((res) => res)
+    .then((res) => res.data)
     .catch((e) => {
       console.error("Error saving appointment:", e.response?.data || e.message);
       throw e;
     });
 }
+
 
 async function SignIn(data: SignInInterface) {
 

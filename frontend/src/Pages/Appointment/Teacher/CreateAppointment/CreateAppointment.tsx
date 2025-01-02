@@ -1,6 +1,6 @@
 // CreateAppointment.jsx
 import React, { useState } from "react";
-import { Modal, Input, Select, TimePicker, Checkbox, Button } from "antd";
+import { Modal, Input, Select, TimePicker, Checkbox, Button , message } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
@@ -38,17 +38,13 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   const [description, setDescription] = useState("");
 
   const handleSave = async () => {
-    const appointmentData = {
-      title,
-      duration,
-      bufferTime,
-      maxBookings,
-      location,
-      description,
-      daysAvailability,
-    };
-  
     try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        message.error("UserID ไม่พบ กรุณาเข้าสู่ระบบอีกครั้ง");
+        return;
+      }
+  
       const response = await SaveAppointment(
         title,
         duration,
@@ -56,18 +52,20 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
         maxBookings,
         location,
         description,
-        daysAvailability
+        daysAvailability,
+        parseInt(userId) // ส่ง UserID
       );
-      console.log("Saved Appointment:", response.data);
-      onSubmit(appointmentData); // ส่งข้อมูลกลับไปยัง component แม่
-      onClose(); // ปิด Modal
+  
+      message.success("Appointment created successfully!");
+      onSubmit(response.data);
+      onClose();
     } catch (error) {
-      console.error("Error while saving appointment:", error);
+      console.error("Error saving appointment:", error);
+      message.error("Failed to create appointment. Please try again.");
     }
   };
   
   
-
   const handleDayChange = (index: number, unavailable: boolean) => {
     const updatedDays = [...daysAvailability];
     updatedDays[index].unavailable = unavailable;

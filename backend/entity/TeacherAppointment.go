@@ -10,6 +10,7 @@ type TeacherAppointment struct{
     MaxBookings      int        `json:"max_bookings"`          // จำนวนการนัดหมายสูงสุด
     Location         string     `json:"location"`              // สถานที่นัดหมาย
     Description      string     `json:"description"`           // คำอธิบายเพิ่มเติม
+	
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
