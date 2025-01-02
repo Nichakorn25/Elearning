@@ -1,15 +1,17 @@
 .student-booking__container {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   font-family: Arial, sans-serif;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  /* align-items: center; */
-  padding: 20px;
+  overflow: hidden; /* ซ่อน Scrollbar ที่ไม่ต้องการ */
+  padding: 0; /* ลบ Padding */
+  margin: 0; /* ลบ Margin */
   margin-top: 5%;
-  overflow: auto; /* เพิ่ม Scrollbar กรณีเนื้อหายาวเกิน */
+  transition: margin-left 0.3s ease-in-out; /* เพิ่ม Transition */
 }
+
 
 .student-booking__header {
   display: flex;
@@ -209,7 +211,7 @@
 .student-booking__search {
   margin-top: 10px; /* เว้นระยะห่างระหว่าง Search กับ Title */
   width: 100%;
-  margin-left: 315px;
+  margin-left: 335px;
   margin-bottom: 0;
 }
 
