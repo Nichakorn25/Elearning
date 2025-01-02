@@ -31,6 +31,19 @@ const StudentBooking: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userSurname, setUserSurname] = useState<string | null>(null);
+
+  useEffect(() => {
+    // ดึงข้อมูลจาก localStorage
+    const userData = localStorage.getItem("id"); // สมมติว่าข้อมูลเก็บใน localStorage
+    if (userData) {
+      const parsedUser = JSON.parse(userData); // แปลงข้อมูลจาก JSON
+      setUserName(parsedUser.firstName); // ตั้งชื่อผู้ใช้
+      setUserSurname(parsedUser.lastName); // ตั้งนามสกุลผู้ใช้
+    }
+  }, []);
+
   // ดึงข้อมูล Departments
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -86,24 +99,25 @@ const StudentBooking: React.FC = () => {
       setLoading(false);
     }
   };
-  
 
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
   const test = async (value: string) => {
     setSelectedMajor(value);
     try {
-      const response = await ListUsersFilters(String(selectedDepartment),String(selectedMajor),String(2))
+      const response = await ListUsersFilters(
+        String(selectedDepartment),
+        String(selectedMajor),
+        String(2)
+      );
       if (response.status === 200) {
         setProfessors(response.data);
-        console.log(response.data)
+        console.log(response.data);
       }
     } catch (error) {
       console.error("Error fetching professors:", error);
       setProfessors([]);
     }
-  }
-
-
+  };
 
   const timeSlots = [
     "9:00am",
@@ -156,10 +170,16 @@ const StudentBooking: React.FC = () => {
       <header className="student-booking__header">
         {/* ส่วนแสดงชื่อ Username */}
         <div className="student-booking__user-info">
-          <span className="student-booking__user-avatar">N</span>
+          <span className="student-booking__user-avatar">
+            {userName ? userName.charAt(0).toUpperCase() : "?"}
+          </span>
           <div className="student-booking__user-details">
-            <span className="student-booking__user-name">Nichakorn</span>
-            <span className="student-booking__user-surname">Chanyutha</span>
+            <span className="student-booking__user-name">
+              {userName || "Guest"}
+            </span>
+            <span className="student-booking__user-surname">
+              {userSurname || ""}
+            </span>
           </div>
           {/* ส่วน Title */}
           <div className="student-booking__title">
