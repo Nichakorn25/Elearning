@@ -4,6 +4,8 @@ import { Modal, Input, Select, TimePicker, Checkbox, Button } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
+import {SaveAppointment} from "../../../../services/https/index"
+
 
 const { Option } = Select;
 const { RangePicker } = TimePicker;
@@ -35,20 +37,36 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const appointmentData = {
       title,
       duration,
-      daysAvailability,
       bufferTime,
       maxBookings,
       location,
       description,
+      daysAvailability,
     };
-    console.log("Saved Data:", appointmentData);
-    onSubmit(appointmentData); // เรียกใช้ onSubmit พร้อมส่งข้อมูล
-    onClose(); // ปิด Modal หลังบันทึก
+  
+    try {
+      const response = await SaveAppointment(
+        title,
+        duration,
+        bufferTime,
+        maxBookings,
+        location,
+        description,
+        daysAvailability
+      );
+      console.log("Saved Appointment:", response.data);
+      onSubmit(appointmentData); // ส่งข้อมูลกลับไปยัง component แม่
+      onClose(); // ปิด Modal
+    } catch (error) {
+      console.error("Error while saving appointment:", error);
+    }
   };
+  
+  
 
   const handleDayChange = (index: number, unavailable: boolean) => {
     const updatedDays = [...daysAvailability];

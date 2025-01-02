@@ -7,6 +7,7 @@ import {
   GetDepartments,
   GetMajors,
   ListUsersFilters,
+  SearchProfessors,
 } from "../../../../services/https";
 import { UserInterface } from "../../../../Interface/IUser";
 
@@ -26,6 +27,9 @@ const StudentBooking: React.FC = () => {
   const [departments, setDepartments] = useState<any[]>([]);
   const [majors, setMajors] = useState<any[]>([]);
   const [professors, setProfessors] = useState<UserInterface[]>([]);
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   // ดึงข้อมูล Departments
   useEffect(() => {
@@ -65,6 +69,24 @@ const StudentBooking: React.FC = () => {
 
     fetchMajors();
   }, [selectedDepartment]);
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const response = await SearchProfessors(searchQuery);
+      if (response && response.status === 200) {
+        setProfessors(response.data); // เก็บผลลัพธ์ที่ค้นพบ
+      } else {
+        setProfessors([]); // หากไม่พบข้อมูล
+      }
+    } catch (error) {
+      console.error("Error fetching professors:", error);
+      setProfessors([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
   const test = async (value: string) => {

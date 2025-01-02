@@ -106,7 +106,26 @@ async function ListUsers() {
 
 //   return response;
 // }
+// ค้นหาอาจารย์จากคำค้นหา
+async function SearchProfessors(searchQuery: string) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
 
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  return axios
+    .get(`${apiUrl}/searchProfessors?filter=${searchQuery}`, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error searching professors:", err);
+      throw err;
+    });
+}
 
 //Filters
 async function ListUsersFilters(departmentId: string, majorId: string, roleId: string) {
@@ -119,7 +138,34 @@ async function ListUsersFilters(departmentId: string, majorId: string, roleId: s
     });
 }
 
+// Save Appointment
+async function SaveAppointment(
+  title: string,
+  duration: string,
+  bufferTime: number,
+  maxBookings: number,
+  location: string,
+  description: string,
+  daysAvailability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>
+) {
+  const appointmentData = {
+    title,
+    duration,
+    buffer_time: bufferTime,
+    max_bookings: maxBookings,
+    location,
+    description,
+    days_availability: daysAvailability,
+  };
 
+  return await axios
+    .post(`${apiUrl}/appointments`, appointmentData, requestOptions)
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error saving appointment:", e.response?.data || e.message);
+      throw e;
+    });
+}
 
 async function SignIn(data: SignInInterface) {
 
@@ -185,6 +231,7 @@ async function DeleteUserByID(id: Number | undefined) {
 
   return res;
 }
+
 // update user
 async function UpdateUserByid(id: string, data: UserInterface) {
 
@@ -237,4 +284,6 @@ export{
   UpdateUser,
   UpdateUserByid,
   ListUsersFilters,
+  SearchProfessors,
+  SaveAppointment,
 };

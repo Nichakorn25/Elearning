@@ -347,3 +347,22 @@
   width: 90%; /* ขยายให้เกือบเต็มพื้นที่ */
   margin: auto; /* จัดให้อยู่กึ่งกลาง */
 }
+
+.search-results {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  margin-top: 10px;
+}
+
+.professor-card {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.professor-card:hover {
+  background-color: #f9f9f9;
+}

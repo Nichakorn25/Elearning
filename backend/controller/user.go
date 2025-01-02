@@ -174,50 +174,70 @@ func ListUsersFilters(c *gin.Context) {
     c.JSON(http.StatusOK, users)
 }
 
-func GetProfessorsByFilters(c *gin.Context) {
-	// ดึงค่าจาก Query Parameters
-	roleID := c.Query("RoleID")
-	departmentID := c.Query("DepartmentID")
-	majorID := c.Query("MajorID")
-	searchQuery := c.Query("SearchQuery")
-
-	// ตัวแปรสำหรับเก็บข้อมูลผู้ใช้
+// SearchProfessors - ค้นหาชื่ออาจารย์จากคำค้นหา
+func SearchProfessors(c *gin.Context) {
+	searchQuery := c.Query("filter")
 	var professors []entity.User
-
-	// เริ่มการ Query
 	db := config.DB()
-	query := db.Preload("Department").Preload("Major").Where("role_id = ?", roleID)
 
-	// เพิ่มเงื่อนไขถ้ามี departmentID
-	if departmentID != "" {
-		query = query.Where("department_id = ?", departmentID)
-	}
+	// ค้นหาเฉพาะ RoleID = 2 (อาจารย์) และค้นหาจาก FirstName หรือ LastName
+	results := db.Where("role_id = ? AND (first_name LIKE ? OR last_name LIKE ?)", 2, "%"+searchQuery+"%", "%"+searchQuery+"%").Find(&professors)
 
-	// เพิ่มเงื่อนไขถ้ามี majorID
-	if majorID != "" {
-		query = query.Where("major_id = ?", majorID)
-	}
-
-	// เพิ่มเงื่อนไขการค้นหาชื่อหรือชื่อสกุล
-	if searchQuery != "" {
-		query = query.Where("first_name LIKE ? OR last_name LIKE ?", "%"+searchQuery+"%", "%"+searchQuery+"%")
-	}
-
-	// ค้นหาข้อมูล
-	if err := query.Find(&professors).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			// ถ้าไม่พบข้อมูล
-			c.JSON(http.StatusNotFound, gin.H{"error": "No professors found"})
-		} else {
-			// ถ้าเกิดข้อผิดพลาดอื่นๆ
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
+	if results.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": results.Error.Error()})
 		return
 	}
 
-	// ส่งข้อมูลกลับในรูปแบบ JSON
 	c.JSON(http.StatusOK, professors)
 }
+
+
+
+
+// func GetProfessorsByFilters(c *gin.Context) {
+// 	// ดึงค่าจาก Query Parameters
+// 	roleID := c.Query("RoleID")
+// 	departmentID := c.Query("DepartmentID")
+// 	majorID := c.Query("MajorID")
+// 	searchQuery := c.Query("SearchQuery")
+
+// 	// ตัวแปรสำหรับเก็บข้อมูลผู้ใช้
+// 	var professors []entity.User
+
+// 	// เริ่มการ Query
+// 	db := config.DB()
+// 	query := db.Preload("Department").Preload("Major").Where("role_id = ?", roleID)
+
+// 	// เพิ่มเงื่อนไขถ้ามี departmentID
+// 	if departmentID != "" {
+// 		query = query.Where("department_id = ?", departmentID)
+// 	}
+
+// 	// เพิ่มเงื่อนไขถ้ามี majorID
+// 	if majorID != "" {
+// 		query = query.Where("major_id = ?", majorID)
+// 	}
+
+// 	// เพิ่มเงื่อนไขการค้นหาชื่อหรือชื่อสกุล
+// 	if searchQuery != "" {
+// 		query = query.Where("first_name LIKE ? OR last_name LIKE ?", "%"+searchQuery+"%", "%"+searchQuery+"%")
+// 	}
+
+// 	// ค้นหาข้อมูล
+// 	if err := query.Find(&professors).Error; err != nil {
+// 		if errors.Is(err, gorm.ErrRecordNotFound) {
+// 			// ถ้าไม่พบข้อมูล
+// 			c.JSON(http.StatusNotFound, gin.H{"error": "No professors found"})
+// 		} else {
+// 			// ถ้าเกิดข้อผิดพลาดอื่นๆ
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		}
+// 		return
+// 	}
+
+// 	// ส่งข้อมูลกลับในรูปแบบ JSON
+// 	c.JSON(http.StatusOK, professors)
+// }
 
 
 // DELETE /users/:id

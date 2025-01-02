@@ -32,6 +32,7 @@ func main() {
     r.POST("/signin", controller.SignIn) //Sign in == login 
     r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login 
 	r.GET("/users/:id", controller.GetUser) //getOnlyID
+	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
 
 	router := r.Group("")
   	{
@@ -40,6 +41,8 @@ func main() {
 		// User Routes
 		router.GET("/users", controller.ListUsers) 
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
+		router.POST("/appointments", controller.CreateAppointment)
+		router.GET("/searchProfessors", controller.SearchProfessors)
 		router.GET("/users/filter", controller.ListUsersFilters)
 		router.POST("/users", controller.CreateUser)
 		router.PUT("/users/:id", controller.UpdateUserByid)

@@ -22,6 +22,7 @@ type User struct {
 	Submission []Submission `gorm:"foreignKey:UserID"`
 	Course []Course `gorm:"foreignKey:UserID"`
 	StudentAnswer []StudentAnswer `gorm:"foreignKey:UserID"`
+	TeacherAppointment []TeacherAppointment `gorm:"foreignKey:UserID"`
 
 	DepartmentID uint `json:"DepartmentID"`
 	Department   Department `gorm:"foreignKey:DepartmentID"`
