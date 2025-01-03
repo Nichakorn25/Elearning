@@ -242,6 +242,7 @@ async function GetUserById(id: string) {
     .catch((e) => e.response);
 
 }
+
 async function DeleteUserByID(id: Number | undefined) {
   const requestOptions = {
     method: "DELETE"
