@@ -11,6 +11,7 @@ import {
 } from "../../../../services/https";
 import { UserInterface } from "../../../../Interface/IUser";
 import BookingPopup from "../BookingPopup/BookingPopup";
+import { GetTeacherAppointments } from "../../../../services/https";
 
 const { Option } = Select;
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -335,7 +336,7 @@ const StudentBooking: React.FC = () => {
                             : ""
                         }`}
                         onClick={() => {
-                          // ตั้งค่าวันที่ที่เลือก
+                          // ตั้งค่าข้อมูลวันที่และเวลา
                           setSelectedDate(date.getDate());
                           setSelectedTime(slot);
 
@@ -345,7 +346,7 @@ const StudentBooking: React.FC = () => {
                               date.getMonth() + 1
                             ).padStart(2, "0")}-${String(
                               date.getDate()
-                            ).padStart(2, "0")}`, // แปลงวันที่ให้ได้รูปแบบ YYYY-MM-DD
+                            ).padStart(2, "0")}`, // รูปแบบ YYYY-MM-DD
                             time: slot,
                           });
 
@@ -358,19 +359,25 @@ const StudentBooking: React.FC = () => {
                     ))}
                   </div>
 
-                  <BookingPopup
-                    visible={isBookingPopupVisible} // ควบคุมการแสดง Popup
-                    onClose={() => setIsBookingPopupVisible(false)} // ปิด Popup
-                    data={popupData} // ส่งข้อมูลวันที่และเวลาที่เลือกไปยัง Popup
-                    onSubmit={(formData) => {
-                      console.log("Booking data:", {
-                        ...popupData,
-                        ...formData,
-                      });
-                      setIsBookingPopupVisible(false);
-                    }}
-                  />
-                  
+                  {/* BookingPopup */}
+                  {popupData && (
+                    <BookingPopup
+                      visible={isBookingPopupVisible} // ควบคุมการแสดง Popup
+                      onClose={() => {
+                        setPopupData(null); // ล้างข้อมูล Popup
+                        setIsBookingPopupVisible(false); // ปิด Popup
+                      }}
+                      selectedDate={popupData.date} // ส่งวันที่ไปยัง Popup
+                      selectedTime={popupData.time} // ส่งเวลาที่เลือกไปยัง Popup
+                      onSubmit={(formData) => {
+                        console.log("Booking data:", {
+                          ...popupData,
+                          ...formData, // รวมข้อมูลจากฟอร์ม
+                        });
+                        setIsBookingPopupVisible(false); // ปิด Popup
+                      }}
+                    />
+                  )}
                 </div>
               ))}
               <button
