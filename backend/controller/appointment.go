@@ -29,57 +29,6 @@ func CreateAvailability(c *gin.Context) {
 	})
 }
 
-// POST /appointments
-// func CreateTeacherAppointment(c *gin.Context) {
-// 	var appointment struct {
-// 		Title              string                    `json:"title"`
-// 		AppointmentDuration int                      `json:"appointment_duration"`
-// 		BufferTime         int                       `json:"buffer_time"`
-// 		MaxBookings        int                       `json:"max_bookings"`
-// 		Location           string                    `json:"location"`
-// 		Description        string                    `json:"description"`
-// 		UserID             uint                      `json:"user_id"`
-// 		DaysAvailability   []entity.Availability     `json:"days_availability"` // รับ days_availability จาก Frontend
-// 	}
-
-// 	// Bind JSON payload
-// 	if err := c.ShouldBindJSON(&appointment); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload", "details": err.Error()})
-// 		return
-// 	}
-
-// 	// Save each day availability
-// 	db := config.DB()
-// 	for _, availability := range appointment.DaysAvailability {
-// 		availability.UserID = appointment.UserID // เชื่อมโยงกับ UserID
-// 		if err := db.Create(&availability).Error; err != nil {
-// 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save availability", "details": err.Error()})
-// 			return
-// 		}
-// 	}
-
-// 	// Save the appointment
-// 	a := entity.TeacherAppointment{
-// 		Title:              appointment.Title,
-// 		AppointmentDuration: appointment.AppointmentDuration,
-// 		BufferTime:         appointment.BufferTime,
-// 		MaxBookings:        appointment.MaxBookings,
-// 		Location:           appointment.Location,
-// 		Description:        appointment.Description,
-// 		UserID:             appointment.UserID,
-// 	}
-
-// 	if err := db.Create(&a).Error; err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create appointment", "details": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusCreated, gin.H{
-// 		"message": "Appointment created successfully",
-// 		"data":    a,
-// 	})
-// }
-
 func CreateTeacherAppointment(c *gin.Context) {
 	var Appointment entity.TeacherAppointment
 
@@ -108,4 +57,18 @@ func CreateTeacherAppointment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "post Appointment success", "data": u})
+}
+
+// GET /teacher/appointments/:teacherId
+func GetTeacherAppointments(c *gin.Context) {
+	teacherId := c.Param("teacherId")
+	var appointments []entity.TeacherAppointment
+
+	// Query appointments
+	if err := config.DB().Where("user_id = ?", teacherId).Find(&appointments).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve appointments"})
+		return
+	}
+
+	c.JSON(http.StatusOK, appointments)
 }

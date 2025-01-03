@@ -10,6 +10,8 @@ import {
   SearchProfessors,
 } from "../../../../services/https";
 import { UserInterface } from "../../../../Interface/IUser";
+import BookingPopup from "../BookingPopup/BookingPopup";
+import { GetTeacherAppointments } from "../../../../services/https";
 
 const { Option } = Select;
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -30,12 +32,17 @@ const StudentBooking: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isBookingPopupVisible, setIsBookingPopupVisible] = useState(false);
+  const [popupData, setPopupData] = useState<{
+    date: string;
+    time: string;
+  } | null>(null);
 
-  const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
+  //const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   // Extract user data or set default values
-  const username = user?.username || "N/A";
+  //const username = user?.username || "N/A";
   const firstName = user?.FirstName || "N/A";
   const lastName = user?.LastName || "N/A";
 
@@ -140,24 +147,6 @@ const StudentBooking: React.FC = () => {
     "9:00am",
   ];
 
-  // const username = "Nichakorn Chanyutha"; // เปลี่ยนชื่อให้ตรงกับผู้ใช้งานที่ล็อกอิน
-
-  // const handleDateClick = (date: number) => {
-  //   setSelectedDate(date);
-  // };
-
-  // const handleTimeClick = (time: string) => {
-  //   setSelectedTime(time);
-  // };
-
-  // const handleConfirm = () => {
-  //   if (selectedDate && selectedTime) {
-  //     alert(`Appointment booked on ${selectedDate} at ${selectedTime}`);
-  //   } else {
-  //     alert("Please select a date and time.");
-  //   }
-  // };
-
   const getDatesForWeek = (weekOffset: number) => {
     const now = new Date();
     const startOfWeek = new Date(
@@ -168,6 +157,40 @@ const StudentBooking: React.FC = () => {
       date.setDate(date.getDate() + i);
       return date;
     });
+  };
+
+  const handleSlotClick = (date: string, time: string) => {
+    // กำหนดวันที่และเวลาที่เลือก
+    setSelectedDate(date);
+    setSelectedTime(time);
+    setIsPopupVisible(true); // เปิด Popup
+  };
+
+  const handlePopupSubmit = (formData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }) => {
+    // รวมข้อมูลการจอง
+    const bookingData = {
+      date: selectedDate,
+      time: selectedTime,
+      ...formData, // ข้อมูลที่กรอกจาก Popup
+    };
+
+    console.log("Booking Data:", bookingData);
+
+    // คุณสามารถเพิ่มโค้ดสำหรับส่งข้อมูลไปยัง Backend ที่นี่
+    // เช่น
+    // await SaveBooking(bookingData);
+
+    // ปิด Popup หลังจากบันทึกข้อมูลสำเร็จ
+    setIsPopupVisible(false);
+  };
+
+  const handlePopupClose = () => {
+    // ปิด Popup โดยไม่บันทึกข้อมูล
+    setIsPopupVisible(false);
   };
 
   const dates = getDatesForWeek(currentWeek);
@@ -194,10 +217,10 @@ const StudentBooking: React.FC = () => {
           </div>
           {/* ส่วน Title */}
           <div className="student-booking__title">
-            <h1>test</h1>
+            <h1>Booking Appointment</h1>
             <p className="student-booking__subtitle">
-              <span className="student-booking__icon">⏰</span> 60 min
-              appointments
+              <span className="student-booking__icon">⏰</span> Select professor
+              you want to make appointment
             </p>
           </div>
         </div>
@@ -301,6 +324,7 @@ const StudentBooking: React.FC = () => {
                     <span>{date.getDate()}</span>
                   </div>
                   {/* Time Slots */}
+                  {/* Time Slots */}
                   <div className="student-bookingcalendar-timeslots">
                     {timeSlots.map((slot, slotIndex) => (
                       <button
@@ -312,14 +336,48 @@ const StudentBooking: React.FC = () => {
                             : ""
                         }`}
                         onClick={() => {
+                          // ตั้งค่าข้อมูลวันที่และเวลา
                           setSelectedDate(date.getDate());
                           setSelectedTime(slot);
+
+                          // เตรียมข้อมูลสำหรับ Popup
+                          setPopupData({
+                            date: `${date.getFullYear()}-${String(
+                              date.getMonth() + 1
+                            ).padStart(2, "0")}-${String(
+                              date.getDate()
+                            ).padStart(2, "0")}`, // รูปแบบ YYYY-MM-DD
+                            time: slot,
+                          });
+
+                          // เปิด Popup
+                          setIsBookingPopupVisible(true);
                         }}
                       >
                         {slot}
                       </button>
                     ))}
                   </div>
+
+                  {/* BookingPopup */}
+                  {popupData && (
+                    <BookingPopup
+                      visible={isBookingPopupVisible} // ควบคุมการแสดง Popup
+                      onClose={() => {
+                        setPopupData(null); // ล้างข้อมูล Popup
+                        setIsBookingPopupVisible(false); // ปิด Popup
+                      }}
+                      selectedDate={popupData.date} // ส่งวันที่ไปยัง Popup
+                      selectedTime={popupData.time} // ส่งเวลาที่เลือกไปยัง Popup
+                      onSubmit={(formData) => {
+                        console.log("Booking data:", {
+                          ...popupData,
+                          ...formData, // รวมข้อมูลจากฟอร์ม
+                        });
+                        setIsBookingPopupVisible(false); // ปิด Popup
+                      }}
+                    />
+                  )}
                 </div>
               ))}
               <button

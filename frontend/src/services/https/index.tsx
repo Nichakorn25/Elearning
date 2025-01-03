@@ -159,6 +159,17 @@ async function SaveAppointment(data: TeacherAppointmentInterface) {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function GetTeacherAppointments(teacherId: string) {
+  return await axios
+    .get(`${apiUrl}/teacher/appointments/${teacherId}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error fetching teacher appointments:", e.response?.data || e.message);
+      throw e;
+    });
+}
+
 // Save Appointment
 // async function SaveAppointment(
 //   title: string,
@@ -315,4 +326,5 @@ export{
   SearchProfessors,
   SaveAppointment,
   SaveAvailability,
+  GetTeacherAppointments,
 };

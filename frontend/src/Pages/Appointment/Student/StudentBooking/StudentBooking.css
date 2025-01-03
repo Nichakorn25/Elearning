@@ -194,6 +194,7 @@
   flex-wrap: wrap; /* รองรับหน้าจอเล็ก */
   gap: 20px;
   margin-top: 0px;
+  margin-left: 75px;
   justify-content: center; /* จัด Dropdown ให้อยู่ตรงกลาง */
 }
 
@@ -211,7 +212,7 @@
 .student-booking__search {
   margin-top: 10px; /* เว้นระยะห่างระหว่าง Search กับ Title */
   width: 100%;
-  margin-left: 335px;
+  margin-left: 285px;
   margin-bottom: 0;
 }
 
