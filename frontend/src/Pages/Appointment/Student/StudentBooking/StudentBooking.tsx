@@ -31,18 +31,28 @@ const StudentBooking: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [userName, setUserName] = useState<string | null>(null);
-  const [userSurname, setUserSurname] = useState<string | null>(null);
+  const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  useEffect(() => {
-    // ดึงข้อมูลจาก localStorage
-    const userData = localStorage.getItem("id"); // สมมติว่าข้อมูลเก็บใน localStorage
-    if (userData) {
-      const parsedUser = JSON.parse(userData); // แปลงข้อมูลจาก JSON
-      setUserName(parsedUser.firstName); // ตั้งชื่อผู้ใช้
-      setUserSurname(parsedUser.lastName); // ตั้งนามสกุลผู้ใช้
-    }
-  }, []);
+  // Extract user data or set default values
+  const username = user?.username || "N/A";
+  const firstName = user?.FirstName || "N/A";
+  const lastName = user?.LastName || "N/A";
+
+  // const [userName, setUserName] = useState<string | null>(null);
+  // const [userSurname, setUserSurname] = useState<string | null>(null);
+
+  // useEffect(() => {
+  //   const userData = localStorage.getItem("id"); // ดึงข้อมูลจาก key "user"
+  //   if (userData) {
+  //     const parsedUser = JSON.parse(userData); // แปลงข้อมูลจาก JSON
+  //     setUserName(parsedUser.firstName); // ตั้งชื่อผู้ใช้
+  //     setUserSurname(parsedUser.lastName); // ตั้งนามสกุลผู้ใช้
+  //   } else {
+  //     setUserName("Guest");
+  //     setUserSurname(""); // หากไม่มีข้อมูลใน localStorage
+  //   }
+  // }, []);
 
   // ดึงข้อมูล Departments
   useEffect(() => {
@@ -171,14 +181,15 @@ const StudentBooking: React.FC = () => {
         {/* ส่วนแสดงชื่อ Username */}
         <div className="student-booking__user-info">
           <span className="student-booking__user-avatar">
-            {userName ? userName.charAt(0).toUpperCase() : "?"}
+            {/* แสดงตัวอักษรแรกของ firstName หรือ "?" หากไม่มีข้อมูล */}
+            {firstName ? firstName.charAt(0).toUpperCase() : "?"}
           </span>
           <div className="student-booking__user-details">
             <span className="student-booking__user-name">
-              {userName || "Guest"}
+              {firstName || "Guest"}
             </span>
             <span className="student-booking__user-surname">
-              {userSurname || ""}
+              {lastName || ""}
             </span>
           </div>
           {/* ส่วน Title */}
