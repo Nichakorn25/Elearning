@@ -64,6 +64,7 @@ func SetupDatabase() {
 		&entity.StudyTime{},
 		&entity.TeacherAppointment{},
 		&entity.Availability{},
+		&entity.StudentBooking{},
 	)
 	departments := []entity.Department{
 		{DepartmentName: "สำนักวิชาวิทยาศาสตร์ (Institute of Science)"},

@@ -6,6 +6,10 @@ export interface DaysAvailabilityInterface {
   }
   
   export interface TeacherAppointmentInterface {
+    appointmentId: number;
+    isBooked: boolean | undefined;
+    time: string | null;
+    date: number | null;
     id?: number;
     title?: string;
     appointment_duration?: number;
@@ -16,4 +20,12 @@ export interface DaysAvailabilityInterface {
     UserID?: number;
     availability_id?: number;
   }
+
+  export interface StudentBookingInterface {
+    id?: number; // ID ของการจอง
+    UserID: number; // ID ของนักเรียนที่ทำการจอง
+    TeacherAppointmentID: number; // ID ของการนัดหมายอาจารย์
+    
+  }
+  
   

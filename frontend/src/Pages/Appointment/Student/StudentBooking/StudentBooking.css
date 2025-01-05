@@ -214,11 +214,36 @@
   width: 100%;
   margin-left: 285px;
   margin-bottom: 0;
+  border-top-right-radius: 0;
 }
 
 .student-booking__search-input {
-  width: 300px;
+  /* width: 300px; */
   margin: 0 auto; /* จัดตรงกลาง */
+  border-top-right-radius: 0; /* ลบโค้งด้านขวาของ Input */
+  border-bottom-right-radius: 0; /* ลบโค้งด้านขวาของ Input */
+  width: 250px; /* กำหนดความกว้างของ Input */
+  height: 35px; /* ตั้งค่าความสูงของ Input ให้พอดีกับปุ่ม */
+  border: 1px solid #ddd; /* เพิ่มเส้นขอบ */
+  outline: none;
+  padding: 0 10px; /* เพิ่ม Padding ด้านใน */
+}
+
+.search-buttonstdbooking{
+  background-color: #ff6600; /* สีพื้นหลังปุ่ม */
+  font-size: 14px;
+  color: white; /* สีข้อความ */
+  border: none; /* ลบเส้นขอบ */
+  border-top-left-radius: 0; /* ลบโค้งด้านซ้ายของปุ่ม */
+  border-bottom-left-radius: 0; /* ลบโค้งด้านซ้ายของปุ่ม */
+  height: 35px; /* ความสูงของปุ่มให้เท่ากับ Input */
+  padding: 0 20px; /* เพิ่ม Padding ให้ปุ่ม */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-buttonstdbooking:hover {
+  background-color: #e65c00; /* สีปุ่มเมื่อ Hover */
 }
 
 .selectappointment{
@@ -231,28 +256,29 @@
   margin-bottom: 50px;
 
 }
-
 .student-booking__mini-calendar {
-  flex: 0 ; /* ให้ Mini Calendar มีขนาดคงที่ */
-  text-align: center;
-  justify-content: center; /* จัดให้อยู่กึ่งกลางแนวนอน */
-  align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
-  width: 300px;
-  height: 300px;
-  margin-left: 20px;
-  margin-right: 0px;
-  margin-top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px; /* ขนาดสูงสุด */
+  height: auto; /* ใช้ auto แทน */
+  margin: 0 ; /* จัดให้อยู่ตรงกลาง */
+  padding: 20px;
+  box-sizing: border-box;
 }
+
 
 .mini-calendar-container {
-  margin-top: 10px;
-  background: none !important; /* ลบพื้นหลัง */
-  border: none !important; /* ลบกรอบ */
-  box-shadow: none !important; /* ลบเงา */
-  padding: 0 !important; /* ลบระยะห่างภายใน */
-  width: 250px; /* ลดขนาด */
-  height: 250px;
+  width: 100%;
+  height: auto; /* เปลี่ยนจากค่า fix เป็น auto */
+  min-height: 300px; /* เพิ่มความสูงขั้นต่ำ */
+  padding: 10px;
+  overflow: visible; /* ให้แสดงผลเต็ม */
 }
+
+
 
 .student-booking__dates-header {
   display: grid;

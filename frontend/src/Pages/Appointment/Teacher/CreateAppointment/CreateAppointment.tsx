@@ -58,6 +58,10 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
       description: description,
       UserID: Number(userId),
       availability_id: 0,
+      isBooked: undefined,
+      time: null,
+      date: null,
+      appointmentId: 0
     };
     console.log(userId);
     console.log(title);

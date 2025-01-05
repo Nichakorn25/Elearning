@@ -1,11 +1,11 @@
 package main
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
 	"elearning/config"
-	"elearning/middlewares"
 	"elearning/controller"
+	"elearning/middlewares"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 const PORT = "8000"
@@ -28,24 +28,36 @@ func main() {
 	r.GET("/departments", controller.GetDepartments)
 	r.GET("/majors/:id", controller.GetMajorsByDepartment) // รับ ID ของ Department
 
-	r.POST("/signup", controller.SignUp) //สมัคร
-    r.POST("/signin", controller.SignIn) //Sign in == login 
-    r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login 
-	r.GET("/users/:id", controller.GetUser) //getOnlyID
+	r.POST("/signup", controller.SignUp)                      //สมัคร
+	r.POST("/signin", controller.SignIn)                      //Sign in == login
+	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
+	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
 
 	router := r.Group("")
-  	{
+	{
 		router.Use(middlewares.Authorizes())
 
 		// User Routes
-		router.GET("/users", controller.ListUsers) 
+		router.GET("/users", controller.ListUsers)
 		router.GET("/users/filter", controller.ListUsersFilters)
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
-		router.POST("/availabilities",controller.CreateAvailability)
+
+		//Appointment
+		router.POST("/availabilities", controller.CreateAvailability)
 		router.POST("/appointments", controller.CreateTeacherAppointment)
 		router.GET("/searchProfessors", controller.SearchProfessors)
+		// Teacher Routes
+		router.GET("/teacher/appointments/:userId", controller.GetTeacherAppointmentsByUserID)
+		router.POST("/teacher/appointments", controller.CreateTeacherAppointment)
+
+		// Student Routes
+		router.GET("/appointments/:teacherId", controller.GetAppointmentsForStudent)
+		router.POST("/bookings", controller.BookAppointment)
 		//router.GET("/users/filter", controller.ListUsersFilters)
+
+
+		//----------------------//
 		router.POST("/users", controller.CreateUser)
 		router.PUT("/users/:id", controller.UpdateUserByid)
 		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้

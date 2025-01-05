@@ -24,6 +24,7 @@ type User struct {
 	StudentAnswer []StudentAnswer `gorm:"foreignKey:UserID"`
 	TeacherAppointment []TeacherAppointment `gorm:"foreignKey:UserID"`
 	Availability []Availability `gorm:"foreignKey:UserID"`
+	StudentBooking []StudentBooking `gorm:"foreignKey:UserID"`
 
 
 	DepartmentID uint `json:"DepartmentID"`
