@@ -262,7 +262,7 @@ const TeacherCalendar: React.FC = () => {
           <div className="mini-calendar">
             <Calendar />
           </div>
-          <div className="sidebar-section">
+          {/* <div className="sidebar-section">
             <h3>My Tasks</h3>
             <ul>
               <li>
@@ -278,7 +278,7 @@ const TeacherCalendar: React.FC = () => {
                 Tasks
               </li>
             </ul>
-          </div>
+          </div> */}
           <div className="sidebar-section">
             <h3>Other Task</h3>
             <button>+</button>

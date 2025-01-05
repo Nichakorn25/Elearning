@@ -3,7 +3,7 @@ import axios from "axios";
 // import { message } from "antd"; // Ant Design message for notifications
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
 import { AnnouncementInterface } from "../../Interface/Admin";
-import {TeacherAppointmentInterface} from "../../Interface/IAppointment";
+import {TeacherAppointmentInterface , StudentBookingInterface} from "../../Interface/IAppointment";
 
 
 const apiUrl = "http://localhost:8000"; // URL ของ API
@@ -160,15 +160,24 @@ async function SaveAppointment(data: TeacherAppointmentInterface) {
     .catch((e) => e.response);
 }
 
+// ดึงข้อมูล Appointment ตาม UserID ของอาจารย์
 async function GetTeacherAppointments(teacherId: string) {
-  return await axios
-    .get(`${apiUrl}/teacher/appointments/${teacherId}`, requestOptions)
+  return axios
+    .get<TeacherAppointmentInterface[]>(
+      `${apiUrl}/teacher/appointments/${teacherId}`,
+      requestOptions
+    )
     .then((res) => res)
-    .catch((e) => {
-      console.error("Error fetching teacher appointments:", e.response?.data || e.message);
-      throw e;
-    });
+    .catch((e) => e.response);
 }
+
+async function BookAppointment(data: StudentBookingInterface) {
+  return axios
+    .post(`${apiUrl}/appointments/book`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 // Save Appointment
 // async function SaveAppointment(
@@ -327,4 +336,5 @@ export{
   SaveAppointment,
   SaveAvailability,
   GetTeacherAppointments,
+  BookAppointment,
 };

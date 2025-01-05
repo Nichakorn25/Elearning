@@ -11,6 +11,7 @@ type TeacherAppointment struct{
     Location         string     `json:"location"`              // สถานที่นัดหมาย
     Description      string     `json:"description"`           // คำอธิบายเพิ่มเติม
 	
+	StudentBooking []StudentBooking `gorm:"foreignKey:TeacherAppointmentID"`
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
