@@ -5,6 +5,8 @@ import Header from "../../../Component/Header/Header";
 import Calendar from "react-calendar";
 import {
   BookAppointment,
+  CreateStudentBooking,
+  GetDay,
   GetDepartments,
   GetMajors,
   ListUsersFilters,
@@ -14,6 +16,7 @@ import { UserInterface } from "../../../../Interface/IUser";
 import BookingPopup from "../BookingPopup/BookingPopup";
 import { GetTeacherAppointments } from "../../../../services/https";
 import {
+  DayInterface,
   StudentBookingInterface,
   TeacherAppointmentInterface,
 } from "../../../../Interface/IAppointment";
@@ -87,6 +90,22 @@ const StudentBooking: React.FC = () => {
     };
 
     fetchDepartments();
+  }, []);
+
+  //===============================ดึงวันทั้งหมด========================================
+  const [Days, setDay] = useState<DayInterface[]>([]);
+  const fetchDayAll = async () => {
+    try {
+      const res = await GetDay();
+      if (res.status === 200 && res.data) {
+        setDay(res.data);
+      }
+    } catch (error) {
+      setDay([]);
+    }
+  };
+  useEffect(() => {
+    fetchDayAll();
   }, []);
 
   // ดึงข้อมูล Majors ตาม Department ที่เลือก
@@ -270,7 +289,7 @@ const StudentBooking: React.FC = () => {
         message.success("Appointment booked successfully!");
         setAppointments((prev) =>
           prev.filter(
-            (appointment) => appointment.id !== popupData.appointmentId
+            (appointment) => appointment.ID !== popupData.appointmentId
           )
         );
         setIsBookingPopupVisible(false);
@@ -291,6 +310,61 @@ const StudentBooking: React.FC = () => {
   const dates = getDatesForWeek(currentWeek);
   const handlePrevWeek = () => setCurrentWeek((prev) => prev - 1);
   const handleNextWeek = () => setCurrentWeek((prev) => prev + 1);
+
+
+  //=============================================popup booking==============================================
+  const [ispopup, setPopup] = useState(false);
+  const [DataForBooking, setDataForBooking] = useState({
+    TName: '',
+    title: '',
+    location: '',
+    description: '',
+    userid: 0,
+    TappointmentID: 0,
+    dayID: 0,
+    dayname: '',
+  });
+  const OpenPopup = (data: TeacherAppointmentInterface) => {
+    setPopup(true)
+    setDataForBooking({
+      TName: String(data.User?.Username),
+      title: String(data.title),
+      location: String(data.location),
+      description: String(data.description),
+      userid: Number(data.UserID),
+      TappointmentID: Number(data.ID),
+      dayID: Number(data.DayofWeekID),
+      dayname: String(data.DayofWeek?.DayName),
+    });
+  };
+  //=============================================ภ้ากดจอง=====================================CreateStudentBooking
+  const createBooking = async () => {
+    const value: StudentBookingInterface = {
+      UserID: DataForBooking.userid,
+      TeacherAppointmentID: DataForBooking.TappointmentID,
+      DayofWeekID: DataForBooking.dayID
+    };
+    try {
+      const res = await CreateStudentBooking(value);
+      if (res.status === 201) {
+        // await fetchData(String(1));
+        message.success("Appointment booked successfully!");
+        setPopup(false);
+        setDataForBooking({
+          TName: '',
+          title: '',
+          location: '',
+          description: '',
+          userid: 0,
+          TappointmentID: 0,
+          dayID: 0,
+          dayname: '',
+        })
+      }
+    } catch (error) {
+      console.error("Error :", error);
+    }
+  }
 
   return (
     <div className="student-booking__container">
@@ -396,93 +470,56 @@ const StudentBooking: React.FC = () => {
           </div>
         </section>
 
-        {/* Time Slots */}
-        <div>
-          {/* Header (Calendar Header with Navigation) */}
-          <div className="student-bookingcalendar-container">
-            <div className="student-bookingcalendar-header">
-              <button
-                className="student-bookingcalendar-nav"
-                onClick={handlePrevWeek}
-              >
-                &lt;
-              </button>
-              {dates.map((date, index) => (
-                <div
-                  key={index}
-                  className="student-bookingcalendar-day-container"
-                >
-                  <div
-                    className={`student-bookingcalendar-day ${
-                      selectedDate === date.getDate()
-                        ? "student-bookingcalendar-day--selected"
-                        : ""
-                    }`}
-                    onClick={() => setSelectedDate(date.getDate())}
-                  >
-                    <span>{daysOfWeek[index]}</span>
-                    <span>{date.getDate()}</span>
+        {/* Time Slots =============================================================================================================================*/}
+        <div className="Daycontanner">
+
+          <div className="Day">
+            ==ไม่ใช้ลบออกได้==
+            {Days.map((date, index) => (
+              <>
+                <div style={{ margin: '0 20px' }} key={index}>{date.DayName}</div>
+              </>
+            ))}
+            ==ไม่ใช้ลบออกได้==
+          </div>
+
+          <div className="AppointmentContent">
+            {appointments.length > 0 ?
+              (appointments.map((data, index) => (
+                <>
+                  <div style={{ margin: '20px 20px' }} className="cardAppop" key={index}>
+                    <div>
+                      โดย : {data.User?.FirstName} {data.User?.LastName} <br />
+                      Title : {data.title} location : {data.location}<br />
+                      duration : {data.appointment_duration} <br />
+                      description : {data.description} <br />
+                      ว่างวัน : {data.DayofWeek?.DayName || 'NO DATA'}
+                    </div>
+                    <div onClick={() => OpenPopup(data)} style={{cursor:'pointer',margin:'50px 10px'}}>จองนัดหมาย</div>
                   </div>
-                  {/* Time Slots */}
-                  <div className="student-bookingcalendar-timeslots">
-                    {appointments.map((appointment) => (
-                      <button
-                        key={appointment.id}
-                        className={`student-booking__timeslot ${
-                          selectedDate === appointment.date &&
-                          selectedTime === appointment.time
-                            ? "student-booking__timeslot--selected"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          handleSlotClick(
-                            appointment.date,
-                            appointment.time,
-                            appointment.appointmentId
-                          )
-                        }
-                        disabled={appointment.isBooked} // ปิดปุ่มถ้ามีการจองแล้ว
-                      >
-                        {appointment.time}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* BookingPopup */}
-                  {popupData && (
-                    <BookingPopup
-                      visible={isBookingPopupVisible} // ควบคุมการแสดง Popup
-                      onClose={handlePopupClose} // เรียกฟังก์ชันเพื่อปิด Popup
-                      selectedDate={popupData.date || ""} // ส่งวันที่ไปยัง Popup
-                      selectedTime={popupData.time || ""} // ส่งเวลาที่เลือกไปยัง Popup
-                      onSubmit={async (formData) => {
-                        // รวมข้อมูล popupData และ formData ก่อนส่งไปประมวลผล
-                        const bookingData = {
-                          ...popupData,
-                          ...formData,
-                        };
-
-                        console.log("Booking data:", bookingData);
-
-                        // เรียกใช้ handlePopupSubmit
-                        await handlePopupSubmit();
-
-                        // ล้างค่า popupData และปิด Popup
-                        setPopupData(null);
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-              <button
-                className="student-bookingcalendar-nav"
-                onClick={handleNextWeek}
-              >
-                &gt;
-              </button>
-            </div>
+                </>
+              ))) : (
+                <>
+                  <h1 style={{ textAlign: 'center', margin: '20% 0px' }}>ยังไม่มีเวลาว่าง/เลือกอาจาร</h1>
+                </>
+              )
+            }
           </div>
         </div>
+        {/* booking popup =============================================================================================================================*/}
+        {ispopup &&
+          <div className="PopupBooking">
+            <div style={{ textAlign: 'center' }}>ต้องการจอง</div>
+            ชื่อครู : {DataForBooking.TName} <br />
+            หัวข้อ : {DataForBooking.title} <br />
+            คำอธิบาย : {DataForBooking.description} <br />
+            สถานที่ : {DataForBooking.location} <br />
+            วันที่ : {DataForBooking.dayname} <br />
+
+            <div onClick={createBooking} className="BtnBooking">ต้องการจอง</div>
+            <div onClick={() => setPopup(false)} style={{ position: 'absolute', top: '10px', right: '10px', width: '20px', height: '20px', backgroundColor: '#ff8d67', borderRadius: '50%', cursor: 'pointer' }}></div>
+          </div>
+        }
       </main>
     </div>
   );

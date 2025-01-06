@@ -53,13 +53,14 @@ func main() {
 		router.GET("/searchProfessors", controller.SearchProfessors)
 		// Teacher Routes
 		router.GET("/teacher/appointments/:userId", controller.GetTeacherAppointmentsByUserID)
+		router.GET("/day", controller.ListDays)
 		router.POST("/teacher/appointments", controller.CreateTeacherAppointment)
+		router.POST("/CreateStudentBooking", controller.CreateStudentBooking)
 
 		// Student Routes
 		router.GET("/appointments/:teacherId", controller.GetAppointmentsForStudent)
 		router.POST("/bookings", controller.BookAppointment)
 		//router.GET("/users/filter", controller.ListUsersFilters)
-
 
 		//----------------------//
 		router.POST("/users", controller.CreateUser)

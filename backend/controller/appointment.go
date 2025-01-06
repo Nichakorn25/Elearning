@@ -47,6 +47,7 @@ func CreateTeacherAppointment(c *gin.Context) {
 		Location: Appointment.Location,
 		Description: Appointment.Description,
 		UserID: Appointment.UserID,
+		DayofWeekID: Appointment.DayofWeekID,
 		AvailabilityID: Appointment.AvailabilityID,
 	}
 
@@ -89,7 +90,7 @@ func GetTeacherAppointmentsByUserID(c *gin.Context) {
 	}
 
 	// Query Appointments
-	if err := config.DB().Where("user_id = ?", userId).Find(&appointments).Error; err != nil {
+	if err := config.DB().Preload("User").Preload("DayofWeek").Preload("Availability").Where("user_id = ?", userId).Find(&appointments).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve appointments"})
 		return
 	}
@@ -156,4 +157,51 @@ func BookAppointment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Appointment booked successfully", "data": booking})
+}
+
+
+
+// list Day of week
+func ListDays(c *gin.Context) {
+
+	var days []entity.DayofWeek
+
+	db := config.DB()
+
+	results := db.Select("id, day_name").Find(&days)
+
+	if results.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, days)
+}
+
+
+
+//จองวันเวลา StudentBooking
+func CreateStudentBooking(c *gin.Context) {
+	var booking entity.StudentBooking
+
+	if err := c.ShouldBindJSON(&booking); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	db := config.DB()
+
+	u := entity.StudentBooking{
+		UserID:        			booking.UserID,
+		DayofWeekID:        	booking.DayofWeekID,
+		TeacherAppointmentID:   booking.TeacherAppointmentID,
+	}
+
+	// บันทึก
+	if err := db.Create(&u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Booking success", "data": u})
 }

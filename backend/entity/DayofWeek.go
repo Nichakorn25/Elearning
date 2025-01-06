@@ -8,4 +8,6 @@ type DayofWeek struct {
 	DayName  string `json:"DayName"`
 
 	Course []Course `gorm:"foreignKey:DayofWeekID"`
+	TeacherAppointment []TeacherAppointment `gorm:"foreignKey:DayofWeekID"`
+	StudentBooking []StudentBooking `gorm:"foreignKey:DayofWeekID"`
 }
