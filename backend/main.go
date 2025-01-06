@@ -34,6 +34,10 @@ func main() {
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
 
+	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
+	// r.POST("/verify_otp", controller.VerifyOTP)
+	// r.POST("/reset_password", controller.Resetpassword)
+
 	router := r.Group("")
 	{
 		router.Use(middlewares.Authorizes())
