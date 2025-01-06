@@ -174,9 +174,9 @@ const TeacherCalendar: React.FC = () => {
         Task
       </Menu.Item>
       {/* Appointment Menu */}
-      <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
+      {/* <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
         Appointment Schedule
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
   
@@ -189,6 +189,9 @@ const TeacherCalendar: React.FC = () => {
       }, 300); // รอให้ Transition ของ Sidebar เสร็จสิ้น
     }
   }, [isSidebarVisible]);
+
+  //=================================popup==================================
+  const [isPopup, setPopUp] = useState(false);
 
   return (
     <div className="teacher-calendar-layout">
@@ -231,6 +234,13 @@ const TeacherCalendar: React.FC = () => {
       <div className="teacher-calendar-main">
         {/* Sidebar */}
         <aside className="calendar-sidebar">
+          {/* ปุ่ม popup CreateAppointment */}
+          <div onClick={() => setPopUp(!isPopup)} style={{margin: '10px 0',boxShadow:'0 0 3px #000',color: '#000',borderRadius:'20px',textAlign:'center',padding:'5px 0px',backgroundColor:'#fff',cursor:'pointer'}}>+ CreateAppointment</div>
+          {isPopup &&
+            <div >
+              <CreateAppointment />
+            </div>
+          }
           <div className="sidebar-header">
             <Dropdown overlay={createMenu} trigger={["click"]}>
               <Button className="create-btn">
@@ -253,11 +263,12 @@ const TeacherCalendar: React.FC = () => {
             selectedDate={selectedDate}
           />
 
-          <CreateAppointment
+          {/* <CreateAppointment
             isVisible={isAppointmentModalVisible}
             onClose={() => setIsAppointmentModalVisible(false)}
             onSubmit={handleSubmitAppointment}
-          />
+          /> */}
+
 
           <div className="mini-calendar">
             <Calendar />

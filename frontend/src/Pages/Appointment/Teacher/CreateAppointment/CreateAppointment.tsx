@@ -1,29 +1,22 @@
 // CreateAppointment.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Input, Select, TimePicker, Checkbox, Button , message } from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
-import {SaveAppointment , SaveAvailability} from "../../../../services/https/index"
-import { TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
+import {GetDay, SaveAppointment , SaveAvailability} from "../../../../services/https/index"
+import { DayInterface, TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
 
 
 const { Option } = Select;
 const { RangePicker } = TimePicker;
 
-interface CreateAppointmentProps {
-  isVisible: boolean;
-  onClose: () => void;
-  onSubmit: (values:any) => void;
-}
 
-const CreateAppointment: React.FC<CreateAppointmentProps> = ({
-  isVisible,
-  onClose,
-  onSubmit,
-}) => {
+
+const CreateAppointment: React.FC = () => {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState(1);
+  const [SelectDay, setSelectDay] = useState(0);
   const [daysAvailability, setDaysAvailability] = useState([
     { day: "Sunday", start: null, end: null, unavailable: true },
     { day: "Monday", start: "09:00", end: "17:00", unavailable: false },
@@ -38,6 +31,34 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const userId = localStorage.getItem("id");
+
+
+  //===============================ดึงวันทั้งหมด========================================
+  const [Days, setDay] = useState<DayInterface[]>([]);
+  const fetchDayAll = async () => {
+      try {
+          const res = await GetDay();
+          if (res.status === 200 && res.data) {
+            setDay(res.data);
+          }
+      } catch (error) {
+        setDay([]);
+      }
+  };
+  useEffect(() => {
+    fetchDayAll();
+  }, []);
+  //=============================== selector day ===================================
+  //selector
+  const selectDay = (value: string) => {
+    setSelectDay(Number(value));
+    console.log(`selected ${value}`);
+  };
+  
+  const onSearch = (value: string) => {
+      console.log('search:', value);
+  };
+  //================================================================================
 
   const handleSave = async () => {
     if (!userId) {
@@ -61,7 +82,8 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
       isBooked: undefined,
       time: null,
       date: null,
-      appointmentId: 0
+      appointmentId: 0,
+      DayofWeekID:SelectDay,
     };
     console.log(userId);
     console.log(title);
@@ -70,11 +92,11 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
     console.log(maxBookings);
     console.log(location);
     console.log(description);
+    console.log(SelectDay);
     try {
       const appointmentResponse = await SaveAppointment(values);
       if (appointmentResponse.status === 201) {
         message.success("Appointment created successfully!");
-        onClose();
       } else {
         message.error("Failed to create appointment.");
       }
@@ -103,14 +125,6 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
   };
 
   return (
-    <Modal
-      visible={isVisible}
-      onCancel={onClose}
-      footer={null}
-      title="Bookable Appointment Schedule"
-      className="create-appointment-modal-content"
-      width={600} // ลดขนาดของ Popup
-    >
       <div>
         {/* Title */}
         <div className="create-appointment-section">
@@ -140,30 +154,20 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
 
         <div className="create-appointment-section">
           <label className="create-appointment-section-label">
-            General Availability
+            Select Day
           </label>
-          {daysAvailability.map((day, index) => (
-            <div key={index} className="create-appointment-availability-row">
-              <span className="create-appointment-day">{day.day}:</span>
-              <Checkbox
-                checked={!day.unavailable}
-                onChange={(e) => handleDayChange(index, !e.target.checked)}
-              >
-                {day.unavailable ? "Unavailable" : "Available"}
-              </Checkbox>
-              {!day.unavailable && (
-                <RangePicker
-                  format="HH:mm"
-                  value={
-                    day.start && day.end
-                      ? [dayjs(day.start, "HH:mm"), dayjs(day.end, "HH:mm")]
-                      : null
-                  }
-                  onChange={(times) => handleTimeChange(index, times)}
-                />
-              )}
-            </div>
-          ))}
+          <Select
+              style={{width:'60%'}}
+              showSearch
+              placeholder="Select a Day"
+              optionFilterProp="label"
+              onChange={selectDay}
+              onSearch={onSearch}
+              options={Days.map((Day) => ({
+                value: Day.ID,
+                label: Day.DayName,
+              }))}
+          />
         </div>
 
         {/* Buffer Time */}
@@ -242,7 +246,6 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
         <div className="create-appointment-footer">
           <Button
             className="create-appointment-cancel-button"
-            onClick={onClose}
           >
             Cancel
           </Button>
@@ -254,7 +257,7 @@ const CreateAppointment: React.FC<CreateAppointmentProps> = ({
           </Button>
         </div>
       </div>
-    </Modal>
+
   );
 };
 

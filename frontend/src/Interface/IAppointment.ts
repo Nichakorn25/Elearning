@@ -1,31 +1,43 @@
-export interface DaysAvailabilityInterface {
-    day: string;
-    start: string | null;
-    end: string | null;
-    unavailable: boolean;
-  }
-  
-  export interface TeacherAppointmentInterface {
-    appointmentId: number;
-    isBooked: boolean | undefined;
-    time: string | null;
-    date: number | null;
-    id?: number;
-    title?: string;
-    appointment_duration?: number;
-    buffer_time?: number;
-    max_bookings?: number;
-    location?: string;
-    description?: string;
-    UserID?: number;
-    availability_id?: number;
-  }
+import { MajorInterface, UserInterface } from "./IUser";
 
-  export interface StudentBookingInterface {
-    id?: number; // ID ของการจอง
-    UserID: number; // ID ของนักเรียนที่ทำการจอง
-    TeacherAppointmentID: number; // ID ของการนัดหมายอาจารย์
-    
-  }
-  
-  
+export interface DaysAvailabilityInterface {
+  day: string;
+  start: string | null;
+  end: string | null;
+  unavailable: boolean;
+}
+
+export interface TeacherAppointmentInterface {
+  appointmentId: number;
+  isBooked: boolean | undefined;
+  time: string | null;
+  date: number | null;
+  ID?: number;
+  title?: string;
+  appointment_duration?: number;
+  buffer_time?: number;
+  max_bookings?: number;
+  location?: string;
+  description?: string;
+  UserID?: number;
+  DayofWeekID?: number;
+  availability_id?: number;
+
+  DayofWeek?: DayInterface;
+  User?: UserInterface;
+  Major?: MajorInterface;
+}
+
+export interface StudentBookingInterface {
+  ID?: number; // ID ของการจอง
+  UserID: number; // ID ของนักเรียนที่ทำการจอง
+  TeacherAppointmentID: number; // ID ของการนัดหมายอาจารย์
+  DayofWeekID?: number;
+
+  DayofWeek?: DayInterface;
+}
+
+export interface DayInterface {
+  ID?: number; // ID ของการจอง
+  DayName?: string;
+}
