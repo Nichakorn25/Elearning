@@ -124,7 +124,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
 
         {/* Right Section - Welcome Section */}
         <div className="popup-right-panel">
-          <h2>Hello, Friend!</h2>
+          <h2>Welcome to SE e-Learning!</h2>
           <p>
             Register with your personal details to use all the features of our
             site.

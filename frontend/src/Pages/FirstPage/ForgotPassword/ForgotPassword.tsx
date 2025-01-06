@@ -23,7 +23,7 @@ const ForgotPassword: React.FC = () => {
 
       // หลังจากรีเซ็ตเสร็จ นำทางไปที่หน้า login
       setTimeout(() => {
-        navigate("/login");
+        navigate("/beforeLogin");
       }, 1000);
     } else {
       messageApi.open({
