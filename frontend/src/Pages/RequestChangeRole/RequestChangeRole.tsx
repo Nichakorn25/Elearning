@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { message } from "antd";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import "./RequestChangeRole.css";
+import {CreateRoleChangeRequests} from '../../services/https';
+import { ChangeRoleInterface } from '../../Interface/Admin';
 
 const RequestChangeRole: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -41,13 +44,49 @@ const RequestChangeRole: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Request Submitted:", formData);
-    if (formData.idCard) {
-      console.log("Uploaded File:", formData.idCard.name);
+
+    // ตรวจสอบว่ามีไฟล์อัปโหลดหรือไม่
+    if (!formData.idCard) {
+      message.error("Please upload your ID card.");
+      return;
     }
-    // ส่งข้อมูลไปยัง backend หรือ API
+
+    const formPayload = new FormData();
+    formPayload.append("username", formData.username);
+    formPayload.append("fullname", formData.fullname);
+    formPayload.append("email", formData.email);
+    formPayload.append("phone", formData.phone);
+    formPayload.append("department", formData.department);
+    formPayload.append("major", formData.major);
+    formPayload.append("reason", formData.reason);
+    // formPayload.append("idCard", formData.idCard);
+    for (let pair of formPayload.entries()) {
+      console.log(pair[0]+ ': ' + pair[1]);
+    }
+    
+    console.log("formPayload before submit:", formPayload);
+    try {
+      const response = await CreateRoleChangeRequests(formPayload);
+      if (response && response.status === 201) {
+        message.success("Your request has been submitted successfully.");
+        setFormData({
+          username: "",
+          fullname: "",
+          email: "",
+          phone: "",
+          department: "",
+          major: "",
+          reason: "",
+          idCard: null,
+        });
+      } else {
+        message.error("Failed to submit the request. Please try again.");
+      }
+    } catch (error) {
+      message.error("An error occurred while submitting the request.");
+    }
   };
 
   return (

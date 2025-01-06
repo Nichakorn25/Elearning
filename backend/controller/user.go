@@ -35,6 +35,7 @@ func CreateUser(c *gin.Context) {
 		DepartmentID: user.DepartmentID,
 		MajorID:      user.MajorID,
 		RoleID:       user.RoleID,
+		Status: 	  user.Status,
 	}
 
 	// บันทึก
@@ -83,7 +84,7 @@ func ListUsers(c *gin.Context) {
 	db := config.DB()
 
 	// Query the user table for basic user data
-	results := db.Preload("Department").Preload("Major").Preload("Major.Department").Preload("Role").Select("id, username, password, first_name, last_name, email, phone, department_id, major_id, role_id").Find(&users)
+	results := db.Preload("Department").Preload("Major").Preload("Major.Department").Preload("Role").Select("id, username, password, first_name, last_name, email, phone, department_id, major_id, role_id, status").Find(&users)
 	// Check for errors in the query
 	if results.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": results.Error.Error()})
@@ -270,14 +271,22 @@ func SearchProfessors(c *gin.Context) {
 
 // DELETE /users/:id
 func DeleteUser(c *gin.Context) {
-
 	id := c.Param("id")
 	db := config.DB()
-	if tx := db.Exec("DELETE FROM users WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+
+	// Delete the user by ID
+	result := db.Delete(&entity.User{}, "id = ?", id)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Deleted successful"})
+
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 
 }
 
@@ -310,41 +319,41 @@ func UpdateUser(c *gin.Context) {
 
 // PUT update user ใช้อันนี้นะจ๊ะ
 func UpdateUserByid(c *gin.Context) {
+    var user entity.User
+    var payload struct {
+        Status string `json:"status"`
+    }
 
-	var user entity.User
+    UserID := c.Param("id")
+    db := config.DB()
 
-	UserID := c.Param("id")
+    // ตรวจสอบว่าผู้ใช้มีอยู่ในระบบหรือไม่
+    result := db.First(&user, UserID)
+    if result.Error != nil {
+        c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        return
+    }
 
-	db := config.DB()
+    // Bind JSON payload เพื่ออ่านค่า status
+    if err := c.ShouldBindJSON(&payload); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
+        return
+    }
 
-	result := db.First(&user, UserID)
+    // ตรวจสอบค่า status ว่าเป็นค่าที่ถูกต้องหรือไม่ (Active, Inactive)
+    if payload.Status != "Active" && payload.Status != "Inactive" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status value"})
+        return
+    }
 
-	if result.Error != nil {
+    // อัปเดตสถานะของผู้ใช้
+    user.Status = payload.Status
+    result = db.Save(&user)
 
-		c.JSON(http.StatusNotFound, gin.H{"error": "NameUser not found"})
+    if result.Error != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+        return
+    }
 
-		return
-
-	}
-
-	if err := c.ShouldBindJSON(&user); err != nil {
-
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
-
-		return
-
-	}
-
-	result = db.Save(&user)
-
-	if result.Error != nil {
-
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
-
-		return
-
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Updated successful"})
-
+    c.JSON(http.StatusOK, gin.H{"message": "Status updated successfully"})
 }

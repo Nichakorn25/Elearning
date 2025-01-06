@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, message } from "antd";
+import { Table, Button, message, Modal, Input } from "antd";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import { ListUsers, DeleteUserByID, UpdateUserByid } from "../../services/https"; // Import API functions
 import "./ManageUsers.css";
+
+const { Search } = Input;
 
 interface User {
   id: number;
@@ -17,73 +19,117 @@ interface User {
 
 const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]); // State สำหรับเก็บข้อมูลที่กรองแล้ว
+  const [searchText, setSearchText] = useState<string>(""); // State สำหรับเก็บข้อความค้นหา
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const loggedInUserId = localStorage.getItem("id");
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const response = await ListUsers(); // Fetch users from API
-        const fetchedUsers = response.data; // Extract the users data from the response
-  
-        if (fetchedUsers && Array.isArray(fetchedUsers)) {
-          // Map the fetched data to the format that your component expects
-          const usersData = fetchedUsers.map((user: any) => ({
-            id: user.ID, // Map 'ID' to 'id'
-            username: user.Username,
-            fullname: user.Fullname, // Ensure you have a 'Fullname' field in the response
-            email: user.Email, // Ensure you have an 'Email' field in the response
-            department: user.Department, // Ensure you have a 'Department' field in the response
-            role: user.Role, // Ensure you have a 'Role' field in the response
-            status: user.Status, // Ensure you have a 'Status' field in the response
-          }));
-          setUsers(usersData); // Update state with formatted data
-        } else {
-          message.error("Failed to load users.");
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error); // Log errors for debugging
-        message.error("An error occurred while fetching users.");
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchUsers();
-  }, []); // Fetch users when component mounts
-  
-
-  const handleDelete = async (id: number) => {
+  const fetchUsers = async () => {
+    setLoading(true);
     try {
-      const isDeleted = await DeleteUserByID(id);
-      if (isDeleted) {
-        message.success("User deleted successfully.");
-        setUsers(users.filter(user => user.id !== id)); // Update the list after deletion
+      const response = await ListUsers();
+      const fetchedUsers = response.data;
+      if (fetchedUsers && Array.isArray(fetchedUsers)) {
+        const usersData = fetchedUsers.map((user: any) => ({
+          id: user.ID,
+          username: user.Username,
+          fullname: `${user.FirstName} ${user.LastName}`,
+          email: user.Email,
+          department: user.Department?.DepartmentName || "N/A",
+          major: user.Major?.MajorName || "N/A",
+          role: user.Role?.RoleName || "N/A",
+          status: user.Status,
+        }));
+        setUsers(usersData);
+        setFilteredUsers(usersData); // ตั้งค่า filteredUsers เริ่มต้นให้เท่ากับ users ทั้งหมด
       } else {
-        message.error("Failed to delete the user.");
+        message.error("Failed to load users.");
       }
     } catch (error) {
-      message.error("An error occurred while deleting the user.");
+      console.error("Error fetching users:", error);
+      message.error("An error occurred while fetching users.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleUpdate = async (id: string, data: User) => {
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleDelete = (id: string) => {
+    if (id === loggedInUserId) {
+      message.error("You cannot delete your own account.");
+      return;
+    }
+
+    Modal.confirm({
+      title: "Are you sure you want to delete this user?",
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: async () => {
+        try {
+          const isDeleted = await DeleteUserByID(id);
+          if (isDeleted) {
+            message.success("User deleted successfully.");
+            fetchUsers();
+          } else {
+            message.error("Failed to delete the user.");
+          }
+        } catch (error) {
+          message.error("An error occurred while deleting the user.");
+        }
+      },
+      onCancel: () => {
+        console.log("Deletion canceled");
+      },
+    });
+  };
+
+  const handleUpdate = async (id: string, status: string) => {
+    if (id === loggedInUserId) {
+      message.error("You cannot update your own status.");
+      return;
+    }
+
     try {
-      const response = await UpdateUserByid(id, data); // Use the UpdateUserByid API function
+      const response = await UpdateUserByid(id, { status });
       if (response) {
-        message.success("User updated successfully.");
-        // Optionally, you can refetch users or update the local state
+        message.success("User status updated successfully.");
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id.toString() === id ? { ...user, status } : user
+          )
+        );
+        setFilteredUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user.id.toString() === id ? { ...user, status } : user
+          )
+        );
       } else {
-        message.error("Failed to update the user.");
+        message.error("Failed to update user status.");
       }
     } catch (error) {
-      message.error("An error occurred while updating the user.");
+      message.error("An error occurred while updating user status.");
     }
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchText(value);
+    const filtered = users.filter((user) =>
+      `${user.username} ${user.fullname} ${user.email} ${user.department} ${user.role}`
+        .toLowerCase()
+        .includes(value.toLowerCase())
+    );
+    setFilteredUsers(filtered);
   };
 
   const columns = [
@@ -108,6 +154,11 @@ const ManageUsers: React.FC = () => {
       key: "department",
     },
     {
+      title: "Major",
+      dataIndex: "major",
+      key: "major",
+    },
+    {
       title: "Role",
       dataIndex: "role",
       key: "role",
@@ -124,23 +175,24 @@ const ManageUsers: React.FC = () => {
         <div className="action-buttons">
           <Button
             type="primary"
-            onClick={() => handleUpdate(record.id.toString(), { ...record, status: 'Active' })}
-            disabled={record.status === "Active"}
+            onClick={() => handleUpdate(record.id.toString(), "Active")}
+            disabled={record.status === "Active" || record.id.toString() === loggedInUserId}
           >
             Activate
           </Button>
           <Button
             type="default"
             danger
-            onClick={() => handleUpdate(record.id.toString(), { ...record, status: 'Inactive' })}
-            disabled={record.status === "Inactive"}
+            onClick={() => handleUpdate(record.id.toString(), "Inactive")}
+            disabled={record.status === "Inactive" || record.id.toString() === loggedInUserId}
           >
             Deactivate
           </Button>
           <Button
             type="default"
             danger
-            onClick={() => handleDelete(record.id)}
+            onClick={() => handleDelete(record.id.toString())}
+            disabled={record.id.toString() === loggedInUserId}
           >
             Delete
           </Button>
@@ -149,18 +201,31 @@ const ManageUsers: React.FC = () => {
     },
   ];
 
+  const getRowClassName = (record: User) => {
+    return record.id.toString() === loggedInUserId ? "highlight-row" : "";
+  };
+
   return (
     <div>
       <Header />
       <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
       <div className="manage-users-container">
         <h2>Manage Users</h2>
+        <Search
+          placeholder="Search by username, fullname, email, department, or role"
+          enterButton
+          value={searchText}
+          onChange={(e) => handleSearch(e.target.value)}
+          onSearch={handleSearch}
+          style={{ marginBottom: "1rem", width: "300px" }}
+        />
         <Table
-          dataSource={users}
+          dataSource={filteredUsers}
           columns={columns}
           rowKey="id"
           loading={loading}
           bordered
+          rowClassName={getRowClassName}
         />
       </div>
     </div>

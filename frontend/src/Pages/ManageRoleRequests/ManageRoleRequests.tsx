@@ -3,6 +3,7 @@ import { Table, Button, message } from "antd";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import "./ManageRoleRequests.css";
+import { GetRoleChangeRequests } from "../../services/https"; // Import the function
 
 interface RoleRequest {
   id: number;
@@ -23,42 +24,32 @@ const ManageRoleRequests: React.FC = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
-  useEffect(() => {
-    let isMounted = true;  // Flag to track if component is mounted
-    const fetchRoleRequests = async () => {
-      console.log("Fetching role requests...");
-      setLoading(true);
-      try {
-        const response = await fetch("/api/role-requests");
-        const data = await response.json();
-        if (isMounted) {
-          setRequests(data);  // Only update state if component is mounted
-        }
-      } catch (error) {
-        if (isMounted) {
-          message.error("Failed to load role requests.");
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+  const fetchRoleRequests = async () => {
+    console.log("Fetching role requests...");
+    setLoading(true);
+    try {
+      const res = await GetRoleChangeRequests(); // Call the axios function
+      console.log(res.data)
+      if (res.status === 200) {
+        setRequests(res.data); // Assuming `res.data` contains the list of requests
+      } else {
+        message.error("Failed to load role requests.");
       }
-    };
+    } catch (error) {
+      message.error("An error occurred while fetching role requests.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchRoleRequests();
-
-    // Cleanup function to mark component as unmounted
-    return () => {
-      isMounted = false;
-    };
-  }, []);  // Empty dependency array ensures the effect runs only once
+  useEffect(() => {
+    fetchRoleRequests(); // Fetch data when component mounts
+  }, []);
 
   const handleApprove = async (id: number) => {
     try {
-      const response = await fetch(`/api/role-requests/${id}/approve`, {
-        method: "POST",
-      });
-      if (response.ok) {
+      const response = await axios.post(`/api/role-requests/${id}/approve`, {}, requestOptions);
+      if (response.status === 200) {
         message.success("Role request approved.");
         fetchRoleRequests(); // Refresh the table
       } else {
@@ -71,10 +62,8 @@ const ManageRoleRequests: React.FC = () => {
 
   const handleReject = async (id: number) => {
     try {
-      const response = await fetch(`/api/role-requests/${id}/reject`, {
-        method: "POST",
-      });
-      if (response.ok) {
+      const response = await axios.post(`/api/role-requests/${id}/reject`, {}, requestOptions);
+      if (response.status === 200) {
         message.success("Role request rejected.");
         fetchRoleRequests(); // Refresh the table
       } else {

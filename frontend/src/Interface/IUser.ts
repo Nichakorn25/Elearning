@@ -12,6 +12,7 @@ export interface UserInterface{
     Phone?: string;
     RoleID?: number;
     rolename?: string;
+    Status?: string;
 }
 
 export interface DepartmentInterface{
