@@ -10,5 +10,5 @@ type StudentBooking struct {
 	User   User `gorm:"foreignKey:UserID"`
 
 	TeacherAppointmentID uint `json:"TeacherAppointmentID"`
-	TeacherAppointment   QuizQuestion `gorm:"foreignKey:TeacherAppointmentID"`
+	TeacherAppointment   TeacherAppointment `gorm:"foreignKey:TeacherAppointmentID"`
 }
