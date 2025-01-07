@@ -13,11 +13,6 @@ const { Option } = Select;
 const EditProfile: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -42,6 +37,7 @@ const EditProfile: React.FC = () => {
         if (userIdFromLocalStorage) {
           const userResponse = await GetUserById(userIdFromLocalStorage);
           if (userResponse.status === 200) {
+            console.log("data", userResponse)
             const data = userResponse.data;
             setUsername(data.Username || '');
             setFirstName(data.FirstName || '');
@@ -52,6 +48,12 @@ const EditProfile: React.FC = () => {
             setMajorId(data.MajorID || 0);
             setRole(data.Role?.RoleName || '');
             setUserId(data.ID?.toString() || '');
+
+            // ตั้งค่า URL ของรูปโปรไฟล์เริ่มต้น
+            if (data.ProfilePicture && data.ProfilePicture[0]) {
+              // ใช้ base URL สำหรับภาพ
+              setPreview(`http://localhost:8000${data.ProfilePicture[0].FilePath}`);
+            }
           }
         }
 
@@ -69,8 +71,15 @@ const EditProfile: React.FC = () => {
     fetchData();
   }, [userIdFromLocalStorage]);
 
+  useEffect(() => {
+    if (departmentId !== 0) {
+      fetchMajors(departmentId);
+    }
+  }, [departmentId]);
+
   const handleDepartmentChange = async (deptId: number) => {
     setDepartmentId(deptId);
+    setMajorId(0);
     await fetchMajors(deptId);
   };
 
@@ -99,10 +108,13 @@ const EditProfile: React.FC = () => {
     formData.append('Phone', phone);
     formData.append('DepartmentID', departmentId.toString());
     formData.append('MajorID', majorId.toString());
-    formData.append('RoleID', role);
+    formData.append('Status', 'Active');
 
     if (profilePicture) {
+      console.log('Profile picture selected:', profilePicture);
       formData.append('ProfilePicture', profilePicture);
+    } else {
+      console.log('No profile picture selected');
     }
 
     try {
@@ -220,7 +232,7 @@ const EditProfile: React.FC = () => {
               <Upload
                 beforeUpload={(file) => {
                   setProfilePicture(file);
-                  setPreview(URL.createObjectURL(file));
+                  setPreview(URL.createObjectURL(file)); // แสดง preview ของรูปใหม่ที่เลือก
                   return false;
                 }}
                 showUploadList={false}
@@ -228,14 +240,16 @@ const EditProfile: React.FC = () => {
               >
                 <Button icon={<UploadOutlined />}>Select File</Button>
               </Upload>
+              {/* แสดง preview ของรูป */}
               {preview && (
                 <img
                   src={preview}
                   alt="Profile Preview"
-                  style={{ width: '100px', marginTop: '10px' }}
+                  style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
                 />
               )}
             </div>
+
             <div className="form-actions">
               <Button type="primary" htmlType="submit">
                 Save Changes

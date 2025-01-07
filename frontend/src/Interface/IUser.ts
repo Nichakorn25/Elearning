@@ -13,6 +13,7 @@ export interface UserInterface{
     RoleID?: number;
     rolename?: string;
     Status?: string;
+    ProfilePicture?: string;
 }
 
 export interface DepartmentInterface{

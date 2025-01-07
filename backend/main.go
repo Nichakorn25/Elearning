@@ -33,6 +33,7 @@ func main() {
 	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
+	r.Static("/uploads", "./uploads") 
 
 	router := r.Group("")
 	{

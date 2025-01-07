@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { message } from "antd";
+import { message, Upload, Button, Image } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import "./RequestChangeRole.css";
-import {CreateRoleChangeRequests} from '../../services/https';
+import { CreateRoleChangeRequests } from '../../services/https';
 import { ChangeRoleInterface } from '../../Interface/Admin';
 
 const RequestChangeRole: React.FC = () => {
@@ -18,6 +19,7 @@ const RequestChangeRole: React.FC = () => {
     reason: "",
     idCard: null as File | null, // สำหรับจัดเก็บไฟล์รูปบัตร
   });
+  const [fileList, setFileList] = useState<any[]>([]); // เก็บรายการไฟล์ที่อัปโหลด
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -35,13 +37,12 @@ const RequestChangeRole: React.FC = () => {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFormData({
-        ...formData,
-        idCard: e.target.files[0], // เก็บไฟล์ที่ผู้ใช้อัปโหลด
-      });
-    }
+  const handleFileChange = (file: File) => {
+    setFormData({
+      ...formData,
+      idCard: file,
+    });
+    setFileList([{ url: URL.createObjectURL(file), name: file.name }]); // สร้าง URL สำหรับแสดง preview
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,12 +62,8 @@ const RequestChangeRole: React.FC = () => {
     formPayload.append("department", formData.department);
     formPayload.append("major", formData.major);
     formPayload.append("reason", formData.reason);
-    // formPayload.append("idCard", formData.idCard);
-    for (let pair of formPayload.entries()) {
-      console.log(pair[0]+ ': ' + pair[1]);
-    }
+    formPayload.append("idCard", formData.idCard);
     
-    console.log("formPayload before submit:", formPayload);
     try {
       const response = await CreateRoleChangeRequests(formPayload);
       if (response && response.status === 201) {
@@ -81,6 +78,7 @@ const RequestChangeRole: React.FC = () => {
           reason: "",
           idCard: null,
         });
+        setFileList([]); // ล้างไฟล์ list หลังจาก submit
       } else {
         message.error("Failed to submit the request. Please try again.");
       }
@@ -187,14 +185,25 @@ const RequestChangeRole: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="idCard">Upload ID Card:</label>
-              <input
-                type="file"
-                id="idCard"
-                name="idCard"
+              <Upload
+                beforeUpload={(file) => {
+                  handleFileChange(file);
+                  return false; // ป้องกันไม่ให้อัปโหลดอัตโนมัติ
+                }}
                 accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
+                fileList={fileList}
+              >
+                <Button icon={<UploadOutlined />}>Upload ID Card</Button>
+              </Upload>
+              {fileList.length > 0 && (
+                <div className="preview-container">
+                  <Image
+                    width={100}
+                    src={fileList[0].url}
+                    alt="ID Card Preview"
+                  />
+                </div>
+              )}
             </div>
             <button type="submit" className="submit-button">
               Submit Request

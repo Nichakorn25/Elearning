@@ -3,10 +3,15 @@ package controller
 import (
 	"elearning/config"
 	"elearning/entity"
+	"strconv"
 	"errors" // เพิ่ม import สำหรับ package errors
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm" // เพิ่ม import สำหรับ gorm
 	"net/http"
+	"time"         // สำหรับใช้กับการสร้าง timestamp
+    "path/filepath" // สำหรับจัดการ path ของไฟล์
+    "fmt"          // สำหรับจัดการ string formatting
+    "os"         
 )
 
 // POST /users
@@ -49,30 +54,48 @@ func CreateUser(c *gin.Context) {
 
 // GET /user/:id
 func GetUser(c *gin.Context) {
-	ID := c.Param("id")
-	var user entity.User
+    ID := c.Param("id")
+    var user entity.User
 
-	db := config.DB()
+    db := config.DB()
 
-	// Use Preload to load related data
-	result := db.Preload("Department").
-		Preload("Major").
-		Preload("Major.Department").
-		Preload("Role").
-		Where("id = ?", ID).
-		First(&user)
+    // ดึงข้อมูลของผู้ใช้ (User) จากฐานข้อมูล
+    result := db.Preload("Department").
+        Preload("Major").
+        Preload("Major.Department").
+        Preload("Role").
+        Where("id = ?", ID).
+        First(&user)
 
-	if result.Error != nil {
-		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-		} else {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-		}
-		return
-	}
+    if result.Error != nil {
+        if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+            c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+        }
+        return
+    }
 
-	c.JSON(http.StatusOK, user)
+    // ตรวจสอบว่า ProfilePicture มีหรือไม่โดยดึงจากตาราง ProfilePicture
+    var profilePicture entity.ProfilePicture
+    pictureResult := db.Where("user_id = ?", ID).First(&profilePicture)
+
+    if pictureResult.Error != nil {
+        if errors.Is(pictureResult.Error, gorm.ErrRecordNotFound) {
+            // ถ้าไม่พบรูปโปรไฟล์ให้คืนค่าเป็น null หรือข้อมูลที่เหมาะสม
+            user.ProfilePicture = nil
+        } else {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": pictureResult.Error.Error()})
+            return
+        }
+    } else {
+        user.ProfilePicture = []entity.ProfilePicture{profilePicture}
+    }
+
+    // ส่งข้อมูลที่รวม ProfilePicture กลับไปยัง client
+    c.JSON(http.StatusOK, user)
 }
+
 
 // GET /users
 func ListUsers(c *gin.Context) {
@@ -321,7 +344,14 @@ func UpdateUser(c *gin.Context) {
 func UpdateUserByid(c *gin.Context) {
     var user entity.User
     var payload struct {
-        Status string `json:"status"`
+        FirstName    string `form:"FirstName" json:"FirstName"`
+        LastName     string `form:"LastName" json:"LastName"`
+        Email        string `form:"Email" json:"Email"`
+        Phone        string `form:"Phone" json:"Phone"`
+        DepartmentID string `form:"DepartmentID" json:"DepartmentID"`
+        MajorID      string `form:"MajorID" json:"MajorID"`
+        RoleID       string `form:"RoleID" json:"RoleID"`
+        Status       string `form:"Status" json:"Status"`
     }
 
     UserID := c.Param("id")
@@ -335,7 +365,7 @@ func UpdateUserByid(c *gin.Context) {
     }
 
     // Bind JSON payload เพื่ออ่านค่า status
-    if err := c.ShouldBindJSON(&payload); err != nil {
+    if err := c.ShouldBind(&payload); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
         return
     }
@@ -346,7 +376,95 @@ func UpdateUserByid(c *gin.Context) {
         return
     }
 
-    // อัปเดตสถานะของผู้ใช้
+    // รับไฟล์รูปภาพจาก form-data ถ้ามี
+    file, err := c.FormFile("ProfilePicture")
+    if err == nil {
+        // สร้างชื่อไฟล์ใหม่
+        uploadPath := "./uploads"
+        timestamp := time.Now().Unix()
+        extension := filepath.Ext(file.Filename)
+        newFileName := fmt.Sprintf("profile_%d%s", timestamp, extension)
+        fileSavePath  := filepath.Join(uploadPath, newFileName)
+		profilePicturePath := fmt.Sprintf("/uploads/%s", newFileName)
+
+        // บันทึกไฟล์ใหม่
+        if err := c.SaveUploadedFile(file, fileSavePath ); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file", "status": 500})
+            return
+        }
+
+        // ตรวจสอบว่ามีรูปภาพเดิมอยู่หรือไม่
+		var profilePicture entity.ProfilePicture
+		err = db.Where("user_id = ?", user.ID).Take(&profilePicture).Error
+		if err == nil {
+			// ลบไฟล์รูปภาพเก่าจากระบบ
+			oldFilePath := fmt.Sprintf(".%s", profilePicture.FilePath)
+			os.Remove(oldFilePath)
+
+			// อัปเดต path ของรูปภาพใหม่
+			profilePicture.FilePath = profilePicturePath
+			if err := db.Save(&profilePicture).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update profile picture", "status": 500})
+				return
+			}
+		} else if errors.Is(err, gorm.ErrRecordNotFound) {
+			// ถ้าไม่มีข้อมูลเดิม ให้สร้างใหม่ (ไม่ถือว่าเป็นข้อผิดพลาด)
+			profilePicture = entity.ProfilePicture{
+				UserID:   user.ID,
+				FilePath: profilePicturePath,
+			}
+			if err := db.Create(&profilePicture).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create profile picture", "status": 500})
+				return
+			}
+		} else {
+			// หากเกิดข้อผิดพลาดอื่น ๆ ที่ไม่ใช่ record not found
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to query profile picture", "status": 500})
+			return
+		}
+	}
+
+    // อัปเดตฟิลด์อื่น ๆ ถ้ามีการส่งค่าเข้ามา
+    if payload.FirstName != "" {
+        user.FirstName = payload.FirstName
+    }
+    if payload.LastName != "" {
+        user.LastName = payload.LastName
+    }
+    if payload.Email != "" {
+        user.Email = payload.Email
+    }
+    if payload.Phone != "" {
+        user.Phone = payload.Phone
+    }
+
+    if payload.DepartmentID != "" {
+        departmentID, err := strconv.ParseUint(payload.DepartmentID, 10, 64)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid DepartmentID"})
+            return
+        }
+        user.DepartmentID = uint(departmentID)
+    }
+
+    if payload.MajorID != "" {
+        majorID, err := strconv.ParseUint(payload.MajorID, 10, 64)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid MajorID"})
+            return
+        }
+        user.MajorID = uint(majorID)
+    }
+
+    if payload.RoleID != "" {
+        roleID, err := strconv.ParseUint(payload.RoleID, 10, 64)
+        if err != nil {
+            c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid RoleID"})
+            return
+        }
+        user.RoleID = uint(roleID)
+    }
+
     user.Status = payload.Status
     result = db.Save(&user)
 

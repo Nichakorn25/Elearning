@@ -99,9 +99,12 @@ const ManageUsers: React.FC = () => {
       message.error("You cannot update your own status.");
       return;
     }
+    const formData = new FormData();
 
+    formData.append("Status", status);
+    console.log("Updating status with:", status);
     try {
-      const response = await UpdateUserByid(id, { status });
+      const response = await UpdateUserByid(id, formData);
       if (response) {
         message.success("User status updated successfully.");
         setUsers((prevUsers) =>

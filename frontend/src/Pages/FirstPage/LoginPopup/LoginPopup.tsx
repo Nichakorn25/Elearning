@@ -45,7 +45,10 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
             LastName: user.LastName,
           })
         );
-  
+        const profilePictureUrl = userResponse.data.ProfilePicture?.[0]?.FilePath
+            ? `http://localhost:8000${userResponse.data.ProfilePicture[0].FilePath}`
+            : 'https://via.placeholder.com/120';
+        localStorage.setItem('profilePicture', profilePictureUrl);
         setTimeout(() => {
           if (user.RoleID === 1) {
             message.success("You are a student!");

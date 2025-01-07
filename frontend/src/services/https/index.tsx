@@ -281,7 +281,12 @@ async function UpdateUserByid(id: string, data: UserInterface) {
 
   return await axios
 
-    .put(`${apiUrl}/users/${id}`, data, requestOptions)
+    .put(`${apiUrl}/users/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `${Bearer} ${Authorization}`,
+      },
+    })
 
     .then((res) => res)
 
@@ -310,6 +315,12 @@ return res;
 }
 
 async function CreateRoleChangeRequests(data: ChangeRoleInterface) {
+  const requestOptions = {
+    headers: {
+      "Content-Type": "multipart/form-data", // เปลี่ยน Content-Type เป็น multipart/form-data
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
 
   return await axios
 
