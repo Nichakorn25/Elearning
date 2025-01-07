@@ -22,6 +22,7 @@ const SignUp: React.FC = () => {
     department: "",
     major: "",
     RoleID: 1,
+    status: "",
   })
 
   

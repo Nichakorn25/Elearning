@@ -33,6 +33,7 @@ func main() {
 	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
+	r.Static("/uploads", "./uploads") 
 
 	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
 	// r.POST("/verify_otp", controller.VerifyOTP)
@@ -73,6 +74,10 @@ func main() {
 		router.POST("/announcements", controller.CreateAnnouncement)
 		router.PUT("/announcements/:id", controller.UpdateAnnouncement)
 		router.DELETE("/announcements/:id", controller.DeleteAnnouncement)
+
+		//RequestChangeRole
+		router.POST("/requestchangeroles", controller.CreateRoleChangeRequests)
+		router.GET("/requestchangeroles", controller.GetRoleChangeRequests)
 	}
 
 	r.GET("/", func(c *gin.Context) {

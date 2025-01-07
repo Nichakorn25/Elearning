@@ -2,7 +2,7 @@ import axios from "axios";
 // import { DepartmentInterface, MajorInterface } from "../../Interface/IUser"; // Import interfaces
 // import { message } from "antd"; // Ant Design message for notifications
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
-import { AnnouncementInterface } from "../../Interface/Admin";
+import { AnnouncementInterface, ChangeRoleInterface } from "../../Interface/Admin";
 import {TeacherAppointmentInterface , StudentBookingInterface} from "../../Interface/IAppointment";
 
 
@@ -284,29 +284,30 @@ async function GetUserById(id: string) {
 
 }
 
-async function DeleteUserByID(id: Number | undefined) {
-  const requestOptions = {
-    method: "DELETE"
-  };
+async function DeleteUserByID(id: string | undefined) {
+  if (!id) return false; // Handle case when ID is undefined
 
-  let res = await fetch(`${apiUrl}/users/${id}`, requestOptions)
-    .then((res) => {
-      if (res.status == 200) {
-        return true;
-      } else {
-        return false;
-      }
+  return axios
+    .delete(`${apiUrl}/users/${id}`, requestOptions)
+    .then((res) => res.status === 200)
+    .catch((e) => {
+      console.error("Error deleting user:", e.response?.data || e.message);
+      return false;
     });
-
-  return res;
 }
+
 
 // update user
 async function UpdateUserByid(id: string, data: UserInterface) {
 
   return await axios
 
-    .put(`${apiUrl}/users/${id}`, data, requestOptions)
+    .put(`${apiUrl}/users/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `${Bearer} ${Authorization}`,
+      },
+    })
 
     .then((res) => res)
 
@@ -334,6 +335,31 @@ async function UpdateUser(data: UserInterface) {
 return res;
 }
 
+async function CreateRoleChangeRequests(data: ChangeRoleInterface) {
+  const requestOptions = {
+    headers: {
+      "Content-Type": "multipart/form-data", // เปลี่ยน Content-Type เป็น multipart/form-data
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  return await axios
+
+    .post(`${apiUrl}/requestchangeroles`, data, requestOptions)
+
+    .then((res) => res)
+
+    .catch((e) => e.response);
+
+}
+
+async function GetRoleChangeRequests() {
+  return axios
+    .get(`${apiUrl}/requestchangeroles`, requestOptions) // Using axios with the authorization header
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 export{
   GetDepartments,
@@ -344,6 +370,8 @@ export{
   UpdateAnnouncementById,
   DeleteAnnouncementById,
   ListUsers,
+  CreateRoleChangeRequests,
+  GetRoleChangeRequests,
   // GetUsersByFilters,
   SignIn,
   CreateUser,

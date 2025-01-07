@@ -17,6 +17,9 @@ const Header: React.FC = () => {
   const firstName = user?.FirstName || "N/A";
   const lastName = user?.LastName || "N/A";
 
+  // Get profile picture URL from localStorage
+  const profileImageUrl = localStorage.getItem('profilePicture') || 'https://via.placeholder.com/120';
+
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
@@ -72,7 +75,7 @@ const Header: React.FC = () => {
             <span className="dashboarduser-id">{username}</span>
             <span className="dashboarduser-name">{`${firstName} ${lastName}`}</span>
             <img
-              src="https://via.placeholder.com/40"
+              src={profileImageUrl} // Use profile picture from localStorage
               alt="User Avatar"
               className="dashboarduser-avatar"
             />

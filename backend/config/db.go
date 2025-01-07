@@ -52,6 +52,7 @@ func SetupDatabase() {
 		&entity.ProfilePicture{},
 		&entity.Purchase{},
 		&entity.QuizQuestion{},
+		&entity.RequestChangeRole{},
 		&entity.Review{},
 		&entity.Role{},
 		&entity.Semester{},
@@ -191,11 +192,11 @@ func SetupDatabase() {
 
 	//User
 	User := []entity.User{
-		{Username: "B6504540", Password: hashedPassword, FirstName: "ศิขเรศ", LastName: "เปภักดี", Email: "B6504540@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17},
-		{Username: "B6510923", Password: hashedPassword, FirstName: "ธนวัฒน์", LastName: "ผ่านบุตร", Email: "B6510923@g.sut.ac.th", Phone: "0987654321", RoleID: 3},
-		{Username: "B6516093", Password: hashedPassword, FirstName: "สุเมธ", LastName: "สาลีพันธ์", Email: "B6516093@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17},
-		{Username: "B6524548", Password: hashedPassword, FirstName: "เจษฎาภรณ์", LastName: "ปิ่นใจ", Email: "B6524548@g.sut.ac.th", Phone: "0987654321", RoleID: 1},
-		{Username: "B6525972", Password: hashedPassword, FirstName: "ณิชากร", LastName: "จันทร์ยุทา", Email: "B6525972@g.sut.ac.th", Phone: "0987654321", RoleID: 1},
+		{Username: "B6504540", Password: hashedPassword, FirstName: "ศิขเรศ", LastName: "เปภักดี", Email: "B6504540@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17, Status: "Active"},
+		{Username: "B6510923", Password: hashedPassword, FirstName: "ธนวัฒน์", LastName: "ผ่านบุตร", Email: "B6510923@g.sut.ac.th", Phone: "0987654321", RoleID: 3, Status: "Active"},
+		{Username: "B6516093", Password: hashedPassword, FirstName: "สุเมธ", LastName: "สาลีพันธ์", Email: "B6516093@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17, Status: "Active"},
+		{Username: "B6524548", Password: hashedPassword, FirstName: "เจษฎาภรณ์", LastName: "ปิ่นใจ", Email: "B6524548@g.sut.ac.th", Phone: "0987654321", RoleID: 1, Status: "Active"},
+		{Username: "B6525972", Password: hashedPassword, FirstName: "ณิชากร", LastName: "จันทร์ยุทา", Email: "B6525972@g.sut.ac.th", Phone: "0987654321", RoleID: 1, Status: "Active"},
 
 		{Username: "T6500001", Password: hashedPassword, FirstName: "นันทวุฒิ", LastName: "คะอังกุ", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
 		{Username: "T6500002", Password: hashedPassword, FirstName: "ศรัญญา", LastName: "กาญจนวัฒนา", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
@@ -203,6 +204,7 @@ func SetupDatabase() {
 		{Username: "T6500004", Password: hashedPassword, FirstName: "ปริญญ์", LastName: "ศรเลิศล้ำวานิช", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
 		{Username: "T6500005", Password: hashedPassword, FirstName: "คมศัลล์", LastName: "ศรีวิสุทธิ์", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
 		{Username: "T6500006", Password: hashedPassword, FirstName: "ทดสอบ", LastName: "ส่งอีเมล", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+
 
 
 		

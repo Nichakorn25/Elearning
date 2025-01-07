@@ -112,14 +112,27 @@ const Announcement: React.FC = () => {
 
 
   const handleDeleteAnnouncement = async (id: string) => {
-    const response = await DeleteAnnouncementById(id);
-    if (response.status === 200) {
-      message.success('Announcement deleted successfully');
-      fetchAnnouncements();
-    } else {
-      message.error('Failed to delete announcement');
-    }
+    Modal.confirm({
+      title: "Are you sure you want to delete this announcement?",
+      content: "This action cannot be undone.",
+      okText: "Yes, delete it",
+      okType: "danger",
+      cancelText: "Cancel",
+      onOk: async () => {
+        const response = await DeleteAnnouncementById(id);
+        if (response.status === 200) {
+          message.success("Announcement deleted successfully");
+          fetchAnnouncements();
+        } else {
+          message.error("Failed to delete announcement");
+        }
+      },
+      onCancel: () => {
+        console.log("Deletion canceled");
+      },
+    });
   };
+  
 
   return (
     <div className="announcement-container">

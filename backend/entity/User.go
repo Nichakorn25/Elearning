@@ -11,7 +11,7 @@ type User struct {
 	LastName  string `json:"LastName"`
 	Email  string `json:"Email"`
 	Phone  string `json:"Phone"`
-	
+	Status string `json:"Status"`
 	ProfilePicture []ProfilePicture `gorm:"foreignKey:UserID"`
 	Announcement []Announcement `gorm:"foreignKey:UserID"`
 	Log []Log `gorm:"foreignKey:UserID"`
