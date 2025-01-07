@@ -1,29 +1,49 @@
-/* MainSealSheet.css */
+/* ปรับให้ Layout ใช้เต็มพื้นที่หน้าจอ */
 .editsheet {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f0f2f5;
-  }
-  
-  .editsheet-content {
-    padding: 20px;
-    background-color: #ffffff;
-    overflow: auto;
-  }
-  
-  .card-title {
-    font-size: 24px;
-    color: #1890ff; /* Blue color for the card title */
-    text-align: center;
-    margin-bottom: 20px; /* Additional bottom space */
-  }
-  
-  .form-container {
-    width: 100%;
-    max-width: 600px;
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
-  }
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+}
+
+/* เพิ่มระยะห่างจาก header */
+.editsheet-content {
+  display: flex;
+  justify-content: center; /* ฟอร์มจะอยู่ตรงกลาง */
+  align-items: flex-start; /* ทำให้ฟอร์มชิดด้านบน */
+  height: 100%; /* ใช้ความสูงที่เหลือจาก header */
+  padding-top: 30px; /* ระยะห่างจาก header */
+  background-color: #ffffff;
+}
+
+/* ปรับขนาดของฟอร์ม */
+.editform-container {
+  width: 100%;
+  max-width: 500px; /* ความกว้างสูงสุดของฟอร์ม */
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin-top: 0; /* ชิดกับ header */
+}
+
+/* ปรับขนาดของ title */
+.editcard-title {
+  font-size: 24px;
+  color: #1890ff; /* สีฟ้าสำหรับ title */
+  text-align: center;
+  margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+}
+
+/* จัดตำแหน่งปุ่มในฟอร์ม */
+.editform-buttons {
+  display: flex;
+  justify-content: center; /* ปุ่มอยู่ตรงกลาง */
+  gap: 10px; /* ระยะห่างระหว่างปุ่ม */
+  margin-top: 20px; /* ระยะห่างด้านบน */
+}
+
+/* ปรับขนาดและสีของปุ่ม */
+.editform-buttons .ant-btn {
+  min-width: 120px; /* กำหนดความกว้างขั้นต่ำของปุ่ม */
+}
