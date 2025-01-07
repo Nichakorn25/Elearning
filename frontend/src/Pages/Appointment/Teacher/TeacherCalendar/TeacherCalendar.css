@@ -274,7 +274,7 @@ html {
   margin-bottom: 10px; /* ระยะห่างระหว่างรายการ */
 }
 
-.create-btn {
+.create-btn  {
   background-color: white !important;
   border: 1px solid #ddd !important;
   border-radius: 20px !important;
@@ -282,7 +282,7 @@ html {
   transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
-.create-btn:hover {
+.create-btn  :hover {
   background-color: #ff9800 !important;
   color: black !important;
   border-color: #ff9800 !important;
@@ -418,4 +418,22 @@ html {
 }
 .fc .fc-button:active {
   background-color: #003f7f;
+}
+
+.create-appointment-btn {
+  height: 25px;
+  font-size: 16px;
+  text-align: center;
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 20px !important;
+  color: black !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+  cursor: pointer;
+}
+
+.create-appointment-btn:hover {
+  background-color: #ff9800 !important;
+  color: black !important;
+  border-color: #ff9800 !important;
 }
