@@ -1,0 +1,64 @@
+.signup-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .signup-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  input,
+  select,
+  button {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  button.signup-submit {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button.signup-submit:hover {
+    background-color: #45a049;
+  }
+  
+/* สไตล์สำหรับ dropdown */
+.dropdown {
+  color: black; /* สีตัวอักษรของ select */
+  background-color: white; /* สีพื้นหลัง */
+  font-size: 16px; /* ปรับขนาดฟอนต์ (ถ้าจำเป็น) */
+}
+
+/* สไตล์สำหรับ option */
+.dropdown option {
+  color: black; /* สีตัวอักษรของ option */
+}

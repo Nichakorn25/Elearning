@@ -1,0 +1,192 @@
+h2 {
+  padding: 10px;
+  font-size: 30px; /* ขนาดตัวอักษรเริ่มต้น */
+  margin-bottom: 20px;
+}
+.buysheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f0f2f5;
+  padding-top: 80px; /* Adjust this value based on your header's height */
+}
+.buysheet-content {
+  color: #333;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 20px;
+  height: auto;
+  min-height: 100vh;
+}
+
+/* CSS สำหรับพื้นที่เนื้อหาหลัก */
+.sheet .ant-layout {
+  flex-grow: 1;
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  overflow: auto;
+  background-color: #f0f2f5;
+}
+  .search-filters {
+    margin: 20px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-filters h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  /* จัดรูปแบบเมื่อมีหลายแถว */
+  @media (max-width: 768px) {
+    .search-bar-sheet {
+      flex-direction: column; /* Cascader ซ้อนกันในแนวตั้งเมื่อจอเล็ก */
+      align-items: flex-start; /* จัดเรียงทางซ้าย */
+    }
+  
+    .ant-cascader {
+      width: 100%; /* ให้ Cascader กินพื้นที่เต็มเมื่อจอเล็ก */
+    }
+  }
+  
+  .Sheet-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  
+  }
+  
+  .Sheet-list .ant-card {
+    flex: 0 1 calc(25% - 20px); 
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .Sheet-list .ant-card:hover {
+    transform: scale(1.05); /* ขยายขนาดการ์ดเล็กน้อยเมื่อเมาส์วาง */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงารอบๆ การ์ด */
+  }
+  
+  .Sheet-list .ant-card .ant-card-body {
+    transition: background-color 0.3s ease; /* เพิ่มการเคลื่อนไหวให้กับเนื้อหาภายในการ์ด */
+  }
+  
+  .Sheet-list .ant-card:hover .ant-card-body {
+    background-color: #f7f7f7; /* เปลี่ยนสีพื้นหลังของการ์ดเมื่อมีการวางเมาส์ */
+  }
+  
+  @media (max-width: 1024px) {
+    .Sheet-list .ant-card {
+      flex: 1 1 calc(33.33% - 20px); /* 3 cards per row for smaller screens */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .Sheet-list .ant-card {
+      flex: 1 1 calc(50% - 20px); /* 2 cards per row for even smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .Sheet-list .ant-card {
+      flex: 1 1 calc(100% - 20px); /* 1 card per row for very small screens */
+    }
+  }
+   
+  .dropdown-menu-sheet {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 10;
+    width: 150px;
+    overflow: hidden;
+  }
+  
+  .dropdown-menu-sheet button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    color: #003366;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown-menu-sheet button:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+  .cart-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000; /* ให้ไอคอนอยู่เหนือองค์ประกอบอื่นๆ */
+  }
+  
+  .cart-icon .ant-btn {
+    background-color: #ff6b00;
+    border-color: #000000;
+    border-width: 2px;
+    color: rgb(255, 255, 255);
+    font-size: 32px; /* ปรับขนาดไอคอน */
+    width: 60px; /* ปรับขนาดของปุ่ม */
+    height: 60px; /* ปรับขนาดของปุ่ม */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px; /* กำหนดมุมให้ไม่กลม */
+    padding: 0; /* ปิด padding เพื่อให้ขนาดไอคอนชัดเจน */
+  }
+  
+  .cart-icon .ant-btn:hover {
+    background-color: #5a6066;
+    border-color: #40a9ff;
+  }
+  .cart-item-count {
+    position: absolute;
+    top: -1px;  /* ปรับตำแหน่งให้เลขชิดไอคอน */
+    right: -1px; /* ปรับตำแหน่งให้เลขชิดขวาของไอคอน */
+    background-color: red; /* สีพื้นหลังของเลข */
+    color: white; /* สีข้อความ */
+    border-radius: 50%; /* ทำให้เป็นวงกลม */
+    padding: 5px 10px; /* เพิ่มขนาดของเลข */
+    font-size: 14px; /* ขนาดตัวอักษร */
+  }
+
+  .additional-info {
+    margin-top: 16px;
+  }
+  
+  .purchased-info {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .average-rating span {
+    font-size: 14px;
+  }
+  .sidebar-fixed {
+    position: fixed;
+    height: 100vh;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 250px; /* Adjust width as needed */
+  }

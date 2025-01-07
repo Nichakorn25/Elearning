@@ -1,0 +1,364 @@
+/* General Styles */
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll; /* ยังคงเลื่อนเนื้อหาได้ */
+  scrollbar-width: none; /* ซ่อน scrollbar */
+  background-color: #f8f9fa; /* ตั้งค่าพื้นหลังเป็นสีเทา */
+  font-family: 'Open Sans', sans-serif;
+}
+
+body::-webkit-scrollbar {
+  display: none; /* ซ่อน scrollbar บน Chrome */
+}
+
+html {
+  height: 100%; /* เพิ่มความสูงให้ html */
+}
+
+/* Layout */
+.teacher-calendar-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+  overflow: hidden; /* ซ่อน scroll bar */
+  margin-top: 60px;
+  width: 100% !important;
+}
+
+/* Header */
+.teacher-calendar-header {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  position: sticky; /* Header อยู่ด้านบนเสมอ */
+  top: 0;
+  z-index: 10;
+  border-bottom: none; /* ลบเส้นกั้นด้านล่าง */
+}
+
+.calendar-title {
+  display: flex; /* ใช้ Flexbox */
+  align-items: center; /* จัดให้แนวตั้งอยู่ตรงกลาง */
+  gap: 10px; /* ระยะห่างระหว่างไอคอนกับข้อความ */
+}
+
+.mycalendar {
+  font-weight: 400; /* น้ำหนักฟอนต์ */
+  font-size: 30px; /* ขนาดตัวอักษร */
+  color: black;
+  margin-left: 10px;
+}
+
+/* Header Left */
+.header-left {
+  font-size: 24px;
+  font-weight: Thin;
+  display: flex;
+  align-items: center;
+  color: black;
+  flex-direction: row;
+}
+.calendar-icon {
+  margin-right: 10px;
+  font-size: 24px;
+  color: #ff9800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header Center */
+.header-center {
+  margin-left: 100px;
+  flex-direction: row;
+}
+.today-btn {
+  margin-left: 10px;
+  padding: 10px 20px; /* เพิ่ม padding ให้ดูใหญ่ขึ้น */
+  border: 1px solid #ddd;
+  border-radius: 20px; /* เพิ่มความโค้งให้เป็นวงรี */
+  background-color: white;
+  cursor: pointer;
+  font-size: 14px; /* ปรับขนาดตัวอักษร */
+  color: black; /* สีตัวอักษร */
+  transition: all 0.3s ease; /* เพิ่ม transition สำหรับเอฟเฟกต์ */
+  background-color: #f5f5f5; /* เพิ่มสีพื้นหลังเมื่อ hover */
+  border-color: #ccc; /* เปลี่ยนสีขอบเมื่อ hover */
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px; /* ขนาดปุ่ม */
+  cursor: pointer;
+  color: black; /* สีปุ่ม */
+  padding: 10px; /* เพิ่มระยะห่างภายในปุ่ม */
+  margin: 15px;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* เพิ่ม transition */
+}
+
+.nav-btn:hover {
+  transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ hover */
+}
+
+.current-date {
+  font-weight: thin;
+  font-size: 24px; /* ขนาดตัวอักษรวันที่ */
+  color: black;
+  margin-left: 5px; /* เพิ่มระยะห่างระหว่างวันที่และปุ่ม */
+  margin-right: 300px;
+}
+
+/* Header Right */
+.header-right {
+  display: flex;
+  align-items: center;
+}
+.header-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-left: 100px;
+  cursor: pointer;
+  color: black;
+}
+
+.calendar-header__dropdown-btn {
+  margin-left: 10px;
+  padding: 10px 20px; /* เพิ่ม padding ให้ดูใหญ่ขึ้น */
+  border: 1px solid #ddd;
+  border-radius: 20px; /* เพิ่มความโค้งให้เป็นวงรี */
+  background-color: white;
+  cursor: pointer;
+  font-size: 14px; /* ปรับขนาดตัวอักษร */
+  color: black; /* สีตัวอักษร */
+  transition: all 0.3s ease; /* เพิ่ม transition สำหรับเอฟเฟกต์ */
+  background-color: #f5f5f5; /* เพิ่มสีพื้นหลังเมื่อ hover */
+  border-color: #ccc; /* เปลี่ยนสีขอบเมื่อ hover */
+}
+
+/* Main Layout */
+.teacher-calendar-main {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  overflow-y: hidden; /* ซ่อน Scroll Bar ของ Layout */
+  height: 100%; /* ใช้พื้นที่เต็มหน้าจอ */
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+}
+
+/* Sidebar */
+.calendar-sidebar {
+  margin: 0;
+  margin-left: 20px;
+  margin-right: 20px;
+  height: 100%;
+  width: 280px;
+  background-color: #f8f9fa;
+  padding: 10px;
+  overflow-y: auto; /* เพิ่ม Scroll เฉพาะ Sidebar */
+  scrollbar-width: thin; /* Scroll แบบบาง */
+  box-shadow: none !important; /* ลบเงาออกทั้งหมด */
+  border: none !important; /* ลบขอบออกทั้งหมด */
+}
+.calendar-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.calendar-sidebar::-webkit-scrollbar-thumb {
+  background: #bbb;
+}
+.sidebar-header button {
+  display: flex; /* จัดการให้ไอคอนและข้อความอยู่ในบรรทัดเดียวกัน */
+  align-items: center; /* จัดแนวไอคอนและข้อความให้อยู่กึ่งกลาง */
+  justify-content: center; /* จัดตำแหน่งข้อความให้อยู่กลาง */
+  color: black; /* สีข้อความ */
+  background-color: white; /* พื้นหลังสีขาว */
+  border: 1px solid #ddd; /* ขอบสีเทาอ่อน */
+  border-radius: 20px; /* มุมโค้งเหมือนตัวอย่าง */
+  padding: 10px 20px; /* ระยะห่างภายใน */
+  font-weight: Thin; /* ตัวหนาสำหรับข้อความ */
+  cursor: pointer; /* แสดง cursor แบบ pointer */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* เพิ่มเงาเบาๆ */
+  transition: all 0.3s ease; /* เพิ่ม Transition เพื่อให้การเปลี่ยนแปลงดูนุ่มนวล */
+}
+
+.sidebar-header button:hover {
+  background-color: #ff9800; /* เปลี่ยนสีพื้นหลังเมื่อ Hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* เพิ่มเงาเมื่อ Hover */
+}
+
+.sidebar-header button:active {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* เงาเมื่อกดปุ่ม */
+}
+
+.mini-calendar {
+  margin-top: 20px;
+  background: none !important; /* ลบพื้นหลัง */
+  border: none !important; /* ลบกรอบ */
+  box-shadow: none !important; /* ลบเงา */
+  padding: 0 !important; /* ลบระยะห่างภายใน */
+}
+
+.sidebar-section h3 {
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+}
+.sidebar-section ul li {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.sidebar-section ul li input {
+  margin-right: 10px;
+}
+
+.create-btn {
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 20px !important;
+  color: black !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+}
+
+.create-btn:hover {
+  background-color: #ff9800 !important;
+  color: black !important;
+  border-color: #ff9800 !important;
+}
+
+/* สไตล์พื้นฐานของ Dropdown Menu */
+.createdropdown .ant-dropdown-menu-item {
+  padding: 15px 20px; /* ระยะห่างเหมือน Sidebar */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    padding-left 0.3s ease;
+  color: black; /* สีข้อความเริ่มต้น */
+}
+
+/* สไตล์เมื่อ Hover */
+.createdropdown .ant-dropdown-menu-item:hover {
+  background-color: #f8f8f8 !important; /* เปลี่ยนสีพื้นหลัง */
+  color: #ff6600 !important; /* เปลี่ยนสีตัวอักษรเป็นสีส้ม */
+  padding-left: 10px !important; /* เลื่อนข้อความไปทางขวาเล็กน้อย */
+}
+
+/* เปลี่ยนข้อความเป็นสีส้มเมื่อ Focus */
+.createdropdown .ant-dropdown-menu-item:focus,
+.createdropdown .ant-dropdown-menu-item:focus-visible {
+  background-color: #f8f8f8 !important; /* เปลี่ยนสีพื้นหลังเมื่อ Focus */
+  color: #ff6600 !important; /* เปลี่ยนสีตัวอักษรเป็นสีส้ม */
+  padding-left: 10px !important; /* เลื่อนข้อความไปทางขวา */
+  outline: none; /* เอาขอบ Focus เริ่มต้นออก */
+}
+
+/* Calendar Container */
+.calendar-container {
+  flex: 1;
+  padding: 0;
+  background-color: #f8f9fa;
+  overflow: hidden; /* ซ่อน Scrollbar ของ Calendar Container */
+  margin: 0%;
+  margin-right: 0;
+  width: 100% !important;
+  height: 100%;
+  gap: 0;
+  margin-top: 0;
+}
+.calendar-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* FullCalendar Adjustments */
+
+.fc {
+  flex: 1;
+  overflow: hidden; /* Prevent internal scroll in FullCalendar */
+  background-color: #f8f9fa;
+  color: black;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  box-shadow: none !important; /* ลบเงา */
+}
+
+/* ทำให้กรอบของปฏิทินทั้งหมดมีมุมโค้ง */
+.fc-view {
+  border-radius: 20px; /* ปรับมุมโค้ง */
+  border: none !important; /* ลบขอบของ View */
+  overflow: hidden; /* ซ่อนเนื้อหาเกิน */
+  background-color: white; /* พื้นหลังของปฏิทิน */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+  margin: 0; /* เพิ่มระยะห่างรอบปฏิทิน */
+  margin-top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+/* ซ่อน scrollbar ของ FullCalendar */
+.fc .fc-scroller {
+  overflow: hidden !important; /* ซ่อน Scrollbar */
+  overflow-y: auto; /* เปิดการเลื่อนขึ้นลง */
+  scrollbar-width: none; /* ซ่อน scrollbar บน Firefox */
+}
+
+.fc-toolbar-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+}
+.fc-daygrid-day-number {
+  color: black;
+  font-weight: bold;
+  border-radius: 50%; /* ทำให้ตัวเลขวงรี */
+  background-color: #e6f7ff; /* พื้นหลังอ่อน */
+  padding: 5px 8px;
+  display: inline-block;
+}
+.fc-event {
+  background-color: #00a676; /* สีเขียวเข้มสำหรับอีเวนต์ */
+  color: white;
+  border: none;
+  border-radius: 20px; /* ขอบโค้งสำหรับอีเวนต์ */
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.fc-event:hover {
+  background-color: #008060; /* สีเขียวเข้มขึ้นเมื่อ hover */
+}
+
+.fc-col-header-cell {
+  color: black; /* ชื่อวัน */
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Today Highlight */
+.fc-day-today {
+  background-color: #fff5e6; /* พื้นหลังไฮไลต์วันที่วันนี้ */
+  border-radius: 10px;
+}
+.fc .fc-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+.fc .fc-button:hover {
+  background-color: #0056b3;
+}
+.fc .fc-button:active {
+  background-color: #003f7f;
+}

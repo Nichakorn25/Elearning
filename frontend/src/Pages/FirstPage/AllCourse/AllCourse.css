@@ -1,0 +1,109 @@
+body{
+    background-color: #e1e1e1;
+}
+/* Container หลัก */
+.all-courses-container {
+    width: 98%; /* จำกัดความกว้าง */
+    align-items: center;
+    margin: 20px auto; /* จัดกึ่งกลาง */
+    padding: 20px; /* ระยะห่างด้านใน */
+    background-color: #ffffff; /* พื้นหลังสีขาว */
+    border-radius: 8px; /* มุมกล่องโค้งมน */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    border: 1px solid #ddd; /* เส้นขอบบาง */
+  }
+  
+  /* หัวข้อ */
+  .all-courses-container h1 {
+    font-size: 34px;
+    color: #333; /* สีข้อความ */
+    margin-bottom: 10px;
+    font-family: 'Open Sans', sans-serif;
+  }
+  
+  /* Breadcrumb */
+  .breadcrumb {
+    font-size: 14px;
+    color: #007bff; /* สีข้อความ breadcrumb */
+    margin-bottom: 20px;
+  }
+  
+  .breadcrumb a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  
+  
+/* กล่องค้นหา */
+.search-container {
+    width: 300px;
+    display: flex; /* ใช้ Flexbox สำหรับจัดวาง */
+    justify-content: flex-start; /* จัดชิดขวา */
+    margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+    border: none; /* ลบเส้นขอบของกล่อง */
+    border-radius: 5px; /* มุมโค้งมน */
+    overflow: hidden; /* ซ่อนเนื้อหาเกินขอบ */
+  }
+  
+  /* ช่องค้นหา */
+  .search-input {
+    flex: 1; /* ใช้พื้นที่เต็ม */
+    padding: 10px; /* ระยะห่างด้านใน */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    border: 1px solid #ccc; /* เส้นขอบสีเทา */
+    border-right: none; /* ลบเส้นขอบด้านขวา */
+    border-radius: 5px 0 0 5px; /* มุมโค้งด้านซ้าย */
+    outline: none; /* ลบเส้นขอบเมื่อคลิก */
+  }
+  
+  /* ปุ่มค้นหา */
+  .search-button {
+    background-color: #ff6600; /* พื้นหลังสีส้ม */
+    color: white; /* สีข้อความ */
+    padding: 10px 20px; /* ระยะห่างด้านใน */
+    font-size: 16px; /* ขนาดตัวอักษร */
+    border: 1px solid #ff6600; /* เส้นขอบสีส้ม */
+    border-radius: 0 5px 5px 0; /* มุมโค้งด้านขวา */
+    cursor: pointer; /* เปลี่ยนเป็นมือคลิก */
+    transition: background-color 0.3s ease; /* เพิ่มเอฟเฟกต์ */
+  }
+  
+  .search-button:hover {
+    background-color: #e65c00; /* พื้นหลังเมื่อ Hover */
+  }
+  
+  
+  /* รายการหมวดหมู่ */
+  .course-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .course-list li {
+    font-size: 18px;
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .course-list li:hover {
+    text-decoration: underline;
+  }
+  
+.allmajor{
+    width: 98%; /* จำกัดความกว้าง */
+    align-items: center;
+    margin: 20px auto; /* จัดกึ่งกลาง */
+    padding: 20px; /* ระยะห่างด้านใน */
+    background-color: #ffffff; /* พื้นหลังสีขาว */
+    border-radius: 8px; /* มุมกล่องโค้งมน */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    border: 1px solid #ddd; /* เส้นขอบบาง */
+}

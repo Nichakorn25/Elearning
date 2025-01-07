@@ -1,0 +1,201 @@
+.sheet {
+    padding: 20px;
+    background: #fff;
+  }
+
+  .menu-button {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: white;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .language {
+    margin-left: 10px;
+  }
+  .user-id, .user-name {
+    margin-right: 10px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  } 
+  .sheet-layout {
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+
+.sheet-content {
+    padding: 24px;
+    background: #fff;
+    
+}
+
+.sheet-details {
+  border-radius: 10px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  max-width: 100%;
+  margin: auto;
+  left: -70px;
+  text-align: left;
+}
+
+.sheet-details-title {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.sheet-details-item {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.sheet-details-item strong {
+  color: #333;
+}
+
+.sheet-card img {
+    border-radius: 8px 8px 0 0;
+}
+
+  .dropdown-menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 10;
+    width: 150px;
+    overflow: hidden;
+  }
+  
+  .dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    background: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    color: #003366;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown-menu button:hover {
+    background-color: #f0f0f0;
+  }
+  
+
+.pdf-preview-container {
+  position: relative;
+  width: 100%; /* ใช้พื้นที่เต็ม Card */
+  height: 100%; /* ใช้พื้นที่เต็ม Card */
+  overflow: hidden; /* ซ่อนส่วนที่เกิน */
+  border-radius: 8px; /* มุมโค้ง */
+  filter: blur(1px); /* เพิ่มความเบลอ */
+}
+
+.pdf-preview-container canvas {
+  margin: auto;
+  display: block;
+  width: 100%; /* ปรับความกว้างเต็ม Card */
+  height: auto; /* ปรับความสูงอัตโนมัติให้สัมพันธ์กับความกว้าง */
+  object-fit: cover; /* ปรับให้เต็มพื้นที่โดยรักษาสัดส่วน */
+}
+
+.sheet-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+    max-width: 350px;
+    max-height: 100%;
+    margin: auto;
+    left: -50px;
+}
+
+.nav-button {
+    position: absolute;
+    top: 50%;
+
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: #e4c3ac;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    border: none;
+    font-size: 16px;
+}
+
+.nav-button.left {
+    left: -45px;
+}
+
+.nav-button.right {
+    right: -45px;
+}
+.nav-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.comments-card {
+  margin-top: 30px; /* ระยะห่างด้านบน */
+  width: 80%; /* กำหนดความกว้าง */
+  margin-left: auto; /* ตรงกลาง */
+  margin-right: auto;
+  padding: 16px; /* ลด Padding ให้ดูเล็กลง */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-list {
+  margin-top: 20px;
+  margin-Bottom: 20px;
+}
+
+.comment-item {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+  background-color: #ffffff;
+}
+
+.comment-user {
+  font-weight: bold;
+  color: #f6b400;
+}
+
+.comment-content {
+  font-size: 14px;
+  color: #636363;
+}
+
+.comment-rating {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -1,0 +1,198 @@
+{
+  "id": "2b70d9ae-d5e8-4289-9ad9-41d3fb9db757",
+  "version": "2.0",
+  "name": "AddSheet",
+  "url": "http://localhost:5173/AddSheet",
+  "tests": [{
+    "id": "3b47a3a1-b474-4c7a-b400-fbcba5aaa89c",
+    "name": "สำเร็จ",
+    "commands": [{
+      "id": "5d2dead1-bb32-4e31-a033-36f6c2c16aa9",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:5173/AddSheet",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e26bd1c2-d83b-4322-95ea-26125eaf3b18",
+      "comment": "",
+      "command": "click",
+      "target": "id=subject",
+      "targets": [
+        ["id=subject", "id"],
+        ["css=#subject", "css:finder"],
+        ["xpath=//input[@id='subject']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div/div/div[2]/div/div/div/div/span/span/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7aa83dba-fbfd-4a86-aeef-aa37e22bc44e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-select-item-option-active > .ant-select-item-option-content",
+      "targets": [
+        ["css=.ant-select-item-option-active > .ant-select-item-option-content", "css:finder"],
+        ["xpath=//div/div[2]/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0f989c7a-8e50-4b3f-a12a-6e9fb93d8cba",
+      "comment": "",
+      "command": "click",
+      "target": "id=term",
+      "targets": [
+        ["id=term", "id"],
+        ["css=#term", "css:finder"],
+        ["xpath=//input[@id='term']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[2]/div/div[2]/div/div/div/div/span/span/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/div/div/div/span/span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7ba23c7b-4b6b-4f22-afa3-17aa7b9362f9",
+      "comment": "",
+      "command": "click",
+      "target": "css=[data-testid=\"option-term-1\"]",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f2dbef42-3a3b-4d92-b899-9596f7102089",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-picker-input",
+      "targets": [
+        ["css=.ant-picker-input", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[3]/div/div[2]/div/div/div/div", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b4845334-5255-42d2-9f08-5c6f87fca6e7",
+      "comment": "",
+      "command": "click",
+      "target": "id=year",
+      "targets": [
+        ["id=year", "id"],
+        ["css=#year", "css:finder"],
+        ["xpath=//input[@id='year']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[3]/div/div[2]/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3bd420e1-cd40-4d6d-bb57-a4babc645a56",
+      "comment": "",
+      "command": "type",
+      "target": "id=year",
+      "targets": [
+        ["id=year", "id"],
+        ["css=#year", "css:finder"],
+        ["xpath=//input[@id='year']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[3]/div/div[2]/div/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//div/input", "xpath:position"]
+      ],
+      "value": "2020"
+    }, {
+      "id": "00c878ce-3218-4f64-9f66-c895b296418b",
+      "comment": "",
+      "command": "click",
+      "target": "id=description",
+      "targets": [
+        ["id=description", "id"],
+        ["css=#description", "css:finder"],
+        ["xpath=//textarea[@id='description']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[4]/div/div[2]/div/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6abda017-ed49-43a7-9107-b99d187e06a5",
+      "comment": "",
+      "command": "type",
+      "target": "id=description",
+      "targets": [
+        ["id=description", "id"],
+        ["css=#description", "css:finder"],
+        ["xpath=//textarea[@id='description']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[4]/div/div[2]/div/div/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "20"
+    }, {
+      "id": "7306bac8-b6a2-41d5-bb93-d42e5df8878a",
+      "comment": "",
+      "command": "click",
+      "target": "id=price",
+      "targets": [
+        ["id=price", "id"],
+        ["css=#price", "css:finder"],
+        ["xpath=//input[@id='price']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[5]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "5bd5bd75-b0bb-4114-aa80-6dc94fb5f9f6",
+      "comment": "",
+      "command": "type",
+      "target": "id=price",
+      "targets": [
+        ["id=price", "id"],
+        ["css=#price", "css:finder"],
+        ["xpath=//input[@id='price']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[5]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "20"
+    }, {
+      "id": "64de221b-3109-4dd0-965e-80cbbfe32dd1",
+      "comment": "",
+      "command": "executeScript",
+      "target": "document.querySelector('input.ant-upload-hidden').style.display = 'block';",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "41569be0-7986-4881-a508-c4f523ae55d4",
+      "comment": "",
+      "command": "sendKeys",
+      "target": "css=input.ant-upload-hidden",
+      "targets": [],
+      "value": "C:\\Users\\Asus\\OneDrive - Suranaree University of Technology\\Desktop\\E-learning\\main\\Elearning\\frontend\\test.pdf"
+    }, {
+      "id": "c62a3012-2879-44d2-b57a-bb8fc1df2fd4",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-btn",
+      "targets": [
+        ["css=.ant-btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/div[2]/main/div/div/form/div[7]/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'เพิ่มชีท')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "98ad203a-5397-4dab-ab13-3ada259f50b7",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.ant-message-custom-content > span:nth-child(2)",
+      "targets": [
+        ["css=.ant-message-custom-content > span:nth-child(2)", "css:finder"],
+        ["xpath=//div/div/div/span[2]", "xpath:position"],
+        ["xpath=//span[contains(.,'ชีทได้ถูกเพิ่มแล้ว')]", "xpath:innerText"]
+      ],
+      "value": "ชีทได้ถูกเพิ่มแล้ว"
+    }]
+  }],
+  "suites": [{
+    "id": "5e470d16-8a91-4625-9838-37a0fc9b24ab",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["3b47a3a1-b474-4c7a-b400-fbcba5aaa89c"]
+  }],
+  "urls": ["http://localhost:5173/", "http://localhost:5173/AddSheet"],
+  "plugins": []
+}

@@ -1,0 +1,224 @@
+{
+  "id": "8cdb6e4c-5d3f-448d-a73b-0d84960f3de6",
+  "version": "2.0",
+  "name": "test_addUser",
+  "url": "http://localhost:5173/AddSealUser",
+  "tests": [{
+    "id": "4f02252f-fc7e-4e42-a299-54148c108558",
+    "name": "สำเร็จ",
+    "commands": [{
+      "id": "84da6348-f5a8-4f62-a8e6-67d1303f997b",
+      "comment": "",
+      "command": "open",
+      "target": "/AddSealUser",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "dce8ce38-70d6-4f6d-93b0-087ec773ba78",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "789x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2392d13b-9d87-4ede-8cc4-193779ceeaca",
+      "comment": "",
+      "command": "click",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a6d34c33-c070-4ec7-92d0-505b539065e3",
+      "comment": "",
+      "command": "type",
+      "target": "id=username",
+      "targets": [
+        ["id=username", "id"],
+        ["css=#username", "css:finder"],
+        ["xpath=//input[@id='username']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "ฺBreech"
+    }, {
+      "id": "0261afb6-7643-4852-b19b-31fe3154e244",
+      "comment": "",
+      "command": "click",
+      "target": "id=bank",
+      "targets": [
+        ["id=bank", "id"],
+        ["css=#bank", "css:finder"],
+        ["xpath=//input[@id='bank']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[2]/div/div[2]/div/div/div/div/span/span/input", "xpath:idRelative"],
+        ["xpath=//span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "644d8ba1-cae6-4dff-ab57-fac059c40121",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-select-item-option-active > .ant-select-item-option-content",
+      "targets": [
+        ["css=.ant-select-item-option-active > .ant-select-item-option-content", "css:finder"],
+        ["xpath=//div/div[2]/div/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d01e9c86-545a-4690-9417-f79a4d805633",
+      "comment": "",
+      "command": "click",
+      "target": "id=accountNumber",
+      "targets": [
+        ["id=accountNumber", "id"],
+        ["css=#accountNumber", "css:finder"],
+        ["xpath=//input[@id='accountNumber']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[3]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "88e527a8-b74c-4218-8134-c3001ec4118d",
+      "comment": "",
+      "command": "type",
+      "target": "id=accountNumber",
+      "targets": [
+        ["id=accountNumber", "id"],
+        ["css=#accountNumber", "css:finder"],
+        ["xpath=//input[@id='accountNumber']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[3]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "123456789"
+    }, {
+      "id": "0a6618ed-a935-4564-9d88-48a96469f18b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-btn > span",
+      "targets": [
+        ["css=.ant-btn > span", "css:finder"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[4]/div/div/div/div/button/span", "xpath:idRelative"],
+        ["xpath=//button/span", "xpath:position"],
+        ["xpath=//span[contains(.,'สร้างผู้ใช้')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "b2a79c9a-4aaf-44bb-aa0e-04b17f381eb9",
+      "comment": "",
+      "command": "verifyText",
+      "target": "css=.ant-message-custom-content > span:nth-child(2)",
+      "targets": [
+        ["css=.ant-message-custom-content > span:nth-child(2)", "css:finder"],
+        ["xpath=//div/div/div/span[2]", "xpath:position"],
+        ["xpath=//span[contains(.,'ผู้ใช้ถูกสร้างเรียบร้อยแล้ว!')]", "xpath:innerText"]
+      ],
+      "value": "ผู้ใช้ถูกสร้างเรียบร้อยแล้ว!"
+    }]
+  }, {
+    "id": "287a6183-4ad7-4979-a3b4-9a0bfcc87a1a",
+    "name": "ไม่สำเร็จ",
+    "commands": [{
+      "id": "eb8e2c2d-f8ae-411c-ab1d-11a3b4a8a7f1",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:5173/AddSealUser",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "32450da4-03dc-44b7-85c6-e32ae50e5b38",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "791x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "83964b24-883f-4f74-8298-8aacc80e7f78",
+      "comment": "",
+      "command": "click",
+      "target": "id=bank",
+      "targets": [
+        ["id=bank", "id"],
+        ["css=#bank", "css:finder"],
+        ["xpath=//input[@id='bank']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[2]/div/div[2]/div/div/div/div/span/span/input", "xpath:idRelative"],
+        ["xpath=//span/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "69a323a3-3473-4b9f-ac03-8d45dbda9b74",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-select-item-option-active",
+      "targets": [
+        ["css=.ant-select-item-option-active", "css:finder"],
+        ["xpath=//div[3]/div/div/div[2]/div/div/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bd5d2e24-2eae-4e79-ba4a-993d55a579dc",
+      "comment": "",
+      "command": "click",
+      "target": "id=accountNumber",
+      "targets": [
+        ["id=accountNumber", "id"],
+        ["css=#accountNumber", "css:finder"],
+        ["xpath=//input[@id='accountNumber']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[3]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c79ae86b-bb00-4da3-bd50-8fe0aca3fa00",
+      "comment": "",
+      "command": "type",
+      "target": "id=accountNumber",
+      "targets": [
+        ["id=accountNumber", "id"],
+        ["css=#accountNumber", "css:finder"],
+        ["xpath=//input[@id='accountNumber']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[3]/div/div[2]/div/div/input", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div[2]/div/div/input", "xpath:position"]
+      ],
+      "value": "123456789"
+    }, {
+      "id": "0a624f05-1763-43ba-a5d5-a12338906823",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ant-btn",
+      "targets": [
+        ["css=.ant-btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/div/div/main/div/div[2]/form/div[4]/div/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'สร้างผู้ใช้')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "dc7c424c-3b03-4b10-80c1-ef993a3b2623",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.ant-form-item-explain-error",
+      "targets": [
+        ["css=.ant-form-item-explain-error", "css:finder"],
+        ["xpath=//div[@id='username_help']/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": "กรุณากรอกชื่อผู้ใช้"
+    }]
+  }],
+  "suites": [{
+    "id": "4fe2a81b-fd7a-422b-ac3f-2ac02693abb4",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["4f02252f-fc7e-4e42-a299-54148c108558"]
+  }],
+  "urls": ["http://localhost:5173/", "http://localhost:5173/AddSealUser"],
+  "plugins": []
+}

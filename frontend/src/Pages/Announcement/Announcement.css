@@ -1,0 +1,21 @@
+.announcement-content {
+    padding: 20px;
+  }
+  
+  .announcement-list {
+    margin-top: 1rem;
+  }
+  
+  .announcement-item {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .toggle-sidebar-button {
+    margin: 1rem;
+  }
+  

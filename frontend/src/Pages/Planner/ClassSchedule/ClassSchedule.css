@@ -1,0 +1,145 @@
+/* ตารางเรียน */
+.schedule-table {
+  margin-top: 80px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-table h2 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.schedule-table h2::before {
+  content: "📅";
+  font-size: 1.5rem;
+}
+
+.schedule-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.schedule-table th,
+.schedule-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.schedule-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  color: #333;
+}
+
+.schedule-table td {
+  height: 50px;
+  vertical-align: middle;
+}
+
+.schedule-table td input {
+  width: 95%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.schedule-table td input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* ปุ่มจัดการตาราง */
+.footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.footer button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.footer .save-button {
+  background-color: #ffc107;
+  color: white;
+}
+
+.footer .save-button:hover {
+  background-color: #e0a800;
+}
+
+.footer .add-course-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.footer .add-course-button:hover {
+  background-color: #0056b3;
+}
+
+/* ปุ่มเพิ่มเติม */
+.actions-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.actions-bar button {
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.actions-bar .reset-button {
+  background-color: #ffc107;
+  color: white;
+}
+
+.actions-bar .reset-button:hover {
+  background-color: #e0a800;
+}
+
+.actions-bar .delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.actions-bar .delete-button:hover {
+  background-color: #c82333;
+}
+
+.actions-bar .export-button {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.actions-bar .export-button:hover {
+  background-color: #117a8b;
+}
+
+
+.day-name{
+  color: black;
+}
