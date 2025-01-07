@@ -30,6 +30,14 @@ import ConfirmTransfer from './Pages/ConfirmTransfer/ConfirmTransfer';
 import ManageRoleRequests from './Pages/ManageRoleRequests/ManageRoleRequests';
 import ManageUsers from "./Pages/ManageUsers/ManageUsers";
 import ProtectedRoute from './Pages/Component/ProtectedRoute/ProtectedRoute'; // Import ProtectedRoute
+import EditSheet from './Pages/EditSheet/EditSheet';
+import IncomeHistory from './Pages/IncomeHistory/IncomeHistory';
+import Payment from './Pages/Payment/Payment';
+import MainSealSheet from './Pages/MainSealSheet/MainSealSheet';
+import CheckSeller from './Pages/CheckSeller/ChechSeller';
+import AddSheet from './Pages/AddSheet/AddSheet';
+import EditSealUser from './Pages/EditSealUser/EditSealUser';
+import AddSealUser from './Pages/AddSealUser/AddSealUser';
 
 
 const App: React.FC = () => {
@@ -76,6 +84,14 @@ const App: React.FC = () => {
           <Route path="/CreateCourse" element={<CreateCourse/>}/>
           <Route path="/ManageCourse" element={<MangeCourse/>}/>
           <Route path="/StudentBooking" element={<StudentBooking/>}/>
+          <Route path="/EditSheet/:id" element={<EditSheet />} />
+          <Route path="/IncomeHistory" element={<IncomeHistory />} />
+          <Route path="/Payment" element={<Payment />} />
+          <Route path="/CheckSeller" element={<CheckSeller />} /> 
+          <Route path="/MainSealSheet" element={<MainSealSheet />} />
+          <Route path="/AddSheet" element={<AddSheet />} />
+          <Route path="/EditSealUser" element={<EditSealUser />} />
+          <Route path="/AddSealUser" element={<AddSealUser />} /> 
         </Routes>
 
         {/* แสดง LoginPopup เมื่อ isPopupOpen เป็น true */}
