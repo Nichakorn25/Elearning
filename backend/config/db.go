@@ -57,6 +57,12 @@ func SetupDatabase() {
 		&entity.Role{},
 		&entity.Semester{},
 		&entity.Sheet{},
+		&entity.Bank{},
+		&entity.SellerBankAccount{},
+		&entity.Seller{},
+		&entity.Cart{},
+		&entity.CartItem{},
+		&entity.CartStatus{},
 		&entity.StudentAnswer{},
 		&entity.Submission{},
 		&entity.Test{},
@@ -283,6 +289,38 @@ func SetupDatabase() {
 	for _, pkg := range Category {
 		db.FirstOrCreate(&pkg, entity.Category{CategoryID: pkg.CategoryID})
 	}
+		// เพิ่ม CartStatus
+		cartStatuses := []entity.CartStatus{
+			{StatusName: "Active"}, 
+			{StatusName: "Completed"},
+		}
+	
+		for _, status := range cartStatuses {
+			db.FirstOrCreate(&status, entity.CartStatus{StatusName: status.StatusName})
+		}
+		paymentStatuses := []entity.PaymentStatus{
+			{StatusName: "Pending"},  
+			{StatusName: "Completed"}, 
+		}
+	
+		for _, status := range paymentStatuses {
+			db.FirstOrCreate(&status, entity.PaymentStatus{StatusName: status.StatusName})
+		}
+		banks := []entity.Bank{
+			{BankName: "ธนาคารกรุงเทพ"},
+			{BankName: "ธนาคารกสิกรไทย"},
+			{BankName: "ธนาคารไทยพาณิชย์"},
+			{BankName: "ธนาคารกรุงไทย"},
+			{BankName: "ธนาคารออมสิน"},
+			{BankName: "ธนาคารทหารไทยธนชาต (TTB)"},
+			{BankName: "ธนาคารซีไอเอ็มบีไทย (CIMB)"},
+			{BankName: "ธนาคารยูโอบี (UOB)"},
+			{BankName: "ธนาคารกรุงศรีอยุธยา"},
+		}
+	
+		for _, bank := range banks {
+			db.FirstOrCreate(&bank, entity.Bank{BankName: bank.BankName})
+		}
 
 
 }
