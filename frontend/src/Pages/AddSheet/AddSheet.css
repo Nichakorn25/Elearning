@@ -1,15 +1,18 @@
 /* MainSealSheet.css */
-.sheet {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f0f2f5;
+.sealsheet {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
   }
   
   .sealsheet-content {
-    padding: 24px;
+    display: flex;
+    justify-content: center; /* ฟอร์มจะอยู่ตรงกลาง */
+    align-items: flex-start; /* ทำให้ฟอร์มชิดด้านบน */
+    height: 100%; /* ทำให้ใช้ความสูงที่เหลือจาก header */
+    padding-top: 30px; /* กำหนดระยะห่างจาก header */
     background-color: #ffffff;
-    overflow: auto;
   }
   
   .card-title {
@@ -19,11 +22,13 @@
     margin-bottom: 20px; /* Additional bottom space */
   }
   
-  .form-container {
-    max-width: 600px;
-    margin: auto;
+  .sealsheetform-container {
+    width: 100%;
+    max-width: 500px; /* ปรับขนาดให้แคบลง */
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin-top: 30; /* ไม่ต้องมี margin-top เพื่อให้ฟอร์มชิดกับ header */  
   }
   
