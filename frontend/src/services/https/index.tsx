@@ -4,6 +4,12 @@ import axios from "axios";
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
 import { AnnouncementInterface, ChangeRoleInterface } from "../../Interface/Admin";
 import {TeacherAppointmentInterface , StudentBookingInterface} from "../../Interface/IAppointment";
+import { ReviewInterface } from "../../Interface/Review";
+import { PurchaseInterface } from "../../Interface/Purchase";
+import { PaymentInterface } from "../../Interface/Payment";
+import { CartItemInterface } from "../../Interface/CartItem";
+import { CartInterface } from "../../Interface/Cart";
+import { SellerInterface } from "../../Interface/Seller";
 
 
 const apiUrl = "http://localhost:8000"; // URL ของ API
@@ -359,7 +365,297 @@ async function GetRoleChangeRequests() {
     .then((res) => res)
     .catch((e) => e.response);
 }
+async function ListSellers() {
+  return axios
+    .get(`${apiUrl}/sellers`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 
+// Get seller by ID
+async function GetSellerById(id: string) {
+  return axios
+    .get(`${apiUrl}/sellers/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Create a new seller
+async function CreateSeller(data: SellerInterface) {
+  return axios
+    .post(`${apiUrl}/sellers`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Update an existing seller
+async function UpdateSellerById(id: string, data: SellerInterface) {
+  return axios
+    .put(`${apiUrl}/sellers/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// Delete a seller
+async function DeleteSellerById(id: string) {
+  return axios
+    .delete(`${apiUrl}/sellers/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function CheckUserExistsInSeller(userId: string) {
+  try {
+    const response = await axios.get(`${apiUrl}/sellers/user/${userId}/exists`, requestOptions);
+
+    // ตรวจสอบผลลัพธ์จาก API
+    if (response.data.status === "success") {
+      return {
+        exists: true,
+        message: response.data.message,
+        sellerId: response.data.sellerId, // ดึง sellerId จาก API
+      };
+    } else if (response.data.status === "fail") {
+      return { exists: false, message: response.data.message };
+    } else {
+      return { exists: false, message: "Unexpected response from server" };
+    }
+  } catch (error: any) {
+    // กรณีเกิดข้อผิดพลาด
+    return { exists: false, message: "Error connecting to server" };
+  }
+}
+
+async function ListBanks() {
+  return axios
+    .get(`${apiUrl}/banks`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetBanksById(id: string) {
+  return axios
+    .get(`${apiUrl}/banks/${id}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+// Get all Sheets
+export async function ListSheets() {
+  try {
+    const response = await axios.get(`${apiUrl}/sheets`, requestOptions);
+    return response.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error fetching sheets:", error);
+    return error.response;
+  }
+}
+export async function ListSheetsBySellerId(sellerID: number) {
+  try {
+    const response = await axios.get(
+      `${apiUrl}/sheets/seller/${sellerID}`,
+      requestOptions
+    );
+    return response.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error fetching sheets by sellerID:", error);
+    return error.response;
+  }
+}
+// Get Sheet by ID
+export async function GetSheetByID(id: string) {
+  try {
+    const response = await axios.get(`${apiUrl}/sheets/${id}`, requestOptions);
+    return response.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error fetching sheet by ID:", error);
+    return error.response;
+  }
+} 
+export async function CreateSheet(data: FormData) {
+  try {
+    const response = await axios.post(`${apiUrl}/sheets`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // ไม่จำเป็นต้องเพิ่ม แต่เพิ่มได้เพื่อความชัดเจน
+        Authorization: `Bearer ${localStorage.getItem('token')}`, // เพิ่ม Token หากจำเป็น
+      },
+    });
+    return response;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error('Axios Error:', error.response?.data || error.message);
+      throw new Error(error.response?.data?.error || 'เกิดข้อผิดพลาด');
+    }
+    console.error('Unexpected Error:', error);
+    throw new Error('เกิดข้อผิดพลาดที่ไม่คาดคิด');
+  }
+}
+// Update an existing Sheet by ID
+export async function UpdateSheet(id: string, data: FormData) {
+  try {
+    const response = await axios.put(`${apiUrl}/sheets/${id}`, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // ระบุ Content-Type
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    return response.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error updating sheet:", error);
+    return error.response; // ส่งข้อผิดพลาดกลับมา
+  }
+}
+
+// Delete a Sheet by ID
+export async function DeleteSheet(id: string) {
+  try {
+    const response = await axios.delete(`${apiUrl}/sheets/${id}`, requestOptions);
+    return response.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error deleting sheet:", error);
+    return error.response;
+  }
+}
+export async function ListCourses() {
+  try {
+    const response = await axios.get(`${apiUrl}/courses`, requestOptions);
+    return response.data.data; // ส่งเฉพาะข้อมูลที่ต้องการ
+  } catch (error: any) {
+    console.error("Error fetching courses:", error);
+    return [];
+  }
+}
+async function ListCarts(p0: { userId: number; }) {
+  return axios
+    .get(`${apiUrl}/carts`, requestOptions)
+    .then((res) => res.data) // Return response data only
+    .catch((e) => e.response);
+}
+
+// Get cart by ID
+async function GetCartById(id: string) {
+  return axios
+    .get(`${apiUrl}/carts/${id}`, requestOptions)
+    .then((res) => res.data) // Return response data only
+    .catch((e) => e.response);
+}
+
+// Create a new cart
+async function CreateCart(data: CartInterface) {
+  return axios
+    .post(`${apiUrl}/carts`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Update an existing cart by ID
+async function UpdateCartById(id: string, data: CartInterface) {
+  return axios
+    .put(`${apiUrl}/carts/${id}`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Delete a cart by ID
+async function DeleteCartById(id: string) {
+  return axios
+    .delete(`${apiUrl}/carts/${id}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Add an item to the cart
+async function AddCartItem(data: CartItemInterface) {
+  return axios
+    .post(`${apiUrl}/cart-items`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Get all items in a cart
+async function ListCartItems(id: string) {
+  return axios
+    .get(`${apiUrl}/cart-items/cart/${id}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+// Update a cart item by ID
+async function UpdateCartItemById(id: string, data: CartItemInterface) {
+  return axios
+    .put(`${apiUrl}/cart-items/${id}`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+// Delete a cart item by ID
+async function DeleteCartItemById(id: number) {
+  return axios
+    .delete(`${apiUrl}/cart-items/${id}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Checkout a cart
+async function CheckoutCart(data: PaymentInterface): Promise<PurchaseInterface | undefined> {
+  return axios
+    .post(`${apiUrl}/carts/${data.PurchaseID}/checkout`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => {
+      console.error("Error during checkout:", e.response || e);
+      return undefined;
+    });
+}
+// Get cart by User ID
+async function GetCartByUser(id: string) {
+  return axios
+    .get(`${apiUrl}/carts/user/${id}`, requestOptions)
+    .then((res) => res.data) 
+    .catch((e) => e.response);
+}
+// Create a new review
+async function CreateReview(data: ReviewInterface) {
+  return axios
+    .post(`${apiUrl}/reviews`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Get all reviews
+async function ListReviews() {
+  return axios
+    .get(`${apiUrl}/reviews`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Get a review by ID
+async function GetReviewById(id: number) {
+  return axios
+    .get(`${apiUrl}/reviews/${id}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Update an existing review by ID
+async function UpdateReviewById(id: number, data: ReviewInterface) {
+  return axios
+    .put(`${apiUrl}/reviews/${id}`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// Delete a review by ID
+async function DeleteReviewById(id: number) {
+  return axios
+    .delete(`${apiUrl}/reviews/${id}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+async function GetReviewsBySheetID(sheetId: number) {
+  return axios
+    .get(`${apiUrl}/reviews/sheet/${sheetId}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
 
 export{
   GetDepartments,
@@ -388,4 +684,29 @@ export{
   BookAppointment,
   GetDay,
   CreateStudentBooking,
+  DeleteSellerById,
+  UpdateSellerById,
+  CreateSeller,
+  GetSellerById,
+  ListSellers,
+  CheckUserExistsInSeller,
+  ListBanks,
+  GetBanksById,
+  ListCarts,
+  GetCartById,
+  CreateCart,
+  UpdateCartById,
+  DeleteCartById,
+  AddCartItem,
+  ListCartItems,
+  UpdateCartItemById,
+  DeleteCartItemById,
+  CheckoutCart,
+  GetCartByUser,
+  DeleteReviewById,
+  UpdateReviewById,
+  GetReviewById,
+  ListReviews,
+  CreateReview,
+  GetReviewsBySheetID
 };
