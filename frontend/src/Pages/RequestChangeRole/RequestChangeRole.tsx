@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { message, Upload, Button, Image } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import "./RequestChangeRole.css";
+import { CreateRoleChangeRequests } from '../../services/https';
+import { ChangeRoleInterface } from '../../Interface/Admin';
 
 const RequestChangeRole: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -15,6 +19,7 @@ const RequestChangeRole: React.FC = () => {
     reason: "",
     idCard: null as File | null, // สำหรับจัดเก็บไฟล์รูปบัตร
   });
+  const [fileList, setFileList] = useState<any[]>([]); // เก็บรายการไฟล์ที่อัปโหลด
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -32,22 +37,54 @@ const RequestChangeRole: React.FC = () => {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFormData({
-        ...formData,
-        idCard: e.target.files[0], // เก็บไฟล์ที่ผู้ใช้อัปโหลด
-      });
-    }
+  const handleFileChange = (file: File) => {
+    setFormData({
+      ...formData,
+      idCard: file,
+    });
+    setFileList([{ url: URL.createObjectURL(file), name: file.name }]); // สร้าง URL สำหรับแสดง preview
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Request Submitted:", formData);
-    if (formData.idCard) {
-      console.log("Uploaded File:", formData.idCard.name);
+
+    // ตรวจสอบว่ามีไฟล์อัปโหลดหรือไม่
+    if (!formData.idCard) {
+      message.error("Please upload your ID card.");
+      return;
     }
-    // ส่งข้อมูลไปยัง backend หรือ API
+
+    const formPayload = new FormData();
+    formPayload.append("username", formData.username);
+    formPayload.append("fullname", formData.fullname);
+    formPayload.append("email", formData.email);
+    formPayload.append("phone", formData.phone);
+    formPayload.append("department", formData.department);
+    formPayload.append("major", formData.major);
+    formPayload.append("reason", formData.reason);
+    formPayload.append("idCard", formData.idCard);
+    
+    try {
+      const response = await CreateRoleChangeRequests(formPayload);
+      if (response && response.status === 201) {
+        message.success("Your request has been submitted successfully.");
+        setFormData({
+          username: "",
+          fullname: "",
+          email: "",
+          phone: "",
+          department: "",
+          major: "",
+          reason: "",
+          idCard: null,
+        });
+        setFileList([]); // ล้างไฟล์ list หลังจาก submit
+      } else {
+        message.error("Failed to submit the request. Please try again.");
+      }
+    } catch (error) {
+      message.error("An error occurred while submitting the request.");
+    }
   };
 
   return (
@@ -148,14 +185,25 @@ const RequestChangeRole: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="idCard">Upload ID Card:</label>
-              <input
-                type="file"
-                id="idCard"
-                name="idCard"
+              <Upload
+                beforeUpload={(file) => {
+                  handleFileChange(file);
+                  return false; // ป้องกันไม่ให้อัปโหลดอัตโนมัติ
+                }}
                 accept="image/*"
-                onChange={handleFileChange}
-                required
-              />
+                fileList={fileList}
+              >
+                <Button icon={<UploadOutlined />}>Upload ID Card</Button>
+              </Upload>
+              {fileList.length > 0 && (
+                <div className="preview-container">
+                  <Image
+                    width={100}
+                    src={fileList[0].url}
+                    alt="ID Card Preview"
+                  />
+                </div>
+              )}
             </div>
             <button type="submit" className="submit-button">
               Submit Request

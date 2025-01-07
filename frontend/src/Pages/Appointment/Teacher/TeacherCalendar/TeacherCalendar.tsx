@@ -174,12 +174,11 @@ const TeacherCalendar: React.FC = () => {
         Task
       </Menu.Item>
       {/* Appointment Menu */}
-      <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
+      {/* <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
         Appointment Schedule
-      </Menu.Item>
+      </Menu.Item> */}
     </Menu>
   );
-  
 
   useEffect(() => {
     if (calendarRef.current) {
@@ -189,6 +188,9 @@ const TeacherCalendar: React.FC = () => {
       }, 300); // รอให้ Transition ของ Sidebar เสร็จสิ้น
     }
   }, [isSidebarVisible]);
+
+  //=================================popup==================================
+  const [isPopup, setPopUp] = useState(false);
 
   return (
     <div className="teacher-calendar-layout">
@@ -231,13 +233,27 @@ const TeacherCalendar: React.FC = () => {
       <div className="teacher-calendar-main">
         {/* Sidebar */}
         <aside className="calendar-sidebar">
-          <div className="sidebar-header">
+          {/* ปุ่ม popup CreateAppointment */}
+          {/* ปุ่ม popup CreateAppointment */}
+          <div
+            onClick={() => setPopUp(!isPopup)}
+            className="create-appointment-btn"
+          >
+            + CreateAppointment
+          </div>
+          {isPopup && (
+            <div>
+              <CreateAppointment />
+            </div>
+          )}
+
+          {/* <div className="sidebar-header">
             <Dropdown overlay={createMenu} trigger={["click"]}>
               <Button className="create-btn">
                 + Create <DownOutlined />
               </Button>
             </Dropdown>
-          </div>
+          </div> */}
 
           {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
           {/* <CreateAppointmentPopup
@@ -246,23 +262,23 @@ const TeacherCalendar: React.FC = () => {
             onSubmit={handleSubmitAppointment}
           /> */}
 
-          <CreateTaskPopup
+          {/* <CreateTaskPopup
             isVisible={isTaskModalVisible}
             onClose={handleCloseTaskModal}
             onSubmit={handleSubmitTask}
             selectedDate={selectedDate}
-          />
+          /> */}
 
-          <CreateAppointment
+          {/* <CreateAppointment
             isVisible={isAppointmentModalVisible}
             onClose={() => setIsAppointmentModalVisible(false)}
             onSubmit={handleSubmitAppointment}
-          />
+          /> */}
 
           <div className="mini-calendar">
             <Calendar />
           </div>
-          <div className="sidebar-section">
+          {/* <div className="sidebar-section">
             <h3>My Tasks</h3>
             <ul>
               <li>
@@ -278,11 +294,24 @@ const TeacherCalendar: React.FC = () => {
                 Tasks
               </li>
             </ul>
-          </div>
+          </div> */}
           <div className="sidebar-section">
             <h3>Other Task</h3>
-            <button>+</button>
+            <button
+              className="create-task-btn"
+              onClick={() => setIsTaskModalVisible(true)}
+            >
+              +
+            </button>
           </div>
+
+          {/* Popup สำหรับ Task */}
+          <CreateTaskPopup
+            isVisible={isTaskModalVisible}
+            onClose={handleCloseTaskModal}
+            onSubmit={handleSubmitTask}
+            selectedDate={selectedDate}
+          />
         </aside>
 
         {/* Calendar */}

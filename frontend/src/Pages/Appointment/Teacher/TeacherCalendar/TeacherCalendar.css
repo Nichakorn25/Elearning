@@ -228,12 +228,19 @@ html {
   border: none; /* ลบขอบใน abbr */
 }
 
+.sidebar-section ul li input {
+  margin: 0 10px 0 0; /* เพิ่มระยะห่างระหว่าง Checkbox และข้อความ */
+}
 
-.sidebar-section{
+/* Sidebar Section */
+.sidebar-section {
+  margin-left: 0; /* จัด Sidebar ชิดซ้าย */
+  padding-left: 0; /* ลบระยะห่างเพิ่มเติม */
   color: black;
 }
 
 .sidebar-section button{
+  margin-left: 0px !important;
   background-color: white !important;
   border: 1px solid #ddd !important;
   border-radius: 10px !important;
@@ -253,16 +260,21 @@ html {
   font-weight: bold;
   color: black;
 }
-.sidebar-section ul li {
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-}
-.sidebar-section ul li input {
-  margin-right: 10px;
+
+.sidebar-section ul {
+  list-style: none; /* เอาจุดหน้ารายการออก */
+  padding: 0; /* ลบระยะห่างด้านใน */
+  margin: 0; /* ลบระยะห่างด้านนอก */
 }
 
-.create-btn {
+.sidebar-section ul li {
+  display: flex; /* ใช้ Flexbox */
+  align-items: center; /* จัด Checkbox และข้อความให้อยู่ในบรรทัดเดียวกัน */
+  justify-content: flex-start; /* จัดตำแหน่งให้อยู่ชิดซ้าย */
+  margin-bottom: 10px; /* ระยะห่างระหว่างรายการ */
+}
+
+.create-btn  {
   background-color: white !important;
   border: 1px solid #ddd !important;
   border-radius: 20px !important;
@@ -270,7 +282,7 @@ html {
   transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
-.create-btn:hover {
+.create-btn  :hover {
   background-color: #ff9800 !important;
   color: black !important;
   border-color: #ff9800 !important;
@@ -406,4 +418,22 @@ html {
 }
 .fc .fc-button:active {
   background-color: #003f7f;
+}
+
+.create-appointment-btn {
+  height: 25px;
+  font-size: 16px;
+  text-align: center;
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 20px !important;
+  color: black !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+  cursor: pointer;
+}
+
+.create-appointment-btn:hover {
+  background-color: #ff9800 !important;
+  color: black !important;
+  border-color: #ff9800 !important;
 }

@@ -52,16 +52,26 @@ func SetupDatabase() {
 		&entity.ProfilePicture{},
 		&entity.Purchase{},
 		&entity.QuizQuestion{},
+		&entity.RequestChangeRole{},
 		&entity.Review{},
 		&entity.Role{},
 		&entity.Semester{},
 		&entity.Sheet{},
+		&entity.Bank{},
+		&entity.SellerBankAccount{},
+		&entity.Seller{},
+		&entity.Cart{},
+		&entity.CartItem{},
+		&entity.CartStatus{},
 		&entity.StudentAnswer{},
 		&entity.Submission{},
 		&entity.Test{},
 		&entity.TransactionLog{},
 		&entity.User{},
 		&entity.StudyTime{},
+		&entity.TeacherAppointment{},
+		&entity.Availability{},
+		&entity.StudentBooking{},
 	)
 	departments := []entity.Department{
 		{DepartmentName: "สำนักวิชาวิทยาศาสตร์ (Institute of Science)"},
@@ -100,8 +110,8 @@ func SetupDatabase() {
 
 		{MajorName: "สาขาวิชาวิศวกรรมเกษตร (School of Agricultural Engineering)", DepartmentID: 4},
 		{MajorName: "สาขาวิชาวิศวกรรมขนส่ง (School of Transportation Engineering)", DepartmentID: 4},
-		{MajorName: "สาขาวิชาวิศวกรรมคอมพิวเตอร์ ( School of Computer Engineering)", DepartmentID: 4},
 		{MajorName: "สาขาวิชาวิศวกรรมเคมี (School of Chemical Engineering)", DepartmentID: 4},
+		{MajorName: "สาขาวิชาวิศวกรรมคอมพิวเตอร์ ( School of Computer Engineering)", DepartmentID: 4},
 		{MajorName: "สาขาวิชาวิศวกรรมเครื่องกล (School of Mechanical Engineering)", DepartmentID: 4},
 		{MajorName: "สาขาวิชาวิศวกรรมเซรามิก (School of Ceramic Engineering)", DepartmentID: 4},
 		{MajorName: "สาขาวิชาวิศวกรรมโทรคมนาคม (School of Telecommunication Engineering)", DepartmentID: 4},
@@ -188,11 +198,22 @@ func SetupDatabase() {
 
 	//User
 	User := []entity.User{
-		{Username: "B6504540", Password: hashedPassword, FirstName: "ศิขเรศ", LastName: "เปภักดี", Email: "B6504540@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17},
-		{Username: "B6510923", Password: hashedPassword, FirstName: "ธนวัฒน์", LastName: "ผ่านบุตร", Email: "B6510923@g.sut.ac.th", Phone: "0987654321", RoleID: 3},
-		{Username: "B6516093", Password: hashedPassword, FirstName: "สุเมธ", LastName: "สาลีพันธ์", Email: "B6516093@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17},
-		{Username: "B6524548", Password: hashedPassword, FirstName: "เจษฎาภรณ์", LastName: "ปิ่นใจ", Email: "B6524548@g.sut.ac.th", Phone: "0987654321", RoleID: 1},
-		{Username: "B6525972", Password: hashedPassword, FirstName: "ณิชากร", LastName: "จันทร์ยุทา", Email: "B6525972@g.sut.ac.th", Phone: "0987654321", RoleID: 1},
+		{Username: "B6504540", Password: hashedPassword, FirstName: "ศิขเรศ", LastName: "เปภักดี", Email: "B6504540@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17, Status: "Active"},
+		{Username: "B6510923", Password: hashedPassword, FirstName: "ธนวัฒน์", LastName: "ผ่านบุตร", Email: "B6510923@g.sut.ac.th", Phone: "0987654321", RoleID: 3, Status: "Active"},
+		{Username: "B6516093", Password: hashedPassword, FirstName: "สุเมธ", LastName: "สาลีพันธ์", Email: "B6516093@g.sut.ac.th", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 17, Status: "Active"},
+		{Username: "B6524548", Password: hashedPassword, FirstName: "เจษฎาภรณ์", LastName: "ปิ่นใจ", Email: "B6524548@g.sut.ac.th", Phone: "0987654321", RoleID: 1, Status: "Active"},
+		{Username: "B6525972", Password: hashedPassword, FirstName: "ณิชากร", LastName: "จันทร์ยุทา", Email: "B6525972@g.sut.ac.th", Phone: "0987654321", RoleID: 1, Status: "Active"},
+
+		{Username: "T6500001", Password: hashedPassword, FirstName: "นันทวุฒิ", LastName: "คะอังกุ", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+		{Username: "T6500002", Password: hashedPassword, FirstName: "ศรัญญา", LastName: "กาญจนวัฒนา", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+		{Username: "T6500003", Password: hashedPassword, FirstName: "วิชัย", LastName: "ศรีสุรักษ์", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+		{Username: "T6500004", Password: hashedPassword, FirstName: "ปริญญ์", LastName: "ศรเลิศล้ำวานิช", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+		{Username: "T6500005", Password: hashedPassword, FirstName: "คมศัลล์", LastName: "ศรีวิสุทธิ์", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+		{Username: "T6500006", Password: hashedPassword, FirstName: "ทดสอบ", LastName: "ส่งอีเมล", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
+
+
+
+		
 	}
 	for _, pkg := range User {
 		db.FirstOrCreate(&pkg, entity.User{Username: pkg.Username})
@@ -268,6 +289,38 @@ func SetupDatabase() {
 	for _, pkg := range Category {
 		db.FirstOrCreate(&pkg, entity.Category{CategoryID: pkg.CategoryID})
 	}
+		// เพิ่ม CartStatus
+		cartStatuses := []entity.CartStatus{
+			{StatusName: "Active"}, 
+			{StatusName: "Completed"},
+		}
+	
+		for _, status := range cartStatuses {
+			db.FirstOrCreate(&status, entity.CartStatus{StatusName: status.StatusName})
+		}
+		paymentStatuses := []entity.PaymentStatus{
+			{StatusName: "Pending"},  
+			{StatusName: "Completed"}, 
+		}
+	
+		for _, status := range paymentStatuses {
+			db.FirstOrCreate(&status, entity.PaymentStatus{StatusName: status.StatusName})
+		}
+		banks := []entity.Bank{
+			{BankName: "ธนาคารกรุงเทพ"},
+			{BankName: "ธนาคารกสิกรไทย"},
+			{BankName: "ธนาคารไทยพาณิชย์"},
+			{BankName: "ธนาคารกรุงไทย"},
+			{BankName: "ธนาคารออมสิน"},
+			{BankName: "ธนาคารทหารไทยธนชาต (TTB)"},
+			{BankName: "ธนาคารซีไอเอ็มบีไทย (CIMB)"},
+			{BankName: "ธนาคารยูโอบี (UOB)"},
+			{BankName: "ธนาคารกรุงศรีอยุธยา"},
+		}
+	
+		for _, bank := range banks {
+			db.FirstOrCreate(&bank, entity.Bank{BankName: bank.BankName})
+		}
 
 
 }

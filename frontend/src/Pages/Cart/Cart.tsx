@@ -1,102 +1,246 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, Layout, Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import './cart.css';
-import Sidebar from '../Component/Sidebar/Sidebar';
-import Header from '../Component/Header/Header';
+import React, { useState, useEffect, useRef } from "react";
+import { Card, Layout, Button, Spin, message, Empty } from "antd";
+import { useNavigate } from "react-router-dom";
+import Header from "../Component/Header/Header";
+import { CartItemInterface } from "../../Interface/CartItem";
+import { DeleteCartItemById, GetCartByUser } from "../../services/https";
+import Sidebar from "../Component/Sidebar/Sidebar";
+import "./Cart.css";
 
 const { Meta } = Card;
 
 const Cart: React.FC = () => {
   const navigate = useNavigate();
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [cartItems, setCartItems] = useState<CartItemInterface[]>([]);
+  const [loading, setLoading] = useState(true);
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+
+  const fetchCartItems = async () => {
+    const userId = localStorage.getItem("id");
+    if (!userId) {
+      message.error("กรุณาเข้าสู่ระบบก่อนใช้งาน");
+      navigate("/login");
+      return;
+    }
+  
+    try {
+      setLoading(true);
+      const response = await GetCartByUser(userId);
+      if (response?.data?.ID) {
+        localStorage.setItem("cartId", response.data.ID); // บันทึก Cart ID
+      }
+      console.log("Response Data:", response.data.CartItem); // Debug Data
+      if (!response || !response.data || response.data.CartStatusID !== 1) {
+        message.info("ไม่มีตะกร้าที่ใช้งานอยู่");
+        setCartItems([]);
+        return;
+      }
+  
+      setCartItems(response.data.CartItem || []);
+    } catch (error) {
+      message.error("ไม่สามารถดึงข้อมูลสินค้าในตะกร้าได้");
+      console.error("Error fetching cart items:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+  useEffect(() => {
+    console.log("Cart Items:", cartItems);
+    cartItems.forEach((item, index) => {
+        const canvas = canvasRefs.current[index];
+        if (canvas && item.Sheet) {
+            console.log("Canvas Data:", item.Sheet); // Debug data
+        }
+    });
+}, [cartItems]);
+useEffect(() => {
+  console.log("Cart Items:", cartItems);
+  cartItems.forEach((item, index) => {
+      const canvas = canvasRefs.current[index];
+      if (canvas && item.Sheet) {
+          console.log("Canvas Data:", item.Sheet); // Debug data
+      }
+  });
+}, [cartItems]);
+
+const handleRemoveItem = async (itemId: number | undefined) => {
+  if (!itemId) {
+    message.error("ไม่สามารถลบสินค้าได้ เนื่องจาก ID ไม่ถูกต้อง");
+    return;
+  }
+
+  try {
+    await DeleteCartItemById(itemId); // ใช้ itemId ที่ตรวจสอบแล้ว
+    setCartItems((prevItems) => prevItems.filter((item) => item.ID !== itemId));
+    message.success("ลบสินค้าออกจากตะกร้าเรียบร้อยแล้ว");
+    fetchCartItems();
+  } catch (error) {
+    message.error("ไม่สามารถลบสินค้าได้");
+    console.error("Error removing item:", error);
+  }
+};
+const handlePayment = () => {
+  const cartId = localStorage.getItem("cartId");
+  if (!cartId) {
+    message.error("ไม่พบ Cart ID ในระบบ โปรดตรวจสอบอีกครั้ง");
+    return;
+  }
+  if (cartItems.length === 0) {
+    message.error("ไม่มีสินค้าในตะกร้า โปรดเพิ่มสินค้าก่อนทำการชำระเงิน");
+    return;
+  }
+  navigate("/Payment", { state: { cartId, cartItems } });
+};
+
+
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownVisible(false);
+    const radius = 10; // Radius for rounded corners
+    canvasRefs.current.forEach((canvas, index) => {
+      if (canvas) {
+        const ctx = canvas.getContext("2d");
+        if (ctx && cartItems[index]) {
+          const cartItem = cartItems[index];
+
+          // Clear canvas
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Background
+          ctx.fillStyle = "#f2a900";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Border
+          ctx.strokeStyle = "#fff";
+          ctx.lineWidth = 2;
+          ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+
+          // Course Code
+          ctx.fillStyle = "#000";
+          ctx.font = "bold 30px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText(cartItem.Sheet?.Course?.CourseDate || "No Course Code", canvas.width / 2, 60);
+
+          // Title
+          ctx.fillStyle = "#000";
+          ctx.font = "bold 20px Arial";
+          ctx.fillText(cartItem.Sheet?.Title || "No Title", canvas.width / 2, 100);
+
+          // Seller Name
+          ctx.fillStyle = "red";
+          ctx.font = "16px Arial";
+          ctx.fillText(`By ${cartItem.Sheet?.Seller?.Name || "No Seller"}`, canvas.width / 2, 130);
+
+          // Edition
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+          ctx.fillText(`ฉบับ ${cartItem.Sheet?.Term || "N/A"} / ${cartItem.Sheet?.Year || "N/A"}`, canvas.width / 2, 160);
+
+          // Price (Rounded Button)
+          const price = `${cartItem.Sheet?.Price || "0"} BAHT`;
+          const priceWidth = ctx.measureText(price).width + 20;
+          const priceX = canvas.width / 2 - priceWidth / 2;
+          const priceY = 200;
+
+          ctx.fillStyle = "red";
+          ctx.beginPath();
+          ctx.moveTo(priceX + radius, priceY - 20);
+          ctx.lineTo(priceX + priceWidth - radius, priceY - 20);
+          ctx.quadraticCurveTo(priceX + priceWidth, priceY - 20, priceX + priceWidth, priceY - 20 + radius);
+          ctx.lineTo(priceX + priceWidth, priceY + 10 - radius);
+          ctx.quadraticCurveTo(priceX + priceWidth, priceY + 10, priceX + priceWidth - radius, priceY + 10);
+          ctx.lineTo(priceX + radius, priceY + 10);
+          ctx.quadraticCurveTo(priceX, priceY + 10, priceX, priceY + 10 - radius);
+          ctx.lineTo(priceX, priceY - 20 + radius);
+          ctx.quadraticCurveTo(priceX, priceY - 20, priceX + radius, priceY - 20);
+          ctx.closePath();
+          ctx.fill();
+
+          // Price Text
+          ctx.fillStyle = "#FFF";
+          ctx.font = "bold 16px Arial";
+          ctx.fillText(price, canvas.width / 2, priceY - 5);
+        }
       }
-    };
+    });
+  },[cartItems]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const sampleCartItems = [
-    {
-      id: '1',
-      name: 'Introduction to Mathematics',
-      description: 'A beginner-friendly mathematics guide.',
-      price: 350,
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: '2',
-      name: 'Physics Fundamentals',
-      description: 'Learn the basics of physics concepts.',
-      price: 450,
-      image: 'https://via.placeholder.com/150',
-    },
-    {
-      id: '3',
-      name: 'Biology Insights',
-      description: 'Explore the world of biology.',
-      price: 300,
-      image: 'https://via.placeholder.com/150',
-    },
-  ];
-
-  const totalPrice = sampleCartItems.reduce((sum, item) => sum + item.price, 0);
-
-  const CartItem: React.FC<{ item: typeof sampleCartItems[0]; onRemove: () => void; onClick: () => void }> = ({ item, onRemove, onClick }) => (
-    <Card hoverable cover={<img alt={item.name} src={item.image} />} onClick={onClick}>
-      <Meta title={item.name} description={item.description} />
-      <p>Price: {item.price} THB</p>
-      <Button type="primary" onClick={(e) => {
-          e.stopPropagation();
-          onRemove();
-        }}>
-        Remove
-      </Button>
-    </Card>
-  );
-
-  const goToSelectSheet = () => {
-    navigate('/selectsheet');
-  };
-
+  if (loading) {
+    return (
+      <Layout className="Cart">
+        <Header />
+        <Spin size="large" tip="กำลังโหลด..." style={{ margin: "auto", display: "block", marginTop: "20%" }} />
+      </Layout>
+    );
+  }
   return (
-    <Layout className="sheet">
-      <Header />
-      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
-      <div className="Cart-Overview">
-        <h2>Cart</h2>
-        <div className="Sheet-list">
-          {sampleCartItems.map((item) => (
-            <CartItem
-              key={item.id}
-              item={item}
-              onClick={goToSelectSheet}
-              onRemove={() => console.log(`Remove ${item.name} from cart`)}
-            />
-          ))}
-        </div>
-        <div className="cart-total">
-          <h3>Total Price: {totalPrice} THB</h3>
-          <Button 
-            type="primary" 
-            onClick={() => navigate('/payment')}
+<Layout className="Cart">
+<Sidebar isVisible={false} onClose={function (): void {
+        throw new Error("Function not implemented.");
+      } }/>
+  <Header />
+  <div className="Cart-Content">
+    <h2 className="Cart-Title">ตะกร้าสินค้า</h2>
+    {cartItems.length === 0 ? (
+      <Empty description="ไม่มีสินค้าในตะกร้าของคุณ">
+        <Button type="primary" onClick={() => navigate("/Buysheet")}>
+          ไปเลือกสินค้ากัน!
+        </Button>
+      </Empty>
+    ) : (
+      <div className="CartSheet-list">
+        {cartItems.map((item, index) => (
+          <Card
+            key={item.ID}
+            hoverable
+            className="CartCard"
+            cover={
+              <canvas
+                ref={(el) => {
+                  canvasRefs.current[index] = el;
+                }}
+                width={300}
+                height={200}
+              />
+            }
+            actions={[
+              <Button type="link" danger onClick={() => handleRemoveItem(item.ID!)}>
+                ลบสินค้า
+              </Button>,
+            ]}
           >
-            Checkout
-          </Button>
-        </div>
+            <Meta
+              title={<span className="CartCard-Title">{item.Sheet?.Title || "No Title"}</span>}
+              description={
+                <div>
+                  <p className="CartCard-Price">ราคา: {item.Sheet?.Price || "0"} บาท</p>
+                  <p className="CartCard-Seller">ผู้ขาย: {item.Sheet?.Seller?.Name || "ไม่ระบุ"}</p>
+                </div>
+              }
+            />
+          </Card>
+        ))}
       </div>
-    </Layout>
-  );
+    )}
+  </div>
+  {cartItems.length > 0 && (
+    <div className="CartFooter">
+      <Button
+        type="primary"
+        size="large"
+        className="Button-Checkout"
+        onClick={handlePayment}
+      >
+        ชำระเงิน
+      </Button>
+    </div>
+  )}
+</Layout>
+
+  );  
+
 };
 
 export default Cart;

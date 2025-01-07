@@ -12,6 +12,8 @@ export interface UserInterface{
     Phone?: string;
     RoleID?: number;
     rolename?: string;
+    Status?: string;
+    ProfilePicture?: string;
 }
 
 export interface DepartmentInterface{

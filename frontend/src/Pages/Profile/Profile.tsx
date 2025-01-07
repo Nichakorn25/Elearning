@@ -28,6 +28,11 @@ const Profile: React.FC = () => {
         const response = await GetUserById(userId);
         if (response.status === 200) {
           setUserProfile(response.data);
+          // Save profile picture to localStorage
+          const profilePictureUrl = response.data.ProfilePicture?.[0]?.FilePath
+            ? `http://localhost:8000${response.data.ProfilePicture[0].FilePath}`
+            : 'https://via.placeholder.com/120';
+          localStorage.setItem('profilePicture', profilePictureUrl);
         } else {
           console.error('Failed to fetch user profile:', response.data.error);
         }
@@ -49,6 +54,9 @@ const Profile: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  // Retrieve the profile picture from localStorage
+  const profileImageUrl = localStorage.getItem('profilePicture') || 'https://via.placeholder.com/120';
+
   return (
     <div className="profile-dashboard">
       {/* Header Section */}
@@ -63,7 +71,7 @@ const Profile: React.FC = () => {
           <div className="nested-boxes">
             <img
               className="profile-avatar"
-              src="https://via.placeholder.com/120"
+              src={profileImageUrl} // Use profile picture from localStorage or fallback URL
               alt="User Avatar"
             />
             <div className="profile-details">

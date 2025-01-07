@@ -1,0 +1,50 @@
+.booking-popup-modal {
+    font-family: Arial, sans-serif;
+  }
+  
+  .booking-popup-header {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+  
+  .booking-popup-info {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  .booking-popup-input {
+    margin-bottom: 10px;
+  }
+  
+  .booking-popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .booking-popup-button {
+    border-radius: 5px;
+  }
+  
+  .booking-popup-button-primary {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+  }
+  
+  .booking-popup-button-primary:hover {
+    background-color: #45a049;
+  }
+  
+  .booking-popup-button-cancel {
+    background-color: #f44336;
+    color: white;
+    border: none;
+  }
+  
+  .booking-popup-button-cancel:hover {
+    background-color: #e53935;
+  }
+  

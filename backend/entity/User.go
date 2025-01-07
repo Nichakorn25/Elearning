@@ -11,17 +11,22 @@ type User struct {
 	LastName  string `json:"LastName"`
 	Email  string `json:"Email"`
 	Phone  string `json:"Phone"`
-	
+	Status string `json:"Status"`
 	ProfilePicture []ProfilePicture `gorm:"foreignKey:UserID"`
 	Announcement []Announcement `gorm:"foreignKey:UserID"`
 	Log []Log `gorm:"foreignKey:UserID"`
 	Review []Review `gorm:"foreignKey:UserID"`
 	Purchase []Purchase `gorm:"foreignKey:UserID"`
 	Payment []Payment `gorm:"foreignKey:UserID"`
-	CartItem []CartItem `gorm:"foreignKey:UserID"`
 	Submission []Submission `gorm:"foreignKey:UserID"`
 	Course []Course `gorm:"foreignKey:UserID"`
 	StudentAnswer []StudentAnswer `gorm:"foreignKey:UserID"`
+	TeacherAppointment []TeacherAppointment `gorm:"foreignKey:UserID"`
+	Availability []Availability `gorm:"foreignKey:UserID"`
+	StudentBooking []StudentBooking `gorm:"foreignKey:UserID"`
+	Seller        []Seller        `gorm:"foreignKey:UserID"`
+	Cart          []Cart          `gorm:"foreignKey:UserID" `
+
 
 	DepartmentID uint `json:"DepartmentID"`
 	Department   Department `gorm:"foreignKey:DepartmentID"`

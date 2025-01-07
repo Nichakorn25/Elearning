@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import "./SignUp.css";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
@@ -22,6 +22,7 @@ const SignUp: React.FC = () => {
     department: "",
     major: "",
     RoleID: 1,
+    status: "",
   })
 
   
@@ -35,7 +36,7 @@ const SignUp: React.FC = () => {
   // ฟังก์ชันซ่อน Popup
   const closeLoginPopup = () => {
     setLoginPopupVisible(false);
-  };;
+  };
 
   // Fetch Departments เมื่อโหลดหน้า
   useEffect(() => {

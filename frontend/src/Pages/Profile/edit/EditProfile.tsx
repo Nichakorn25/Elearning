@@ -3,19 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import './EditProfile.css';
 import Sidebar from '../../Component/Sidebar/Sidebar';
 import Header from '../../Component/Header/Header';
-import { GetUserById, UpdateUserByid, GetDepartments, GetMajors } from '../../../services/https'; // Import API functions
-import { UserInterface } from '../../../Interface/IUser'; // Import UserInterface
-import { message } from 'antd'; // Import Ant Design message component
+import { GetUserById, UpdateUserByid, GetDepartments, GetMajors } from '../../../services/https';
+import { UserInterface } from '../../../Interface/IUser';
+import { message, Upload, Button, Input, Select, Spin } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
+const { Option } = Select;
 
 const EditProfile: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
-  // User profile states
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -29,15 +26,18 @@ const EditProfile: React.FC = () => {
   const [departments, setDepartments] = useState<{ ID: number; DepartmentName: string }[]>([]);
   const [majors, setMajors] = useState<{ ID: number; MajorName: string }[]>([]);
   const [isMajorsLoading, setMajorsLoading] = useState(false);
-  const userIdFromLocalStorage = localStorage.getItem('id'); // Get userId from localStorage or auth context
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const userIdFromLocalStorage = localStorage.getItem('id');
 
   useEffect(() => {
-    // Fetch user and dropdown data
     const fetchData = async () => {
       try {
         if (userIdFromLocalStorage) {
           const userResponse = await GetUserById(userIdFromLocalStorage);
           if (userResponse.status === 200) {
+            console.log("data", userResponse)
             const data = userResponse.data;
             setUsername(data.Username || '');
             setFirstName(data.FirstName || '');
@@ -48,13 +48,18 @@ const EditProfile: React.FC = () => {
             setMajorId(data.MajorID || 0);
             setRole(data.Role?.RoleName || '');
             setUserId(data.ID?.toString() || '');
+
+            // ตั้งค่า URL ของรูปโปรไฟล์เริ่มต้น
+            if (data.ProfilePicture && data.ProfilePicture[0]) {
+              // ใช้ base URL สำหรับภาพ
+              setPreview(`http://localhost:8000${data.ProfilePicture[0].FilePath}`);
+            }
           }
         }
 
-        // Fetch departments
         const departmentsResponse = await GetDepartments();
         if (departmentsResponse.status === 200) {
-          setDepartments(departmentsResponse.data); // Assuming departmentsResponse.data is an array of departments
+          setDepartments(departmentsResponse.data);
         }
       } catch (error) {
         console.error('Error fetching data', error);
@@ -66,9 +71,15 @@ const EditProfile: React.FC = () => {
     fetchData();
   }, [userIdFromLocalStorage]);
 
+  useEffect(() => {
+    if (departmentId !== 0) {
+      fetchMajors(departmentId);
+    }
+  }, [departmentId]);
+
   const handleDepartmentChange = async (deptId: number) => {
     setDepartmentId(deptId);
-    // Fetch majors based on the selected department
+    setMajorId(0);
     await fetchMajors(deptId);
   };
 
@@ -77,7 +88,7 @@ const EditProfile: React.FC = () => {
       setMajorsLoading(true);
       const majorsResponse = await GetMajors(departmentId.toString());
       if (majorsResponse.status === 200) {
-        setMajors(majorsResponse.data); // Assuming majorsResponse.data is an array of majors
+        setMajors(majorsResponse.data);
       }
     } catch (error) {
       console.error('Error fetching majors', error);
@@ -86,49 +97,47 @@ const EditProfile: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const updatedData: UserInterface = {
-      Username: username,
-      FirstName: firstName,
-      LastName: lastName,
-      Email: email,
-      Phone: phone,
-      DepartmentID: departmentId,
-      MajorID: majorId,
-      RoleID: parseInt(role), // Assuming RoleID is fixed or derived dynamically
-    };
+    const formData = new FormData();
+    formData.append('Username', username);
+    formData.append('FirstName', firstName);
+    formData.append('LastName', lastName);
+    formData.append('Email', email);
+    formData.append('Phone', phone);
+    formData.append('DepartmentID', departmentId.toString());
+    formData.append('MajorID', majorId.toString());
+    formData.append('Status', 'Active');
 
-    if (userIdFromLocalStorage) {
-      UpdateUserByid(userIdFromLocalStorage, updatedData)
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('Profile updated successfully');
+    if (profilePicture) {
+      console.log('Profile picture selected:', profilePicture);
+      formData.append('ProfilePicture', profilePicture);
+    } else {
+      console.log('No profile picture selected');
+    }
 
-            // Update localStorage with the new user data
-            localStorage.setItem(
-              'user',
-              JSON.stringify({
-                username: username,
-                FirstName: firstName,
-                LastName: lastName,
-              })
-            );
-
-            // Show success message using Ant Design message
-            message.success('Profile updated successfully!');
-
-            // Navigate back to the profile page after a short delay
-            setTimeout(() => {
-              navigate('/profile');
-            }, 2000); // Delay navigation to allow message visibility
-          }
-        })
-        .catch((error) => {
-          console.error('Error updating user data', error);
-          message.error('Failed to update profile.');
-        });
+    try {
+      if (userIdFromLocalStorage) {
+        const response = await UpdateUserByid(userIdFromLocalStorage, formData);
+        if (response.status === 200) {
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
+              username: username,
+              FirstName: firstName,
+              LastName: lastName,
+            })
+          );
+          message.success('Profile updated successfully!');
+          setTimeout(() => {
+            navigate('/profile');
+          }, 2000);
+        }
+      }
+    } catch (error) {
+      console.error('Error updating user data', error);
+      message.error('Failed to update profile.');
     }
   };
 
@@ -147,12 +156,11 @@ const EditProfile: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="username">Username</label>
-              <input type="text" id="username" value={username} readOnly />
+              <Input id="username" value={username} readOnly />
             </div>
             <div className="form-group">
               <label htmlFor="firstName">First Name</label>
-              <input
-                type="text"
+              <Input
                 id="firstName"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -160,8 +168,7 @@ const EditProfile: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="lastName">Last Name</label>
-              <input
-                type="text"
+              <Input
                 id="lastName"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -169,17 +176,16 @@ const EditProfile: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
-              <input
-                type="email"
+              <Input
                 id="email"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="form-group">
               <label htmlFor="phone">Phone</label>
-              <input
-                type="text"
+              <Input
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -187,43 +193,67 @@ const EditProfile: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="department">Department</label>
-              <select
+              <Select
                 id="department"
-                value={departmentId}
-                onChange={(e) => handleDepartmentChange(Number(e.target.value))}
+                value={departmentId !== 0 ? departmentId : undefined}
+                onChange={handleDepartmentChange}
+                placeholder="Select Department"
               >
-                <option value="">Select Department</option>
                 {departments.map((dept) => (
-                  <option key={dept.ID} value={dept.ID}>
+                  <Option key={dept.ID} value={dept.ID}>
                     {dept.DepartmentName}
-                  </option>
+                  </Option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div className="form-group">
               <label htmlFor="major">Major</label>
-              <select
+              <Select
                 id="major"
-                value={majorId}
-                onChange={(e) => setMajorId(Number(e.target.value))}
-                disabled={!departmentId || isMajorsLoading}
+                value={majorId !== 0 ? majorId : undefined}
+                onChange={(value) => setMajorId(value)}
+                placeholder="Select Major"
+                loading={isMajorsLoading}
+                disabled={!departmentId}
               >
-                <option value="">Select Major</option>
                 {majors.map((major) => (
-                  <option key={major.ID} value={major.ID}>
+                  <Option key={major.ID} value={major.ID}>
                     {major.MajorName}
-                  </option>
+                  </Option>
                 ))}
-              </select>
+              </Select>
             </div>
             <div className="form-group">
               <label htmlFor="role">Role</label>
-              <input type="text" id="role" value={role} readOnly />
+              <Input id="role" value={role} readOnly />
             </div>
+            <div className="form-group">
+              <label htmlFor="profilePicture">Profile Picture</label>
+              <Upload
+                beforeUpload={(file) => {
+                  setProfilePicture(file);
+                  setPreview(URL.createObjectURL(file)); // แสดง preview ของรูปใหม่ที่เลือก
+                  return false;
+                }}
+                showUploadList={false}
+                accept="image/*"
+              >
+                <Button icon={<UploadOutlined />}>Select File</Button>
+              </Upload>
+              {/* แสดง preview ของรูป */}
+              {preview && (
+                <img
+                  src={preview}
+                  alt="Profile Preview"
+                  style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
+                />
+              )}
+            </div>
+
             <div className="form-actions">
-              <button type="submit" className="submit-btn">
+              <Button type="primary" htmlType="submit">
                 Save Changes
-              </button>
+              </Button>
             </div>
           </form>
         </div>

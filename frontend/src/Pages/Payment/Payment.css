@@ -1,55 +1,119 @@
-/* Layout */
-
-/* Card */
-.card {
-    width: 100vw; /* ความกว้างเต็มหน้าจอ */
-    height: 100vh; /* ความสูงเต็มหน้าจอ */
-    margin: 0; /* ไม่มีระยะขอบ */
-    padding: 24px; /* ระยะห่างภายใน */
-    box-shadow: none; /* ลบเงา */
-    border-radius: 0; /* ไม่มีมุมโค้ง */
-    background-color: #ffffff; /* สีพื้นหลัง */
-}
-
-/* Table */
-.ant-table {
-    margin-bottom: 20px; /* Add space below the table */
-}
-
-/* Total container */
-.total-container {
+.site-layout {
+    background-color: #ffffff;
+    min-height: 100vh;
     display: flex;
-    justify-content: space-between; /* Align items horizontally */
-    font-size: 16px;
+    flex-direction: column;
+  }
+  .card {
+    margin: 20px auto;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 50px;
+    min-width: 100vh;
+  }
+  
+  .total-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
     font-weight: bold;
     margin-top: 20px;
-}
-
-/* Bank details */
-.bank-details {
-    background-color: #f9f9f9; /* Light background */
-    padding: 20px;
-    border-radius: 8px;
+    padding: 10px 0;
+    border-top: 1px solid #eaeaea;
+  }
+  
+  .bank-details {
     margin-top: 20px;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-/* Upload container */
-.upload-container {
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  
+  .bank-details strong {
+    color: #333;
+  }
+  
+  .upload-container {
     margin-top: 20px;
     text-align: center;
-}
-
-/* Button container */
-.button-container {
+  }
+  
+  .upload-container .ant-btn {
+    background: #ff7a45;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .upload-container .ant-btn:hover {
+    background: #e66a3c;
+    color: white;
+  }
+  
+  .confirm-payment {
+    margin-top: 30px;
+    text-align: center;
+  }
+  
+  .confirm-payment .ant-btn {
+    background: #52c41a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+  
+  .confirm-payment .ant-btn:disabled {
+    background: #d9d9d9;
+    color: #999;
+  }
+  
+  .confirm-payment .ant-btn:hover {
+    background: #45ad16;
+    color: white;
+  }
+  
+  .table-container {
     margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-/* General Button Styling */
-.paymentbutton {
-    width: 100%;
-    max-width: 200px;
-}
+  }
+  
+  .ant-table {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .ant-table-thead > tr > th {
+    background: #fafafa;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  
+  .ant-table-tbody > tr > td {
+    font-size: 15px;
+  }
+  
+  @media (max-width: 768px) {
+    .card {
+      max-width: 95%;
+    }
+  
+    .total-container {
+      flex-direction: column;
+      align-items: flex-start;
+      font-size: 16px;
+    }
+  
+    .upload-container .ant-btn,
+    .confirm-payment .ant-btn {
+      width: 100%;
+    }
+  }
+  

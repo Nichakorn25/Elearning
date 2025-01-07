@@ -215,12 +215,13 @@ html {
   color: black;
 }
 .sidebar-section ul li {
+  margin-left: 0px !important;
   margin: 10px 0;
   display: flex;
-  align-items: center;
+  /* align-items: center; */
 }
 .sidebar-section ul li input {
-  margin-right: 10px;
+  margin-left: 0px !important;
 }
 
 .create-btn {
