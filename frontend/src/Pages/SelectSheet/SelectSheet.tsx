@@ -182,104 +182,119 @@ const SelectSheet: React.FC = () => {
   }
 
   return (
-    <Layout className="sheet">
-      <Header />
-      <Sidebar isVisible={false} onClose={() => {}} />
-      <Content className="sheet-content" style={{ padding: '30px' }}>
-        <Row gutter={[24, 24]} justify="center" align="middle">
-          <Col xs={24} lg={12} style={{ textAlign: 'center' }}>
-            <Card className="sheet-card">
-              {sheetDetails.FilePath ? (
-                <div className="pdf-preview-container">
-                  <Document
-                    file={`http://localhost:8000${sheetDetails.FilePath}`}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                  >
-                    <Page
-                      pageNumber={currentPage}
-                      renderTextLayer={false}
-                      renderAnnotationLayer={false}
-                      width={250}
-                    />
-                  </Document>
-                </div>
-              ) : (
-                <p style={{ textAlign: 'center', color: 'gray' }}>ไม่พบไฟล์ PDF</p>
-              )}
-              <button
-                className="nav-button left"
-                onClick={handlePreviousPage}
-                disabled={currentPage <= 1}
-              >
-                &lt;
-              </button>
-              <button
-                className="nav-button right"
-                onClick={handleNextPage}
-                disabled={currentPage >= (numPages || 0)}
-              >
-                &gt;
-              </button>
-            </Card>
-          </Col>
-          <Col xs={24} lg={12}>
-            <Card className="sheet-details">
-              <h3 className="sheet-details-title">รายละเอียดชีท</h3>
-              <p><strong>ชื่อชีท:</strong> {sheetDetails.Title}</p>
-              <p><strong>รหัสวิชา:</strong> {sheetDetails.Course.CourseDate}</p>
-              <p><strong>วิชา:</strong> {sheetDetails.Course.CourseName}</p>
-              <p><strong>ราคา:</strong> {sheetDetails.Price} THB</p>
-              <p><strong>รายละเอียด:</strong> {sheetDetails.Description}</p>
-              <Button type="primary" block onClick={handleAddToCart}>
-                ซื้อชีทนี้
-              </Button>
-            </Card>
-          </Col>
-        </Row>
-        <Card title="คอมเมนต์และคะแนน" className="comments-card">
-  <Form layout="vertical" onFinish={handleAddComment}>
-    <Form.Item label="ให้คะแนน">
-      <Rate value={rating} onChange={(value) => setRating(value)} />
-    </Form.Item>
-    <Form.Item label="เขียนคอมเมนต์">
-      <TextArea
-        rows={3}
-        value={commentInput}
-        onChange={(e) => setCommentInput(e.target.value)}
-        placeholder="แสดงความคิดเห็นของคุณ..."
-      />
-    </Form.Item>
-    <Form.Item>
-      <Button type="primary" htmlType="submit" block>
-        เพิ่มคอมเมนต์พร้อมคะแนน
-      </Button>
-    </Form.Item>
-  </Form>
-  <List
-    className="comment-list"
-    bordered
-    dataSource={comments}
-    renderItem={(comment) => (
-      <List.Item key={comment.id} className="comment-item">
-        <Row gutter={[16, 16]} style={{ width: '100%' }}>
-          <Col span={24} className="comment-user">
-            <strong>{`${comment.User.FirstName} ${comment.User.LastName}`}</strong>
-          </Col>
-          <Col span={24} className="comment-content">
-            <p>{comment.Comment}</p>
-          </Col>
-          <Col span={24} className="comment-rating" style={{ textAlign: 'right' }}>
-            <Rate disabled value={comment.Rating} />
-          </Col>
-        </Row>
-      </List.Item>
-    )}
-    locale={{ emptyText: 'ยังไม่มีคอมเมนต์' }}
-  />
+<Layout className="selectsheet">
+  <Header />
+  <Sidebar isVisible={false} onClose={() => {}} />
+  <Content className="selectsheet-content">
+    {/* ส่วนแสดง PDF */}
+    <Card className="selectsheet-card">
+      {sheetDetails.FilePath ? (
+        <div className="pdf-preview-container">
+          <Document
+            file={`http://localhost:8000${sheetDetails.FilePath}`}
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
+            <Page
+              pageNumber={currentPage}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+              width={250}
+            />
+          </Document>
+        </div>
+      ) : (
+        <p style={{ textAlign: 'center', color: 'gray' }}>ไม่พบไฟล์ PDF</p>
+      )}
+      <button
+        className="nav-button left"
+        onClick={handlePreviousPage}
+        disabled={currentPage <= 1}
+      >
+        &lt;
+      </button>
+      <button
+        className="nav-button right"
+        onClick={handleNextPage}
+        disabled={currentPage >= (numPages || 0)}
+      >
+        &gt;
+      </button>
+    </Card>
+
+    {/* รายละเอียดชีท */}
+    <Card className="selectsheet-details">
+  <h3 className="selectsheet-details-title">รายละเอียดชีท</h3>
+  <p>
+    <strong>ชื่อชีท:</strong>
+    <span> {sheetDetails.Title}</span>
+  </p>
+  <p>
+    <strong>รหัสวิชา:</strong>
+    <span> {sheetDetails.Course.CourseDate}</span>
+  </p>
+  <p>
+    <strong>วิชา:</strong>
+    <span> {sheetDetails.Course.CourseName}</span>
+  </p>
+  <p>
+    <strong>ราคา:</strong>
+    <span> {sheetDetails.Price} THB</span>
+  </p>
+  <p>
+    <strong>รายละเอียด:</strong>
+    <span> {sheetDetails.Description}</span>
+  </p>
+  <Button type="primary" block onClick={handleAddToCart}>
+    ซื้อชีทนี้
+  </Button>
 </Card>
 
-      </Content>
-    </Layout>
+
+    {/* คอมเมนต์และคะแนน */}
+    <Card title="คอมเมนต์และคะแนน" className="comments-card">
+      <Form layout="vertical" onFinish={handleAddComment}>
+        <Form.Item label="ให้คะแนน">
+          <Rate value={rating} onChange={(value) => setRating(value)} />
+        </Form.Item>
+        <Form.Item label="เขียนคอมเมนต์">
+          <TextArea
+            rows={3}
+            value={commentInput}
+            onChange={(e) => setCommentInput(e.target.value)}
+            placeholder="แสดงความคิดเห็นของคุณ..."
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            เพิ่มคอมเมนต์พร้อมคะแนน
+          </Button>
+        </Form.Item>
+      </Form>
+      <List
+        className="comment-list"
+        bordered
+        dataSource={comments}
+        renderItem={(comment) => (
+          <List.Item key={comment.id} className="comment-item">
+            <Row gutter={[16, 16]} style={{ width: '100%' }}>
+              <Col span={24} className="comment-user">
+                <strong>{`${comment.User.FirstName} ${comment.User.LastName}`}</strong>
+              </Col>
+              <Col span={24} className="comment-content">
+                <p>{comment.Comment}</p>
+              </Col>
+              <Col span={24} className="comment-rating" style={{ textAlign: 'right' }}>
+                <Rate disabled value={comment.Rating} />
+              </Col>
+            </Row>
+          </List.Item>
+        )}
+        locale={{ emptyText: 'ยังไม่มีคอมเมนต์' }}
+      />
+    </Card>
+  </Content>
+</Layout>
+
   );
 };
 
