@@ -23,6 +23,8 @@ func main() {
 	r := gin.Default()
 
 	r.Use(CORSMiddleware())
+	r.Static("/uploads", "./public/uploads")
+	r.Static("/worker", "./public/worker")
 
 	// Auth Route
 	r.GET("/departments", controller.GetDepartments)
@@ -78,6 +80,56 @@ func main() {
 		//RequestChangeRole
 		router.POST("/requestchangeroles", controller.CreateRoleChangeRequests)
 		router.GET("/requestchangeroles", controller.GetRoleChangeRequests)
+		// SellerBankAccount Routes
+		router.GET("/seller-bank-accounts", controller.GetAllSellerBankAccounts)
+		router.GET("/seller-bank-accounts/:id", controller.GetSellerBankAccountByID)
+		router.GET("/seller-bank-accounts/user/:userID", controller.GetSellerBankAccountsByUserID)
+		router.POST("/seller-bank-accounts", controller.CreateSellerBankAccount)
+		router.PUT("/seller-bank-accounts/:id", controller.UpdateSellerBankAccount)
+		router.DELETE("/seller-bank-accounts/:id", controller.DeleteSellerBankAccount)
+		router.GET("/banks", controller.GetBanks)
+		router.GET("/banks/:id", controller.GetBankByID)
+		// Seller Routes
+		router.GET("/sellers", controller.GetAllSellers)
+		router.GET("/sellers/:id", controller.GetSellerByID)
+		router.POST("/sellers", controller.CreateSeller)
+		router.PUT("/sellers/:id", controller.UpdateSeller)
+		router.DELETE("/sellers/:id", controller.DeleteSeller)
+		sellers := r.Group("/sellers")
+		{
+			sellers.GET("/id/:id", controller.GetSellersByUserID)                   // ใช้สำหรับดึงข้อมูล Seller ด้วย ID
+			sellers.GET("/user/:userId/exists", controller.CheckUserExistsInSeller) // ใช้สำหรับตรวจสอบว่ามี userId อยู่ใน Seller หรือไม่
+		}
+
+		// Sheet Routes
+		router.GET("/sheets", controller.GetSheets)
+		router.GET("/sheets/:id", controller.GetSheetByID)
+		router.POST("/sheets", controller.CreateSheet)
+		router.PUT("/sheets/:id", controller.UpdateSheet)
+		router.DELETE("/sheets/:id", controller.DeleteSheet)
+		r.GET("/courses", controller.GetCourses)
+		r.POST("/upload", controller.UploadFile)
+		router.GET("/sheets/seller/:sellerID", controller.GetSheetsBySellerID)
+		// Route สำหรับ Cart
+		router.GET("/cart-statuses", controller.GetCartStatuses)
+		router.GET("/carts", controller.GetCarts)
+		router.GET("/carts/:id", controller.GetCartById)
+		router.POST("/cart-items", controller.AddToCart)
+		router.GET("/cart-items/cart/:cart_id", controller.ListCartItems)
+		router.PUT("/cart-items/:id", controller.UpdateCartItemById)
+		router.DELETE("/cart-items/:id", controller.DeleteCartItemById)
+		router.POST("/carts/:id/checkout", controller.CheckoutCart)
+		router.GET("/carts/user/:id", controller.GetCartByUser)
+		router.POST("/carts", controller.CreateOrGetCart)
+		// Routes สำหรับ Review
+		reviewRoutes := router.Group("/reviews")
+		{
+			reviewRoutes.POST("", controller.CreateReview)       // เพิ่ม Review
+			reviewRoutes.GET("", controller.GetAllReviews)       // ดึงข้อมูล Review ทั้งหมด
+			reviewRoutes.GET("/:id", controller.GetReviewByID)   // ดึงข้อมูล Review ตาม ID
+			reviewRoutes.DELETE("/:id", controller.DeleteReview) // ลบ Review
+			reviewRoutes.GET("/sheet/:sheet_id", controller.GetReviewsBySheetID)
+		}
 	}
 
 	r.GET("/", func(c *gin.Context) {
