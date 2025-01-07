@@ -35,6 +35,10 @@ func main() {
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
 	r.Static("/uploads", "./uploads") 
 
+	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
+	// r.POST("/verify_otp", controller.VerifyOTP)
+	// r.POST("/reset_password", controller.Resetpassword)
+
 	router := r.Group("")
 	{
 		router.Use(middlewares.Authorizes())
@@ -50,13 +54,14 @@ func main() {
 		router.GET("/searchProfessors", controller.SearchProfessors)
 		// Teacher Routes
 		router.GET("/teacher/appointments/:userId", controller.GetTeacherAppointmentsByUserID)
+		router.GET("/day", controller.ListDays)
 		router.POST("/teacher/appointments", controller.CreateTeacherAppointment)
+		router.POST("/CreateStudentBooking", controller.CreateStudentBooking)
 
 		// Student Routes
 		router.GET("/appointments/:teacherId", controller.GetAppointmentsForStudent)
 		router.POST("/bookings", controller.BookAppointment)
 		//router.GET("/users/filter", controller.ListUsersFilters)
-
 
 		//----------------------//
 		router.POST("/users", controller.CreateUser)

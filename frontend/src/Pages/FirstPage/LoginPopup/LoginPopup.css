@@ -1,129 +1,142 @@
+/* Popup Overlay */
 .popup-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
 }
 
+/* Popup Container */
 .popup-container {
-  width: 400px;
-  padding: 30px;
-  background: rgba(255, 153, 51, 0.4); /* ปรับ RGB ให้สว่างขึ้น */
-  border-radius: 16px;
-  text-align: center;
-  animation: fadeIn 0.3s ease-in-out;
-  backdrop-filter: blur(15px); /* เพิ่มเบลอพื้นหลัง */
+  display: flex;
+  width: 700px; /* Reduced width */
+  height: 400px; /* Reduced height */
+  background: #ffffff;
+  border-radius: 20px; /* Smaller radius */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  overflow: hidden;
+}
+
+/* Left Section: Form Container */
+.popup-form-container {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  position: relative; /* เพื่อให้ absolute ใน forgot-password อ้างอิง */
 }
 
 
-
-.popup-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 20px;
-}
-
-.input-box {
-  position: relative;
-  margin-bottom: 20px;
-}
-
-.input-field {
-  width: 100%;
-  padding: 12px 16px;
-  padding-left: 40px; /* เว้นที่สำหรับไอคอน */
-  border-radius: 25px;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  background: rgba(255, 255, 255, 0.5);
+.popup-form-container h2 {
+  font-size: 24px; /* Reduced font size */
   color: #333;
-  outline: none;
-  transition: border-color 0.3s ease;
+  margin-bottom: 15px; /* Reduced margin */
 }
 
-.input-icon {
-  position: absolute;
-  top: 50%;
-  left: 14px; /* ตำแหน่งไอคอนด้านซ้าย */
-  transform: translateY(-50%);
-  color: rgba(0, 0, 0, 0.5);
-  font-size: 18px;
+.popup-input-field {
+  width: 100%;
+  padding: 10px; /* Reduced padding */
+  margin-bottom: 10px; /* Reduced margin */
+  border-radius: 20px; /* Smaller radius */
+  border: 2px solid #ddd;
+  font-size: 14px; /* Reduced font size */
+  color: #333;
 }
 
-.input-field:focus {
+.popup-input-field:focus {
   border-color: #32cdd5;
+  outline: none;
+}
+
+.popup-form-actions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 15px; /* Reduced margin */
 }
 
 .popup-login-button {
   width: 100%;
-  padding: 12px;
-  margin-top: 20px;
-  background: #da9753;
+  padding: 10px; /* Reduced padding */
+  background: #28a745;
   color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
+  border-radius: 20px; /* Smaller radius */
+  font-size: 14px; /* Reduced font size */
   font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
 }
 
 .popup-login-button:hover {
-  background: #28b8c2;
+  background: #218838;
 }
 
-.remember-forgot-box {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+/* Right Section: Welcome Section */
+.popup-right-panel {
+  flex: 1;
+  background: linear-gradient(135deg, #FF4500, #FFA500);
+  color: white !important;
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+  align-items: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+  text-align: center;
+  padding: 40px;
 }
 
-.remember-me {
-  display: flex;
-  align-items: center;
-  flex-direction: row ;
+.popup-right-panel h2 {
+  color: white !important;
+  font-size: 24px; /* Reduced font size */
+  margin-bottom: 15px; /* Reduced margin */
+}
+
+.popup-right-panel p {
+  font-size: 14px; /* Reduced font size */
+  margin-bottom: 15px; /* Reduced margin */
+}
+
+.popup-panel-button {
+  padding: 10px 15px; /* ลดขนาดปุ่ม */
+  border-radius: 20px; /* ขอบโค้งมน */
+  border: 2px solid white;
+  background: transparent;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 20px; /* ระยะห่างจากข้อความด้านบน */
+}
+
+.popup-panel-button:hover {
+  background: white;
+  color: #89216b;
 }
 
 .forgot-password {
-  color: #ffffff;
+  color: #218838;
   text-decoration: none;
   font-size: 14px;
+  cursor: pointer;
+  position: absolute; /* ใช้ตำแหน่ง absolute */
+  right: 20px; /* ระยะห่างจากขอบขวา */
+  bottom: 115px; /* ระยะห่างจากขอบล่าง */
 }
 
 .forgot-password:hover {
   text-decoration: underline;
 }
 
-.dont-have-account {
-  margin-top: 20px;
-  font-size: 14px;
-}
 
-.dont-have-account a {
-  color: #da9753;
-  font-weight: bold;
-  text-decoration: none;
-}
 
-.dont-have-account a:hover {
-  text-decoration: underline;
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}

@@ -178,6 +178,27 @@ async function BookAppointment(data: StudentBookingInterface) {
     .catch((e) => e.response);
 }
 
+// ดึงวัน ในแต่ละสัปดาห์
+async function GetDay() {
+
+  return await axios
+
+    .get(`${apiUrl}/day`, requestOptions)
+
+    .then((res) => res)
+
+    .catch((e) => e.response);
+
+}
+
+//จองนัดหมาย
+async function CreateStudentBooking(data: StudentBookingInterface) {
+  return axios
+    .post(`${apiUrl}/CreateStudentBooking`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 // Save Appointment
 // async function SaveAppointment(
@@ -365,4 +386,6 @@ export{
   SaveAvailability,
   GetTeacherAppointments,
   BookAppointment,
+  GetDay,
+  CreateStudentBooking,
 };

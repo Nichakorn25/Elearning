@@ -80,14 +80,15 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
     <div className="popup-overlay" onClick={onClose}>
       {contextHolder}
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
-        <h2 className="popup-title">SUT e-Learning</h2>
-        <Form
-          name="login"
-          onFinish={onFinish}
-          className="popup-form"
-          requiredMark={false}
-        >
-          <div className="input-box">
+        {/* Left Section - Login Form */}
+        <div className="popup-form-container">
+          <h2>Log In</h2>
+          <Form
+            name="login"
+            onFinish={onFinish}
+            className="popup-form"
+            requiredMark={false}
+          >
             <Form.Item
               name="username"
               rules={[
@@ -97,12 +98,9 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
               <Input
                 type="text"
                 placeholder="Username"
-                className="input-field"
+                className="popup-input-field"
               />
             </Form.Item>
-            <i className="bx bxs-user input-icon"></i>
-          </div>
-          <div className="input-box">
             <Form.Item
               name="password"
               rules={[
@@ -112,43 +110,45 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
               <Input.Password
                 type="password"
                 placeholder="Password"
-                className="input-field"
+                className="popup-input-field"
               />
             </Form.Item>
-            <i className="bx bxs-lock-alt input-icon"></i>
-          </div>
-          <div className="remember-forgot-box">
-            <div className="remember-me">
-              <Input type="checkbox" id="remember-me" />
-              <label htmlFor="remember-me">Remember me</label>
+            <div className="popup-form-actions">
+              {/* <div className="remember-me">
+                <Input type="checkbox" id="remember-me" />
+                <label htmlFor="remember-me">Remember me</label>
+              </div> */}
+              <a
+                href="#"
+                className="forgot-password"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleForgotPassword();
+                }}
+              >
+                Forgot password?
+              </a>
             </div>
-            <a
-              href="#"
-              className="forgot-password"
-              onClick={(e) => {
-                e.preventDefault();
-                handleForgotPassword();
-              }}
-            >
-              Forgot password?
-            </a>
-          </div>
-          <button className="popup-login-button" type="submit">
-            Login
+            <button className="popup-login-button" type="submit">
+              Sign In
+            </button>
+          </Form>
+        </div>
+
+        {/* Right Section - Welcome Section */}
+        <div className="popup-right-panel">
+          <h2>Welcome to SE e-Learning!</h2>
+          <p>
+            Register with your personal details to use all the features of our
+            site.
+          </p>
+          <button
+            className="popup-panel-button"
+            onClick={() => navigate("/Signup")}
+          >
+            Sign Up
           </button>
-          <div className="dont-have-account">
-            Don't have an account?{" "}
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/Signup");
-              }}
-            >
-              Register
-            </a>
-          </div>
-        </Form>
+        </div>
       </div>
     </div>
   );

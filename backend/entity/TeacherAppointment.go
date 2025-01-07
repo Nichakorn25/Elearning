@@ -16,6 +16,9 @@ type TeacherAppointment struct{
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
 
+	DayofWeekID uint `json:"DayofWeekID"`
+	DayofWeek   DayofWeek `gorm:"foreignKey:DayofWeekID"`
+
 	AvailabilityID uint `json:"AvailabilityID"`
 	Availability   Availability `gorm:"foreignKey:AvailabilityID"`
 }

@@ -1,47 +1,172 @@
-import React, { useState } from "react";
-import "./ForgotPassword.css"; // Import CSS
+import React from "react";
+import "./ForgotPassword.css";
 import { useNavigate } from "react-router-dom";
-import LoginPopup from "../LoginPopup/LoginPopup";
-import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
+import video from "../../../assets/loginbackground.mp4";
+import { Form, Input, message } from "antd";
+import { UserInterface } from "../../../Interface/IUser";
+import { ResetPassword } from "../../../services/https/index";
+import HeaderBeforeLogin from "../../Component/HeaderBeforeLogin/HeaderBeforeLogin"; // Import Header ที่แยกไว้
 
-const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // API Call Logic
-  };
-
-  const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
+const ForgotPassword: React.FC = () => {
   const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
 
-  // ฟังก์ชันแสดง Popup
-  const handleOpenLoginPopup = () => {
-    setLoginPopupVisible(true);
-  };
+  const onFinish = async (values: UserInterface) => {
+    // ส่งข้อมูลไปที่ API เพื่อรีเซ็ตรหัสผ่าน
+    let res = await ResetPassword(values);
 
-  // ฟังก์ชันซ่อน Popup
-  const closeLoginPopup = () => {
-    setLoginPopupVisible(false);
+    if (res.status === 200) {
+      messageApi.open({
+        type: "success",
+        content: res.data.message,
+      });
+
+      // หลังจากรีเซ็ตเสร็จ นำทางไปที่หน้า login
+      setTimeout(() => {
+        navigate("/beforeLogin");
+      }, 1000);
+    } else {
+      messageApi.open({
+        type: "error",
+        content: res.data.error,
+      });
+    }
   };
 
   return (
     <>
-    <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
-    <div className="forgot-password-container">
-        <h1>Forgot Password</h1>
-        <form onSubmit={handleSubmit}>
-            <input
-            type="email"
-            placeholder="Enter your registered email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            />
-            <button type="submit">Send Reset Link</button>
-        </form>
-        {isLoginPopupVisible && <LoginPopup onClose={closeLoginPopup} />}
-    </div>
+      <HeaderBeforeLogin onLoginClick={() => navigate("/beforeLogin")} />
+      {contextHolder}
+      <video autoPlay loop muted playsInline>
+        <source src={video} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div className="forget-container">
+        <div className="forget-box">
+          <h1 className="textSize">Reset Password</h1>
+          <Form
+            style={{ margin: "0px" }}
+            name="resetPassword"
+            onFinish={onFinish}
+            layout="vertical"
+            requiredMark={false}
+          >
+            <Form.Item
+              style={{ margin: "0px" }}
+              name="username"
+              label={
+                <span
+                  style={{
+                    color: "#ffff",
+                    fontSize: "15px",
+                    fontFamily: "fantasy",
+                    margin: "0px",
+                  }}
+                >
+                  USERNAME
+                </span>
+              }
+              rules={[
+                { required: true, message: "Please enter your username" },
+              ]}
+            >
+              <Input placeholder="Username" className="form-groupF" />
+            </Form.Item>
+
+            <Form.Item
+              style={{ margin: "0px" }}
+              name="email"
+              label={
+                <span
+                  style={{
+                    color: "#ffff",
+                    fontSize: "15px",
+                    fontFamily: "fantasy",
+                    margin: "0px",
+                  }}
+                >
+                  Email
+                </span>
+              }
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter your email",
+                  type: "email",
+                },
+              ]}
+            >
+              <Input placeholder="Email" className="form-groupF" />
+            </Form.Item>
+
+            <Form.Item
+              style={{ margin: "0px" }}
+              name="password"
+              label={
+                <span
+                  style={{
+                    color: "#ffff",
+                    fontSize: "15px",
+                    fontFamily: "fantasy",
+                    margin: "0px",
+                  }}
+                >
+                  NEW PASSWORD
+                </span>
+              }
+              rules={[
+                { required: true, message: "Please enter your new password" },
+              ]}
+            >
+              <Input.Password
+                placeholder="New Password"
+                className="form-groupF"
+              />
+            </Form.Item>
+
+            <Form.Item
+              style={{ margin: "0px" }}
+              name="confirmPassword"
+              label={
+                <span
+                  style={{
+                    color: "#ffff",
+                    fontSize: "15px",
+                    fontFamily: "fantasy",
+                    margin: "0px",
+                  }}
+                >
+                  CONFIRM PASSWORD
+                </span>
+              }
+              dependencies={["password"]}
+              rules={[
+                { required: true, message: "Please confirm your password" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error("Passwords do not match!"));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                placeholder="Confirm Password"
+                className="form-groupF"
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <button className="confirm-button">CONFIRM</button>
+            </Form.Item>
+          </Form>
+          <a href="/beforeLogin" className="signup-link">
+            BACK TO LOGIN
+          </a>
+        </div>
+      </div>
     </>
   );
 };
