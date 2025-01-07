@@ -10,7 +10,6 @@ type TransactionLog struct {
 
 	StatusID uint `json:"StatusID"`
 	PaymentStatus   PaymentStatus `gorm:"foreignKey:StatusID"`
-
 	PaymentID uint `json:"PaymentID"`
 	Payment   Payment `gorm:"foreignKey:PaymentID"`
 

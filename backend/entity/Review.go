@@ -5,10 +5,11 @@ import (
 	"time"
 )
 
+
 type Review struct {
 	gorm.Model
 	Comment    string    `json:"Comment"`
-	Rating     uint      `json:"Rating"`
+	Rating     uint      `json:"Rating"`	
 	ReviewDate time.Time `json:"ReviewDate"`
 
 	UserID uint `json:"UserID"`

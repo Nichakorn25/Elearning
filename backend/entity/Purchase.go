@@ -1,8 +1,9 @@
 package entity
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Purchase struct {
@@ -12,8 +13,8 @@ type Purchase struct {
 
 	Payment []Payment `gorm:"foreignKey:PurchaseID"`
 
-	SheetID uint  `json:"SheetID"`
-	Sheet   Sheet `gorm:"foreignKey:SheetID"`
+	CartID uint `json:"CartID"`
+	Cart    Cart `gorm:"foreignKey:CartID"`
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`
