@@ -111,7 +111,7 @@ const SelectSheet: React.FC = () => {
     const userId = localStorage.getItem('id');
     if (!userId) {
       message.error('กรุณาเข้าสู่ระบบก่อนแสดงความคิดเห็น');
-      navigate('/login');
+      navigate('/');
       return;
     }
 
@@ -129,6 +129,7 @@ const SelectSheet: React.FC = () => {
       };
 
       const response = await CreateReview(newComment);
+      window.location.reload();
       message.success('เพิ่มคอมเมนต์พร้อมคะแนนสำเร็จ');
 
       // อัปเดตคอมเมนต์ใหม่ในหน้าจอ

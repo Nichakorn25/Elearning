@@ -1,255 +1,266 @@
-package controller
+import React, { useState, useEffect } from 'react';
+import { Button, Typography, Card, Layout, Form, Input, Select, DatePicker, message, Upload, Modal } from 'antd';
+import { UploadChangeParam, UploadFile } from 'antd/lib/upload/interface';
+import { useNavigate, useParams } from 'react-router-dom';
+import { GetSheetByID, ListCourses, UpdateSheet, DeleteSheet } from '../../services/https';
+import { InboxOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import Header from '../Component/Header/Header';
+import { Course } from '../../Interface/Course';
+import moment from 'moment';
+import './EditSheet.css';
 
-import (
-	"elearning/config"
-	"elearning/entity"
-	"fmt"
-	"net/http"
-	"os"
-	"path/filepath"
-	"strconv"
-	"time"
+const { Content } = Layout;
+const { Option } = Select;
+const { TextArea } = Input;
+const { Title } = Typography;
+const { confirm } = Modal;
 
-	"github.com/gin-gonic/gin"
-)
+const EditSheet: React.FC = () => {
+    const [form] = Form.useForm();
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const [sheetData, setSheetData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const [originalFileList, setOriginalFileList] = useState<UploadFile[]>([]);
+    const [uploadedFile] = useState<File | null>(null);
 
-// Get all Sheets
-func GetSheets(c *gin.Context) {
-	var sheets []entity.Sheet
-	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").Find(&sheets).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": sheets})
-}
+    useEffect(() => {
+        if (!id) {
+            message.error("ไม่พบ ID ของชีท");
+            navigate("/MainSealSheet");
+            return;
+        }
 
-func GetSheetsBySellerID(c *gin.Context) {
-	var sheets []entity.Sheet
-	sellerID := c.Param("sellerID")
+        const fetchSheetData = async () => {
+            try {
+                const { data } = await GetSheetByID(id);
+                setSheetData(data);
+                form.setFieldsValue({
+                    Title: data.Title,
+                    Description: data.Description,
+                    Price: data.Price,
+                    Year: moment(data.Year, 'YYYY'),
+                    Term: data.Term,
+                    CourseID: data.CourseID
+                });
 
-	if sellerID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "SellerID is required"})
-		return
-	}
+                const file = {
+                    uid: '-1',
+                    name: data.FilePath.split('/').pop(),
+                    status: 'done',
+                    url: `http://localhost:8000/uploads/${data.FilePath.split('/').pop()}`
+                } as UploadFile;
 
-	if err := config.DB().
-		Where("seller_id = ?", sellerID).
-		Preload("Seller").
-		Preload("Course").
-		Preload("Review").
-		Find(&sheets).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+                setFileList([file]);
+                setOriginalFileList([file]); // เก็บไฟล์เดิมสำหรับการรีเซ็ต
+            } catch (error) {
+                message.error("ไม่สามารถดึงข้อมูลชีทได้");
+                console.error("Fetch error:", error);
+            }
+        };
 
-	c.JSON(http.StatusOK, gin.H{"data": sheets})
-}
+        fetchSheetData();
+    }, [id, form, navigate]);
 
-// Get Sheet by ID
-func GetSheetByID(c *gin.Context) {
-	id := c.Param("id")
-	var sheet entity.Sheet
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const data = await ListCourses();
+                setCourses(data);
+            } catch (error) {
+                console.error("Error fetching courses:", error);
+                message.error("ไม่สามารถโหลดรายวิชาได้");
+            }
+        };
 
-	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").First(&sheet, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
-		return
-	}
+        fetchCourses();
+    }, []);
 
-	c.JSON(http.StatusOK, gin.H{"data": sheet})
-}
 
-func CreateSheet(c *gin.Context) {
-	file, err := c.FormFile("file")
-	if err != nil {
-		fmt.Println("File Error:", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please upload a file"})
-		return
-	}
+    const onFinish = async (values: any) => {
+        try {
+            if (!id) {
+                message.error("ไม่พบ ID ของชีท");
+                navigate("/MainSealSheet");
+                return;
+            }
 
-	uploadDir := "public/uploads"
-	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
-		os.MkdirAll(uploadDir, os.ModePerm)
-	}
+            if (!uploadedFile && fileList.length === 0) {
+                message.error("กรุณาอัพโหลดไฟล์ PDF");
+                return;
+            }
 
-	filename := fmt.Sprintf("%d-%s", time.Now().Unix(), file.Filename)
-	filePath := filepath.Join(uploadDir, filename)
+            setIsLoading(true);
 
-	if err := c.SaveUploadedFile(file, filePath); err != nil {
-		fmt.Println("File Save Error:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save the file"})
-		return
-	}
+            const formData = new FormData();
+            if (uploadedFile) {
+                formData.append("file", uploadedFile); // ไฟล์ใหม่ที่อัปโหลด
+            } else if (fileList.length > 0 && fileList[0].originFileObj) {
+                formData.append("file", fileList[0].originFileObj); // ไฟล์เดิมใน FileList
+            } else {
+                formData.append("file", fileList[0]?.name || ""); // ใช้ชื่อไฟล์เดิม
+            }
 
-	relativePath := fmt.Sprintf("/uploads/%s", filename)
+            formData.append("Title", values.Title);
+            formData.append("Description", values.Description);
+            formData.append("Price", values.Price.toString());
+            formData.append("CourseID", values.CourseID.toString());
+            formData.append("Year", values.Year.format("YYYY"));
+            formData.append("Term", values.Term);
 
-	title := c.PostForm("Title")
-	description := c.PostForm("Description")
-	price := c.PostForm("Price")
-	courseID := c.PostForm("CourseID")
-	year := c.PostForm("Year")
-	sellerID := c.PostForm("SellerID")
-	term := c.PostForm("Term")
+            console.log("FormData Preview:");
+            formData.forEach((value, key) => {
+                console.log(`${key}: ${value}`);
+            });
 
-	priceFloat, err := strconv.ParseFloat(price, 32)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Price must be a number"})
-		return
-	}
+            try {
+                const response = await UpdateSheet(id, formData);
+                console.log("Response from API:", response);
 
-	courseIDUint, err := strconv.ParseUint(courseID, 10, 32)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID must be a number"})
-		return
-	}
+                if (response?.status === "success") {
+                    message.success("อัพเดทข้อมูลชีทสำเร็จ");
+                    navigate("/MainSealSheet");
+                } else {
+                    message.error("การอัพเดทข้อมูลล้มเหลว");
+                    console.error("Unexpected response:", response);
+                }
+            } catch (error) {
+                message.error("เกิดข้อผิดพลาดขณะอัพเดทข้อมูล");
+                console.error("Update error:", error);
+            }
+        } catch (errorInfo) {
+            console.error("Validation Failed:", errorInfo);
+            message.error("กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง");
+        } finally {
+            setIsLoading(false); // ปิดสถานะโหลดไม่ว่าจะสำเร็จหรือไม่
+        }
+    };
 
-	yearUint, err := strconv.ParseUint(year, 10, 32)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Year must be a number"})
-		return
-	}
+    const handleFileChange = (info: UploadChangeParam<UploadFile>) => {
+        const latestFile = info.fileList[info.fileList.length - 1];
+        if (latestFile) {
+            setFileList([latestFile]); // แทนที่ไฟล์เดิมด้วยไฟล์ใหม่
+            message.success("ไฟล์ใหม่ถูกเพิ่มแล้ว");
+        }
+    };
 
-	sellerIDUint, err := strconv.ParseUint(sellerID, 10, 32)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "SellerID must be a number"})
-		return
-	}
+    const handleResetFile = () => {
+        setFileList(originalFileList); // คืนค่าไฟล์กลับเป็นไฟล์เดิม
+        message.info("กลับไปใช้ไฟล์เดิมเรียบร้อยแล้ว");
+    };
 
-	sheet := entity.Sheet{
-		Title:       title,
-		Description: description,
-		Price:       float32(priceFloat),
-		CourseID:    uint(courseIDUint),
-		Year:        uint(yearUint),
-		SellerID:    uint(sellerIDUint),
-		FilePath:    relativePath,
-		Term:        term,
-	}
+    const handleDeleteSheet = async () => {
+        if (!id) {
+            message.error("ไม่พบ ID ของชีท");
+            return;
+        }
 
-	if err := config.DB().Create(&sheet).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save the sheet"})
-		return
-	}
+        confirm({
+            title: "คุณต้องการลบชีทนี้หรือไม่?",
+            icon: <ExclamationCircleOutlined />,
+            content: "การลบชีทจะไม่สามารถกู้คืนได้",
+            okText: "ยืนยัน",
+            cancelText: "ยกเลิก",
+            onOk: async () => {
+                try {
+                    const response = await DeleteSheet(id);
+                    if (response?.status === 200) {
+                        message.success("ลบชีทสำเร็จ");
+                        navigate("/MainSealSheet");
+                    } else {
+                        message.error("ไม่สามารถลบชีทได้");
+                    }
+                } catch (error) {
+                    message.error("เกิดข้อผิดพลาดขณะลบชีท");
+                    console.error("Delete error:", error);
+                }
+            },
+        });
+    };
 
-	c.JSON(http.StatusCreated, gin.H{"data": sheet})
-}
+    return (
+        <Layout className="editsheet">
+            <Sidebar isVisible={false} onClose={() => {}} />
+            <Layout>
+                <Header />
+                <Content className="editsheet-content">
+                    <Card className="editform-container" bordered={false}>
+                        <Title level={2} className="editcard-title">แก้ไขชีท</Title>
+                        {sheetData ? (
+                            <Form form={form} layout="vertical" onFinish={onFinish}>
+                                <Form.Item name="Title" label="ชื่อชีท" rules={[{ required: true }]} >
+                                    <Input disabled={isLoading} />
+                                </Form.Item>
+                                <Form.Item name="CourseID" label="รายวิชา" rules={[{ required: true }]} >
+                                    <Select placeholder="เลือกรายวิชา" disabled={isLoading}>
+                                        {courses.map(course => (
+                                            <Option key={course.ID} value={course.ID}>{course.CourseName}</Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item name="Year" label="ปีการศึกษา" rules={[{ required: true }]} >
+                                    <DatePicker picker="year" disabled={isLoading} />
+                                </Form.Item>
+                                <Form.Item name="Term" label="เทอม" rules={[{ required: true }]} >
+                                    <Select placeholder="เลือกเทอม" disabled={isLoading}>
+                                        <Option value="1">เทอม 1</Option>
+                                        <Option value="2">เทอม 2</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item name="Description" label="คำอธิบาย" rules={[{ required: true }]} >
+                                    <TextArea rows={4} disabled={isLoading} />
+                                </Form.Item>
+                                <Form.Item name="Price" label="ราคา" rules={[{ required: true }]} >
+                                    <Input type="number" disabled={isLoading} />
+                                </Form.Item>
+                                <Form.Item name="file" label="อัพโหลด PDF">
+                                <Upload.Dragger
+                                    name="file"
+                                    beforeUpload={() => false}
+                                    accept=".pdf"
+                                    onChange={handleFileChange}
+                                    fileList={fileList}
+                                >
+                                    <p className="ant-upload-drag-icon">
+                                        <InboxOutlined />
+                                    </p>
+                                    <p className="ant-upload-text">คลิกหรือลากไฟล์เพื่ออัพโหลด</p>
+                                    <p className="ant-upload-hint">รองรับเฉพาะไฟล์ PDF</p>
+                                </Upload.Dragger>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                    <Button
+                                        type="default"
+                                        danger
+                                        icon={<InboxOutlined />}
+                                        onClick={handleResetFile}
+                                        disabled={fileList === originalFileList}
+                                    >
+                                        กลับไปใช้ไฟล์เดิม
+                                    </Button>
+                                </div>
+                            </Form.Item>
+                                <div className="editform-buttons">
+                                    <Button type="default" danger onClick={handleDeleteSheet} disabled={isLoading}>
+                                        ลบชีท
+                                    </Button>
+                                    <Button type="primary" htmlType="submit" loading={isLoading}>
+                                        อัพเดทข้อมูลชีท
+                                    </Button>
+                                </div>
+                            </Form>
+                        ) : (
+                            <p>กำลังโหลดข้อมูลชีท...</p>
+                        )}
+                    </Card>
+                </Content>
+            </Layout>
+        </Layout>
+    );
+};
 
-// Update a Sheet by ID
-func UpdateSheet(c *gin.Context) {
-	id := c.Param("id")
-	var sheet entity.Sheet
-
-	if err := config.DB().First(&sheet, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
-		return
-	}
-
-	file, err := c.FormFile("file")
-	if err == nil {
-		if sheet.FilePath != "" {
-			oldFilePath := filepath.Join("public", sheet.FilePath)
-			if _, err := os.Stat(oldFilePath); err == nil {
-				os.Remove(oldFilePath)
-			}
-		}
-
-		uploadDir := "public/uploads"
-		if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
-			os.MkdirAll(uploadDir, os.ModePerm)
-		}
-
-		filename := fmt.Sprintf("%d-%s", time.Now().Unix(), file.Filename)
-		filePath := filepath.Join(uploadDir, filename)
-
-		if err := c.SaveUploadedFile(file, filePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save the file"})
-			return
-		}
-
-		relativePath := fmt.Sprintf("/uploads/%s", filename)
-		sheet.FilePath = relativePath
-	}
-
-	sheet.Title = c.PostForm("Title")
-	sheet.Description = c.PostForm("Description")
-	price, _ := strconv.ParseFloat(c.PostForm("Price"), 32)
-	sheet.Price = float32(price)
-	year, _ := strconv.Atoi(c.PostForm("Year"))
-	sheet.Year = uint(year)
-	sheet.Term = c.PostForm("Term")
-	courseID, _ := strconv.Atoi(c.PostForm("CourseID"))
-	sheet.CourseID = uint(courseID)
-
-	if err := config.DB().Save(&sheet).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the sheet"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": sheet})
-}
-
-// Delete a Sheet by ID
-func DeleteSheet(c *gin.Context) {
-	id := c.Param("id")
-	var sheet entity.Sheet
-
-	if err := config.DB().First(&sheet, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
-		return
-	}
-
-	if sheet.FilePath != "" {
-		filePath := filepath.Join("public", sheet.FilePath)
-		if _, err := os.Stat(filePath); err == nil {
-			os.Remove(filePath)
-		}
-	}
-
-	if err := config.DB().Delete(&sheet).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete the sheet"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "Sheet deleted successfully"})
-}
-
-func UploadFile(c *gin.Context) {
-	file, err := c.FormFile("file")
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Please upload a file"})
-		return
-	}
-
-	if filepath.Ext(file.Filename) != ".pdf" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Only PDF files are supported"})
-		return
-	}
-
-	uploadDir := "public/uploads"
-	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
-		os.MkdirAll(uploadDir, os.ModePerm)
-	}
-
-	filename := fmt.Sprintf("%d-%s", time.Now().Unix(), filepath.Base(file.Filename))
-	filePath := filepath.Join(uploadDir, filename)
-
-	if err := c.SaveUploadedFile(file, filePath); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save the file"})
-		return
-	}
-
-	fileURL := fmt.Sprintf("/uploads/%s", filename)
-
-	c.JSON(http.StatusCreated, gin.H{
-		"path":    fileURL,
-		"message": "File uploaded successfully",
-	})
-}
-
-func GetCourses(c *gin.Context) {
-	var courses []entity.Course
-	if err := config.DB().Find(&courses).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": courses})
-}
+export default EditSheet;
