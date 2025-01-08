@@ -6,11 +6,7 @@ import (
 
 type Attachment struct {
 	gorm.Model
-	FileName  string `json:"FileName"`
-	FilePath  string `json:"FilePath"`
-	
-	AssignmentID uint `json:"AssignmentID"`
-	Assignment   Assignment `gorm:"foreignKey:AssignmentID"`
-
-	
+	FileName  string `json:"file_name"`
+	FilePath  string `json:"file_path"`
+	SubmissionID uint `json:"submissiom_id"`
 }

@@ -130,6 +130,19 @@ func main() {
 			reviewRoutes.DELETE("/:id", controller.DeleteReview) // ลบ Review
 			reviewRoutes.GET("/sheet/:sheet_id", controller.GetReviewsBySheetID)
 		}
+
+		// Assignment Routes
+		router.GET("/courses/:id/assignments", controller.GetAssignmentCourseID)
+		router.GET("/courses/:id/assignments/:assignment_id", controller.GetAssignmentByIDAndCourseID)
+		router.POST("/assignments", controller.CreateAssignment)       // สร้าง Assignment ใหม่
+		router.PUT("/assignments/:id", controller.UpdateAssignment)    // อัปเดต Assignment ตาม ID
+		router.DELETE("/assignments/:id", controller.DeleteAssignment) // ลบ Assignment ตาม ID
+
+		router.GET("/submission/:user_id/:assignment_id", controller.GetSubmissionWithAttachment)
+		router.GET("/assignments/:assignment_id/submissions", controller.GetSubmissionWithAttachmentAll)
+		router.POST("/submissions", controller.CreateSubmissionWithAttachment)
+		router.PUT("/submissions/:id", controller.UpdateSubmissionWithAttachment)    
+		router.DELETE("/submissions/:id", controller.DeleteSubmission) 
 	}
 
 	r.GET("/", func(c *gin.Context) {

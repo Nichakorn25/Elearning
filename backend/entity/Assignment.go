@@ -6,14 +6,12 @@ import (
 )
 type Assignment struct {
 	gorm.Model
-	Title  string `json:"Title"`
-	Description	string`json:"Description"`
-	DaedLine 	time.Time `json:"DaedLine"`
+	Title  		string `json:"title" valid:"required~Title is required"`
+	Description	string `json:"description" valid:"required~Description is required"`
+	Daedline 	time.Time `json:"deadline" valid:"required~Daedline is required"`
 
 	Submission []Submission `gorm:"foreignKey:AssignmentID"`
-	
-	Attachment []Attachment `gorm:"foreignKey:AssignmentID"`
 
-	CourseID uint                `json:"CourseID"`
-	Course   Course `gorm:"foreignKey:CourseID"` // ใช้ Course จาก package CreateCourse
+	CourseID uint  `json:"course_id"`
+	Course   Course `gorm:"foreignKey:CourseID"`
 }

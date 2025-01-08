@@ -6,11 +6,8 @@ import (
 
 type Grade struct {
 	gorm.Model
-	Score  uint `json:"Score"`
-	Feedback	string `json:"Feedback"`
-	Credit 		uint `json:"Credit"`
-
-	SubmissionID uint `json:"SubmissionID"`
-	Submission   Submission `gorm:"foreignKey:SubmissionID"`
-
+	Score  		uint `json:"score"`
+	Feedback	string `json:"feedback"`
+	Credit 		uint `json:"credit"`
+	SubmissionID uint `json:"submission_id"`
 }
