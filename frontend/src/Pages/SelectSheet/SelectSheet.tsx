@@ -10,6 +10,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 // ตั้งค่า Worker ให้ตรงกับเวอร์ชัน PDF
 pdfjs.GlobalWorkerOptions.workerSrc = '/worker/pdf.worker.min.mjs';
 
+
 const { Content } = Layout;
 const { TextArea } = Input;
 
