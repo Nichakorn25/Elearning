@@ -1,4 +1,4 @@
-.dashboard {
+.stddashboard {
   padding: 20px;
   font-family: "Noto Sans", "Noto Sans Thai", "Prompt", sans-serif;
   min-height: 100vh; /* ให้เนื้อหาเต็มความสูง */
@@ -7,14 +7,14 @@
   margin-top: 80px; /* ระยะห่างจาก Header */
 }
 
-.dashboardsearch-bar {
+.stddashboard-search-bar {
   display: flex;
   align-items: center;
   margin-bottom: 20px; /* เพิ่มระยะห่างจาก content ด้านล่าง */
   gap: 10px;
 }
 
-.dashboardsearch-bar input {
+.stddashboard-search-bar input {
   flex: 1;
   padding: 10px;
   border: 1px solid #ccc;
@@ -22,7 +22,7 @@
   font-size: 1em;
 }
 
-.dashboardsearch-bar .dashboardsearch-button {
+.stddashboard-search-bar .stddashboard-search-button {
   background-color: #ff6b00;
   border: none;
   color: white;
@@ -32,38 +32,84 @@
   transition: background-color 0.3s ease;
 }
 
-.dashboardsearch-bar .dashboardsearch-button:hover {
+.stddashboard-search-bar .stddashboard-search-button:hover {
   background-color: #ff4500;
 }
 
-.course-overview {
+.stddashboard-your-courses h2 , .stddashboard-recommend h2 {
   margin-top: 20px;
+  color: black;
 }
 
-.course-list {
-  display: flex;
-  flex-wrap: wrap; /* ให้คอร์สจัดเรียงในแถวถัดไปเมื่อเต็ม */
-  gap: 20px;
+.stddashboard-course-list {
+  display: grid; /* ใช้ Grid Layout */
+  grid-template-columns: repeat(5, 1fr); /* กำหนดให้มี 5 คอลัมน์ */
+  gap: 20px; /* ระยะห่างระหว่างการ์ด */
+  padding: 10px; /* เพิ่ม padding */
 }
 
-.course-card {
+
+.stddashboard-course-card {
   background-color: #f2f2f2;
   padding: 15px;
   border-radius: 8px;
-  width: calc(25% - 20px); /* ทำให้คอร์สแสดงได้ 4 คอร์สต่อแถว */
+  width: 100%; /* ให้การ์ดขยายเต็มคอลัมน์ */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .dashboardsearch-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 5px;
-  }
 
-  .course-card {
-    width: calc(50% - 20px); /* 2 คอร์สต่อแถวในมือถือ */
+/* สำหรับรูปภาพในคอร์ส */
+.stddashboard-course-card img {
+  width: 100%; /* ให้รูปภาพเต็มความกว้างของการ์ด */
+  height: 150px; /* ตั้งค่าความสูง */
+  object-fit: cover; /* รักษาสัดส่วนรูปภาพ */
+  border-radius: 8px; /* ทำให้ขอบรูปภาพโค้งมน */
+  margin-bottom: 10px; /* ระยะห่างระหว่างรูปและข้อความ */
+}
+
+.stddashboard-course-card h3 {
+  font-size: 1.2em;
+  margin: 10px 0 5px;
+  color: #333;
+}
+
+.stddashboard-course-card p {
+  font-size: 0.9em;
+  color: #666;
+}
+
+/* สำหรับหน้าจอกลาง: 3 คอลัมน์ */
+@media (max-width: 1024px) {
+  .stddashboard-course-list {
+    grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* สำหรับหน้าจอเล็ก: 2 คอลัมน์ */
+@media (max-width: 768px) {
+  .stddashboard-course-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* สำหรับหน้าจอเล็กมาก: 1 คอลัมน์ */
+@media (max-width: 480px) {
+  .stddashboard-course-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.stddashboard-slider {
+  margin: 20px 0; /* ระยะห่างบนล่าง */
+  width: 100%; /* ความกว้างเต็มจอ */
+  max-height: 300px; /* กำหนดความสูงสูงสุด */
+  overflow: hidden;
+}
+
+.stddashboard-slide-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px; /* โค้งมนขอบภาพ */
 }
