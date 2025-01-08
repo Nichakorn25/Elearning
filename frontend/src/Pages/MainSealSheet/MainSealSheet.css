@@ -119,19 +119,19 @@
   gap: 20px;
 }
 
-.ant-card {
+.mainseaalsheet-card {
   width: 300px; /* กำหนดความกว้างการ์ด */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้การ์ด */
   transition: transform 0.3s ease, box-shadow 0.3s ease; /* เพิ่มการเปลี่ยนแปลงเวลา hover */
   border-radius: 8px; /* มุมมน */
 }
 
-.ant-card:hover {
+.mainseaalsheet-card:hover {
   transform: scale(1.05); /* การขยายเล็กน้อยเมื่อ hover */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* เพิ่มเงาให้เด่นขึ้น */
 }
 
-.ant-card-cover canvas {
+.mainseaalsheet-card-cover canvas {
   border-radius: 8px 8px 0 0; /* มุมมนเฉพาะด้านบน */
 }
 
