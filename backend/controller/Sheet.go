@@ -184,7 +184,11 @@ func UpdateSheet(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": sheet})
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"message": "Sheet updated successfully",
+		"data":    sheet,
+	})
 }
 
 // Delete a Sheet by ID

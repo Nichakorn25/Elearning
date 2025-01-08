@@ -51,7 +51,7 @@ const EditSheet: React.FC = () => {
                     uid: '-1',
                     name: data.FilePath.split('/').pop(),
                     status: 'done',
-                    url: `http://localhost:8080/uploads/${data.FilePath.split('/').pop()}`
+                    url: `http://localhost:8000/uploads/${data.FilePath.split('/').pop()}`
                 } as UploadFile;
 
                 setFileList([file]);
@@ -120,7 +120,7 @@ const EditSheet: React.FC = () => {
                 const response = await UpdateSheet(id, formData);
                 console.log("Response from API:", response);
 
-                if (response?.status === 200 || response?.status === 201) {
+                if (response?.status === "success") {
                     message.success("อัพเดทข้อมูลชีทสำเร็จ");
                     navigate("/MainSealSheet");
                 } else {

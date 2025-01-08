@@ -30,15 +30,6 @@ const BuySheet: React.FC = () => {
   useEffect(() => {
     const fetchCartItemCount = async () => {
         try {
-            const userID = localStorage.getItem("id");
-            if (!userID) {
-                console.error("User ID not found in localStorage.");
-                message.error("กรุณาเข้าสู่ระบบ");
-                navigate("/");
-                return;
-            }
-
-            console.log("User ID:", userID);
 
             // Fetch cart list
             const cartListResponse = await ListCarts({ userId: parseInt(userID) });
@@ -155,8 +146,6 @@ const BuySheet: React.FC = () => {
     setFilteredSheets(filtered);
   }, [searchTerm, searchTermYearTerm, sheets]);
 
-  const handleMouseEnter = (id: string) => setHoveredCard(id);
-  const handleMouseLeave = () => setHoveredCard(null);
 
   const navigateToSelectSheet = (sheetId: string | undefined) => {
     if (!sheetId) {
@@ -234,7 +223,7 @@ const BuySheet: React.FC = () => {
         }
       }
     });
-  }, [sheets,filteredSheets]);
+  }, [filteredSheets]);
 
   if (loading) {
     return (
@@ -288,9 +277,8 @@ const BuySheet: React.FC = () => {
                   height={200}
                 />
               }
-              onMouseEnter={() => handleMouseEnter(sheet.ID || sheet.id)}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => navigateToSelectSheet(sheet.ID || sheet.id)} // ใช้ ID ที่ถูกต้อง
+
+              onClick={() => navigateToSelectSheet(sheet.ID || sheet.id)} 
               className={hoveredCard === (sheet.ID || sheet.id) ? "hovered" : ""}
             >
               <Meta title={sheet.Title} description={`Price: ${sheet.Price} BAHT`} />

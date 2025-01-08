@@ -26,7 +26,6 @@ const EditSealUser = () => {
           navigate("/MainSealSheet");
           return;
         }
-        const userID = localStorage.getItem("id");
         // ดึงข้อมูลธนาคาร
         const bankResponse = await ListBanks();
         if (bankResponse.status === 200 && bankResponse.data.data) {

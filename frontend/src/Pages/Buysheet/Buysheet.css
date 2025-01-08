@@ -17,6 +17,7 @@ h2 {
   padding: 20px 20px;
   height: auto;
   min-height: 100vh;
+  margin-top: 30px ;
 }
 
 /* CSS สำหรับพื้นที่เนื้อหาหลัก */
@@ -36,7 +37,7 @@ h2 {
     padding: 10px;
     background: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
   }
   
   .search-filters h3 {

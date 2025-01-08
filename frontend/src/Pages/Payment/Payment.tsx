@@ -109,7 +109,7 @@ const Payment = () => {
 
       if (response) {
         message.success("ยืนยันการชำระเงินสำเร็จ");
-        navigate("/Buysheet", { state: { purchaseId: response.ID } });
+        navigate("/Buysheet");
       } else {
         message.error("การชำระเงินล้มเหลว");
       }

@@ -154,7 +154,7 @@ const MainSealSheet: React.FC = () => {
               <p>กำลังโหลดข้อมูล...</p>
             ) : sheets.length > 0 ? (
               sheets.map((sheet, index) => (
-              <Card
+              <Card className="mainseaalsheet-card"
                 key={sheet.ID}
                 cover={
                   <canvas
