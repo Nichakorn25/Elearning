@@ -5,6 +5,7 @@ import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import { UserInterface,DepartmentInterface,MajorInterface} from "../../../Interface/IUser";
 import { GetDepartments,GetMajors,CreateUser } from "../../../services/https";
+import backgroundVideo from "../../../assets/loginbackground.mp4"
 
 const SignUp: React.FC = () => {
   // State สำหรับจัดเก็บ departments และ majors
@@ -140,6 +141,10 @@ const SignUp: React.FC = () => {
     <>
     <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
     <div className="signup-container">
+      {/* วิดีโอพื้นหลัง */}
+      <video autoPlay loop muted className="backgroundbeforelogin-video">
+        <source src={backgroundVideo} type="video/mp4" />
+      </video>
       <h1 className="signup-title">Sign Up</h1>
       <form className="signup-form" onSubmit={handleSubmit}>
         <div className="form-group">

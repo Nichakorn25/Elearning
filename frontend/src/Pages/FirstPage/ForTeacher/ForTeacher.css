@@ -6,11 +6,12 @@
     
   }
   
-  .title {
-    font-size: 2.5em;
+  .titleforteacher{
+    font-size: 1.5em;
     margin-bottom: 30px;
     color: #333;
     text-align: left;
+    margin-bottom: 20px;
   }
   
   .content-container {

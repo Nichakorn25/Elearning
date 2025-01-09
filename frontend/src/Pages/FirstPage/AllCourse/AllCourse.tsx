@@ -28,7 +28,7 @@ const AllCourse: React.FC = () => {
       <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
 
       <div className="all-courses-container">
-        <h1>SUT e-Learning</h1>
+        <h1>SE e-Learning</h1>
         <p>หน้าหลัก / รายวิชาทั้งหมด</p>
         <div className="search-container">
           <input

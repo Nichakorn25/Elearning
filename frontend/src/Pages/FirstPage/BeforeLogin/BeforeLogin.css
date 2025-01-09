@@ -10,7 +10,7 @@
 }
 
 /* เพิ่มเลเยอร์โปร่งแสง */
-.app::before {
+.BeforeLogin::before {
   content: "";
   position: fixed;
   top: 0;
