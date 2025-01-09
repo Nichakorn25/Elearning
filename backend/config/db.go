@@ -6,6 +6,7 @@ import (
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"time"
 )
 
 var db *gorm.DB
@@ -72,6 +73,7 @@ func SetupDatabase() {
 		&entity.TeacherAppointment{},
 		&entity.Availability{},
 		&entity.StudentBooking{},
+		&entity.ClassSchedule{},
 	)
 	departments := []entity.Department{
 		{DepartmentName: "สำนักวิชาวิทยาศาสตร์ (Institute of Science)"},
@@ -211,12 +213,68 @@ func SetupDatabase() {
 		{Username: "T6500005", Password: hashedPassword, FirstName: "คมศัลล์", LastName: "ศรีวิสุทธิ์", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
 		{Username: "T6500006", Password: hashedPassword, FirstName: "ทดสอบ", LastName: "ส่งอีเมล", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19},
 
-
-
-		
 	}
 	for _, pkg := range User {
 		db.FirstOrCreate(&pkg, entity.User{Username: pkg.Username})
+	}
+
+	// ข้อมูลตัวอย่างสำหรับ Course
+	courses := []entity.Course{
+		{
+			CourseName:  "Introduction to Computer Science",
+			CourseDate:  time.Now(),
+			Credit:      3,
+			Description: "Basic concepts in computer science, programming, and problem-solving.",
+			CategoryID:  1, // วิทยาศาสตร์
+			UserID:      1, // อาจารย์ที่สอน
+			SemesterID:  1, // ภาคการศึกษาที่ 1
+			DayofWeekID: 2, // วันจันทร์
+		},
+		{
+			CourseName:  "Digital Arts and Design",
+			CourseDate:  time.Now().AddDate(0, 0, 7), // เริ่มอีก 7 วัน
+			Credit:      2,
+			Description: "Introduction to digital arts and design tools.",
+			CategoryID:  9, // ศาสตร์และศิลป์ดิจิทัล
+			UserID:      2,
+			SemesterID:  1,
+			DayofWeekID: 3, // วันอังคาร
+		},
+		{
+			CourseName:  "Advanced Physics",
+			CourseDate:  time.Now().AddDate(0, 0, 14), // เริ่มอีก 14 วัน
+			Credit:      4,
+			Description: "Deep dive into classical mechanics, electromagnetism, and quantum physics.",
+			CategoryID:  1, // วิทยาศาสตร์
+			UserID:      3,
+			SemesterID:  2, // ภาคการศึกษาที่ 2
+			DayofWeekID: 4, // วันพุธ
+		},
+		{
+			CourseName:  "Introduction to Agricultural Technology",
+			CourseDate:  time.Now().AddDate(0, 0, 21), // เริ่มอีก 21 วัน
+			Credit:      3,
+			Description: "Overview of modern agricultural technologies and their applications.",
+			CategoryID:  3, // เทคโนโลยีการเกษตร
+			UserID:      4,
+			SemesterID:  2,
+			DayofWeekID: 5, // วันพฤหัสบดี
+		},
+		{
+			CourseName:  "Software Engineering Fundamentals",
+			CourseDate:  time.Now().AddDate(0, 0, 28), // เริ่มอีก 28 วัน
+			Credit:      3,
+			Description: "Basic principles of software engineering and software development lifecycle.",
+			CategoryID:  5, // วิศวกรรมศาสตร์
+			UserID:      5,
+			SemesterID:  1,
+			DayofWeekID: 6, // วันศุกร์
+		},
+	}
+
+	// เพิ่มข้อมูลลงในฐานข้อมูล
+	for _, course := range courses {
+		db.FirstOrCreate(&course, entity.Course{CourseName: course.CourseName})
 	}
 
 	permissions := []entity.Permission{
@@ -277,7 +335,7 @@ func SetupDatabase() {
 	Category := []entity.Category{
 		{CategoryID: 1, CategoryName: "วิทยาศาสตร์"},
 		{CategoryID: 2, CategoryName: "เทคโนโยยีสังคม"},
-		{CategoryID: 3, CategoryName: "เทคโนโยยีการเกษตร"},
+		{CategoryID: 3, CategoryName: "เทคโนโลยีการเกษตร"},
 		{CategoryID: 4, CategoryName: "แพทยศาสตร์"},
 		{CategoryID: 5, CategoryName: "วิศวกรรมศาสตร์"},
 		{CategoryID: 6, CategoryName: "พยาบาลศาสตร์"},

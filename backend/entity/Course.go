@@ -21,6 +21,8 @@ type Course struct {
 
 	Assignment []Assignment `gorm:"foreignKey:CourseID"`
 
+	ClassSchedule []ClassSchedule `gorm:"foreignKey:CourseID"`
+
 	CategoryID uint `json:"CategoryID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
 

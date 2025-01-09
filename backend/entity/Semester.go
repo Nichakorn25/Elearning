@@ -13,4 +13,5 @@ type Semester struct {
 	EndDate		time.Time `json:"EndDate"`
 
 	Course []Course `gorm:"foreignKey:SemesterID"`
+	ClassSchedule []ClassSchedule `gorm:"foreignKey:SemesterID"`
 }

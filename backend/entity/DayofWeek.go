@@ -10,4 +10,5 @@ type DayofWeek struct {
 	Course []Course `gorm:"foreignKey:DayofWeekID"`
 	TeacherAppointment []TeacherAppointment `gorm:"foreignKey:DayofWeekID"`
 	StudentBooking []StudentBooking `gorm:"foreignKey:DayofWeekID"`
+	ClassSchedule []ClassSchedule `gorm:"foreignKey:DayofWeekID"`
 }
