@@ -1,9 +1,10 @@
-import React from "react";
+import React , {useState} from "react";
 import { Form, Input, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./LoginPopup.css";
 import { SignInInterface } from "../../../Interface/IUser";
 import { SignIn, GetUserById } from "../../../services/https";
+import Loading from "../../Component/Loading/Loading";
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -12,8 +13,10 @@ interface LoginPopupProps {
 const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false); // เพิ่มสถานะ loading
 
   const onFinish = async (values: SignInInterface) => {
+    setLoading(true); // เริ่มหน้าจอโหลด
     let res = await SignIn(values);
   
     if (res.status === 200) {
@@ -60,6 +63,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
             message.success("You are an Admin!");
             navigate("/Dashboard");
           }
+          onClose(); // ปิด Popup หลังจาก login สำเร็จ
         }, 1000);
       } else {
         messageApi.error("Failed to retrieve user data");
@@ -79,6 +83,9 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
   return (
     <div className="popup-overlay" onClick={onClose}>
       {contextHolder}
+      {loading ? ( // แสดง Loading Animation
+      <Loading />
+    ) : (
       <div className="popup-container" onClick={(e) => e.stopPropagation()}>
         {/* Left Section - Login Form */}
         <div className="popup-form-container">
@@ -150,6 +157,7 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
           </button>
         </div>
       </div>
+    )}
     </div>
   );
 };
