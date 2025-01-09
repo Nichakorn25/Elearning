@@ -102,14 +102,14 @@ func main() {
 		}
 
 		// Sheet Routes
-		// router.GET("/sheets", controller.GetSheets)
-		// router.GET("/sheets/:id", controller.GetSheetByID)
-		// router.POST("/sheets", controller.CreateSheet)
-		// router.PUT("/sheets/:id", controller.UpdateSheet)
-		// router.DELETE("/sheets/:id", controller.DeleteSheet)
-		// r.GET("/courses", controller.GetCourses)
-		// r.POST("/upload", controller.UploadFile)
-		// router.GET("/sheets/seller/:sellerID", controller.GetSheetsBySellerID)
+		router.GET("/sheets", controller.GetSheets)
+		router.GET("/sheets/:id", controller.GetSheetByID)
+		router.POST("/sheets", controller.CreateSheet)
+		router.PUT("/sheets/:id", controller.UpdateSheet)
+		router.DELETE("/sheets/:id", controller.DeleteSheet)
+		r.GET("/courses", controller.GetCourses)
+		r.POST("/upload", controller.UploadFile)
+		router.GET("/sheets/seller/:sellerID", controller.GetSheetsBySellerID)
 		// Route สำหรับ Cart
 		router.GET("/cart-statuses", controller.GetCartStatuses)
 		router.GET("/carts", controller.GetCarts)

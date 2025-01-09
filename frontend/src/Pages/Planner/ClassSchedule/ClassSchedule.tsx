@@ -22,6 +22,7 @@ const ClassSchedule: React.FC = () => {
     '18:00-19:00',
     '19:00-20:00',
   ];
+  
 
   // ข้อมูลตารางเรียน (Days & Slots)
   const [schedule, setSchedule] = useState([
@@ -47,6 +48,7 @@ const ClassSchedule: React.FC = () => {
     <div className="dashboard">
       {/* Header Section */}
       <Header />
+      
       {/* Schedule Table */}
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>
