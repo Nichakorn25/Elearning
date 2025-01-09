@@ -54,7 +54,6 @@ func GetSheetByID(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"data": sheet})
 }
 
