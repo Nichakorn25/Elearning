@@ -25,7 +25,7 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
   };
 
   return (
-    <div className="app">
+    <div className="BeforeLogin">
       {/* วิดีโอพื้นหลัง */}
       <video autoPlay loop muted className="backgroundbeforelogin-video">
         <source src={backgroundVideo} type="video/mp4" />
@@ -36,8 +36,9 @@ const BeforeLogin: React.FC<BeforeLoginProps> = ({ onLoginClick }) => {
 
       {/* เนื้อหาหลัก */}
       <main className="main-contentbeforelogin">
-        <h1 className="h1bflogin">SUT e-Learning</h1>
-        <p>ระบบบริหารจัดการเรียนการสอนผ่านเครือข่าย มหาวิทยาลัยเทคโนโลยีสุรนารี</p>
+        <h1 className="h1bflogin">SE e-Learning</h1>
+        <p>แพลตฟอร์มบริหารจัดการการเรียนการสอนออนไลน์ที่ออกแบบมาเพื่อสนับสนุนการศึกษา </p>
+        <p>การพัฒนาทักษะ และการเรียนรู้ตลอดชีวิตสำหรับผู้เรียนทุกระดับ</p>
       </main>
       {/* แสดง LoginPopup หากเปิด */}
       {isLoginPopupVisible && <LoginPopup onClose={closeLoginPopup} />}

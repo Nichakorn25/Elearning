@@ -66,7 +66,7 @@ const Header: React.FC = () => {
             ☰
           </button>
           <h1 onClick={handleTitleClick} style={{ cursor: "pointer" }}>
-            SUT e-Learning
+            SE e-Learning
           </h1>
         </div>
 
