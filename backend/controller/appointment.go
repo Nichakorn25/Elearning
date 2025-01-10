@@ -42,13 +42,13 @@ func CreateTeacherAppointment(c *gin.Context) {
 	u := entity.TeacherAppointment{
 		Title: Appointment.Title,
 		AppointmentDuration: Appointment.AppointmentDuration,
-		BufferTime: Appointment.BufferTime,
-		MaxBookings: Appointment.MaxBookings,
+		// BufferTime: Appointment.BufferTime,
+		// MaxBookings: Appointment.MaxBookings,
 		Location: Appointment.Location,
 		Description: Appointment.Description,
 		UserID: Appointment.UserID,
 		DayofWeekID: Appointment.DayofWeekID,
-		AvailabilityID: Appointment.AvailabilityID,
+		// AvailabilityID: Appointment.AvailabilityID,
 	}
 
 	// บันทึก
@@ -90,7 +90,7 @@ func GetTeacherAppointmentsByUserID(c *gin.Context) {
 	}
 
 	// Query Appointments
-	if err := config.DB().Preload("User").Preload("DayofWeek").Preload("Availability").Where("user_id = ?", userId).Find(&appointments).Error; err != nil {
+	if err := config.DB().Preload("User").Preload("DayofWeek").Where("user_id = ?", userId).Find(&appointments).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve appointments"})
 		return
 	}
@@ -118,6 +118,7 @@ func GetAppointmentsForStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, appointments)
 }
 
+//ไม่ได้ใช้
 func BookAppointment(c *gin.Context) {
 	var booking entity.StudentBooking
 
@@ -180,7 +181,7 @@ func ListDays(c *gin.Context) {
 
 
 
-//จองวันเวลา StudentBooking
+//จองวันเวลา StudentBooking ใช้อันนี้
 func CreateStudentBooking(c *gin.Context) {
 	var booking entity.StudentBooking
 
@@ -193,7 +194,6 @@ func CreateStudentBooking(c *gin.Context) {
 
 	u := entity.StudentBooking{
 		UserID:        			booking.UserID,
-		DayofWeekID:        	booking.DayofWeekID,
 		TeacherAppointmentID:   booking.TeacherAppointmentID,
 	}
 

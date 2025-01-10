@@ -1,17 +1,29 @@
 // CreateAppointment.jsx
 import React, { useEffect, useState } from "react";
-import { Modal, Input, Select, TimePicker, Checkbox, Button , message } from "antd";
+import {
+  Modal,
+  Input,
+  Select,
+  TimePicker,
+  Checkbox,
+  Button,
+  message,
+} from "antd";
 import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
-import {GetDay, SaveAppointment , SaveAvailability} from "../../../../services/https/index"
-import { DayInterface, TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
-
+import {
+  GetDay,
+  SaveAppointment,
+  SaveAvailability,
+} from "../../../../services/https/index";
+import {
+  DayInterface,
+  TeacherAppointmentInterface,
+} from "../../../../Interface/IAppointment";
 
 const { Option } = Select;
 const { RangePicker } = TimePicker;
-
-
 
 const CreateAppointment: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -32,18 +44,17 @@ const CreateAppointment: React.FC = () => {
   const [description, setDescription] = useState("");
   const userId = localStorage.getItem("id");
 
-
   //===============================ดึงวันทั้งหมด========================================
   const [Days, setDay] = useState<DayInterface[]>([]);
   const fetchDayAll = async () => {
-      try {
-          const res = await GetDay();
-          if (res.status === 200 && res.data) {
-            setDay(res.data);
-          }
-      } catch (error) {
-        setDay([]);
+    try {
+      const res = await GetDay();
+      if (res.status === 200 && res.data) {
+        setDay(res.data);
       }
+    } catch (error) {
+      setDay([]);
+    }
   };
   useEffect(() => {
     fetchDayAll();
@@ -54,9 +65,9 @@ const CreateAppointment: React.FC = () => {
     setSelectDay(Number(value));
     console.log(`selected ${value}`);
   };
-  
+
   const onSearch = (value: string) => {
-      console.log('search:', value);
+    console.log("search:", value);
   };
   //================================================================================
 
@@ -83,7 +94,7 @@ const CreateAppointment: React.FC = () => {
       time: null,
       date: null,
       appointmentId: 0,
-      DayofWeekID:SelectDay,
+      DayofWeekID: SelectDay,
     };
     console.log(userId);
     console.log(title);
@@ -105,8 +116,7 @@ const CreateAppointment: React.FC = () => {
       message.error("Failed to create appointment. Please try again.");
     }
   };
-  
-  
+
   const handleDayChange = (index: number, unavailable: boolean) => {
     const updatedDays = [...daysAvailability];
     updatedDays[index].unavailable = unavailable;
@@ -125,139 +135,128 @@ const CreateAppointment: React.FC = () => {
   };
 
   return (
-      <div>
-        {/* Title */}
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">Add Title</label>
-          <Input
-            placeholder="Add title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">
-            Appointment Duration
-          </label>
-          <Select
-            value={duration}
-            style={{ width: "100%" }}
-            onChange={(value) => setDuration(value)}
-          >
-            <Option value={15}>15 minutes</Option>
-            <Option value={30}>30 minutes</Option>
-            <Option value={60}>1 hour</Option>
-            <Option value={120}>2 hours</Option>
-          </Select>
-        </div>
-
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">
-            Select Day
-          </label>
-          <Select
-              style={{width:'60%'}}
-              showSearch
-              placeholder="Select a Day"
-              optionFilterProp="label"
-              onChange={selectDay}
-              onSearch={onSearch}
-              options={Days.map((Day) => ({
-                value: Day.ID,
-                label: Day.DayName,
-              }))}
-          />
-        </div>
-
-        {/* Buffer Time */}
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">
-            Buffer Time
-          </label>
-          <Checkbox
-            checked={bufferTime > 0}
-            onChange={(e) => setBufferTime(e.target.checked ? 30 : 0)}
-          >
-            Add Buffer Time
-          </Checkbox>
-          {bufferTime > 0 && (
-            <Input
-              type="number"
-              min={0}
-              value={bufferTime}
-              onChange={(e) => setBufferTime(Number(e.target.value))}
-              addonAfter="minutes"
-              style={{ width: "150px", marginLeft: "16px" }}
-            />
-          )}
-        </div>
-
-        {/* Maximum Bookings */}
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">
-            Maximum Bookings
-          </label>
-          <Checkbox
-            checked={maxBookings > 0}
-            onChange={(e) => setMaxBookings(e.target.checked ? 4 : 0)}
-          >
-            Limit Bookings
-          </Checkbox>
-          {maxBookings > 0 && (
-            <Input
-              type="number"
-              min={1}
-              value={maxBookings}
-              onChange={(e) => setMaxBookings(Number(e.target.value))}
-              style={{ width: "150px", marginLeft: "16px" }}
-            />
-          )}
-        </div>
-
-        {/* Location */}
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">Location</label>
-          <Select
-            placeholder="Select how and where to meet"
-            value={location}
-            style={{ width: "100%" }}
-            onChange={(value) => setLocation(value)}
-          >
-            <Option value="inPerson">In-person meeting</Option>
-            <Option value="videoCall">Video conferencing</Option>
-            <Option value="phoneCall">Phone call</Option>
-          </Select>
-        </div>
-
-        {/* Description */}
-        <div className="create-appointment-section">
-          <label className="create-appointment-section-label">
-            Description
-          </label>
-          <TextArea
-            placeholder="Add description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-          />
-        </div>
-
-        <div className="create-appointment-footer">
-          <Button
-            className="create-appointment-cancel-button"
-          >
-            Cancel
-          </Button>
-          <Button
-            className="create-appointment-save-button"
-            onClick={handleSave}
-          >
-            Save
-          </Button>
-        </div>
+    <div>
+      {/* Title */}
+      <div className="create-appointment-section">
+        <label className="create-appointment-section-label">Add Title</label>
+        <Input
+          placeholder="Add title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
       </div>
 
+      <div className="create-appointment-section">
+        <label className="create-appointment-section-label">
+          Appointment Duration
+        </label>
+        <Select
+          value={duration}
+          style={{ width: "100%" }}
+          placeholder="Select Duration"
+          onChange={(value) => setDuration(value)} // กำหนดค่า duration เมื่อเลือก
+        >
+          {/* ตัวเลือกสำหรับช่วงเวลา */}
+          <Option value="9.00-10.00">9.00-10.00</Option>
+          <Option value="11.00-12.00">11.00-12.00</Option>
+          <Option value="13.00-14.00">13.00-14.00</Option>
+          <Option value="15.00-16.00">15.00-16.00</Option>
+
+        </Select>
+      </div>
+
+      <div className="create-appointment-section">
+        <label className="create-appointment-section-label">Select Day</label>
+        <Select
+          style={{ width: "60%" }}
+          showSearch
+          placeholder="Select a Day"
+          optionFilterProp="label"
+          onChange={selectDay}
+          onSearch={onSearch}
+          options={Days.map((Day) => ({
+            value: Day.ID,
+            label: Day.DayName,
+          }))}
+        />
+      </div>
+
+      {/* Buffer Time */}
+      {/* <div className="create-appointment-section">
+        <label className="create-appointment-section-label">Buffer Time</label>
+        <Checkbox
+          checked={bufferTime > 0}
+          onChange={(e) => setBufferTime(e.target.checked ? 30 : 0)}
+        >
+          Add Buffer Time
+        </Checkbox>
+        {bufferTime > 0 && (
+          <Input
+            type="number"
+            min={0}
+            value={bufferTime}
+            onChange={(e) => setBufferTime(Number(e.target.value))}
+            addonAfter="minutes"
+            style={{ width: "150px", marginLeft: "16px" }}
+          />
+        )}
+      </div> */}
+
+      {/* Maximum Bookings */}
+      {/* <div className="create-appointment-section">
+        <label className="create-appointment-section-label">
+          Maximum Bookings
+        </label>
+        <Checkbox
+          checked={maxBookings > 0}
+          onChange={(e) => setMaxBookings(e.target.checked ? 4 : 0)}
+        >
+          Limit Bookings
+        </Checkbox>
+        {maxBookings > 0 && (
+          <Input
+            type="number"
+            min={1}
+            value={maxBookings}
+            onChange={(e) => setMaxBookings(Number(e.target.value))}
+            style={{ width: "150px", marginLeft: "16px" }}
+          />
+        )}
+      </div> */}
+
+      {/* Location */}
+      <div className="create-appointment-section">
+        <label className="create-appointment-section-label">Location</label>
+        <Select
+          placeholder="Select how and where to meet"
+          value={location}
+          style={{ width: "100%" }}
+          onChange={(value) => setLocation(value)}
+        >
+          <Option value="inPerson">In-person meeting</Option>
+          <Option value="videoCall">Video conferencing</Option>
+          <Option value="phoneCall">Phone call</Option>
+        </Select>
+      </div>
+
+      {/* Description */}
+      <div className="create-appointment-section">
+        <label className="create-appointment-section-label">Description</label>
+        <TextArea
+          placeholder="Add description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={4}
+        />
+      </div>
+
+      <div className="create-appointment-footer">
+        <Button className="create-appointment-cancel-button">Cancel</Button>
+        <Button className="create-appointment-save-button" onClick={handleSave}>
+          Save
+        </Button>
+      </div>
+    </div>
   );
 };
 
