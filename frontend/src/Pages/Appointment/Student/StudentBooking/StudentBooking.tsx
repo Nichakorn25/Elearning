@@ -419,94 +419,88 @@ const StudentBooking: React.FC = () => {
         </section>
         {/* Time Slots =============================================================================================================================*/}
         <div className="Daycontanner">
-          {/* <div className="Day">
-            
-            {Days.map((date, index) => (
-              <>
-                <div style={{ margin: '0 20px' }} key={index}>{date.DayName}</div>
-              </>
-            ))}
-           
-          </div> */}
-
           <div className="AppointmentContent">
             {appointments.length > 0 ? (
               appointments.map((data, index) => (
-                <>
-                  <div
-                    style={{ margin: "20px 20px" }}
-                    className="cardAppop"
-                    key={index}
-                  >
-                    <div>
-                      โดย : {data.User?.FirstName} {data.User?.LastName} <br />
-                      Title : {data.title} location : {data.location}
-                      <br />
-                      duration : {data.appointment_duration} <br />
-                      description : {data.description} <br />
-                      ว่างวัน : {data.DayofWeek?.DayName || "NO DATA"}
-                    </div>
-                    <div
-                      onClick={() => OpenPopup(data)}
-                      style={{ cursor: "pointer", margin: "50px 10px" }}
-                    >
-                      จองนัดหมาย
-                    </div>
+                <div
+                  style={{ margin: "20px 20px" }}
+                  className="cardAppop"
+                  key={index}
+                >
+                  <div>
+                    โดย : {data.User?.FirstName} {data.User?.LastName} <br />
+                    Title : {data.title} location : {data.location}
+                    <br />
+                    duration : {data.appointment_duration} <br />
+                    description : {data.description} <br />
+                    ว่างวัน : {data.DayofWeek?.DayName || "NO DATA"}
                   </div>
-                </>
+                  <div
+                    onClick={() => OpenPopup(data)}
+                    style={{ cursor: "pointer", margin: "50px 10px" }}
+                  >
+                    จองนัดหมาย
+                  </div>
+                </div>
               ))
             ) : (
-              <>
-                <h1 style={{ textAlign: "center", margin: "20% 0px" }}>
-                  Please select Professor before make an appointment.
-                </h1>
-              </>
+              <h1 style={{ textAlign: "center", margin: "20% 0px" }}>
+                Please select Professor before make an appointment.
+              </h1>
             )}
           </div>
         </div>
-        {/* booking popup =============================================================================================================================*/}
+
         {ispopup && (
           <div className="PopupBooking">
-            <div style={{ textAlign: "center" }}>ต้องการจอง</div>
-            ชื่อครู : {DataForBooking.TName} <br />
-            หัวข้อ : {DataForBooking.title} <br />
-            คำอธิบาย : {DataForBooking.description} <br />
-            สถานที่ : {DataForBooking.location} <br />
-            วันที่ : {DataForBooking.dayname} <br />
-            {/* Show Booking Popup */}
-            <div
-              onClick={() => setIsBookingPopupVisible(true)}
-              className="BtnBooking"
-            >
-              ต้องการจอง
+            <div className="PopupBooking__header">
+              <h3>ต้องการจอง</h3>
+              <div
+                onClick={() => setPopup(false)}
+                className="PopupBooking__close"
+              >
+                ✕
+              </div>
             </div>
-            {/* Close button */}
-            <div
-              onClick={() => setPopup(false)}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                width: "20px",
-                height: "20px",
-                backgroundColor: "#ff8d67",
-                borderRadius: "50%",
-                cursor: "pointer",
-              }}
-            ></div>
+            <div className="PopupBooking__content">
+              <p>
+                <strong>ชื่อครู :</strong> {DataForBooking.TName}
+              </p>
+              <p>
+                <strong>หัวข้อ :</strong> {DataForBooking.title}
+              </p>
+              <p>
+                <strong>คำอธิบาย :</strong> {DataForBooking.description}
+              </p>
+              <p>
+                <strong>สถานที่ :</strong> {DataForBooking.location}
+              </p>
+              <p>
+                <strong>วันที่ :</strong> {DataForBooking.dayname}
+              </p>
+            </div>
+            <div className="PopupBooking__footer">
+              <button
+                onClick={() =>
+                  createBooking({
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: "",
+                  })
+                }
+                className="PopupBooking__btn--confirm"
+              >
+                ต้องการจอง
+              </button>
+              <button
+                onClick={() => setPopup(false)}
+                className="PopupBooking__btn--cancel"
+              >
+                ยกเลิก
+              </button>
+            </div>
           </div>
         )}
-        {/* /* Booking Popup */}
-        <BookingPopup
-          visible={isBookingPopupVisible}
-          onClose={() => {
-            setIsBookingPopupVisible(false);
-            setPopup(false); // Close the main popup
-          }}
-          onSubmit={(formData) => createBooking(formData)}
-          selectedDate={DataForBooking.dayname}
-          selectedTime={DataForBooking.title}
-        />
       </main>
     </div>
   );
