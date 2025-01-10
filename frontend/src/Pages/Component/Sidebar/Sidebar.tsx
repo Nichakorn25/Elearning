@@ -19,6 +19,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     onClose(); // ปิด Sidebar
   };
 
+  const goToStudentDashboard = () => {
+    navigate("/dashboard");
+    onClose();
+  };
+
+  const goToTeacherDashboard = () => {
+    navigate("/TeacherDashboard");
+    onClose();
+  };
+
   const goToClassSchedule = () => {
     navigate("/ClassSchedule");
     onClose();
@@ -26,6 +36,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
 
   const goToStudentCalendar = () => {
     navigate("/StudentCalendar");
+    onClose();
+  };
+
+  const goToTeacherCalendar = () => {
+    navigate("/TeacherCalendar");
+    onClose();
+  };
+
+  const goToCoursesOpen = () => {
+    navigate("/dashboard");
     onClose();
   };
 
@@ -50,11 +70,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
   return (
     <div className={`sidebar ${isVisible ? "visible" : ""}`}>
       <ul>
-        <li onClick={() => navigateTo("/dashboard")}>Dashboard</li>
+        {userRole === "1" && <li onClick={goToStudentDashboard}>Dashboard</li>}
+        {userRole === "2" && <li onClick={goToTeacherDashboard}>Dashboard</li>}
         {userRole === "1" && <li onClick={goToClassSchedule}>Class Schedule</li>}
         {userRole === "1" && <li onClick={goToStudentCalendar}>Calendar</li>}
-        <li onClick={() => navigateTo("/TeacherCalendar")}>Calendar</li>
-        <li onClick={() => navigateTo("/profile")}>Courses Open</li>
+        {userRole === "2" && <li onClick={goToTeacherCalendar}>Calendar</li>}
+        {userRole === "1" && <li onClick={goToCoursesOpen}>Courses Open</li>}
         <li onClick={() => navigateTo("/Buysheet")}>Buy Sheet</li>
         <li onClick={() => navigateTo("/CheckSeller")}>Seal Sheet</li>
         {userRole === "1" && <li onClick={goToRequestChangeRole}>Request for Change Role</li>}
