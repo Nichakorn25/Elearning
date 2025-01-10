@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import "./SignUp.css";
+import {message} from "antd";
+import {useNavigate } from "react-router-dom";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import { UserInterface,DepartmentInterface,MajorInterface} from "../../../Interface/IUser";
@@ -9,6 +11,8 @@ import backgroundVideo from "../../../assets/loginbackground.mp4"
 
 const SignUp: React.FC = () => {
   // State สำหรับจัดเก็บ departments และ majors
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false); // สถานะสำหรับหน้าโหลด
   const [departments, setDepartments] = useState<DepartmentInterface[]>([]);
   const [majors, setMajors] = useState<MajorInterface[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
@@ -110,7 +114,7 @@ const SignUp: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      message.error("Passwords do not match!");
       return;
     }
     const values: UserInterface = {
@@ -126,19 +130,30 @@ const SignUp: React.FC = () => {
     };
   
     try {
+      setLoading(true); // เริ่มหน้าโหลด
       const response = await CreateUser(values);
       if (response.status === 201) {
-        alert("Sign Up Successful!");
+        message.success("Sign Up Successful!");
+        setTimeout(() => {
+          setLoading(false); // หยุดหน้าโหลด
+          navigate("/BeforeLogin"); // นำไปยังหน้า BeforeLogin
+        }, 2000); // หน่วงเวลา 2 วินาที
       }
     } catch (error) {
       console.error("Error signing up:", error);
-      alert("Failed to sign up. Please try again.");
+      message.error("Failed to sign up. Please try again.");
+      setLoading(false); // หยุดหน้าโหลดในกรณีเกิดข้อผิดพลาด
     }
   };
   
 
   return (
     <>
+     {loading && (
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+        </div>
+      )}
     <HeaderTabBFLogin onLoginClick={handleOpenLoginPopup} />
     <div className="signup-container">
       {/* วิดีโอพื้นหลัง */}

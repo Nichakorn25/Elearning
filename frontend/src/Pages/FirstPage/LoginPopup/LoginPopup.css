@@ -47,7 +47,7 @@
   width: 100%;
   padding: 10px; /* Reduced padding */
   margin-bottom: 10px; /* Reduced margin */
-  border-radius: 20px; /* Smaller radius */
+  border-radius: 20px !important; /* Smaller radius */
   border: 2px solid #ddd;
   font-size: 14px; /* Reduced font size */
   color: #333;

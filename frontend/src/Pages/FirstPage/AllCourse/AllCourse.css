@@ -11,6 +11,7 @@ body{
     border-radius: 8px; /* มุมกล่องโค้งมน */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
     border: 1px solid #ddd; /* เส้นขอบบาง */
+    margin-top: 7%;
   }
   
   /* หัวข้อ */
