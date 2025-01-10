@@ -14,7 +14,7 @@ type Availability struct {
 	IsAvailable bool      `json:"is_available"`        // สถานะ Available หรือ Unavailable
 
 	// ความสัมพันธ์กับ TeacherAppointment
-	TeacherAppointments []TeacherAppointment `gorm:"foreignKey:AvailabilityID"`
+	// TeacherAppointments []TeacherAppointment `gorm:"foreignKey:AvailabilityID"`
 
 	UserID uint `json:"UserID"`
 	User   User `gorm:"foreignKey:UserID"`

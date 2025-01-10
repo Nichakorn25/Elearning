@@ -14,9 +14,9 @@ export interface TeacherAppointmentInterface {
   date: number | null;
   ID?: number;
   title?: string;
-  appointment_duration?: number;
-  buffer_time?: number;
-  max_bookings?: number;
+  appointment_duration?: string;
+  // buffer_time?: number;
+  // max_bookings?: number;
   location?: string;
   description?: string;
   UserID?: number;
