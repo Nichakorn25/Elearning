@@ -1,4 +1,4 @@
-/* การตั้งค่าวิดีโอพื้นหลัง */
+/* วิดีโอพื้นหลัง */
 .backgroundbeforelogin-video {
   position: fixed;
   top: 0;
@@ -6,10 +6,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: -2; /* ทำให้วิดีโออยู่ด้านหลังเลเยอร์โปร่งแสง */
+  z-index: -2;
 }
 
-/* เพิ่มเลเยอร์โปร่งแสง */
+/* เลเยอร์โปร่งแสง */
 .BeforeLogin::before {
   content: "";
   position: fixed;
@@ -17,8 +17,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* สีดำโปร่งแสง ปรับค่า 0.5 ตามความเข้มที่ต้องการ */
-  z-index: -1; /* ทำให้เลเยอร์โปร่งแสงอยู่ด้านหลังเนื้อหา แต่หน้าวิดีโอ */
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: -1;
 }
 
 /* การตั้งค่าพื้นฐาน */
@@ -38,11 +38,10 @@ body {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #1B1B1B; /* สีดำทึบ */
+  background-color: #1B1B1B;
 }
 
-
-.logo-containerbeforelogin{
+.logo-containerbeforelogin {
   position: absolute;
   top: 10px;
   left: 10px;
@@ -75,6 +74,7 @@ body {
   cursor: pointer;
 }
 
+/* เนื้อหาหลัก */
 .main-contentbeforelogin {
   display: flex;
   flex-direction: column;
@@ -95,3 +95,90 @@ body {
   color: #ccc;
 }
 
+/* === Responsive Design === */
+
+/* === ปรับปรุงสำหรับ Responsive Design === */
+
+/* หน้าจอเล็กกว่า 768px (Tablet และมือถือ) */
+@media (max-width: 768px) {
+  .headerbeforelogin {
+    flex-direction: column;
+    align-items: center; /* จัดให้อยู่กึ่งกลาง */
+    gap: 10px; /* เพิ่มช่องว่างระหว่างองค์ประกอบ */
+    padding: 10px 5px; /* ลด Padding */
+  }
+
+  .logobeforelogin {
+    width: 40px; /* ลดขนาดโลโก้ */
+  }
+
+  .search-barbeforelogin {
+    width: 90%; /* ลดความกว้างให้เหมาะกับหน้าจอเล็ก */
+    font-size: 14px;
+    margin: 0; /* ตั้ง Margin ให้อยู่กึ่งกลาง */
+  }
+
+  .header-linksbeforelogin a {
+    font-size: 14px; /* ลดขนาดฟอนต์ */
+    text-align: center; /* จัดให้อยู่กึ่งกลาง */
+  }
+
+  .login-buttonbeforelogin {
+    font-size: 14px; /* ลดขนาดฟอนต์ */
+    padding: 8px 14px;
+  }
+
+  .main-contentbeforelogin {
+    padding: 20px; /* ลด Padding รอบเนื้อหา */
+  }
+
+  .main-contentbeforelogin h1 {
+    font-size: 2.5em; /* ลดขนาดหัวข้อ */
+  }
+
+  .main-contentbeforelogin p {
+    font-size: 1em; /* ลดขนาดข้อความ */
+  }
+}
+
+/* หน้าจอเล็กกว่า 480px (มือถือ) */
+@media (max-width: 480px) {
+  .headerbeforelogin {
+    padding: 5px; /* ลด Padding */
+    gap: 5px; /* ลดระยะห่างระหว่างองค์ประกอบ */
+  }
+
+  .logobeforelogin {
+    width: 30px; /* ลดขนาดโลโก้ */
+  }
+
+  .search-barbeforelogin {
+    font-size: 12px; /* ลดขนาดฟอนต์ */
+    padding: 6px;
+  }
+
+  .header-linksbeforelogin a {
+    font-size: 12px; /* ลดขนาดฟอนต์ */
+    margin-right: 8px;
+  }
+
+  .login-buttonbeforelogin {
+    font-size: 12px; /* ลดขนาดฟอนต์ */
+    padding: 6px 10px;
+  }
+
+  .main-contentbeforelogin h1 {
+    font-size: 2em; /* ลดขนาดหัวข้อ */
+  }
+
+  .main-contentbeforelogin p {
+    font-size: 0.9em; /* ลดขนาดข้อความ */
+  }
+
+  /* เพิ่มการจัดเรียงให้อยู่กึ่งกลาง */
+  .main-contentbeforelogin {
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+  }
+}

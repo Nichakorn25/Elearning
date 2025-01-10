@@ -1,57 +1,84 @@
-/* CSS สำหรับ Header */
 .headerbeforelogin {
-    width: 100%;
-    height: 10%;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #1B1B1B; /* สีดำทึบ */
-    z-index: 1001;
-    position: fixed;
-    font-size: 16px;
-    font-family: 'Open Sans', sans-serif;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1B1B1B; /* สีดำทึบ */
+  z-index: 1001;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  position: fixed;
+}
+
+.logo-containerbeforelogin {
+  display: flex;
+  align-items: center;
+  margin-right: 20px; /* เพิ่มระยะห่างจากช่องค้นหา */
+}
+
+.logobeforelogin {
+  width: 50px;
+}
+
+.search-barbeforelogin {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+  font-size: 15px;
+  margin-left: 50px;
+  margin-right: 10px;
+}
+
+
+.header-linksbeforelogin {
+  display: flex;
+  gap: 15px; /* ระยะห่างระหว่างลิงก์ */
+}
+
+.header-linksbeforelogin a {
+  color: white;
+  text-decoration: none;
+}
+
+.header-linksbeforelogin a:hover {
+  color: #ff6600; /* สีเมื่อ hover */
+}
+
+.login-buttonbeforelogin {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login-buttonbeforelogin:hover {
+  background-color: #e65c00; /* สีเมื่อ hover */
+}
+
+
+/* หน้าจอเล็กกว่า 480px (มือถือ) */
+@media (max-width: 480px) {
+  .headerbeforelogin {
+    flex-direction: column; /* จัดเรียงลงในแนวตั้ง */
+    align-items: center; /* จัดให้อยู่ตรงกลาง */
+    padding: 10px 5px;
   }
-  
-  .logo-containerbeforelogin {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-  
-  .logobeforelogin {
-    width: 50px;
-  }
-  
+
   .search-barbeforelogin {
-    flex: 1;
-    padding: 8px;
-    border-radius: 4px;
-    border: none;
-    margin-left: 80px;
-    font-size: 15px;
+    width: 90%; /* ให้เต็มหน้าจอมากขึ้น */
+    font-size: 12px;
   }
-  
-  .header-linksbeforelogin a {
-    margin-left: 10px;
-    margin-right: 20px;
-    color: white;
-    text-decoration: none;
-  }
-  
-  .header-linksbeforelogin a:hover {
-    color: #ff6600; /* สีเมื่อ hover */
-  }
-  
+
   .login-buttonbeforelogin {
-    background-color: #ff6600;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 12px;
   }
-  
-  .login-buttonbeforelogin:hover {
-    background-color: #e65c00; /* สีเมื่อ hover */
+
+  .header-linksbeforelogin a {
+    font-size: 12px; /* ลดขนาดฟอนต์ */
   }
-  
+}
