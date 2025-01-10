@@ -4,9 +4,7 @@ import { Select, Input, message } from "antd";
 import Header from "../../../Component/Header/Header";
 import Calendar from "react-calendar";
 import {
-  BookAppointment,
   CreateStudentBooking,
-  GetDay,
   GetDepartments,
   GetMajors,
   ListUsersFilters,
@@ -16,7 +14,6 @@ import { UserInterface } from "../../../../Interface/IUser";
 import BookingPopup from "../BookingPopup/BookingPopup";
 import { GetTeacherAppointments } from "../../../../services/https";
 import {
-  DayInterface,
   StudentBookingInterface,
   TeacherAppointmentInterface,
 } from "../../../../Interface/IAppointment";
@@ -42,6 +39,7 @@ const StudentBooking: React.FC = () => {
   >([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false); // ควบคุมการแสดงผล Dropdown
   const [isBookingPopupVisible, setIsBookingPopupVisible] = useState(false);
   const [popupData, setPopupData] = useState<{
     date: string;
@@ -61,7 +59,6 @@ const StudentBooking: React.FC = () => {
   const firstName = user?.FirstName || "N/A";
   const lastName = user?.LastName || "N/A";
 
-  // const [userName, setUserName] = useState<string | null>(null);
   // const [userSurname, setUserSurname] = useState<string | null>(null);
 
   // useEffect(() => {
@@ -93,20 +90,20 @@ const StudentBooking: React.FC = () => {
   }, []);
 
   //===============================ดึงวันทั้งหมด========================================
-  const [Days, setDay] = useState<DayInterface[]>([]);
-  const fetchDayAll = async () => {
-    try {
-      const res = await GetDay();
-      if (res.status === 200 && res.data) {
-        setDay(res.data);
-      }
-    } catch (error) {
-      setDay([]);
-    }
-  };
-  useEffect(() => {
-    fetchDayAll();
-  }, []);
+  //const [Days, setDay] = useState<DayInterface[]>([]);
+  // const fetchDayAll = async () => {
+  //   try {
+  //     const res = await GetDay();
+  //     if (res.status === 200 && res.data) {
+  //       setDay(res.data);
+  //     }
+  //   } catch (error) {
+  //     setDay([]);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchDayAll();
+  // }, []);
 
   // ดึงข้อมูล Majors ตาม Department ที่เลือก
   useEffect(() => {
@@ -131,14 +128,28 @@ const StudentBooking: React.FC = () => {
     fetchMajors();
   }, [selectedDepartment]);
 
-  const handleSearch = async () => {
+  // ฟังก์ชันค้นหาอาจารย์ (เรียก API)
+  const handleSearchProfessorInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = e.target.value;
+    console.log("Search Query:", query); // เพิ่มจุดนี้
+    setSearchProfessor(query);
+  
+    if (query.trim() === "") {
+      setProfessors([]);
+      setDropdownVisible(false);
+      return;
+    }
+  
     setLoading(true);
     try {
-      const response = await SearchProfessors(searchQuery);
+      const response = await SearchProfessors(query);
       if (response && response.status === 200) {
-        setProfessors(response.data); // เก็บผลลัพธ์ที่ค้นพบ
+        setProfessors(response.data);
+        setDropdownVisible(true);
       } else {
-        setProfessors([]); // หากไม่พบข้อมูล
+        setProfessors([]);
       }
     } catch (error) {
       console.error("Error fetching professors:", error);
@@ -147,26 +158,16 @@ const StudentBooking: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
-  // ดึงข้อมูล Professors ตาม Major ที่เลือก
-  // const test = async (value: string) => {
-  //   setSelectedMajor(value);
-  //   try {
-  //     const response = await ListUsersFilters(
-  //       String(selectedDepartment),
-  //       String(selectedMajor),
-  //       String(2)
-  //     );
-  //     if (response.status === 200) {
-  //       setProfessors(response.data);
-  //       console.log(response.data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching professors:", error);
-  //     setProfessors([]);
-  //   }
-  // };
+  // ฟังก์ชันเมื่อผู้ใช้คลิกชื่ออาจารย์ใน Dropdown
+  const handleProfessorClick = (professor: UserInterface) => {
+    setSearchProfessor(`${professor.FirstName} ${professor.LastName}`); // ใส่ชื่ออาจารย์ในช่องค้นหา
+    setProfessors([]); // ล้างผลลัพธ์
+    setDropdownVisible(false); // ซ่อน Dropdown
+  };
 
+ 
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
   const test = async (value: string) => {
     try {
@@ -223,93 +224,6 @@ const StudentBooking: React.FC = () => {
     }
   }, [selectedMajor]);
 
-  // เมื่อเลือก Professor (เช่น ผ่าน Dropdown)
-  // const handleSelectProfessor = (professorId: string) => {
-  //   fetchAppointments(professorId); // ดึงข้อมูล Appointment ตาม UserID ของอาจารย์
-  // };
-
-  // const timeSlots = [
-  //   "9:00am",
-  //   "10:00am",
-  //   "11:00am",
-  //   "12:00pm",
-  //   "1:00pm",
-  //   "2:00pm",
-  //   "3:00pm",
-  //   "9:00am",
-  // ];
-
-  const getDatesForWeek = (weekOffset: number) => {
-    const now = new Date();
-    const startOfWeek = new Date(
-      now.setDate(now.getDate() - now.getDay() + weekOffset * 7)
-    );
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(startOfWeek);
-      date.setDate(date.getDate() + i);
-      return date;
-    });
-  };
-
-  const handleSlotClick = (
-    date: number | null,
-    time: string | null,
-    appointmentId: number
-  ) => {
-    if (date !== null && time) {
-      setPopupData({
-        date: date.toString(), // แปลง number เป็น string
-        time: time, // ใช้ time โดยตรงหลังจากตรวจสอบว่าไม่เป็น null
-        appointmentId,
-      });
-      setSelectedDate(date); // กำหนดค่า date โดยตรง
-      setSelectedTime(time); // กำหนดค่า time โดยตรง
-      setIsBookingPopupVisible(true);
-    } else {
-      console.error("Invalid date or time: null");
-    }
-  };
-
-  const handlePopupSubmit = async () => {
-    if (!popupData || !popupData.appointmentId) {
-      message.error("No appointment data available");
-      return;
-    }
-
-    try {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
-      if (!user.ID) throw new Error("User is not logged in");
-
-      const response = await BookAppointment({
-        UserID: user.ID,
-        TeacherAppointmentID: popupData.appointmentId,
-      });
-
-      if (response.status === 201) {
-        message.success("Appointment booked successfully!");
-        setAppointments((prev) =>
-          prev.filter(
-            (appointment) => appointment.ID !== popupData.appointmentId
-          )
-        );
-        setIsBookingPopupVisible(false);
-      } else {
-        throw new Error("Failed to book appointment");
-      }
-    } catch (error) {
-      message.error("Failed to book appointment.");
-      console.error(error);
-    }
-  };
-
-  const handlePopupClose = () => {
-    // ปิด Popup โดยไม่บันทึกข้อมูล
-    setIsBookingPopupVisible(false);
-  };
-
-  const dates = getDatesForWeek(currentWeek);
-  const handlePrevWeek = () => setCurrentWeek((prev) => prev - 1);
-  const handleNextWeek = () => setCurrentWeek((prev) => prev + 1);
 
   //=============================================popup booking==============================================
   const [ispopup, setPopup] = useState(false);
@@ -337,7 +251,11 @@ const StudentBooking: React.FC = () => {
     });
   };
   //=============================================ภ้ากดจอง=====================================CreateStudentBooking
-  const createBooking = async (_formData: { firstName: string; lastName: string; email: string; }) => {
+  const createBooking = async (_formData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  }) => {
     const value: StudentBookingInterface = {
       UserID: DataForBooking.userid,
       TeacherAppointmentID: DataForBooking.TappointmentID,
@@ -393,18 +311,31 @@ const StudentBooking: React.FC = () => {
           </div>
         </div>
 
+        {/* ช่องค้นหา */}
         <div className="student-booking__search">
           <Input
             placeholder="Search Professor by Name"
             value={searchProfessor}
-            onChange={(e) => setSearchProfessor(e.target.value)} // เก็บค่าที่ผู้ใช้พิมพ์
-            onPressEnter={handleSearch} // เรียกฟังก์ชันค้นหาเมื่อกด Enter
+            onChange={handleSearchProfessorInputChange} // เรียกฟังก์ชันเมื่อพิมพ์ข้อความ
             className="student-booking__search-input"
           />
-          <button onClick={handleSearch} className="search-buttonstdbooking">
-            Search
-          </button>
+          {loading && <div className="loading-indicator">Loading...</div>}
         </div>
+
+        {/* Dropdown ผลลัพธ์การค้นหา */}
+        {isDropdownVisible && professors.length > 0 && (
+          <div className="search-dropdown">
+            {professors.map((professor) => (
+              <div
+                key={professor.ID}
+                className="search-dropdown-item"
+                onClick={() => handleProfessorClick(professor)} // เมื่อคลิกอาจารย์
+              >
+                {professor.FirstName} {professor.LastName}
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Dropdowns */}
         <div className="student-booking__dropdowns">
@@ -547,7 +478,7 @@ const StudentBooking: React.FC = () => {
             ></div>
           </div>
         )}
-        {/* /* Booking Popup */ }
+        {/* /* Booking Popup */}
         <BookingPopup
           visible={isBookingPopupVisible}
           onClose={() => {

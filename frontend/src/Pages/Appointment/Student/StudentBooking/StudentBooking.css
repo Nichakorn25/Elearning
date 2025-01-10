@@ -476,3 +476,33 @@
   background-color: #ff8d67;
   color: #fff;
 }
+
+/* Dropdown Container */
+.search-dropdown {
+  display: block;
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+
+/* รายการใน Dropdown */
+.search-dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  margin-top: 5px;
+  color: #888;
+  font-size: 14px;
+}
