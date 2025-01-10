@@ -38,6 +38,7 @@ import CheckSeller from './Pages/CheckSeller/ChechSeller';
 import AddSheet from './Pages/AddSheet/AddSheet';
 import EditSealUser from './Pages/EditSealUser/EditSealUser';
 import AddSealUser from './Pages/AddSealUser/AddSealUser';
+import StudentProtectedRoute from './Pages/Component/ProtectedRoute/StudentProtectedRoute';
 
 
 const App: React.FC = () => {
@@ -69,10 +70,10 @@ const App: React.FC = () => {
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="//SelectSheet/:id" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
-          <Route path="/ClassSchedule" element={<ClassSchedule />} />
+          <Route path="/ClassSchedule" element={<StudentProtectedRoute><ClassSchedule /></StudentProtectedRoute>} />
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
           {/* <Route path="/CreateAppointment" element={<CreateAppointment/>}/> */}
-          <Route path="/StudentCalendar" element={<StudentCalendar/>}/>
+          <Route path="/StudentCalendar" element={<StudentProtectedRoute><StudentCalendar/></StudentProtectedRoute>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
           <Route path="/VerifyOTP" element={<VerifyOTP/>}/>
           <Route path="/ForgotPassword" element={<ForgotPassword/>}/>
@@ -83,7 +84,7 @@ const App: React.FC = () => {
           <Route path="/SignUp" element={<SignUp/>}/>
           <Route path="/CreateCourse" element={<CreateCourse/>}/>
           <Route path="/ManageCourse" element={<MangeCourse/>}/>
-          <Route path="/StudentBooking" element={<StudentBooking/>}/>
+          <Route path="/StudentBooking" element={<StudentProtectedRoute><StudentBooking/></StudentProtectedRoute>}/>
           <Route path="/EditSheet/:id" element={<EditSheet />} />
           <Route path="/IncomeHistory" element={<IncomeHistory />} />
           <Route path="/Payment" element={<Payment />} />

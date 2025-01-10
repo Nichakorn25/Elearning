@@ -10,10 +10,30 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
   const navigate = useNavigate();
 
+   // Get user role and user data from localStorage
+   const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
+   //const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const navigateTo = (path: string) => {
     navigate(path); // เปลี่ยนหน้า
     onClose(); // ปิด Sidebar
   };
+
+  const goToClassSchedule = () => {
+    navigate("/ClassSchedule");
+    onClose();
+  };
+
+  const goToStudentCalendar = () => {
+    navigate("/StudentCalendar");
+    onClose();
+  };
+
+  const goToRequestChangeRole = () => {
+    navigate("/RequestChangeRole");
+    onClose();
+  };
+
 
   useEffect(() => {
     // ปรับ margin-left ของ #root ตามสถานะ Sidebar
@@ -31,13 +51,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     <div className={`sidebar ${isVisible ? "visible" : ""}`}>
       <ul>
         <li onClick={() => navigateTo("/dashboard")}>Dashboard</li>
-        <li onClick={() => navigateTo("/ClassSchedule")}>Class Schedule</li>
+        {userRole === "1" && <li onClick={goToClassSchedule}>Class Schedule</li>}
+        {userRole === "1" && <li onClick={goToStudentCalendar}>Calendar</li>}
         <li onClick={() => navigateTo("/TeacherCalendar")}>Calendar</li>
         <li onClick={() => navigateTo("/profile")}>Courses Open</li>
-        <li onClick={() => navigateTo("/TeacherSchedule")}>Teacher Schedule</li>
         <li onClick={() => navigateTo("/Buysheet")}>Buy Sheet</li>
         <li onClick={() => navigateTo("/CheckSeller")}>Seal Sheet</li>
-        <li onClick={() => navigateTo("/RequestChangeRole")}>Request for Change Role</li>
+        {userRole === "1" && <li onClick={goToRequestChangeRole}>Request for Change Role</li>}
       </ul>
     </div>
   );
