@@ -133,32 +133,33 @@ const StudentBooking: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const query = e.target.value;
-    console.log("Search Query:", query); // เพิ่มจุดนี้
-    setSearchProfessor(query);
-  
+    setSearchProfessor(query); // บันทึกคำค้นหาใน state
+
     if (query.trim() === "") {
       setProfessors([]);
       setDropdownVisible(false);
       return;
     }
-  
+
     setLoading(true);
     try {
-      const response = await SearchProfessors(query);
-      if (response && response.status === 200) {
-        setProfessors(response.data);
-        setDropdownVisible(true);
+      const response = await SearchProfessors(query); // เรียก API
+      console.log("API Response:", response); // Debug ข้อมูลที่ได้จาก API
+      if (response && response.length > 0) {
+        setProfessors(response); // บันทึกผลการค้นหาใน state
+        setDropdownVisible(true); // แสดง Dropdown
       } else {
         setProfessors([]);
+        setDropdownVisible(false); // ซ่อน Dropdown ถ้าไม่มีผลลัพธ์
       }
     } catch (error) {
       console.error("Error fetching professors:", error);
       setProfessors([]);
+      setDropdownVisible(false);
     } finally {
-      setLoading(false);
+      setLoading(false); // ปิดสถานะการโหลด
     }
   };
-  
 
   // ฟังก์ชันเมื่อผู้ใช้คลิกชื่ออาจารย์ใน Dropdown
   const handleProfessorClick = (professor: UserInterface) => {
@@ -167,7 +168,6 @@ const StudentBooking: React.FC = () => {
     setDropdownVisible(false); // ซ่อน Dropdown
   };
 
- 
   // ดึงข้อมูล Professors ตาม Major ที่เลือก
   const test = async (value: string) => {
     try {
@@ -223,7 +223,6 @@ const StudentBooking: React.FC = () => {
       test(selectedMajor); // เรียกใช้ฟังก์ชัน test เพื่อตรวจสอบ Professors
     }
   }, [selectedMajor]);
-
 
   //=============================================popup booking==============================================
   const [ispopup, setPopup] = useState(false);
@@ -313,29 +312,48 @@ const StudentBooking: React.FC = () => {
 
         {/* ช่องค้นหา */}
         <div className="student-booking__search">
-          <Input
-            placeholder="Search Professor by Name"
-            value={searchProfessor}
-            onChange={handleSearchProfessorInputChange} // เรียกฟังก์ชันเมื่อพิมพ์ข้อความ
-            className="student-booking__search-input"
-          />
+          {/* Input Search Bar */}
+          <div className="search-bar-container">
+            <Input
+              placeholder="Search Professor by Name"
+              value={searchProfessor}
+              onChange={handleSearchProfessorInputChange} // ฟังก์ชันที่อัปเดต State
+              className="student-booking__search-input"
+            />
+            <button
+              className="search-buttonstdbooking"
+              onClick={() => {
+                if (searchProfessor.trim() !== "") {
+                  handleSearchProfessorInputChange({
+                    target: { value: searchProfessor },
+                  });
+                }
+              }}
+            >
+              🔍
+            </button>
+          </div>
+
+          {/* Dropdown สำหรับผลลัพธ์ */}
+          {isDropdownVisible &&
+            searchProfessor.trim() !== "" &&
+            professors.length > 0 && (
+              <div className="search-dropdown">
+                {professors.map((professor) => (
+                  <div
+                    key={professor.ID}
+                    className="search-dropdown-item"
+                    onClick={() => handleProfessorClick(professor)}
+                  >
+                    {professor.FirstName} {professor.LastName}
+                  </div>
+                ))}
+              </div>
+            )}
+
+          {/* Loading Indicator */}
           {loading && <div className="loading-indicator">Loading...</div>}
         </div>
-
-        {/* Dropdown ผลลัพธ์การค้นหา */}
-        {isDropdownVisible && professors.length > 0 && (
-          <div className="search-dropdown">
-            {professors.map((professor) => (
-              <div
-                key={professor.ID}
-                className="search-dropdown-item"
-                onClick={() => handleProfessorClick(professor)} // เมื่อคลิกอาจารย์
-              >
-                {professor.FirstName} {professor.LastName}
-              </div>
-            ))}
-          </div>
-        )}
 
         {/* Dropdowns */}
         <div className="student-booking__dropdowns">

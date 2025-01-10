@@ -251,18 +251,32 @@
   border: 1px solid #ddd; /* เพิ่มเส้นขอบ */
   outline: none;
   padding: 0 10px; /* เพิ่ม Padding ด้านใน */
+  padding-right: 45px; /* เพิ่มระยะด้านขวาให้พอดีกับปุ่ม */
 }
 
-.search-buttonstdbooking{
-  background-color: #ff6600; /* สีพื้นหลังปุ่ม */
-  font-size: 14px;
-  color: white; /* สีข้อความ */
-  border: none; /* ลบเส้นขอบ */
-  border-top-left-radius: 0; /* ลบโค้งด้านซ้ายของปุ่ม */
-  border-bottom-left-radius: 0; /* ลบโค้งด้านซ้ายของปุ่ม */
-  height: 35px; /* ความสูงของปุ่มให้เท่ากับ Input */
-  padding: 0 20px; /* เพิ่ม Padding ให้ปุ่ม */
+/* Container สำหรับ Input และปุ่ม */
+.search-bar-container {
+  position: relative; /* ทำให้ตำแหน่งอิงกับ container */
+  width: fit-content; /* ให้กว้างเท่าที่จำเป็น */
+  margin: 0 ; /* จัดให้อยู่ตรงกลาง */
+}
+
+.search-buttonstdbooking {
+  
+  position: absolute;
+  right: 0; /* ชิดขอบขวาของ container */
+  top: 0; /* ชิดด้านบนของ container */
+  height: 35px;
+  width: 40px;
+  background-color: #ff6600; /* สีพื้นหลัง */
+  color: white; /* สีตัวอักษร */
+  border: none; /* ไม่มีเส้นขอบ */
+  border-radius: 0 5px 5px 0; /* โค้งเฉพาะมุมขวา */
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
@@ -479,30 +493,44 @@
 
 /* Dropdown Container */
 .search-dropdown {
-  display: block;
-  position: absolute;
+
+  margin-top: 10px;
+  font-size: 14px;
+  position: absolute; /* วางไว้ในตำแหน่ง absolute */
+  z-index: 999; /* แสดงด้านหน้าสุด */
   background: white;
   border: 1px solid #ccc;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
+  width: 20%; /* ให้มีความกว้างเท่ากับ Search Bar */
+  max-height: 200px; /* จำกัดความสูง */
+  overflow-y: auto; /* เลื่อนดูได้ถ้ารายการเกิน */
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* เงา */
+  color: black;
 }
 
-
-/* รายการใน Dropdown */
 .search-dropdown-item {
-  padding: 10px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+  padding: 10px 15px; /* เพิ่ม Padding ให้ข้อความ */
+  cursor: pointer; /* เปลี่ยนเป็น Pointer เมื่อ Hover */
+  transition: background-color 0.3s ease; /* เพิ่ม Transition */
+  font-size: 14px; /* ขนาดตัวอักษร */
+  color: #333; /* สีตัวอักษร */
 }
 
 .search-dropdown-item:hover {
-  background-color: #f0f0f0;
+  background-color: #f9f9f9; /* สีพื้นหลังเมื่อ Hover */
 }
 
-/* Loading Indicator */
+/* ปรับตำแหน่งของ Loading Indicator */
 .loading-indicator {
-  margin-top: 5px;
+  position: absolute; /* ให้อยู่ด้านล่าง Search Bar */
+  top: 100%;
+  left: 0;
   color: #888;
   font-size: 14px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none; /* เอาขอบด้านบนออก */
+  width: 100%;
+  z-index: 998; /* อยู่ใต้ Dropdown */
 }
