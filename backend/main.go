@@ -66,6 +66,9 @@ func main() {
 		router.POST("/bookings", controller.BookAppointment)
 		//router.GET("/users/filter", controller.ListUsersFilters)
 
+		//Planner
+		router.GET("/searchCourses", controller.SearchCourses)
+
 		//----------------------//
 		router.POST("/users", controller.CreateUser)
 		router.PUT("/users/:id", controller.UpdateUserByid)

@@ -134,6 +134,35 @@ async function SearchProfessors(searchQuery: string) {
     });
 }
 
+// ค้นหาคอร์สจากคำค้นหาและเทอม
+async function SearchCourses(semester: string, searchTerm: string) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
+    searchTerm
+  )}`;
+
+  console.log("Sending request to:", url); // Debug URL
+
+  return axios
+    .get(url, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error during API request:", err.response || err.message);
+      throw err;
+    });
+}
+
+
+
 //Filters
 async function ListUsersFilters(departmentId: string, majorId: string, roleId: string) {
   return await axios
@@ -718,4 +747,5 @@ export{
   CreateReview,
   GetReviewsBySheetID,
   ListStudentBooking,
+  SearchCourses,
 };

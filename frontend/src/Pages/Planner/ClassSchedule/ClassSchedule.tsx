@@ -93,7 +93,7 @@ const ClassSchedule: React.FC = () => {
         <button className="add-course-button" onClick={togglePopup}>เพิ่มวิชา </button>
       </footer>
 
-      <CreditSummary /> {/* ตารางหน่วยกิต */}
+      <CreditSummary courses={[]} /> {/* ตารางหน่วยกิต */}
 
       <AddSubjectPopup isVisible={isPopupVisible} onClose={togglePopup} />
     </div>
