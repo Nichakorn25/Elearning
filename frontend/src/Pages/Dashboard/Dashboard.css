@@ -113,3 +113,30 @@
   object-fit: cover;
   border-radius: 10px; /* โค้งมนขอบภาพ */
 }
+
+.announcement-section {
+  padding: 16px;
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.announcement-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 10px;
+}
+
+.announcement-card h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.announcement-card p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #666;
+}

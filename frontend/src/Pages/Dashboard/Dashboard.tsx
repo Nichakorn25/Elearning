@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //import { useNavigate } from 'react-router-dom';
 import "./Dashboard.css";
 import Sidebar from "../Component/Sidebar/Sidebar";
@@ -14,10 +14,33 @@ import Course07 from "../../assets/course07.jpeg";
 import Course08 from "../../assets/course08.jpeg";
 import Course09 from "../../assets/course09.jpeg";
 import Course10 from "../../assets/course10.jpeg";
-
+import { GetAnnouncementById } from "../../services/https";
 
 const Dashboard: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [announcement, setAnnouncement] = useState<{
+    title: string;
+    content: string;
+  } | null>(null);
+
+  // ฟังก์ชันดึงข้อมูล Announcement โดย ID
+  const fetchAnnouncement = async (id: string) => {
+    try {
+      const response = await GetAnnouncementById(id);
+      if (response.status === 200) {
+        setAnnouncement(response.data); // บันทึกข้อมูลใน state
+      } else {
+        console.error("Failed to fetch announcement:", response);
+      }
+    } catch (error) {
+      console.error("Error fetching announcement:", error);
+    }
+  };
+
+  // โหลดข้อมูลเมื่อ Component ถูกสร้าง
+  useEffect(() => {
+    fetchAnnouncement("1"); // เรียกฟังก์ชันพร้อม ID (เปลี่ยน ID ตามความเหมาะสม)
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible); // เปิด/ปิด Sidebar
@@ -78,6 +101,16 @@ const Dashboard: React.FC = () => {
         </Slider>
       </div> */}
 
+      {/* Announcement Section */}
+      <div className="announcement-section">
+        <h2>Announcement</h2>
+        {announcement && (
+          <div className="announcement-card">
+            <h3>{announcement.title}</h3>
+            <p>{announcement.content}</p>
+          </div>
+        )}
+      </div>
 
       {/* Search Bar */}
       <div className="stddashboard-search-bar">
@@ -87,7 +120,7 @@ const Dashboard: React.FC = () => {
 
       {/* Your Courses Section */}
       <div className="stddashboard-your-courses">
-        <h2>Your Courses</h2>
+        <h2>คอร์สเรียนของคุณ</h2>
         <div className="stddashboard-course-list">
           <div className="stddashboard-course-card">
             <img src={Course01} alt="Course 01" />
@@ -119,7 +152,39 @@ const Dashboard: React.FC = () => {
 
       {/* Recommend Section */}
       <div className="stddashboard-recommend">
-        <h2>Recommend</h2>
+        <h2>แนะนำสำหรับคุณ</h2>
+        <div className="stddashboard-course-list">
+          <div className="stddashboard-course-card">
+            <img src={Course05} alt="Course 01" />
+            <h3>AI: Deep Learning</h3>
+            <p>By Prof. Kobkiat Saraboon</p>
+          </div>
+          <div className="stddashboard-course-card">
+            <img src={Course06} alt="Course 01" />
+            <h3>Golang Backend</h3>
+            <p>By Ruangyot Nanchiang</p>
+          </div>
+          <div className="stddashboard-course-card">
+            <img src={Course07} alt="Course 01" />
+            <h3>AI: Deep Learning</h3>
+            <p>By Prof. Kobkiat Saraboon</p>
+          </div>
+          <div className="stddashboard-course-card">
+            <img src={Course08} alt="Course 01" />
+            <h3>Golang Backend</h3>
+            <p>By Ruangyot Nanchiang</p>
+          </div>
+          <div className="stddashboard-course-card">
+            <img src={Course10} alt="Course 01" />
+            <h3>Golang Backend</h3>
+            <p>By Ruangyot Nanchiang</p>
+          </div>
+        </div>
+      </div>
+
+      {/* แนะนำตามสาขาที่เรียน */}
+      <div className="stddashboard-recommend">
+        <h2>เนื่องจากคุณเป็นนักศึกษาวิศวกรรมศาสตร์ สาขาวิศวกรรมคอมพิวเตอร์</h2>
         <div className="stddashboard-course-list">
           <div className="stddashboard-course-card">
             <img src={Course05} alt="Course 01" />
