@@ -84,6 +84,7 @@
   margin-left: 8px;
   object-fit: cover;
   border: 2px solid white;
+  background-color: gray;
 }
 
 .stddashboard-dropdown-menu {

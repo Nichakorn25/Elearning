@@ -641,3 +641,21 @@
 .PopupBooking__btn--cancel:hover {
   background-color: #d32f2f;
 }
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังสีเทาโปร่งใส */
+  z-index: 1000; /* ทำให้ซ้อนทับด้านบน */
+}
+
+.loading-overlay + .loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1001; /* อยู่บนพื้นหลัง */
+}

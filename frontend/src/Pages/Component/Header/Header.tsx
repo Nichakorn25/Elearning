@@ -104,7 +104,7 @@ const Header: React.FC = () => {
             <span className="stddashboard-user-name">{`${firstName} ${lastName}`}</span>
             <img
               src={profileImageUrl}
-              alt="User Avatar"
+              // alt="User Avatar"
               className="stddashboard-user-avatar"
             />
             <i
