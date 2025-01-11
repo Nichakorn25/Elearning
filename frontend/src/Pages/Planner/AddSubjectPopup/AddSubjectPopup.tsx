@@ -43,22 +43,22 @@ const AddSubjectPopup: React.FC<AddSubjectPopupProps> = ({ isVisible, onClose })
     </select>
   </span>
 </div>
-          <div className="add-subject-popup__form-group">
+          {/* <div className="add-subject-popup__form-group">
             <label>ค้นหาด้วย 'รหัสวิชา'</label>
             <input type="text" placeholder="เช่น SCI03 1001 หรือ 523101" />
-          </div>
+          </div> */}
           <div className="add-subject-popup__form-group">
-            <label>หรือค้นหาด้วย 'ชื่อวิชา'</label>
+            <label>ค้นหาด้วย 'ชื่อวิชา'</label>
             <input type="text" placeholder="เช่น CALCULUS*" />
           </div>
           <div className="add-subject-popup__buttons">
             <button className="btn-search">ค้นหา</button>
             <button className="btn-guide" onClick={toggleGuidePopup}>วิธีค้นหา</button>
           </div>
-          <div className="add-subject-popup__alert">
+          {/* <div className="add-subject-popup__alert">
             <strong>ประกาศ:</strong> ตรวจสอบรายวิชาที่เปลี่ยนแปลงรหัสใหม่ เทอม 2 ปี 2567 ได้ที่ 
             <a href="#">คลิกที่นี่</a>
-          </div>
+          </div> */}
         </div>
         <div className="add-subject-popup__footer">
           <button className="btn-close" onClick={onClose}>ปิดหน้าต่าง</button>

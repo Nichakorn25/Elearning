@@ -233,9 +233,10 @@ func ListStudentBookingByID(c *gin.Context) {
     }
 
     if len(teacherAppointments) == 0 {
-        c.JSON(http.StatusOK, gin.H{"data": []})
-        return
-    }
+		c.JSON(http.StatusOK, gin.H{"data": []entity.TeacherAppointment{}})
+		return
+	}
+	
 
     var teacherAppointmentIDs []uint
     for _, appointment := range teacherAppointments {

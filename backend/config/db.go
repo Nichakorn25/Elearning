@@ -282,46 +282,46 @@ func SetupDatabase() {
 		db.FirstOrCreate(&course, entity.Course{CourseName: course.CourseName})
 	}
 
-	permissions := []entity.Permission{
-		{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 1, RoleID: 1},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 2, RoleID: 1},
-		{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 3, RoleID: 1},
-		{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 4, RoleID: 1},
-		{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 5, RoleID: 1},
-		{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 6, RoleID: 1},
-		{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 7, RoleID: 1},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 1},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 9, RoleID: 1},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 10, RoleID: 1},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 11, RoleID: 1},
+	// permissions := []entity.Permission{
+	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 1, RoleID: 1},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 2, RoleID: 1},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 3, RoleID: 1},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 4, RoleID: 1},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 5, RoleID: 1},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 6, RoleID: 1},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 7, RoleID: 1},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 1},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 9, RoleID: 1},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 10, RoleID: 1},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 11, RoleID: 1},
 
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 1, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 2, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 3, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 4, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 5, RoleID: 2},
-		{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 6, RoleID: 2},
-		{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 7, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 2},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 9, RoleID: 2},
-		{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 10, RoleID: 2},
-		{CanCreate: false, CanRead: false, CanUpdate: false, CanDelete: false, ModuleID: 11, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 1, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 2, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 3, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 4, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 5, RoleID: 2},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 6, RoleID: 2},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 7, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 2},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 9, RoleID: 2},
+	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 10, RoleID: 2},
+	// 	{CanCreate: false, CanRead: false, CanUpdate: false, CanDelete: false, ModuleID: 11, RoleID: 2},
 
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 1, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 2, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 3, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 4, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 5, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 6, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 7, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 9, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 10, RoleID: 3},
-		{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 11, RoleID: 3},
-	}
-	for _, pkg := range permissions {
-		db.FirstOrCreate(&pkg, entity.Permission{RoleID: pkg.ModuleID})
-	}
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 1, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 2, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 3, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 4, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 5, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 6, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 7, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 8, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 9, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 10, RoleID: 3},
+	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: true, ModuleID: 11, RoleID: 3},
+	// }
+	// for _, pkg := range permissions {
+	// 	db.FirstOrCreate(&pkg, entity.Permission{RoleID: pkg.ModuleID})
+	// }
 
 	DayofWeek := []entity.DayofWeek{
 		{DayName: "วันอาทิตย์"},
