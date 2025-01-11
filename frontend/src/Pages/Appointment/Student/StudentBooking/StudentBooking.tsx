@@ -47,6 +47,7 @@ const StudentBooking: React.FC = () => {
     time: string;
     appointmentId: number;
   } | null>(null);
+  
 
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(
     null
@@ -254,6 +255,7 @@ const StudentBooking: React.FC = () => {
   };
   //=============================================ภ้ากดจอง=====================================CreateStudentBooking
   const createBooking = async () => {
+    setPopup(false); // ปิด Popup ก่อน
     setLoading(true); // เริ่มแสดงหน้าโหลด
 
     try {

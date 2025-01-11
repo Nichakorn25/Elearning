@@ -57,11 +57,11 @@
   cursor: pointer;
 }
 
-.stddashboard-notification-icon {
+/* .stddashboard-notification-icon {
   width: 24px;
   height: 24px;
   color: white;
-}
+} */
 
 .stddashboard-user-info {
   display: flex;
@@ -132,3 +132,125 @@
 .stddashboard-arrow.down {
   transform: rotate(45deg);
 }
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.notification-popup {
+  position: fixed;
+  top: 60px; /* ระยะห่างจาก header */
+  right: 20px; /* ระยะห่างจากขอบขวาของหน้าจอ */
+  width: 300px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  z-index: 1000;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.notification-popup__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.notification-popup__header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-popup__close {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.notification-popup__messages {
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.notification-popup__message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notification-popup__message:hover {
+  background-color: #eaeaea;
+}
+
+.notification-popup__message-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff89b0, #7e5dff);
+}
+
+.notification-popup__message-info {
+  flex: 1;
+}
+
+.notification-popup__message-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.notification-popup__message-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-popup__message-time {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.notification-popup__message-content {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.notification-popup__no-messages {
+  text-align: center;
+  color: #777;
+  padding: 20px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

@@ -649,7 +649,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* พื้นหลังสีเทาโปร่งใส */
-  z-index: 1000; /* ทำให้ซ้อนทับด้านบน */
+  
 }
 
 .loading-overlay + .loading {
@@ -659,3 +659,14 @@
   transform: translate(-50%, -50%);
   z-index: 1001; /* อยู่บนพื้นหลัง */
 }
+
+/* ดินสอหรือไอคอน */
+.icon-pencil {
+  position: fixed; /* กำหนดตำแหน่งให้เป็น fixed */
+  top: 10px; /* ระยะห่างจากด้านบน */
+  right: 10px; /* ระยะห่างจากด้านขวา */
+  z-index: 1100; /* อยู่บนสุด */
+  font-size: 24px; /* ขนาดไอคอน */
+  color: white; /* สีดินสอ */
+}
+

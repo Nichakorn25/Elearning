@@ -205,3 +205,56 @@ func CreateStudentBooking(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Booking success", "data": u})
 }
+
+//ดึงข้อมูลStudentBookingใส่Notification
+func ListStudentBookingByID(c *gin.Context) {
+    var studentBookings []struct {
+        ID               uint   `json:"id"`
+        TeacherName      string `json:"teacher_name"`
+        AppointmentDate  string `json:"appointment_date"`
+        Description      string `json:"description"`
+        StudentName      string `json:"student_name"`
+    }
+
+    var teacherAppointments []entity.TeacherAppointment
+
+    db := config.DB()
+
+    userID := c.Query("userID")
+    if userID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
+        return
+    }
+
+    // Find TeacherAppointments created by the user
+    if err := db.Where("user_id = ?", userID).Find(&teacherAppointments).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    if len(teacherAppointments) == 0 {
+        c.JSON(http.StatusOK, gin.H{"data": []})
+        return
+    }
+
+    var teacherAppointmentIDs []uint
+    for _, appointment := range teacherAppointments {
+        teacherAppointmentIDs = append(teacherAppointmentIDs, appointment.ID)
+    }
+
+    // Join StudentBooking with Student name and TeacherAppointment
+    query := db.Table("student_bookings").
+        Select("student_bookings.id, teacher_appointments.title AS teacher_name, student_bookings.created_at AS appointment_date, student_bookings.description, users.first_name || ' ' || users.last_name AS student_name").
+        Joins("JOIN teacher_appointments ON student_bookings.teacher_appointment_id = teacher_appointments.id").
+        Joins("JOIN users ON student_bookings.user_id = users.id").
+        Where("teacher_appointments.id IN ?", teacherAppointmentIDs).
+        Scan(&studentBookings)
+
+    if query.Error != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": query.Error.Error()})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"data": studentBookings})
+}
+
