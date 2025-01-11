@@ -18,7 +18,8 @@ const Header: React.FC = () => {
   const lastName = user?.LastName || "N/A";
 
   // Get profile picture URL from localStorage
-  const profileImageUrl = localStorage.getItem('profilePicture') || 'https://via.placeholder.com/120';
+  const profileImageUrl =
+    localStorage.getItem("profilePicture") || "https://via.placeholder.com/120";
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -60,40 +61,77 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="dashboard-header">
-        <div className="dashboardheader-left">
-          <button className="dashboardmenu-button" onClick={toggleSidebar}>
+      <header className="stddashboard-header">
+        <div className="stddashboard-header-left">
+          <button
+            className="stddashboard-menu-button"
+            onClick={toggleSidebar}
+          >
             ☰
           </button>
-          <h1 onClick={handleTitleClick} style={{ cursor: "pointer" }}>
+          <h1
+            onClick={handleTitleClick}
+            style={{ cursor: "pointer"}}
+          >
             SE e-Learning
           </h1>
         </div>
 
-        <div className="dashboardheader-right">
-          <div className="dashboarduser-info" onClick={toggleDropdown}>
-            <span className="dashboarduser-id">{username}</span>
-            <span className="dashboarduser-name">{`${firstName} ${lastName}`}</span>
+        <div className="stddashboard-header-right">
+          {/* Notification Button */}
+          <button className="stddashboard-notification-button">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              className="stddashboard-notification-icon"
+            >
+              <path fill="none" d="M0 0h24v24H0z"></path>
+              <path
+                fill="currentColor"
+                d="M20 17h2v2H2v-2h2v-7a8 8 0 1 1 16 0v7zm-2 0v-7a6 6 0 1 0-12 0v7h12zm-9 4h6v2H9v-2z"
+              ></path>
+            </svg>
+          </button>
+
+          {/* User Info */}
+          <div
+            className="stddashboard-user-info"
+            onClick={toggleDropdown}
+          >
+            <span className="stddashboard-user-id">{username}</span>
+            <span className="stddashboard-user-name">{`${firstName} ${lastName}`}</span>
             <img
-              src={profileImageUrl} // Use profile picture from localStorage
+              src={profileImageUrl}
               alt="User Avatar"
-              className="dashboarduser-avatar"
+              className="stddashboard-user-avatar"
             />
-            <i className={`arrow ${isDropdownVisible ? "down" : "up"}`}></i>
+            <i
+              className={`stddashboard-arrow ${
+                isDropdownVisible ? "down" : "up"
+              }`}
+            ></i>
           </div>
 
+          {/* Dropdown Menu */}
           {isDropdownVisible && (
-            <div className="dashboarddropdown-menu">
+            <div className="stddashboard-dropdown-menu">
               <button onClick={goToDashboard}>Dashboard</button>
               <button onClick={goToProfile}>Profile</button>
-              {userRole === "3" && <button onClick={goToAdmin}>Admin</button>}
+              {userRole === "3" && (
+                <button onClick={goToAdmin}>Admin</button>
+              )}
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
         </div>
       </header>
 
-      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
+      <Sidebar
+        isVisible={isSidebarVisible}
+        onClose={() => setSidebarVisible(false)}
+      />
     </>
   );
 };
