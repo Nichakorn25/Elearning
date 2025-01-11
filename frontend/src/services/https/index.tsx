@@ -205,6 +205,14 @@ async function CreateStudentBooking(data: StudentBookingInterface) {
     .catch((e) => e.response);
 }
 
+//ดึงstudentbookingใส่notification
+async function ListStudentBooking(userID: string) {
+  return axios
+    .get(`${apiUrl}/student/bookings?userID=${userID}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 // Save Appointment
 // async function SaveAppointment(
@@ -708,5 +716,6 @@ export{
   GetReviewById,
   ListReviews,
   CreateReview,
-  GetReviewsBySheetID
+  GetReviewsBySheetID,
+  ListStudentBooking,
 };

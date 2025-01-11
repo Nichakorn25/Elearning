@@ -17,6 +17,7 @@ import {
   StudentBookingInterface,
   TeacherAppointmentInterface,
 } from "../../../../Interface/IAppointment";
+import Loading from "../../../Component/Loading/Loading";
 
 const { Option } = Select;
 const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -46,6 +47,7 @@ const StudentBooking: React.FC = () => {
     time: string;
     appointmentId: number;
   } | null>(null);
+  
 
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(
     null
@@ -54,11 +56,13 @@ const StudentBooking: React.FC = () => {
   //const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const userIdstr = localStorage.getItem("id");
-  
+
   // Extract user data or set default values
   //const username = user?.username || "N/A";
   const firstName = user?.FirstName || "N/A";
   const lastName = user?.LastName || "N/A";
+
+  const [loadingBooking, setLoadingBooking] = useState(false);
 
   // const [userSurname, setUserSurname] = useState<string | null>(null);
 
@@ -130,11 +134,11 @@ const StudentBooking: React.FC = () => {
   }, [selectedDepartment]);
 
   // ฟังก์ชันค้นหาอาจารย์ (เรียก API)
-  const handleSearchProfessorInputChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
+  const handleSearchProfessorInputChange = (
+    e: React.ChangeEvent<HTMLInputElement> | { target: { value: string } }
   ) => {
-    const query = e.target.value;
-    setSearchProfessor(query); // บันทึกคำค้นหาใน state
+    const query = "target" in e ? e.target.value : ""; // ตรวจสอบชนิดข้อมูล
+    setSearchProfessor(query);
 
     if (query.trim() === "") {
       setProfessors([]);
@@ -143,23 +147,22 @@ const StudentBooking: React.FC = () => {
     }
 
     setLoading(true);
-    try {
-      const response = await SearchProfessors(query); // เรียก API
-      console.log("API Response:", response); // Debug ข้อมูลที่ได้จาก API
-      if (response && response.length > 0) {
-        setProfessors(response); // บันทึกผลการค้นหาใน state
-        setDropdownVisible(true); // แสดง Dropdown
-      } else {
+    SearchProfessors(query)
+      .then((response) => {
+        if (response && response.length > 0) {
+          setProfessors(response);
+          setDropdownVisible(true);
+        } else {
+          setProfessors([]);
+          setDropdownVisible(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching professors:", error);
         setProfessors([]);
-        setDropdownVisible(false); // ซ่อน Dropdown ถ้าไม่มีผลลัพธ์
-      }
-    } catch (error) {
-      console.error("Error fetching professors:", error);
-      setProfessors([]);
-      setDropdownVisible(false);
-    } finally {
-      setLoading(false); // ปิดสถานะการโหลด
-    }
+        setDropdownVisible(false);
+      })
+      .finally(() => setLoading(false));
   };
 
   // ฟังก์ชันเมื่อผู้ใช้คลิกชื่ออาจารย์ใน Dropdown
@@ -251,41 +254,69 @@ const StudentBooking: React.FC = () => {
     });
   };
   //=============================================ภ้ากดจอง=====================================CreateStudentBooking
-  const createBooking = async (_formData: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  }) => {
-    const value: StudentBookingInterface = {
-      UserID: DataForBooking.userid,
-      TeacherAppointmentID: DataForBooking.TappointmentID,
-      DayofWeekID: DataForBooking.dayID,
-    };
+  const createBooking = async () => {
+    setPopup(false); // ปิด Popup ก่อน
+    setLoading(true); // เริ่มแสดงหน้าโหลด
+
     try {
+      const value: StudentBookingInterface = {
+        UserID: DataForBooking.userid,
+        TeacherAppointmentID: DataForBooking.TappointmentID,
+        DayofWeekID: DataForBooking.dayID,
+      };
+
       const res = await CreateStudentBooking(value);
-      if (res.status === 201) {
-        // await fetchData(String(1));
-        message.success("Appointment booked successfully!");
-        setPopup(false);
-        setDataForBooking({
-          TName: "",
-          title: "",
-          location: "",
-          description: "",
-          userid: 0,
-          TappointmentID: 0,
-          dayID: 0,
-          dayname: "",
-        });
-      }
+
+      // ใช้ setTimeout เพื่อแสดงหน้าโหลดขั้นต่ำ 2 วินาที
+      setTimeout(() => {
+        if (res.status === 201) {
+          message.success("Appointment booked successfully!");
+
+          // อัปเดต appointments เพื่อกรองข้อมูลที่จองออก
+          setAppointments((prevAppointments) =>
+            prevAppointments.filter(
+              (appointment) => appointment.ID !== DataForBooking.TappointmentID
+            )
+          );
+
+          setPopup(false); // ปิด Popup
+          setDataForBooking({
+            TName: "",
+            title: "",
+            location: "",
+            description: "",
+            userid: 0,
+            TappointmentID: 0,
+            dayID: 0,
+            dayname: "",
+          });
+        } else {
+          message.error("Failed to book appointment.");
+        }
+        setLoading(false); // ปิดหน้าโหลดหลังจาก 2 วินาที
+      }, 3000);
     } catch (error) {
-      console.error("Error :", error);
+      // ใช้ setTimeout เพื่อเลื่อนเวลาโหลดเมื่อเกิดข้อผิดพลาด
+      setTimeout(() => {
+        console.error("Error during booking:", error);
+        message.error("An error occurred while booking.");
+        setLoading(false); // ปิดหน้าโหลด
+      }, 3000);
     }
   };
 
   return (
     <div className="student-booking__container">
       <Header />
+      {loading && (
+        <>
+          {/* พื้นหลังสีเทา */}
+          <div className="loading-overlay"></div>
+          {/* Animation หรือข้อความแสดงการโหลด */}
+          <Loading />
+        </>
+      )}
+
       <header className="student-booking__header">
         {/* ส่วนแสดงชื่อ Username */}
         <div className="student-booking__user-info">
@@ -454,10 +485,11 @@ const StudentBooking: React.FC = () => {
 
         {ispopup && (
           <div className="PopupBooking">
+            {loading && <Loading />} {/* แสดงหน้าโหลด */}
             <div className="PopupBooking__header">
               <h3>ต้องการจอง</h3>
               <div
-                onClick={() => setPopup(false)}
+                onClick={() => !loading && setPopup(false)} // ปิด Popup เฉพาะเมื่อไม่โหลด
                 className="PopupBooking__close"
               >
                 ✕
@@ -482,20 +514,16 @@ const StudentBooking: React.FC = () => {
             </div>
             <div className="PopupBooking__footer">
               <button
-                onClick={() =>
-                  createBooking({
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: "",
-                  })
-                }
+                onClick={createBooking}
                 className="PopupBooking__btn--confirm"
+                disabled={loading} // ปิดการใช้งานปุ่มขณะโหลด
               >
-                ต้องการจอง
+                {loading ? "Loading..." : "ต้องการจอง"}
               </button>
               <button
-                onClick={() => setPopup(false)}
+                onClick={() => !loading && setPopup(false)} // ปิด Popup เฉพาะเมื่อไม่โหลด
                 className="PopupBooking__btn--cancel"
+                disabled={loading} // ปิดการใช้งานปุ่มขณะโหลด
               >
                 ยกเลิก
               </button>
