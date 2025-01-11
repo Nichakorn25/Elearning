@@ -53,7 +53,8 @@ const StudentBooking: React.FC = () => {
 
   //const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
   const user = JSON.parse(localStorage.getItem("user") || "{}");
-
+  const userIdstr = localStorage.getItem("id");
+  
   // Extract user data or set default values
   //const username = user?.username || "N/A";
   const firstName = user?.FirstName || "N/A";
@@ -243,7 +244,7 @@ const StudentBooking: React.FC = () => {
       title: String(data.title),
       location: String(data.location),
       description: String(data.description),
-      userid: Number(data.UserID),
+      userid: Number(userIdstr),
       TappointmentID: Number(data.ID),
       dayID: Number(data.DayofWeekID),
       dayname: String(data.DayofWeek?.DayName),
