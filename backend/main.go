@@ -35,7 +35,7 @@ func main() {
 	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
-	// r.Static("/uploads", "./uploads") 
+	r.Static("/Uploads", "./uploads") 
 
 	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
 	// r.POST("/verify_otp", controller.VerifyOTP)
@@ -84,6 +84,9 @@ func main() {
 		//RequestChangeRole
 		router.POST("/requestchangeroles", controller.CreateRoleChangeRequests)
 		router.GET("/requestchangeroles", controller.GetRoleChangeRequests)
+		router.PATCH("/requestchangeroles/:id", controller.UpdateRoleChangeRequestsByID)
+		router.PATCH("/users/role/:id", controller.UpdateUserRoleByID)
+
 		// SellerBankAccount Routes
 		router.GET("/seller-bank-accounts", controller.GetAllSellerBankAccounts)
 		router.GET("/seller-bank-accounts/:id", controller.GetSellerBankAccountByID)
@@ -147,6 +150,15 @@ func main() {
 		router.POST("/submissions", controller.CreateSubmissionWithAttachment)
 		router.PUT("/submissions/:id", controller.UpdateSubmissionWithAttachment)    
 		router.DELETE("/submissions/:id", controller.DeleteSubmission) 
+
+		//TransactionLog
+		router.GET("/transactionlogs", controller.GetTransactionLog)
+		router.PATCH("/transactionlogs/:id", controller.UpdateTransactionLogStatus)
+
+		//Course
+		router.GET("/categories", controller.GetCategories)
+		router.GET("/semesters", controller.GetSemesters)
+		router.GET("/daysofweek", controller.GetDayOfWeek)
 	}
 
 	r.GET("/", func(c *gin.Context) {
@@ -171,7 +183,7 @@ func CORSMiddleware() gin.HandlerFunc {
 
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
 
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE, PATCH")
 
 		if c.Request.Method == "OPTIONS" {
 

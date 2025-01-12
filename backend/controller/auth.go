@@ -158,6 +158,8 @@ func SignUp(c *gin.Context) {
 
     RoleID: 1,
 
+    Status: "Active",
+
    }
    
 

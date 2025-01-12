@@ -250,9 +250,15 @@ func UploadFile(c *gin.Context) {
 
 func GetCourses(c *gin.Context) {
 	var courses []entity.Course
-	if err := config.DB().Find(&courses).Error; err != nil {
+	if err := config.DB().
+		Preload("Category").
+		Preload("User").
+		Preload("Semester").
+		Preload("DayofWeek").
+		Find(&courses).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": courses})
 }
+

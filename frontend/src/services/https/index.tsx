@@ -2,7 +2,7 @@ import axios from "axios";
 // import { DepartmentInterface, MajorInterface } from "../../Interface/IUser"; // Import interfaces
 // import { message } from "antd"; // Ant Design message for notifications
 import { UserInterface,SignInInterface } from "../../Interface/IUser";
-import { AnnouncementInterface, ChangeRoleInterface } from "../../Interface/Admin";
+import { AnnouncementInterface, ChangeRoleInterface, RoleIDInterface, RoleRequest } from "../../Interface/Admin";
 import {TeacherAppointmentInterface , StudentBookingInterface} from "../../Interface/IAppointment";
 import { ReviewInterface } from "../../Interface/Review";
 import { PurchaseInterface } from "../../Interface/Purchase";
@@ -81,6 +81,27 @@ async function GetMajors(departmentId: string){
 
   .catch((e) => e.response);
 
+}
+
+async function GetCategories() {
+  return await axios
+    .get(`${apiUrl}/categories`, requestOptions) // Replace with actual API endpoint for categories
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetSemesters() {
+  return await axios
+    .get(`${apiUrl}/semesters`, requestOptions) // Replace with actual API endpoint for semesters
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetDayOfWeek() {
+  return await axios
+    .get(`${apiUrl}/daysofweek`, requestOptions) // Replace with actual API endpoint for day of week
+    .then((res) => res)
+    .catch((e) => e.response);
 }
 
 // Get all users
@@ -402,6 +423,20 @@ async function GetRoleChangeRequests() {
     .then((res) => res)
     .catch((e) => e.response);
 }
+
+async function UpdateRoleChangeRequestsById(id: string, data: RoleRequest) {
+  return axios
+    .patch(`${apiUrl}/requestchangeroles/${id}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function UpdateUserRoleByID(userID: number, data: RoleIDInterface) {
+  return axios
+    .patch(`${apiUrl}/users/role/${userID}`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
 async function ListSellers() {
   return axios
     .get(`${apiUrl}/sellers`, requestOptions)
@@ -694,9 +729,35 @@ async function GetReviewsBySheetID(sheetId: number) {
     .catch((e) => e.response);
 }
 
+
+async function UpdateCourse (courseId: number, updatedData: any) {
+  return axios
+    .put(`${apiUrl}/courses/${courseId}`, updatedData, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+};
+
+async function GetTransactionLog() {
+  return axios
+    .get(`${apiUrl}/transactionlogs`, requestOptions)
+    .then((res) => res) 
+    .catch((e) => e.response);
+}
+
+async function UpdateTransactionLog(id: string, statusID: number) {
+  return axios
+    .patch(`${apiUrl}/transactionlogs/${id}`, { StatusID: statusID }, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+
 export{
   GetDepartments,
   GetMajors,
+  GetCategories,
+  GetSemesters,
+  GetDayOfWeek,
   ListAnnouncements,
   GetAnnouncementById,
   CreateAnnouncement,
@@ -705,6 +766,9 @@ export{
   ListUsers,
   CreateRoleChangeRequests,
   GetRoleChangeRequests,
+  UpdateRoleChangeRequestsById,
+  UpdateUserRoleByID,
+
   // GetUsersByFilters,
   SignIn,
   CreateUser,
@@ -729,6 +793,10 @@ export{
   CheckUserExistsInSeller,
   ListBanks,
   GetBanksById,
+  // ListCourses,
+  UpdateCourse,
+  GetTransactionLog,
+  UpdateTransactionLog,
   ListCarts,
   GetCartById,
   CreateCart,

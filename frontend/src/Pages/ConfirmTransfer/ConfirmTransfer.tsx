@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, message } from 'antd';
-import Header from '../Component/Header/Header'; // Import the Header component
-import Sidebar from '../Component/Sidebar/Sidebar'; // Import the Sidebar component
-import './ConfirmTransfer.css'; // Assuming you have custom CSS for the page
+import { Table, Button, Tabs, message, Popconfirm } from 'antd';
+import Header from '../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import { GetTransactionLog, UpdateTransactionLog } from "../../services/https";
+import './ConfirmTransfer.css';
 
 const ConfirmTransfer: React.FC = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(false); // Sidebar visibility state
-  const [pendingTransfers, setPendingTransfers] = useState<any[]>([]); // State to store pending transfers
-  const [loading, setLoading] = useState<boolean>(false); // Loading state for fetching data
-  const [error, setError] = useState<string | null>(null); // Error state to store any errors
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [pendingTransfers, setPendingTransfers] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible); // Toggle Sidebar visibility
+    setSidebarVisible(!isSidebarVisible);
   };
 
-  // Simulate fetching pending transfers (mock data)
   useEffect(() => {
     const fetchPendingTransfers = async () => {
       setLoading(true);
-      setError(null); // Reset error state before fetching
+      setError(null);
       try {
-        // Simulating an API call with mock data
-        const mockData = [
-          { id: 1, buyer: 'John Doe', amount: 500 },
-          { id: 2, buyer: 'Jane Smith', amount: 300 },
-          { id: 3, buyer: 'Alice Johnson', amount: 750 },
-        ];
-        setPendingTransfers(mockData); // Set the mock data as the pending transfers
+        const response = await GetTransactionLog();
+        console.log("response data", response.data);
+        if (response && response.data) {
+          setPendingTransfers(response.data);
+        } else {
+          setError('No transaction data available');
+        }
       } catch (err) {
         setError('Failed to load pending transfers');
       } finally {
@@ -34,60 +34,142 @@ const ConfirmTransfer: React.FC = () => {
       }
     };
 
-    fetchPendingTransfers(); // Fetch mock data when component mounts
-  }, []); // Empty dependency array means this runs once on component mount
+    fetchPendingTransfers();
+  }, []);
 
-  const handleConfirm = (transferId: number) => {
-    alert(`Transfer with ID ${transferId} confirmed!`);
-    setPendingTransfers((prev) => prev.filter((transfer) => transfer.id !== transferId));
-  };
+  // ในฟังก์ชัน handleConfirm
+const handleConfirm = async (transactionId: number) => {
+  try {
+    await UpdateTransactionLog(transactionId, 2);  // ส่ง StatusID เป็นค่าตัวเลข 2
+    message.success(`Transfer confirmed successfully!`);
+    setPendingTransfers((prev) =>
+      prev.map((transfer) =>
+        transfer.ID === transactionId ? { ...transfer, StatusID: 2 } : transfer
+      )
+    );
+  } catch (err) {
+    message.error('Failed to confirm transfer');
+  }
+};
 
-  // Table columns configuration
+
   const columns = [
     {
       title: 'Buyer',
-      dataIndex: 'buyer',
+      dataIndex: ['Payment', 'User', 'Username'],
       key: 'buyer',
     },
     {
       title: 'Amount',
-      dataIndex: 'amount',
+      dataIndex: ['Payment', 'Amount'],
       key: 'amount',
       render: (amount: number) => `$${amount}`,
+    },
+    {
+      title: 'Payment Date',
+      dataIndex: ['Payment', 'PaymentDate'],
+      key: 'PaymentDate',
+      render: (date: string) => new Date(date).toLocaleDateString(),
+    },
+    {
+      title: 'Slip',
+      dataIndex: ['Payment', 'Slip'],
+      key: 'Slip',
+      render: (slip: string) => (
+        <a href={slip} target="_blank" rel="noopener noreferrer">
+          View Slip
+        </a>
+      ),
+    },
+    {
+      title: 'User ID',
+      dataIndex: ['Payment', 'UserID'],
+      key: 'UserID',
+    },
+    {
+      title: 'Purchase ID',
+      dataIndex: ['Payment', 'PurchaseID'],
+      key: 'PurchaseID',
+    },
+    {
+      title: 'Method ID',
+      dataIndex: ['Payment', 'MethodID'],
+      key: 'MethodID',
     },
     {
       title: 'Actions',
       key: 'actions',
       render: (record: any) => (
-        <Button
-          onClick={() => handleConfirm(record.id)}
-          type="primary"
-        >
-          Confirm
-        </Button>
+        record.StatusID === 1 ? (
+          <Popconfirm
+            title="Are you sure to confirm this transfer?"
+            onConfirm={() => handleConfirm(record.ID)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary">Confirm</Button>
+          </Popconfirm>
+        ) : (
+          <span>Completed</span>
+        )
       ),
     },
   ];
 
   return (
     <div className="confirm-transfer-container">
-      <Header /> {/* Include Header component */}
-      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} /> {/* Include Sidebar component */}
+      <Header />
+      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
 
       <div className="pending-transfers">
         <h2>Pending Transfers</h2>
 
-        {/* Show loading or error */}
         {loading && <p>Loading...</p>}
         {error && <p>{error}</p>}
 
-        {/* Display the table with pending transfers */}
-        <Table
-          dataSource={pendingTransfers}
-          columns={columns}
-          rowKey="id"
-          loading={loading}
-          bordered
+        <Tabs
+          defaultActiveKey="1"
+          items={[
+            {
+              key: '1',
+              label: 'All',
+              children: (
+                <Table
+                  dataSource={pendingTransfers}
+                  columns={columns}
+                  rowKey="ID"
+                  loading={loading}
+                  bordered
+                />
+              ),
+            },
+            {
+              key: '2',
+              label: 'Pending',
+              children: (
+                <Table
+                  dataSource={pendingTransfers.filter((transfer) => transfer.StatusID === 1)}
+                  columns={columns}
+                  rowKey="ID"
+                  loading={loading}
+                  bordered
+                />
+              ),
+            },
+            {
+              key: '3',
+              label: 'Completed',
+              children: (
+                <Table
+                  dataSource={pendingTransfers.filter((transfer) => transfer.StatusID === 2)}
+                  columns={columns}
+                  rowKey="ID"
+                  loading={loading}
+                  bordered
+                />
+              ),
+            },
+          ]}
         />
       </div>
     </div>

@@ -385,7 +385,7 @@ func UpdateUserByid(c *gin.Context) {
         extension := filepath.Ext(file.Filename)
         newFileName := fmt.Sprintf("profile_%d%s", timestamp, extension)
         fileSavePath  := filepath.Join(uploadPath, newFileName)
-		profilePicturePath := fmt.Sprintf("/uploads/%s", newFileName)
+		profilePicturePath := fmt.Sprintf("/Uploads/%s", newFileName)
 
         // บันทึกไฟล์ใหม่
         if err := c.SaveUploadedFile(file, fileSavePath ); err != nil {

@@ -1,92 +1,72 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button, message, Modal } from "antd"; 
-import { EyeOutlined } from "@ant-design/icons"; // นำเข้าไอคอน Eye
-import Sidebar from "../Component/Sidebar/Sidebar";
-import Header from "../Component/Header/Header";
-import "./ManageRoleRequests.css";
-import { GetRoleChangeRequests } from "../../services/https"; // Import the function
-
-interface RoleRequest {
-  id: number;
-  username: string;
-  fullname: string;
-  email: string;
-  department: string;
-  reason: string;
-  status: string; // e.g., "Pending", "Approved", "Rejected"
-  idCard: string | null; // URL or path to the ID card image
-}
+import React, { useEffect, useState } from 'react';
+import { Table, Button, message, Modal, Tabs, Popconfirm } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import Header from '../Component/Header/Header';
+import Sidebar from '../Component/Sidebar/Sidebar';
+import './ManageRoleRequests.css';
+import { GetRoleChangeRequests, UpdateRoleChangeRequestsById, UpdateUserRoleByID } from '../../services/https';
+import { ChangeRoleInterface, RoleRequest } from '../../Interface/Admin';
 
 const ManageRoleRequests: React.FC = () => {
-  const [requests, setRequests] = useState<RoleRequest[]>([]);
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [requests, setRequests] = useState<ChangeRoleInterface[]>([]);
   const [loading, setLoading] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false); // For showing the ID card modal
-  const [currentIdCard, setCurrentIdCard] = useState<string | null>(null); // To store the image URL for modal
+  const [error, setError] = useState<string | null>(null);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [currentIdCard, setCurrentIdCard] = useState<string | null>(null);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
   const fetchRoleRequests = async () => {
-    console.log("Fetching role requests...");
     setLoading(true);
+    setError(null);
     try {
-      const res = await GetRoleChangeRequests(); // Call the axios function
-      console.log(res.data);
-      if (res.status === 200) {
-        setRequests(res.data); // Assuming `res.data` contains the list of requests
+      const res = await GetRoleChangeRequests();
+      console.log(res);
+      if (res.data && Array.isArray(res.data.data)) {
+        setRequests(res.data.data);
       } else {
-        message.error("Failed to load role requests.");
+        setError('No role change requests available');
       }
     } catch (error) {
-      message.error("An error occurred while fetching role requests.");
+      setError('Failed to load role change requests');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchRoleRequests(); // Fetch data when component mounts
+    fetchRoleRequests();
   }, []);
 
-  const handleApprove = async (id: number) => {
+  const handleApprove = async (ID: number, userID: number) => {
     try {
-      const response = await axios.post(`/api/role-requests/${id}/approve`, {}, requestOptions);
-      if (response.status === 200) {
-        message.success("Role request approved.");
-        fetchRoleRequests(); // Refresh the table
-      } else {
-        message.error("Failed to approve the request.");
-      }
+      await UpdateRoleChangeRequestsById(ID.toString(), { status: 'Approved' });
+      await UpdateUserRoleByID(userID, { role_id: 2 });
+      message.success('Role request approved and user role updated successfully.');
+      fetchRoleRequests();
     } catch (error) {
-      message.error("An error occurred.");
+      message.error('Failed to approve role request.');
     }
   };
 
-  const handleReject = async (id: number) => {
+  const handleReject = async (ID: number) => {
     try {
-      const response = await axios.post(`/api/role-requests/${id}/reject`, {}, requestOptions);
-      if (response.status === 200) {
-        message.success("Role request rejected.");
-        fetchRoleRequests(); // Refresh the table
-      } else {
-        message.error("Failed to reject the request.");
-      }
+      await UpdateRoleChangeRequestsById(ID.toString(), { status: 'Rejected' });
+      message.success('Role request rejected.');
+      fetchRoleRequests();
     } catch (error) {
-      message.error("An error occurred.");
+      message.error('Failed to reject role request.');
     }
   };
 
-  // Show Modal with ID card image
   const showIdCard = (idCardUrl: string) => {
-    const fullUrl = `http://localhost:8000${idCardUrl}`; // Add base URL if the ID card is a relative path
-    console.log(fullUrl);
-    setCurrentIdCard(fullUrl);
+    setCurrentIdCard(`http://localhost:8000${idCardUrl}`);
     setModalVisible(true);
   };
 
-  // Close Modal
   const handleCancelModal = () => {
     setModalVisible(false);
     setCurrentIdCard(null);
@@ -94,97 +74,113 @@ const ManageRoleRequests: React.FC = () => {
 
   const columns = [
     {
-      title: "Username",
-      dataIndex: "username",
-      key: "username",
+      title: 'Username',
+      dataIndex: ['User', 'Username'],
+      key: 'username',
     },
     {
-      title: "Fullname",
-      dataIndex: "fullname",
-      key: "fullname",
+      title: 'Fullname',
+      dataIndex: ['User', 'FirstName'],
+      key: 'fullname',
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: ['User', 'Email'],
+      key: 'email',
     },
     {
-      title: "Department",
-      dataIndex: "department",
-      key: "department",
+      title: 'Phone',
+      dataIndex: ['User', 'Phone'],
+      key: 'phone',
     },
     {
-      title: "Major",
-      dataIndex: "major",
-      key: "major",
+      title: 'Department',
+      dataIndex: ['User', 'Department', 'DepartmentName'],
+      key: 'department',
     },
     {
-      title: "Reason",
-      dataIndex: "reason",
-      key: "reason",
+      title: 'Major',
+      dataIndex: ['User', 'Major', 'MajorName'],
+      key: 'major',
     },
     {
-      title: "ID Card", 
-      key: "idCard",
-      render: (record: RoleRequest) => (
-        record.idCard && record.idCard !== "" ? (
-          <Button
-            icon={<EyeOutlined />}
-            type="link"
-            onClick={() => showIdCard(record.idCard)} 
-          >
+      title: 'Reason',
+      dataIndex: 'reason',
+      key: 'reason',
+    },
+    {
+      title: 'ID Card',
+      key: 'idCard',
+      render: (record: ChangeRoleInterface) =>
+        record.idCard ? (
+          <Button icon={<EyeOutlined />} type="link" onClick={() => showIdCard(record.idCard)}>
             View
           </Button>
         ) : (
           <span>No ID Card</span>
-        )
-      ),
+        ),
     },
     {
-      title: "Actions",
-      key: "actions",
-      render: (record: RoleRequest) => (
-        <div className="action-buttons">
-          <Button
-            type="primary"
-            onClick={() => handleApprove(record.id)}
-            disabled={record.status !== "Pending"}
-          >
-            Approve
-          </Button>
-          <Button
-            type="default"
-            danger
-            onClick={() => handleReject(record.id)}
-            disabled={record.status !== "Pending"}
-          >
-            Reject
-          </Button>
-        </div>
-      ),
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'Actions',
+      key: 'actions',
+      render: (record: ChangeRoleInterface) =>
+        record.status === 'Pending' ? (
+          <div className="action-buttons">
+            <Popconfirm
+              title="Are you sure to approve this request?"
+              onConfirm={() => handleApprove(record.ID, record.User.ID)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="primary">Approve</Button>
+            </Popconfirm>
+            <Popconfirm
+              title="Are you sure to reject this request?"
+              onConfirm={() => handleReject(record.ID)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="default" danger>
+                Reject
+              </Button>
+            </Popconfirm>
+          </div>
+        ) : (
+          <span>{record.status}</span>
+        ),
     },
   ];
-  
 
   return (
-    <div>
+    <div className="manage-role-requests-container">
       <Header />
       <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
-      <div className="manage-role-requests-container">
+      <div className="pending-requests">
         <h2>Manage Role Change Requests</h2>
-        <Table
-          dataSource={requests}
-          columns={columns}
-          rowKey="id"
-          loading={loading}
-          bordered
-        />
-        {/* Modal to display ID card image */}
+
+        {loading && <p>Loading...</p>}
+        {error && <p>{error}</p>}
+
+        <Tabs defaultActiveKey="all" onChange={() => {}}>
+          <Tabs.TabPane tab="All" key="all">
+            <Table dataSource={requests} columns={columns} rowKey="ID" bordered />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Pending" key="pending">
+            <Table dataSource={requests.filter((r) => r.status === 'Pending')} columns={columns} rowKey="ID" bordered />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Approved" key="approved">
+            <Table dataSource={requests.filter((r) => r.status === 'Approved')} columns={columns} rowKey="ID" bordered />
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="Rejected" key="rejected">
+            <Table dataSource={requests.filter((r) => r.status === 'Rejected')} columns={columns} rowKey="ID" bordered />
+          </Tabs.TabPane>
+        </Tabs>
+
         <Modal
           visible={isModalVisible}
           title="ID Card"
@@ -196,7 +192,7 @@ const ManageRoleRequests: React.FC = () => {
             <img
               src={currentIdCard}
               alt="ID Card"
-              style={{ width: "100%", objectFit: "contain" }}
+              style={{ width: '100%', objectFit: 'contain' }}
             />
           ) : (
             <p>No ID card available</p>

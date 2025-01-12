@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Input, message, DatePicker } from 'antd';
-import moment, { Moment } from 'moment';  // นำเข้า moment
+import { Modal, Button, Input, message, DatePicker, Table } from 'antd';
+import moment, { Moment } from 'moment';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
 import {
   ListAnnouncements,
   CreateAnnouncement,
   UpdateAnnouncementById,
-  DeleteAnnouncementById,
-  GetAnnouncementById
-} from '../../services/https'; // Import API functions
+  DeleteAnnouncementById
+} from '../../services/https';
 import './Announcement.css';
 import { AnnouncementInterface } from '../../Interface/Admin';
 
@@ -19,10 +18,10 @@ const Announcement: React.FC = () => {
   const [newAnnouncement, setNewAnnouncement] = useState<{
     title: string;
     content: string;
-    date: string | null;  // รองรับค่า null
+    date: string | null;
   }>({ title: '', content: '', date: null });
   const [editingAnnouncement, setEditingAnnouncement] = useState<any>(null);
-  const [announcements, setAnnouncements] = useState([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -30,9 +29,7 @@ const Announcement: React.FC = () => {
 
   const fetchAnnouncements = async () => {
     const response = await ListAnnouncements();
-    console.log('Fetched announcements:', response);
     if (response.status === 200) {
-      console.log('Announcements fetched:', response.data);
       setAnnouncements(response.data);
     } else {
       message.error('Failed to fetch announcements');
@@ -48,7 +45,7 @@ const Announcement: React.FC = () => {
       setNewAnnouncement({
         title: announcement.title || '',
         content: announcement.content || '',
-        date: announcement.announce_date ? moment(announcement.announce_date) : null,  // ใช้ moment แปลงวันที่
+        date: announcement.announce_date ? moment(announcement.announce_date) : null,
       });
       setEditingAnnouncement(announcement);
     } else {
@@ -71,18 +68,15 @@ const Announcement: React.FC = () => {
     }
 
     const date = new Date(newAnnouncement.date);
-    date.setHours(date.getHours() + 7);  // เพิ่ม 7 ชั่วโมง
-    const formattedDate = date.toISOString();  // แปลงเป็น ISO string
+    date.setHours(date.getHours() + 7);
+    const formattedDate = date.toISOString();
 
-    console.log('Formatted date:', formattedDate);
     const data: AnnouncementInterface = {
       title: newAnnouncement.title,
       content: newAnnouncement.content,
       announce_date: formattedDate,
       user_id: Number(localStorage.getItem('id')),
     };
-
-    console.log('Data to save:', data);
 
     if (editingAnnouncement) {
       const response = await UpdateAnnouncementById(editingAnnouncement.id, data);
@@ -105,34 +99,57 @@ const Announcement: React.FC = () => {
     }
   };
 
-
-
-
-
-
-
   const handleDeleteAnnouncement = async (id: string) => {
     Modal.confirm({
-      title: "Are you sure you want to delete this announcement?",
-      content: "This action cannot be undone.",
-      okText: "Yes, delete it",
-      okType: "danger",
-      cancelText: "Cancel",
+      title: 'Are you sure you want to delete this announcement?',
+      content: 'This action cannot be undone.',
+      okText: 'Yes, delete it',
+      okType: 'danger',
+      cancelText: 'Cancel',
       onOk: async () => {
         const response = await DeleteAnnouncementById(id);
         if (response.status === 200) {
-          message.success("Announcement deleted successfully");
+          message.success('Announcement deleted successfully');
           fetchAnnouncements();
         } else {
-          message.error("Failed to delete announcement");
+          message.error('Failed to delete announcement');
         }
-      },
-      onCancel: () => {
-        console.log("Deletion canceled");
       },
     });
   };
-  
+
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Content',
+      dataIndex: 'content',
+      key: 'content',
+    },
+    {
+      title: 'Publish Date',
+      dataIndex: 'announce_date',
+      key: 'announce_date',
+      render: (text: string) => moment(text).format('DD MMM YYYY'),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (text: string, record: any) => (
+        <>
+          <Button onClick={() => handleOpenModal(record)} style={{ marginRight: 8 }}>
+            Edit
+          </Button>
+          <Button onClick={() => handleDeleteAnnouncement(record.ID)} danger>
+            Delete
+          </Button>
+        </>
+      ),
+    },
+  ];
 
   return (
     <div className="announcement-container">
@@ -142,31 +159,16 @@ const Announcement: React.FC = () => {
 
       <div className="announcement-content">
         <h2>Manage Announcements</h2>
-        <Button type="primary" onClick={() => handleOpenModal(null)}>
+        <Button type="primary" onClick={() => handleOpenModal(null)} style={{ marginBottom: '16px' }}>
           Create New Announcement
         </Button>
-        <div className="announcement-list">
-          {announcements.map((announcement: any) => (
-            <div key={announcement.ID} className="announcement-item">
-              <h3>{announcement.title}</h3>
-              <p>{announcement.content}</p>
-              <p>
-                <strong>Publish Date:</strong>
-                {announcement.announce_date
-                  ? moment(announcement.announce_date).format('DD MMM YYYY')
-                  : 'No date available'}
-              </p>
-
-              <Button onClick={() => handleOpenModal(announcement)}>Edit</Button>
-              <Button danger onClick={() => handleDeleteAnnouncement(announcement.ID)}>
-                Delete
-              </Button>
-            </div>
-          ))}
-        </div>
+        <Table
+          dataSource={announcements}
+          columns={columns}
+          rowKey="ID"
+        />
       </div>
 
-      {/* Modal for Adding/Editing Announcement */}
       <Modal
         title={editingAnnouncement ? 'Edit Announcement' : 'Create New Announcement'}
         visible={isModalVisible}
@@ -190,12 +192,10 @@ const Announcement: React.FC = () => {
         <DatePicker
           value={newAnnouncement.date ? moment(newAnnouncement.date) : null}
           onChange={(date) => {
-            console.log('Selected Date:', date); // Ensure this is a valid date
             setNewAnnouncement({ ...newAnnouncement, date: date ? date.toISOString() : null });
           }}
           style={{ marginTop: '1rem', width: '100%' }}
         />
-
       </Modal>
     </div>
   );
