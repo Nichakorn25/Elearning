@@ -587,15 +587,12 @@ export async function DeleteSheet(id: string) {
     return error.response;
   }
 }
-export async function ListCourses() {
-  try {
-    const response = await axios.get(`${apiUrl}/courses`, requestOptions);
-    return response.data.data; // ส่งเฉพาะข้อมูลที่ต้องการ
-  } catch (error: any) {
-    console.error("Error fetching courses:", error);
-    return [];
-  }
-}
+async function ListCourses() {
+  return axios
+    .get(`${apiUrl}/courses`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+};
 async function ListCarts(p0: { userId: number; }) {
   return axios
     .get(`${apiUrl}/carts`, requestOptions)
@@ -793,7 +790,7 @@ export{
   CheckUserExistsInSeller,
   ListBanks,
   GetBanksById,
-  // ListCourses,
+  ListCourses,
   UpdateCourse,
   GetTransactionLog,
   UpdateTransactionLog,
