@@ -194,6 +194,7 @@ func CreateStudentBooking(c *gin.Context) {
 
 	u := entity.StudentBooking{
 		UserID:        			booking.UserID,
+		DayofWeekID: booking.DayofWeekID,
 		TeacherAppointmentID:   booking.TeacherAppointmentID,
 	}
 
@@ -274,6 +275,7 @@ func GetBookingStudent(c *gin.Context) {
     var studentBookings []entity.StudentBooking
     if err := config.DB().
 		Preload("User").
+		Preload("DayofWeek").
         Preload("TeacherAppointment"). // Preload ข้อมูล TeacherAppointment
         Where("teacher_appointment_id IN (SELECT id FROM teacher_appointments WHERE user_id = ?)", teacherId).
         Find(&studentBookings).Error; err != nil {

@@ -150,9 +150,9 @@ const Header: React.FC = () => {
                     Booking.map((data,index) => (
                         <>
                           <div key={index} style={{borderBottom:'1px solid #000', padding:'20px 0'}} >
-                            <p style={{fontSize:'16px'}}>ผู้จอง : {data.User?.Username} {data.User?.FirstName} {data.User?.LastName} Tel : {data.User?.Phone || "ไม่ได้ระบุ"}</p>
+                            <p style={{fontSize:'16px'}}>ผู้จอง : {data.User?.Username} {data.User?.FirstName} {data.User?.LastName} <br /> Tel : {data.User?.Phone || "ไม่ได้ระบุ"}</p>
                             <p style={{fontSize:'14px'}}>
-                             วัน : {data.TeacherAppointment?.DayofWeek?.DayName} <br /> ระยะเวลา : {data.TeacherAppointment?.appointment_duration} <br />หัวข้อ : {data.TeacherAppointment?.title} <br />รายระเอียด : {data.TeacherAppointment?.description} <br />สถานที่ : {data.TeacherAppointment?.location}
+                             วัน : {data.DayofWeek?.DayName} <br /> ระยะเวลา : {data.TeacherAppointment?.appointment_duration} <br />หัวข้อ : {data.TeacherAppointment?.title} <br />รายละเอียด : {data.TeacherAppointment?.description} <br />สถานที่ : {data.TeacherAppointment?.location}
                             </p>
 
                           </div>
