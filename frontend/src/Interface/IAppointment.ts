@@ -32,6 +32,8 @@ export interface StudentBookingInterface {
   ID?: number; // ID ของการจอง
   UserID: number; // ID ของนักเรียนที่ทำการจอง
   TeacherAppointmentID: number; // ID ของการนัดหมายอาจารย์
+  TeacherAppointment?: TeacherAppointmentInterface;
+  User?: UserInterface;
   DayofWeekID?: number;
 
   DayofWeek?: DayInterface;
