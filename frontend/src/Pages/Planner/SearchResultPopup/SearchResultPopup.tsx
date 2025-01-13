@@ -1,20 +1,12 @@
 import React from "react";
 import "./SearchResultPopup.css";
-
-interface Course {
-  ID: number;
-  CourseName: string;
-  Credit: number;
-  Description: string;
-  Category: string;
-  Status: string;
-}
+import { CourseInterface } from "../../../Interface/IClassSchedule";
 
 interface SearchResultsPopupProps {
   isVisible: boolean;
   onClose: () => void;
-  results: Course[];
-  onAddCourse: (course: Course) => void;
+  results: CourseInterface[];
+  onAddCourse: (course: CourseInterface) => void;
 }
 
 const SearchResultsPopup: React.FC<SearchResultsPopupProps> = ({
