@@ -537,33 +537,6 @@ async function ListStudentBooking(userID: string) {
     .catch((e) => e.response);
 }
 
-// ค้นหาคอร์สจากคำค้นหาและเทอม
-async function SearchCourses(semester: string, searchTerm: string) {
-  const Authorization = localStorage.getItem("token");
-  const Bearer = localStorage.getItem("token_type");
-
-  const requestOptions = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${Bearer} ${Authorization}`,
-    },
-  };
-
-  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
-    searchTerm
-  )}`;
-
-  console.log("Sending request to:", url); // Debug URL
-
-  return axios
-    .get(url, requestOptions)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error("Error during API request:", err.response || err.message);
-      throw err;
-    });
-}
-
 // get message by id ใช้อันนี้
 async function GetMessageById(id: string) {
 
@@ -704,6 +677,81 @@ async function CreateStudentBooking(data: StudentBookingInterface) {
     .catch((e) => e.response);
 }
 
+//---------------------------------Class Schedule------------------------------------------
+// ค้นหาคอร์สจากคำค้นหาและเทอม
+async function SearchCourses(semester: string, searchTerm: string) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
+    searchTerm
+  )}`;
+
+  console.log("Sending request to:", url); // Debug URL
+
+  return axios
+    .get(url, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error during API request:", err.response || err.message);
+      throw err;
+    });
+}
+
+// ดึง StudyTime ตาม CourseID
+async function GetStudyTimeByCourseId(courseId: number) {
+  return axios
+    .get(`${apiUrl}/courses/${courseId}/studytime`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// ดึง ExamSchedule ตาม CourseID
+async function GetExamScheduleByCourseId(courseId: number) {
+  return axios
+    .get(`${apiUrl}/courses/${courseId}/examschedule`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// เพิ่มคอร์สไปยังตารางเรียน
+async function AddCourseToSchedule(data: { courseId: number; userId: number }) {
+  return axios
+    .post(`${apiUrl}/classschedule`, data, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// ลบคอร์สออกจากตารางเรียน
+async function RemoveCourseFromSchedule(scheduleId: number) {
+  return axios
+    .delete(`${apiUrl}/classschedule/${scheduleId}`, requestOptions)
+    .then((res) => res.data)
+    .catch((e) => e.response);
+}
+
+// ค้นหา Courses พร้อม StudyTime และ ExamSchedule
+async function SearchCoursesWithDetails(semester: string, searchTerm: string) {
+  const url = `${apiUrl}/searchCoursesWithDetails?semester=${semester}&filter=${encodeURIComponent(searchTerm)}`;
+  return axios
+    .get(url, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error during API request:", err.response || err.message);
+      throw err;
+    });
+}
+
+
+
+
 
 export{
   GetCategories,
@@ -772,4 +820,11 @@ export{
   BookAppointment,
   GetDay,
   CreateStudentBooking,
+
+  //ClassSchedule
+  GetStudyTimeByCourseId,
+  GetExamScheduleByCourseId,
+  AddCourseToSchedule,
+  RemoveCourseFromSchedule,
+  SearchCoursesWithDetails,
 };

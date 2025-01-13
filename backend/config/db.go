@@ -78,7 +78,6 @@ func SetupDatabase() {
 		&entity.TimeConflict{},
 		&entity.EnrollmentSuggestion{},
 		&entity.CreditSummary{},
-
 	)
 	departments := []entity.Department{
 		{DepartmentName: "สำนักวิชาวิทยาศาสตร์ (Institute of Science)"},
@@ -217,13 +216,12 @@ func SetupDatabase() {
 		{Username: "T6500004", Password: hashedPassword, FirstName: "ปริญญ์", LastName: "ศรเลิศล้ำวานิช", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19, Status: "Active"},
 		{Username: "T6500005", Password: hashedPassword, FirstName: "คมศัลล์", LastName: "ศรีวิสุทธิ์", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19, Status: "Active"},
 		{Username: "T6500006", Password: hashedPassword, FirstName: "ทดสอบ", LastName: "ส่งอีเมล", Email: "nichakorn391@gmail.com", Phone: "0987654321", RoleID: 2, DepartmentID: 4, MajorID: 19, Status: "Active"},
-
 	}
 	for _, pkg := range User {
 		db.FirstOrCreate(&pkg, entity.User{Username: pkg.Username})
 	}
 
-	// ข้อมูลตัวอย่างสำหรับ Course
+	// ตัวอย่างข้อมูลสำหรับ Course
 	courses := []entity.Course{
 		{
 			CourseName:  "Introduction to Computer Science",
@@ -231,7 +229,7 @@ func SetupDatabase() {
 			Credit:      3,
 			Description: "Basic concepts in computer science, programming, and problem-solving.",
 			CategoryID:  1, // วิทยาศาสตร์
-			UserID:      1, // อาจารย์ที่สอน
+			UserID:      1, // ผู้สอน
 			SemesterID:  1, // ภาคการศึกษาที่ 1
 			DayofWeekID: 2, // วันจันทร์
 		},
@@ -280,6 +278,82 @@ func SetupDatabase() {
 	// เพิ่มข้อมูลลงในฐานข้อมูล
 	for _, course := range courses {
 		db.FirstOrCreate(&course, entity.Course{CourseName: course.CourseName})
+	}
+
+	//ตัวอย่างข้อมูลตาราง StudyTime
+	studyTimes := []entity.StudyTime{
+		{
+			StudyDay:       "Monday",
+			StudyTimeStart: time.Date(2025, 1, 15, 8, 0, 0, 0, time.UTC),  // 08:00
+			StudyTimeEnd:   time.Date(2025, 1, 15, 10, 0, 0, 0, time.UTC), // 10:00
+			CourseID:       1,                                             // ID ของ "Introduction to Computer Science"
+		},
+		{
+			StudyDay:       "Tuesday",
+			StudyTimeStart: time.Date(2025, 1, 16, 10, 0, 0, 0, time.UTC), // 10:00
+			StudyTimeEnd:   time.Date(2025, 1, 16, 12, 0, 0, 0, time.UTC), // 12:00
+			CourseID:       2,                                             // ID ของ "Digital Arts and Design"
+		},
+		{
+			StudyDay:       "Wednesday",
+			StudyTimeStart: time.Date(2025, 1, 17, 14, 0, 0, 0, time.UTC), // 14:00
+			StudyTimeEnd:   time.Date(2025, 1, 17, 16, 0, 0, 0, time.UTC), // 16:00
+			CourseID:       3,                                             // ID ของ "Advanced Physics"
+		},
+		{
+			StudyDay:       "Thursday",
+			StudyTimeStart: time.Date(2025, 1, 18, 13, 0, 0, 0, time.UTC), // 13:00
+			StudyTimeEnd:   time.Date(2025, 1, 18, 15, 0, 0, 0, time.UTC), // 15:00
+			CourseID:       4,                                             // ID ของ "Introduction to Agricultural Technology"
+		},
+		{
+			StudyDay:       "Friday",
+			StudyTimeStart: time.Date(2025, 1, 19, 9, 0, 0, 0, time.UTC),  // 09:00
+			StudyTimeEnd:   time.Date(2025, 1, 19, 11, 0, 0, 0, time.UTC), // 11:00
+			CourseID:       5,                                             // ID ของ "Software Engineering Fundamentals"
+		},
+	}
+	// เพิ่มข้อมูล StudyTime
+	for _, study := range studyTimes {
+		db.FirstOrCreate(&study, entity.StudyTime{CourseID: study.CourseID, StudyDay: study.StudyDay})
+	}
+
+	//ตัวอย่างข้อมูลตาราง ExamSchdule
+	examSchedules := []entity.ExamSchedule{
+		{
+			ExamDate:  time.Date(2025, 3, 15, 0, 0, 0, 0, time.UTC),  // วันที่ 15 มีนาคม 2025
+			StartTime: time.Date(2025, 3, 15, 9, 0, 0, 0, time.UTC),  // เริ่มสอบ 09:00
+			EndTime:   time.Date(2025, 3, 15, 12, 0, 0, 0, time.UTC), // สอบสิ้นสุด 12:00
+			CourseID:  1,                                             // ID ของ "Introduction to Computer Science"
+		},
+		{
+			ExamDate:  time.Date(2025, 3, 20, 0, 0, 0, 0, time.UTC),  // วันที่ 20 มีนาคม 2025
+			StartTime: time.Date(2025, 3, 20, 13, 0, 0, 0, time.UTC), // เริ่มสอบ 13:00
+			EndTime:   time.Date(2025, 3, 20, 16, 0, 0, 0, time.UTC), // สอบสิ้นสุด 16:00
+			CourseID:  2,                                             // ID ของ "Digital Arts and Design"
+		},
+		{
+			ExamDate:  time.Date(2025, 4, 5, 0, 0, 0, 0, time.UTC),  // วันที่ 5 เมษายน 2025
+			StartTime: time.Date(2025, 4, 5, 10, 0, 0, 0, time.UTC), // เริ่มสอบ 10:00
+			EndTime:   time.Date(2025, 4, 5, 13, 0, 0, 0, time.UTC), // สอบสิ้นสุด 13:00
+			CourseID:  3,                                            // ID ของ "Advanced Physics"
+		},
+		{
+			ExamDate:  time.Date(2025, 4, 10, 0, 0, 0, 0, time.UTC),  // วันที่ 10 เมษายน 2025
+			StartTime: time.Date(2025, 4, 10, 14, 0, 0, 0, time.UTC), // เริ่มสอบ 14:00
+			EndTime:   time.Date(2025, 4, 10, 17, 0, 0, 0, time.UTC), // สอบสิ้นสุด 17:00
+			CourseID:  4,                                             // ID ของ "Introduction to Agricultural Technology"
+		},
+		{
+			ExamDate:  time.Date(2025, 4, 15, 0, 0, 0, 0, time.UTC),  // วันที่ 15 เมษายน 2025
+			StartTime: time.Date(2025, 4, 15, 9, 0, 0, 0, time.UTC),  // เริ่มสอบ 09:00
+			EndTime:   time.Date(2025, 4, 15, 11, 0, 0, 0, time.UTC), // สอบสิ้นสุด 11:00
+			CourseID:  5,                                             // ID ของ "Software Engineering Fundamentals"
+		},
+	}
+	// เพิ่มข้อมูล ExamSchedule
+	for _, exam := range examSchedules {
+		db.FirstOrCreate(&exam, entity.ExamSchedule{CourseID: exam.CourseID, ExamDate: exam.ExamDate})
 	}
 
 	// permissions := []entity.Permission{
@@ -352,38 +426,37 @@ func SetupDatabase() {
 	for _, pkg := range Category {
 		db.FirstOrCreate(&pkg, entity.Category{CategoryID: pkg.CategoryID})
 	}
-		// เพิ่ม CartStatus
-		cartStatuses := []entity.CartStatus{
-			{StatusName: "Active"}, 
-			{StatusName: "Completed"},
-		}
-	
-		for _, status := range cartStatuses {
-			db.FirstOrCreate(&status, entity.CartStatus{StatusName: status.StatusName})
-		}
-		paymentStatuses := []entity.PaymentStatus{
-			{StatusName: "Pending"},  
-			{StatusName: "Completed"}, 
-		}
-	
-		for _, status := range paymentStatuses {
-			db.FirstOrCreate(&status, entity.PaymentStatus{StatusName: status.StatusName})
-		}
-		banks := []entity.Bank{
-			{BankName: "ธนาคารกรุงเทพ"},
-			{BankName: "ธนาคารกสิกรไทย"},
-			{BankName: "ธนาคารไทยพาณิชย์"},
-			{BankName: "ธนาคารกรุงไทย"},
-			{BankName: "ธนาคารออมสิน"},
-			{BankName: "ธนาคารทหารไทยธนชาต (TTB)"},
-			{BankName: "ธนาคารซีไอเอ็มบีไทย (CIMB)"},
-			{BankName: "ธนาคารยูโอบี (UOB)"},
-			{BankName: "ธนาคารกรุงศรีอยุธยา"},
-		}
-	
-		for _, bank := range banks {
-			db.FirstOrCreate(&bank, entity.Bank{BankName: bank.BankName})
-		}
+	// เพิ่ม CartStatus
+	cartStatuses := []entity.CartStatus{
+		{StatusName: "Active"},
+		{StatusName: "Completed"},
+	}
 
+	for _, status := range cartStatuses {
+		db.FirstOrCreate(&status, entity.CartStatus{StatusName: status.StatusName})
+	}
+	paymentStatuses := []entity.PaymentStatus{
+		{StatusName: "Pending"},
+		{StatusName: "Completed"},
+	}
+
+	for _, status := range paymentStatuses {
+		db.FirstOrCreate(&status, entity.PaymentStatus{StatusName: status.StatusName})
+	}
+	banks := []entity.Bank{
+		{BankName: "ธนาคารกรุงเทพ"},
+		{BankName: "ธนาคารกสิกรไทย"},
+		{BankName: "ธนาคารไทยพาณิชย์"},
+		{BankName: "ธนาคารกรุงไทย"},
+		{BankName: "ธนาคารออมสิน"},
+		{BankName: "ธนาคารทหารไทยธนชาต (TTB)"},
+		{BankName: "ธนาคารซีไอเอ็มบีไทย (CIMB)"},
+		{BankName: "ธนาคารยูโอบี (UOB)"},
+		{BankName: "ธนาคารกรุงศรีอยุธยา"},
+	}
+
+	for _, bank := range banks {
+		db.FirstOrCreate(&bank, entity.Bank{BankName: bank.BankName})
+	}
 
 }

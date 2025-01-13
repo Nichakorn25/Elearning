@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import './ClassSchedule.css';
-// import { useNavigate } from 'react-router-dom';
-import Header from '../../Component/Header/Header'; // เรียกใช้ Header ที่แยกไว้
+import Header from '../../Component/Header/Header';
 import AddSubjectPopup from '../AddSubjectPopup/AddSubjectPopup';
 import CreditSummary from '../CreditSummary/CreditSummary';
-
+import { CourseInterface } from '../../../Interface/IClassSchedule';
+import {message} from 'antd';
 
 const ClassSchedule: React.FC = () => {
-  // ช่วงเวลา (Time Slots)
   const timeslots = [
     '08:00-09:00',
     '09:00-10:00',
@@ -22,80 +21,115 @@ const ClassSchedule: React.FC = () => {
     '18:00-19:00',
     '19:00-20:00',
   ];
-  
 
-  // ข้อมูลตารางเรียน (Days & Slots)
-  const [schedule, setSchedule] = useState([
-    { day: 'จันทร์', slots: Array(timeslots.length).fill('') },
-    { day: 'อังคาร', slots: Array(timeslots.length).fill('') },
-    { day: 'พุธ', slots: Array(timeslots.length).fill('') },
-    { day: 'พฤหัส', slots: Array(timeslots.length).fill('') },
-    { day: 'ศุกร์', slots: Array(timeslots.length).fill('') },
-  ]);
+  const [schedule, setSchedule] = useState(
+    [
+      { day: 'จันทร์', slots: Array(timeslots.length).fill('') },
+      { day: 'อังคาร', slots: Array(timeslots.length).fill('') },
+      { day: 'พุธ', slots: Array(timeslots.length).fill('') },
+      { day: 'พฤหัส', slots: Array(timeslots.length).fill('') },
+      { day: 'ศุกร์', slots: Array(timeslots.length).fill('') },
+    ]
+  );
+
+  const [courses, setCourses] = useState<CourseInterface[]>([]); // ใช้ CourseInterface
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const togglePopup = () => setPopupVisible(!isPopupVisible);
+
+  const handleAddCourse = (course: CourseInterface) => {
+    // ตรวจสอบการซ้อนทับของเวลา
+    const dayRow = schedule.find((row) => row.day === course.Day);
+    if (dayRow) {
+      const startIndex = timeslots.findIndex((time) => time === course.StartTime);
+      const endIndex = timeslots.findIndex((time) => time === course.EndTime);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        if (dayRow.slots[i]) {
+          message.error(`เวลาเรียนของ ${course.CourseName} ซ้อนกับ ${dayRow.slots[i]}`);
+          return;
+        }
+      }
+    }
+
+    // เพิ่มข้อมูลลงตาราง CreditSummary
+    setCourses((prevCourses) => [...prevCourses, course]);
+
+    // อัปเดตตารางเรียน
+    const newSchedule = schedule.map((dayRow) => {
+      if (dayRow.day === course.Day) {
+        const updatedSlots = [...dayRow.slots];
+        const startIndex = timeslots.findIndex((time) => time === course.StartTime);
+        const endIndex = timeslots.findIndex((time) => time === course.EndTime);
+
+        for (let i = startIndex; i <= endIndex; i++) {
+          updatedSlots[i] = course.CourseName;
+        }
+        return { ...dayRow, slots: updatedSlots };
+      }
+      return dayRow;
+    });
+
+    setSchedule(newSchedule);
+  };
+
+  const handleRemoveCourse = (id: number) => {
+    // ลบวิชาออกจาก courses
+    setCourses((prevCourses) => prevCourses.filter((course) => course.ID !== id));
+  
+    // อัปเดตตารางเรียน
+    const updatedSchedule = schedule.map((dayRow) => {
+      const updatedSlots = dayRow.slots.map((slot) =>
+        courses.find((course) => course.ID === id && course.CourseName === slot) ? "" : slot
+      );
+      return { ...dayRow, slots: updatedSlots };
+    });
+  
+    setSchedule(updatedSchedule);
+  };
 
   const handleSave = () => {
     console.log('Saving schedule...', schedule);
-    alert('ตารางเรียนถูกบันทึก!');
-  };
-
-  const [isPopupVisible, setPopupVisible] = useState(false);
-
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
+    message.success('ตารางเรียนถูกบันทึก!');
   };
 
   return (
     <div className="dashboard">
-      {/* Header Section */}
       <Header />
-      
-      {/* Schedule Table */}
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>
         <table>
           <thead>
-          <tr>
-            <th>Day</th>
-            {timeslots.map((slot, index) => (
-              <th key={index}>{slot}</th>
-            ))}
-          </tr>
+            <tr>
+              <th>Day</th>
+              {timeslots.map((slot, index) => (
+                <th key={index}>{slot}</th>
+              ))}
+            </tr>
           </thead>
           <tbody>
             {schedule.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {/* แสดงชื่อวันในคอลัมน์ Day */}
-                <td className="day-name" >{row.day}</td>
+                <td className="day-name">{row.day}</td>
                 {row.slots.map((slot, slotIndex) => (
-                  <td key={slotIndex}>
-                    <input
-                      type="text"
-                      value={slot}
-                      onChange={(e) => {
-                        const newSchedule = [...schedule];
-                        newSchedule[rowIndex].slots[slotIndex] = e.target.value;
-                        setSchedule(newSchedule);
-                      }}
-                    />
-                  </td>
+                  <td key={slotIndex}>{slot}</td>
                 ))}
               </tr>
             ))}
           </tbody>
         </table>
       </section>
-
-      {/* Footer */}
       <footer className="footer">
         <button className="save-button" onClick={handleSave}>
           บันทึกตาราง
         </button>
-        <button className="add-course-button" onClick={togglePopup}>เพิ่มวิชา </button>
+        <button className="add-course-button" onClick={togglePopup}>
+          เพิ่มวิชา
+        </button>
       </footer>
-
-      <CreditSummary courses={[]} /> {/* ตารางหน่วยกิต */}
-
-      <AddSubjectPopup isVisible={isPopupVisible} onClose={togglePopup} />
+      // CreditSummary Component
+      <CreditSummary courses={courses} onRemoveCourse={handleRemoveCourse} />
+      <AddSubjectPopup isVisible={isPopupVisible} onClose={togglePopup} onAddCourse={handleAddCourse} />
     </div>
   );
 };

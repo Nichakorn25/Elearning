@@ -5,15 +5,19 @@ import { SearchCourses } from "../../../services/https/index"; // Import ฟั�
 import Loading from "../../Component/Loading/Loading"; // Import Loading animation
 import { message } from "antd";
 import SearchResultsPopup from "../SearchResultPopup/SearchResultPopup"; // Import Popup แสดงผลลัพธ์
+import { CourseInterface } from "../../../Interface/IClassSchedule";
 
 interface AddSubjectPopupProps {
   isVisible: boolean;
   onClose: () => void;
+  onAddCourse: (course: CourseInterface) => void;
+
 }
 
 const AddSubjectPopup: React.FC<AddSubjectPopupProps> = ({
   isVisible,
   onClose,
+  onAddCourse,
 }) => {
   const [isGuideVisible, setGuideVisible] = useState(false); // State สำหรับ popup วิธีค้นหา
   const [semester, setSemester] = useState("1"); // State สำหรับเทอม
@@ -115,13 +119,22 @@ const AddSubjectPopup: React.FC<AddSubjectPopupProps> = ({
 
         {/* Popup แสดงผลลัพธ์ */}
         <SearchResultsPopup
-          isVisible={isResultsPopupVisible}
-          onClose={() => setResultsPopupVisible(false)}
-          results={searchResults}
-          onAddCourse={(course) => {
-            console.log("Course added:", course);
-          }}
-        />
+  isVisible={isResultsPopupVisible}
+  onClose={() => setResultsPopupVisible(false)}
+  results={searchResults}
+  onAddCourse={(course) => {
+    const formattedCourse: CourseInterface = {
+      ...course,
+      CourseDate: course.CourseDate || "",
+      CategoryID: course.CategoryID || 0,
+      UserID: course.UserID || 0,
+      SemesterID: course.SemesterID || 0,
+      DayofWeekID: course.DayofWeekID || 0,
+    };
+    onAddCourse(formattedCourse);
+  }}
+/>
+
       </div>
     </div>
   );

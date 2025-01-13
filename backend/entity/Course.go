@@ -23,6 +23,8 @@ type Course struct {
 
 	ClassSchedule []ClassSchedule `gorm:"foreignKey:CourseID"`
 
+	StudyTime []StudyTime `gorm:"foreignKey:CourseID"`
+
 	CategoryID uint `json:"CategoryID"`
 	Category   Category `gorm:"foreignKey:CategoryID"`
 

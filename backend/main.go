@@ -35,7 +35,7 @@ func main() {
 	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
 	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
-	r.Static("/Uploads", "./uploads") 
+	r.Static("/Uploads", "./uploads")
 
 	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
 	// r.POST("/verify_otp", controller.VerifyOTP)
@@ -68,7 +68,17 @@ func main() {
 		//router.GET("/users/filter", controller.ListUsersFilters)
 
 		//Planner
-		router.GET("/searchCourses", controller.SearchCourses)
+		// Routes สำหรับการค้นหาและจัดการข้อมูล Courses
+		router.GET("/searchCourses", controller.SearchCourses)                         // ค้นหารายวิชา
+		router.GET("/courses/:id/study-time", controller.GetStudyTimeByCourseId)       // ดึงเวลาเรียนของรายวิชา
+		router.GET("/courses/:id/exam-schedule", controller.GetExamScheduleByCourseId) // ดึงตารางสอบของรายวิชา
+
+		// Routes สำหรับการจัดการตารางเรียน
+		router.POST("/class-schedule", controller.AddCourseToSchedule)            // เพิ่มรายวิชาในตารางเรียน
+		router.DELETE("/class-schedule/:id", controller.RemoveCourseFromSchedule) // ลบรายวิชาออกจากตารางเรียน
+
+		// Route สำหรับค้นหารายวิชาพร้อมข้อมูลเพิ่มเติม
+		// router.GET("/searchCoursesWithDetails", controller.SearchCoursesWithDetails) // ค้นหารายวิชาพร้อม StudyTime และ ExamSchedule
 
 		//----------------------//
 		router.POST("/users", controller.CreateUser)
@@ -149,8 +159,8 @@ func main() {
 		router.GET("/submission/:user_id/:assignment_id", controller.GetSubmissionWithAttachment)
 		router.GET("/assignments/:assignment_id/submissions", controller.GetSubmissionWithAttachmentAll)
 		router.POST("/submissions", controller.CreateSubmissionWithAttachment)
-		router.PUT("/submissions/:id", controller.UpdateSubmissionWithAttachment)    
-		router.DELETE("/submissions/:id", controller.DeleteSubmission) 
+		router.PUT("/submissions/:id", controller.UpdateSubmissionWithAttachment)
+		router.DELETE("/submissions/:id", controller.DeleteSubmission)
 
 		//TransactionLog
 		router.GET("/transactionlogs", controller.GetTransactionLog)

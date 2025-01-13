@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
 
       {/* แนะนำตามสาขาที่เรียน */}
       <div className="stddashboard-recommend">
-        <h2>เนื่องจากคุณเป็นนักศึกษาวิศวกรรมศาสตร์ สาขาวิศวกรรมคอมพิวเตอร์</h2>
+        <h2>เนื่องจากคุณเป็นนักศึกษาสำนักวิชาวิศวกรรมศาสตร์</h2>
         <div className="stddashboard-course-list">
           <div className="stddashboard-course-card">
             <img src={Course05} alt="Course 01" />
