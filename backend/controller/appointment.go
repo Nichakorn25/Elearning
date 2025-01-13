@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+
+//ไม่ได้ใช้
 func CreateAvailability(c *gin.Context) {
 	var availability entity.Availability
 
@@ -28,7 +30,9 @@ func CreateAvailability(c *gin.Context) {
 		"data":    availability,
 	})
 }
+//not use
 
+//ใช้
 func CreateTeacherAppointment(c *gin.Context) {
 	var Appointment entity.TeacherAppointment
 
@@ -60,7 +64,7 @@ func CreateTeacherAppointment(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "post Appointment success", "data": u})
 }
 
-// GET /teacher/appointments/:teacherId
+
 // GetTeacherAppointments ดึง Appointment ตาม UserID (อาจารย์)
 func GetTeacherAppointments(c *gin.Context) {
 	teacherId := c.Param("teacherId") // รับ UserID ของอาจารย์
@@ -76,8 +80,9 @@ func GetTeacherAppointments(c *gin.Context) {
 		"appointments": appointments,
 	})
 }
+//not use
 
-
+//use
 func GetTeacherAppointmentsByUserID(c *gin.Context) {
 	userId := c.Param("userId")
 	var appointments []entity.TeacherAppointment
@@ -97,6 +102,7 @@ func GetTeacherAppointmentsByUserID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, appointments)
 }
+//use
 
 func GetAppointmentsForStudent(c *gin.Context) {
 	teacherId := c.Param("teacherId")
@@ -159,10 +165,11 @@ func BookAppointment(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Appointment booked successfully", "data": booking})
 }
+//not use
 
 
 
-// list Day of week
+// list Day of week use
 func ListDays(c *gin.Context) {
 
 	var days []entity.DayofWeek
