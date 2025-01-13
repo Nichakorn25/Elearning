@@ -64,42 +64,9 @@ async function DeleteAnnouncementById(id: string) {
     .catch((e) => e.response);
 }
 
-// ฟังก์ชันดึง Departments
-async function GetDepartments(){
-  return await axios
-      .get(`${apiUrl}/departments`, requestOptions) // ปรับ URL ให้ตรงกับที่ API ใช้
-      .then((res) => res)
-      .catch((e) => e.response);
-}
-
-// ฟังก์ชันดึง Majors ตาม Department ID
-async function GetMajors(departmentId: string){
-  return await axios
-  .get(`${apiUrl}/majors/${departmentId}`, requestOptions)
-
-  .then((res) => res)
-
-  .catch((e) => e.response);
-
-}
-
 async function GetCategories() {
   return await axios
     .get(`${apiUrl}/categories`, requestOptions) // Replace with actual API endpoint for categories
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-async function GetSemesters() {
-  return await axios
-    .get(`${apiUrl}/semesters`, requestOptions) // Replace with actual API endpoint for semesters
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-async function GetDayOfWeek() {
-  return await axios
-    .get(`${apiUrl}/daysofweek`, requestOptions) // Replace with actual API endpoint for day of week
     .then((res) => res)
     .catch((e) => e.response);
 }
@@ -111,206 +78,6 @@ async function ListUsers() {
     .then((res) => res)
     .catch((e) => e.response);
 }
-
-//ไม่ใช้
-// async function GetUsersByFilters(filters: {
-//   RoleID: number;
-//   DepartmentID?: string;
-//   MajorID?: string;
-// }) {
-//   const { RoleID, DepartmentID, MajorID } = filters;
-//   const params = new URLSearchParams();
-
-//   if (RoleID) params.append("RoleID", RoleID.toString());
-//   if (DepartmentID) params.append("DepartmentID", DepartmentID);
-//   if (MajorID) params.append("MajorID", MajorID);
-
-//   const response = await axios
-//     .get(`${apiUrl}/users`, {
-//       params, // ส่งค่าพารามิเตอร์ไปใน URL
-//     })
-//     .then((res) => res)
-//     .catch((err) => err.response);
-
-//   return response;
-// }
-// ค้นหาอาจารย์จากคำค้นหา
-async function SearchProfessors(searchQuery: string) {
-  const Authorization = localStorage.getItem("token");
-  const Bearer = localStorage.getItem("token_type");
-
-  const requestOptions = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${Bearer} ${Authorization}`,
-    },
-  };
-
-  return axios
-    .get(`${apiUrl}/searchProfessors?filter=${searchQuery}`, requestOptions)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error("Error searching professors:", err);
-      throw err;
-    });
-}
-
-// ค้นหาคอร์สจากคำค้นหาและเทอม
-async function SearchCourses(semester: string, searchTerm: string) {
-  const Authorization = localStorage.getItem("token");
-  const Bearer = localStorage.getItem("token_type");
-
-  const requestOptions = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${Bearer} ${Authorization}`,
-    },
-  };
-
-  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
-    searchTerm
-  )}`;
-
-  console.log("Sending request to:", url); // Debug URL
-
-  return axios
-    .get(url, requestOptions)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error("Error during API request:", err.response || err.message);
-      throw err;
-    });
-}
-
-
-
-//Filters
-async function ListUsersFilters(departmentId: string, majorId: string, roleId: string) {
-  return await axios
-    .get(`${apiUrl}/users/filter?departmentId=${departmentId}&majorId=${majorId}&roleId=${roleId}`, requestOptions)///filter?departmentId=4&majorId=16&roleId=2
-    .then((res) => res)
-    .catch((e) => {
-      console.error("Error fetching users:", e.response?.data || e.message);
-      throw e;
-    });
-}
-async function SaveAvailability(data: {
-  day: string;
-  start_time: string | null;
-  end_time: string | null;
-  is_available: boolean;
-}) {
-  return axios
-    .post(`${apiUrl}/availabilities`, data, requestOptions)
-    .then((res) => res)
-    .catch((e) => {
-      console.error("Error saving availability:", e.response?.data || e.message);
-      throw e;
-    });
-}
-
-async function SaveAppointment(data: TeacherAppointmentInterface) {
-  return axios
-    .post(`${apiUrl}/appointments`, data, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-// ดึงข้อมูล Appointment ตาม UserID ของอาจารย์
-async function GetTeacherAppointments(teacherId: string) {
-  return axios
-    .get<TeacherAppointmentInterface[]>(
-      `${apiUrl}/teacher/appointments/${teacherId}`,
-      requestOptions
-    )
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-async function BookAppointment(data: StudentBookingInterface) {
-  return axios
-    .post(`${apiUrl}/appointments/book`, data, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-// ดึงวัน ในแต่ละสัปดาห์
-async function GetDay() {
-
-  return await axios
-
-    .get(`${apiUrl}/day`, requestOptions)
-
-    .then((res) => res)
-
-    .catch((e) => e.response);
-
-}
-
-//จองนัดหมาย
-async function CreateStudentBooking(data: StudentBookingInterface) {
-  return axios
-    .post(`${apiUrl}/CreateStudentBooking`, data, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-//ดึงstudentbookingใส่notification ไม่ได้ใช้
-async function ListStudentBooking(userID: string) {
-  return axios
-    .get(`${apiUrl}/student/bookings?userID=${userID}`, requestOptions)
-    .then((res) => res)
-    .catch((e) => e.response);
-}
-
-// get message by id ใช้อันนี้
-async function GetMessageById(id: string) {
-
-  return await axios
-
-    .get(`${apiUrl}/message/${id}`, requestOptions)
-
-    .then((res) => res)
-
-    .catch((e) => e.response);
-
-}
-
-
-// Save Appointment
-// async function SaveAppointment(
-//   title: string,
-//   duration: string,
-//   buffer_time: number,
-//   max_bookings: number,
-//   location: string,
-//   description: string,
-//   days_availability: Array<{ day: string; start: string | null; end: string | null; unavailable: boolean }>,
-//   user_id: number,
-//   data: any = {} // Default value
-// ) {
-//   const appointmentData = {
-//     title,
-//     duration,
-//     buffer_time,
-//     max_bookings,
-//     location,
-//     description,
-//     days_availability,
-//     user_id,
-//     ...data // Merge additional data if provided
-//   };
-
-//   return await axios
-//     .post(`${apiUrl}/appointments`, appointmentData, requestOptions)
-//     .then((res) => res.data)
-//     .catch((e) => {
-//       console.error("Error saving appointment:", e.response?.data || e.message);
-//       throw e;
-//     });
-// }
-
-
 
 async function SignIn(data: SignInInterface) {
 
@@ -761,13 +528,185 @@ async function UpdateTransactionLog(id: string, statusID: number) {
     .catch((e) => e.response);
 }
 
+//----------------------------------------Appointment----------------------------------------
+//ดึงstudentbookingใส่notification ไม่ได้ใช้
+async function ListStudentBooking(userID: string) {
+  return axios
+    .get(`${apiUrl}/student/bookings?userID=${userID}`, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// ค้นหาคอร์สจากคำค้นหาและเทอม
+async function SearchCourses(semester: string, searchTerm: string) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
+    searchTerm
+  )}`;
+
+  console.log("Sending request to:", url); // Debug URL
+
+  return axios
+    .get(url, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error during API request:", err.response || err.message);
+      throw err;
+    });
+}
+
+// get message by id ใช้อันนี้
+async function GetMessageById(id: string) {
+
+  return await axios
+
+    .get(`${apiUrl}/message/${id}`, requestOptions)
+
+    .then((res) => res)
+
+    .catch((e) => e.response);
+
+}
+
+// ฟังก์ชันดึง Departments
+async function GetDepartments(){
+  return await axios
+      .get(`${apiUrl}/departments`, requestOptions) // ปรับ URL ให้ตรงกับที่ API ใช้
+      .then((res) => res)
+      .catch((e) => e.response);
+}
+
+// ฟังก์ชันดึง Majors ตาม Department ID
+async function GetMajors(departmentId: string){
+  return await axios
+  .get(`${apiUrl}/majors/${departmentId}`, requestOptions)
+
+  .then((res) => res)
+
+  .catch((e) => e.response);
+
+}
+
+async function GetSemesters() {
+  return await axios
+    .get(`${apiUrl}/semesters`, requestOptions) // Replace with actual API endpoint for semesters
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function GetDayOfWeek() {
+  return await axios
+    .get(`${apiUrl}/daysofweek`, requestOptions) // Replace with actual API endpoint for day of week
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+//ดึงอาจารย์ตามคณะและสาขา
+async function ListUsersFilters(departmentId: string, majorId: string, roleId: string) {
+  return await axios
+    .get(`${apiUrl}/users/filter?departmentId=${departmentId}&majorId=${majorId}&roleId=${roleId}`, requestOptions)///filter?departmentId=4&majorId=16&roleId=2
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error fetching users:", e.response?.data || e.message);
+      throw e;
+    });
+}
+
+// ค้นหาอาจารย์จากคำค้นหา
+async function SearchProfessors(searchQuery: string) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
+  return axios
+    .get(`${apiUrl}/searchProfessors?filter=${searchQuery}`, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error searching professors:", err);
+      throw err;
+    });
+}
+
+async function SaveAppointment(data: TeacherAppointmentInterface) {
+  return axios
+    .post(`${apiUrl}/appointments`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+//ไม่ได้ใช้
+async function SaveAvailability(data: {
+  day: string;
+  start_time: string | null;
+  end_time: string | null;
+  is_available: boolean;
+}) {
+  return axios
+    .post(`${apiUrl}/availabilities`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error saving availability:", e.response?.data || e.message);
+      throw e;
+    });
+}
+
+// ดึงข้อมูล Appointment ตาม UserID ของอาจารย์
+async function GetTeacherAppointments(teacherId: string) {
+  return axios
+    .get<TeacherAppointmentInterface[]>(
+      `${apiUrl}/teacher/appointments/${teacherId}`,
+      requestOptions
+    )
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+async function BookAppointment(data: StudentBookingInterface) {
+  return axios
+    .post(`${apiUrl}/appointments/book`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
+// ดึงวัน ในแต่ละสัปดาห์
+async function GetDay() {
+
+  return await axios
+
+    .get(`${apiUrl}/day`, requestOptions)
+
+    .then((res) => res)
+
+    .catch((e) => e.response);
+
+}
+
+//จองนัดหมาย
+async function CreateStudentBooking(data: StudentBookingInterface) {
+  return axios
+    .post(`${apiUrl}/CreateStudentBooking`, data, requestOptions)
+    .then((res) => res)
+    .catch((e) => e.response);
+}
+
 
 export{
-  GetDepartments,
-  GetMajors,
   GetCategories,
-  GetSemesters,
-  GetDayOfWeek,
   ListAnnouncements,
   GetAnnouncementById,
   CreateAnnouncement,
@@ -787,14 +726,6 @@ export{
   DeleteUserByID,
   UpdateUser,
   UpdateUserByid,
-  ListUsersFilters,
-  SearchProfessors,
-  SaveAppointment,
-  SaveAvailability,
-  GetTeacherAppointments,
-  BookAppointment,
-  GetDay,
-  CreateStudentBooking,
   DeleteSellerById,
   UpdateSellerById,
   CreateSeller,
@@ -824,7 +755,21 @@ export{
   ListReviews,
   CreateReview,
   GetReviewsBySheetID,
+
+  //Appointment
   ListStudentBooking,
   SearchCourses,
   GetMessageById,
+  GetDepartments,
+  GetMajors,
+  GetSemesters,
+  GetDayOfWeek,
+  ListUsersFilters,
+  SearchProfessors,
+  SaveAppointment,
+  SaveAvailability,
+  GetTeacherAppointments,
+  BookAppointment,
+  GetDay,
+  CreateStudentBooking,
 };

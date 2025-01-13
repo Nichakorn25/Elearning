@@ -1,6 +1,6 @@
 import React from 'react';
 import './HeaderBeforeLogin.css'; // เพิ่ม CSS เฉพาะสำหรับ Header
-import logo from '../../../assets/sutbranding2.jpg';
+import logo from '../../../assets/sebranding.jpg';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderBeforeLoginProps {
