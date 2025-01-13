@@ -1,21 +1,17 @@
 // CreateAppointment.jsx
 import React, { useEffect, useState } from "react";
 import {
-  Modal,
   Input,
   Select,
-  TimePicker,
-  Checkbox,
   Button,
   message,
 } from "antd";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 import TextArea from "antd/lib/input/TextArea";
 import "./CreateAppointment.css";
 import {
   GetDay,
   SaveAppointment,
-  SaveAvailability,
 } from "../../../../services/https/index";
 import {
   DayInterface,
@@ -23,13 +19,13 @@ import {
 } from "../../../../Interface/IAppointment";
 
 const { Option } = Select;
-const { RangePicker } = TimePicker;
+// const { RangePicker } = TimePicker;
 
 const CreateAppointment: React.FC = () => {
   const [title, setTitle] = useState("");
   const [duration, setDuration] = useState(1);
   const [SelectDay, setSelectDay] = useState(0);
-  const [daysAvailability, setDaysAvailability] = useState([
+  const [daysAvailability] = useState([
     { day: "Sunday", start: null, end: null, unavailable: true },
     { day: "Monday", start: "09:00", end: "17:00", unavailable: false },
     { day: "Tuesday", start: "09:00", end: "17:00", unavailable: false },
@@ -38,8 +34,8 @@ const CreateAppointment: React.FC = () => {
     { day: "Friday", start: "09:00", end: "17:00", unavailable: false },
     { day: "Saturday", start: null, end: null, unavailable: true },
   ]);
-  const [bufferTime, setBufferTime] = useState(30);
-  const [maxBookings, setMaxBookings] = useState(4);
+  const [bufferTime] = useState(30);
+  const [maxBookings] = useState(4);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const userId = localStorage.getItem("id");
@@ -84,8 +80,8 @@ const CreateAppointment: React.FC = () => {
     const values: TeacherAppointmentInterface = {
       title: title,
       appointment_duration: duration,
-      buffer_time: bufferTime,
-      max_bookings: maxBookings,
+      // buffer_time: bufferTime,
+      // max_bookings: maxBookings,
       location: location,
       description: description,
       UserID: Number(userId),
@@ -117,22 +113,22 @@ const CreateAppointment: React.FC = () => {
     }
   };
 
-  const handleDayChange = (index: number, unavailable: boolean) => {
-    const updatedDays = [...daysAvailability];
-    updatedDays[index].unavailable = unavailable;
-    if (unavailable) {
-      updatedDays[index].start = null;
-      updatedDays[index].end = null;
-    }
-    setDaysAvailability(updatedDays);
-  };
+  // const handleDayChange = (index: number, unavailable: boolean) => {
+  //   const updatedDays = [...daysAvailability];
+  //   updatedDays[index].unavailable = unavailable;
+  //   if (unavailable) {
+  //     updatedDays[index].start = null;
+  //     updatedDays[index].end = null;
+  //   }
+  //   setDaysAvailability(updatedDays);
+  // };
 
-  const handleTimeChange = (index: number, times: any) => {
-    const updatedDays = [...daysAvailability];
-    updatedDays[index].start = times ? times[0].format("HH:mm") : null;
-    updatedDays[index].end = times ? times[1].format("HH:mm") : null;
-    setDaysAvailability(updatedDays);
-  };
+  // const handleTimeChange = (index: number, times: any) => {
+  //   const updatedDays = [...daysAvailability];
+  //   updatedDays[index].start = times ? times[0].format("HH:mm") : null;
+  //   updatedDays[index].end = times ? times[1].format("HH:mm") : null;
+  //   setDaysAvailability(updatedDays);
+  // };
 
   return (
     <div>

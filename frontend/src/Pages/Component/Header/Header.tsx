@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar"; // Import Sidebar
 import "./Header.css";
-import axios from "axios";
-import { StudentBookingInterface , DayInterface } from "../../../Interface/IAppointment";
+// import axios from "axios";
+import { StudentBookingInterface } from "../../../Interface/IAppointment";
 import { GetMessageById } from "../../../services/https";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const [unreadBookings, setUnreadBookings] = useState(0);
-  const [bookings, setBookings] = useState([]);
+  // const [unreadBookings, setUnreadBookings] = useState(0);
+  const [bookings] = useState([]);
   const [isNotificationVisible, setNotificationVisible] = useState(false);
 
   // ดึงข้อมูลการจอง

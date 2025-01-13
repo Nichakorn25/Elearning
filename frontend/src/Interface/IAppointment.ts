@@ -14,7 +14,7 @@ export interface TeacherAppointmentInterface {
   date: number | null;
   ID?: number;
   title?: string;
-  appointment_duration?: string;
+  appointment_duration?: string | number; 
   // buffer_time?: number;
   // max_bookings?: number;
   location?: string;

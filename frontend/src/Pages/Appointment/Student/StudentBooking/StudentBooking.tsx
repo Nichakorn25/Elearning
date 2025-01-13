@@ -11,7 +11,7 @@ import {
   SearchProfessors,
 } from "../../../../services/https";
 import { UserInterface } from "../../../../Interface/IUser";
-import BookingPopup from "../BookingPopup/BookingPopup";
+// import BookingPopup from "../BookingPopup/BookingPopup";
 import { GetTeacherAppointments } from "../../../../services/https";
 import {
   StudentBookingInterface,
@@ -20,17 +20,17 @@ import {
 import Loading from "../../../Component/Loading/Loading";
 
 const { Option } = Select;
-const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+// const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
 const StudentBooking: React.FC = () => {
-  const [currentWeek, setCurrentWeek] = useState(0);
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  // const [currentWeek, setCurrentWeek] = useState(0);
+  // const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  // const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
     null
   );
   const [selectedMajor, setSelectedMajor] = useState<string | null>(null);
-  const [professor, setProfessor] = useState<string | null>(null);
+  // const [professor, setProfessor] = useState<string | null>(null);
   const [searchProfessor, setSearchProfessor] = useState<string>(""); // ใช้ searchProfessor แทน
   const [departments, setDepartments] = useState<any[]>([]);
   const [majors, setMajors] = useState<any[]>([]);
@@ -38,15 +38,15 @@ const StudentBooking: React.FC = () => {
   const [appointments, setAppointments] = useState<
     TeacherAppointmentInterface[]
   >([]);
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // const [searchQuery, setSearchQuery] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isDropdownVisible, setDropdownVisible] = useState<boolean>(false); // ควบคุมการแสดงผล Dropdown
-  const [isBookingPopupVisible, setIsBookingPopupVisible] = useState(false);
-  const [popupData, setPopupData] = useState<{
-    date: string;
-    time: string;
-    appointmentId: number;
-  } | null>(null);
+  // const [isBookingPopupVisible, setIsBookingPopupVisible] = useState(false);
+  // const [popupData, setPopupData] = useState<{
+  //   date: string;
+  //   time: string;
+  //   appointmentId: number;
+  // } | null>(null);
   
 
   const [selectedProfessor, setSelectedProfessor] = useState<string | null>(
@@ -62,7 +62,7 @@ const StudentBooking: React.FC = () => {
   const firstName = user?.FirstName || "N/A";
   const lastName = user?.LastName || "N/A";
 
-  const [loadingBooking, setLoadingBooking] = useState(false);
+  // const [loadingBooking, setLoadingBooking] = useState(false);
 
   // const [userSurname, setUserSurname] = useState<string | null>(null);
 

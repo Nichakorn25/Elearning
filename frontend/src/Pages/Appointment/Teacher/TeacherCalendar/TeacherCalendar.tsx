@@ -8,7 +8,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./TeacherCalendar.css";
 import Header from "../../../Component/Header/Header";
-import { Menu, Dropdown, Button } from "antd";
+import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointment from "../CreateAppointment/CreateAppointment";
@@ -35,8 +35,8 @@ const TeacherCalendar: React.FC = () => {
   ]);
 
   const [currentView, setCurrentView] = useState("dayGridMonth");
-  const [isAppointmentModalVisible, setIsAppointmentModalVisible] =
-    useState(false); // สำหรับ Popup
+  // const [setIsAppointmentModalVisible] =
+  //   useState(false); // สำหรับ Popup
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
@@ -119,18 +119,18 @@ const TeacherCalendar: React.FC = () => {
   // };
 
   // เมื่อส่งข้อมูลจาก Popup
-  const handleSubmitAppointment = (values: any) => {
-    const newEvent = {
-      id: String(events.length + 1),
-      title: values.title,
-      start: `${values.startDate}T${values.startTime}`,
-      end: `${values.startDate}T${values.endTime}`,
-      location: values.location,
-      description: values.description,
-    };
-    setEvents([...events, newEvent]);
-    setIsAppointmentModalVisible(false);
-  };
+  // const handleSubmitAppointment = (values: any) => {
+  //   const newEvent = {
+  //     id: String(events.length + 1),
+  //     title: values.title,
+  //     start: `${values.startDate}T${values.startTime}`,
+  //     end: `${values.startDate}T${values.endTime}`,
+  //     location: values.location,
+  //     description: values.description,
+  //   };
+  //   setEvents([...events, newEvent]);
+  //   setIsAppointmentModalVisible(false);
+  // };
 
   const [isTaskModalVisible, setIsTaskModalVisible] = useState(false);
 
@@ -167,18 +167,18 @@ const TeacherCalendar: React.FC = () => {
     console.log("New Task Added:", newEvent);
   };
 
-  const createMenu = (
-    <Menu className="createdropdown">
-      {/* Task Menu */}
-      <Menu.Item key="task" onClick={() => setIsTaskModalVisible(true)}>
-        Task
-      </Menu.Item>
-      {/* Appointment Menu */}
-      {/* <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
-        Appointment Schedule
-      </Menu.Item> */}
-    </Menu>
-  );
+  // const createMenu = (
+  //   <Menu className="createdropdown">
+  //     {/* Task Menu */}
+  //     <Menu.Item key="task" onClick={() => setIsTaskModalVisible(true)}>
+  //       Task
+  //     </Menu.Item>
+  //     {/* Appointment Menu */}
+  //     {/* <Menu.Item key="appointment" onClick={() => setIsAppointmentModalVisible(true)}>
+  //       Appointment Schedule
+  //     </Menu.Item> */}
+  //   </Menu>
+  // );
 
   useEffect(() => {
     if (calendarRef.current) {
