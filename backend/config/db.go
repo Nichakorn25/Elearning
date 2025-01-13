@@ -285,31 +285,31 @@ func SetupDatabase() {
 		{
 			StudyDay:       "Monday",
 			StudyTimeStart: time.Date(2025, 1, 15, 8, 0, 0, 0, time.UTC),  // 08:00
-			StudyTimeEnd:   time.Date(2025, 1, 15, 10, 0, 0, 0, time.UTC), // 10:00
+			StudyTimeEnd:   time.Date(2025, 1, 15, 9, 0, 0, 0, time.UTC), // 10:00
 			CourseID:       1,                                             // ID ของ "Introduction to Computer Science"
 		},
 		{
 			StudyDay:       "Tuesday",
 			StudyTimeStart: time.Date(2025, 1, 16, 10, 0, 0, 0, time.UTC), // 10:00
-			StudyTimeEnd:   time.Date(2025, 1, 16, 12, 0, 0, 0, time.UTC), // 12:00
+			StudyTimeEnd:   time.Date(2025, 1, 16, 11, 0, 0, 0, time.UTC), // 12:00
 			CourseID:       2,                                             // ID ของ "Digital Arts and Design"
 		},
 		{
 			StudyDay:       "Wednesday",
 			StudyTimeStart: time.Date(2025, 1, 17, 14, 0, 0, 0, time.UTC), // 14:00
-			StudyTimeEnd:   time.Date(2025, 1, 17, 16, 0, 0, 0, time.UTC), // 16:00
+			StudyTimeEnd:   time.Date(2025, 1, 17, 15, 0, 0, 0, time.UTC), // 16:00
 			CourseID:       3,                                             // ID ของ "Advanced Physics"
 		},
 		{
 			StudyDay:       "Thursday",
 			StudyTimeStart: time.Date(2025, 1, 18, 13, 0, 0, 0, time.UTC), // 13:00
-			StudyTimeEnd:   time.Date(2025, 1, 18, 15, 0, 0, 0, time.UTC), // 15:00
+			StudyTimeEnd:   time.Date(2025, 1, 18, 14, 0, 0, 0, time.UTC), // 15:00
 			CourseID:       4,                                             // ID ของ "Introduction to Agricultural Technology"
 		},
 		{
 			StudyDay:       "Friday",
 			StudyTimeStart: time.Date(2025, 1, 19, 9, 0, 0, 0, time.UTC),  // 09:00
-			StudyTimeEnd:   time.Date(2025, 1, 19, 11, 0, 0, 0, time.UTC), // 11:00
+			StudyTimeEnd:   time.Date(2025, 1, 19, 10, 0, 0, 0, time.UTC), // 11:00
 			CourseID:       5,                                             // ID ของ "Software Engineering Fundamentals"
 		},
 	}
