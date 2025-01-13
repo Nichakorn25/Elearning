@@ -255,12 +255,25 @@ async function CreateStudentBooking(data: StudentBookingInterface) {
     .catch((e) => e.response);
 }
 
-//ดึงstudentbookingใส่notification
+//ดึงstudentbookingใส่notification ไม่ได้ใช้
 async function ListStudentBooking(userID: string) {
   return axios
     .get(`${apiUrl}/student/bookings?userID=${userID}`, requestOptions)
     .then((res) => res)
     .catch((e) => e.response);
+}
+
+// get message by id ใช้อันนี้
+async function GetMessageById(id: string) {
+
+  return await axios
+
+    .get(`${apiUrl}/message/${id}`, requestOptions)
+
+    .then((res) => res)
+
+    .catch((e) => e.response);
+
 }
 
 
@@ -813,4 +826,5 @@ export{
   GetReviewsBySheetID,
   ListStudentBooking,
   SearchCourses,
+  GetMessageById,
 };

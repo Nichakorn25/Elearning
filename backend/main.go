@@ -52,6 +52,7 @@ func main() {
 
 		//Appointment
 		router.GET("/student/bookings", controller.ListStudentBookingByID)
+		router.GET("/message/:teacherId", controller.GetBookingStudent)
 		router.POST("/availabilities", controller.CreateAvailability)
 		router.POST("/appointments", controller.CreateTeacherAppointment)
 		router.GET("/searchProfessors", controller.SearchProfessors)

@@ -194,6 +194,7 @@ func CreateStudentBooking(c *gin.Context) {
 
 	u := entity.StudentBooking{
 		UserID:        			booking.UserID,
+		DayofWeekID: booking.DayofWeekID,
 		TeacherAppointmentID:   booking.TeacherAppointmentID,
 	}
 
@@ -206,7 +207,7 @@ func CreateStudentBooking(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Booking success", "data": u})
 }
 
-//ดึงข้อมูลStudentBookingใส่Notification
+//ไม่ได้ใช้
 func ListStudentBookingByID(c *gin.Context) {
     var studentBookings []struct {
         ID               uint   `json:"id"`
@@ -259,3 +260,28 @@ func ListStudentBookingByID(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"data": studentBookings})
 }
 
+//ดึงข้อมูลStudentBookingใส่Notification
+func GetBookingStudent(c *gin.Context) {
+    teacherId := c.Param("teacherId") // รับ teacherId จาก URL parameter
+    var teacher []entity.User
+
+    // ตรวจสอบว่า Teacher ID มีอยู่หรือไม่ และ Role เป็น Teacher
+    if err := config.DB().First(&teacher, "id = ?", teacherId).Error; err != nil {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "Teacher not found or invalid"})
+        return
+    }
+
+    // ดึงข้อมูล StudentBooking พร้อม Preload ตาราง TeacherAppointment
+    var studentBookings []entity.StudentBooking
+    if err := config.DB().
+		Preload("User").
+		Preload("DayofWeek").
+        Preload("TeacherAppointment"). // Preload ข้อมูล TeacherAppointment
+        Where("teacher_appointment_id IN (SELECT id FROM teacher_appointments WHERE user_id = ?)", teacherId).
+        Find(&studentBookings).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
+        return
+    }
+
+    c.JSON(http.StatusOK, studentBookings)
+}
