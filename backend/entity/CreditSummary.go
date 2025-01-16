@@ -6,9 +6,11 @@ import (
 type CreditSummary struct {
 	gorm.Model
 	TotalCredit     int            `json:"TotalCredit"`
-	MaximumCredit   int            `json:"MaximumCredit"`
+	
 	ClassScheduleID uint           `json:"ClassScheduleID"`
 	ClassSchedule   ClassSchedule  `gorm:"foreignKey:ClassScheduleID"`
 
+	
+	MaximumCredit   int            `json:"MaximumCredit"`
 	TimeConflict   []TimeConflict `gorm:"foreignKey:CreditSummaryID"`
 }
