@@ -14,6 +14,7 @@ const SearchResultsPopup: React.FC<SearchResultsPopupProps> = ({
   onClose,
   results,
   onAddCourse,
+
 }) => {
   if (!isVisible) return null;
 
@@ -44,7 +45,7 @@ const SearchResultsPopup: React.FC<SearchResultsPopupProps> = ({
                     <td>{course.Credit}</td>
                     <td>{course.Description}</td>
                     <td>
-                      <button onClick={() => onAddCourse(course)}>เพิ่ม</button>
+                      <button onClick={() => onAddCourse(course) }>เพิ่ม</button>
                     </td>
                   </tr>
                 ))}
