@@ -9,8 +9,8 @@ type TimeConflict struct {
 	UserID          uint          `json:"UserID"`
 	User            User          `gorm:"foreignKey:UserID"`
 
-	ClassScheduleID uint          `json:"ClassScheduleID"`
-	ClassSchedule   ClassSchedule `gorm:"foreignKey:ClassScheduleID"`
+	// ClassScheduleID uint          `json:"ClassScheduleID"`
+	// ClassSchedule   ClassSchedule `gorm:"foreignKey:ClassScheduleID"`
 
 	ConflictTypeID  uint          `json:"ConflictTypeID"`
 	ConflictType    ConflictType  `gorm:"foreignKey:ConflictTypeID"`

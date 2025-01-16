@@ -17,5 +17,5 @@ type EnrollmentSuggestion struct {
 	CourseID        uint           `json:"CourseID"`
 	Course          Course         `gorm:"foreignKey:CourseID"`
 
-	ClassSchedules  []ClassSchedule `gorm:"foreignKey:SuggestionID"`
+	// ClassSchedules  []ClassSchedule `gorm:"foreignKey:SuggestionID"`
 }
