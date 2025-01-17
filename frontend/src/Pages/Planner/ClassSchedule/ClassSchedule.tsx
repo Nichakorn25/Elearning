@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./ClassSchedule.css";
 import Header from "../../Component/Header/Header";
 import AddSubjectPopup from "../AddSubjectPopup/AddSubjectPopup";
 import CreditSummary from "../CreditSummary/CreditSummary";
 import { CourseInterface } from "../../../Interface/IClassSchedule";
 import { message } from "antd";
-
 
 const ClassSchedule: React.FC = () => {
   const timeslots = [
@@ -23,14 +22,7 @@ const ClassSchedule: React.FC = () => {
     "19:00-20:00",
   ];
 
-  useEffect(() => {
-      console.log(addtable)
-    }, []);
-
-
-  const [addtable, setAddtable] = useState([
-    {key:1,day:1},
-  ]);
+  const [addtable, setAddtable] = useState([]);
   const [schedule, setSchedule] = useState([
     { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
     { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
@@ -83,44 +75,53 @@ const ClassSchedule: React.FC = () => {
   //   setSchedule(newSchedule);
   // };
 
-  const populateSchedule = (courses) => {
-
-    const updateAddtable = [...addtable, courses]; // Clone the existing schedule table
-
-    // Iterating through the courses
-    updateAddtable.forEach(({ DayofWeekID, StudyTimes, CourseName }) => {
-      // Match the day in schedule using DayofWeekID
-      const dayIndex = updateAddtable.findIndex(
-        (item) => item.key === DayofWeekID
-      );
-
-      if (dayIndex !== -1) {
-        // Map StudyTimes to schedule
-        StudyTimes.forEach(({ StudyTimeStart, StudyTimeEnd }) => {
-          // Extract hours from start and end times
-          const startHour = new Date(StudyTimeStart).getHours();
-          const endHour = new Date(StudyTimeEnd).getHours();
-
-          // Find corresponding slots in timeslots
-          const startIndex = timeslots.findIndex((slot) =>
-            slot.startsWith(`${startHour.toString().padStart(2, "0")}:`)
-          );
-          const endIndex = timeslots.findIndex((slot) =>
-            slot.startsWith(`${endHour.toString().padStart(2, "0")}:`)
-          );
-
-          // Fill the slots with the course name
-          if (startIndex !== -1 && endIndex !== -1) {
-            for (let i = startIndex; i < endIndex; i++) {
-              updateAddtable[dayIndex].slots[i] = CourseName;
-            }
+  const populateSchedule = (course) => {
+    // เพิ่มรายวิชาใหม่ใน addtable
+    setAddtable((prevAddtable) => [...prevAddtable, course]);
+  
+    // เพิ่มรายวิชาใหม่ใน courses สำหรับ CreditSummary
+    setCourses((prevCourses) => [...prevCourses, course]);
+  
+    // อัปเดตตาราง schedule
+    const updatedSchedule = [...schedule];
+  
+    course.StudyTimes.forEach(({ StudyDay, StudyTimeStart, StudyTimeEnd }) => {
+      // แปลง StudyDay เป็นชื่อวันในภาษาไทย
+      const dayMapping = {
+        Monday: "จันทร์",
+        Tuesday: "อังคาร",
+        Wednesday: "พุธ",
+        Thursday: "พฤหัส",
+        Friday: "ศุกร์",
+      };
+  
+      const mappedDay = dayMapping[StudyDay];
+      const dayRow = updatedSchedule.find((row) => row.day === mappedDay);
+  
+      if (dayRow) {
+        const startHour = new Date(StudyTimeStart).getHours();
+        const endHour = new Date(StudyTimeEnd).getHours();
+  
+        const startIndex = timeslots.findIndex((slot) =>
+          slot.startsWith(`${startHour.toString().padStart(2, "0")}:`)
+        );
+        const endIndex = timeslots.findIndex((slot) =>
+          slot.startsWith(`${endHour.toString().padStart(2, "0")}:`)
+        );
+  
+        if (startIndex !== -1 && endIndex !== -1) {
+          for (let i = startIndex; i < endIndex; i++) {
+            dayRow.slots[i] = course.CourseName;
           }
-        });
+        }
       }
     });
-    console.log(updateAddtable);
-    setAddtable(updateAddtable); // Update the state
+  
+    console.log(updatedSchedule);
+    setSchedule(updatedSchedule); // อัปเดต schedule
   };
+  
+  
 
   const handleRemoveCourse = (id: number) => {
     // ลบวิชาออกจาก courses

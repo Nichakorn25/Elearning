@@ -11,7 +11,6 @@ interface AddSubjectPopupProps {
   isVisible: boolean;
   onClose: () => void;
   onAddCourse: (course: CourseInterface) => void;
-
 }
 
 const AddSubjectPopup: React.FC<AddSubjectPopupProps> = ({
@@ -119,22 +118,21 @@ const AddSubjectPopup: React.FC<AddSubjectPopupProps> = ({
 
         {/* Popup แสดงผลลัพธ์ */}
         <SearchResultsPopup
-  isVisible={isResultsPopupVisible}
-  onClose={() => setResultsPopupVisible(false)}
-  results={searchResults}
-  onAddCourse={(course) => {
-    const formattedCourse: CourseInterface = {
-      ...course,
-      CourseDate: course.CourseDate || "",
-      CategoryID: course.CategoryID || 0,
-      UserID: course.UserID || 0,
-      SemesterID: course.SemesterID || 0,
-      DayofWeekID: course.DayofWeekID || 0,
-    };
-    onAddCourse(formattedCourse);
-  }}
-/>
-
+          isVisible={isResultsPopupVisible}
+          onClose={() => setResultsPopupVisible(false)}
+          results={searchResults}
+          onAddCourse={(course) => {
+            const formattedCourse: CourseInterface = {
+              ...course,
+              CourseDate: course.CourseDate || "",
+              CategoryID: course.CategoryID || 0,
+              UserID: course.UserID || 0,
+              SemesterID: course.SemesterID || 0,
+              DayofWeekID: course.DayofWeekID || 0,
+            };
+            onAddCourse(formattedCourse);
+          }}
+        />
       </div>
     </div>
   );
