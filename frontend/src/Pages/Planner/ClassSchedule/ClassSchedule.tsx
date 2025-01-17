@@ -56,7 +56,9 @@ const ClassSchedule: React.FC = () => {
   ];
 
   const getRandomColor = (): string => {
-    const availableColors = colorTable.filter((color) => !usedColors.includes(color));
+    const availableColors = colorTable.filter(
+      (color) => !usedColors.includes(color)
+    );
     if (availableColors.length === 0) {
       message.warning("สีถูกใช้งานหมดแล้ว");
       return "#FFFFFF"; // Default to white if no colors available
@@ -73,46 +75,57 @@ const ClassSchedule: React.FC = () => {
 
     const updatedSchedule = [...schedule];
 
-    course.StudyTimes.forEach(({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
-      const dayMapping: { [key: string]: string } = {
-        Monday: "จันทร์",
-        Tuesday: "อังคาร",
-        Wednesday: "พุธ",
-        Thursday: "พฤหัส",
-        Friday: "ศุกร์",
-      };
+    course.StudyTimes.forEach(
+      ({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
+        const dayMapping: { [key: string]: string } = {
+          Monday: "จันทร์",
+          Tuesday: "อังคาร",
+          Wednesday: "พุธ",
+          Thursday: "พฤหัส",
+          Friday: "ศุกร์",
+        };
 
-      const mappedDay = dayMapping[StudyDay];
-      const dayRow = updatedSchedule.find((row) => row.day === mappedDay);
+        const mappedDay = dayMapping[StudyDay];
+        const dayRow = updatedSchedule.find((row) => row.day === mappedDay);
 
-      if (dayRow) {
-        const startDate = new Date(StudyTimeStart);
-        const endDate = new Date(StudyTimeEnd);
+        if (dayRow) {
+          const startDate = new Date(StudyTimeStart);
+          const endDate = new Date(StudyTimeEnd);
 
-        const startHour = startDate.getUTCHours();
-        const endHour = endDate.getUTCHours();
+          const startHour = startDate.getUTCHours();
+          const endHour = endDate.getUTCHours();
 
-        let timeFront = startHour - 8;
-        let timeEnd = endHour - 8 - 1;
+          let timeFront = startHour - 8;
+          let timeEnd = endHour - 8 - 1;
 
-        if (timeFront >= 0 && timeEnd >= 0 && timeFront < timeslots.length && timeEnd < timeslots.length) {
-          for (let i = timeFront; i <= timeEnd; i++) {
-            if (!dayRow.slots[i]) {
-              dayRow.slots[i] = {
-                courseName: course.CourseName,
-                color: courseColor,
-              };
-            } else {
-              console.warn(`Time conflict for ${course.CourseName} at slot ${timeslots[i]}`);
+          if (
+            timeFront >= 0 &&
+            timeEnd >= 0 &&
+            timeFront < timeslots.length &&
+            timeEnd < timeslots.length
+          ) {
+            for (let i = timeFront; i <= timeEnd; i++) {
+              if (!dayRow.slots[i]) {
+                dayRow.slots[i] = {
+                  courseName: course.CourseName,
+                  color: courseColor,
+                };
+              } else {
+                console.warn(
+                  `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
+                );
+              }
             }
+          } else {
+            console.error(
+              `Time indices out of range for ${course.CourseName}: ${timeFront} - ${timeEnd}`
+            );
           }
         } else {
-          console.error(`Time indices out of range for ${course.CourseName}: ${timeFront} - ${timeEnd}`);
+          console.error(`Failed to map day for ${StudyDay}`);
         }
-      } else {
-        console.error(`Failed to map day for ${StudyDay}`);
       }
-    });
+    );
     console.log(updatedSchedule);
     setSchedule(updatedSchedule);
 
@@ -122,7 +135,6 @@ const ClassSchedule: React.FC = () => {
       { ...course, color: courseColor },
     ]);
   };
-  
 
   const handleRemoveCourse = (id: number) => {
     const courseToRemove = courses.find((course) => course.ID === id);
@@ -148,11 +160,8 @@ const ClassSchedule: React.FC = () => {
           prevColors.filter((color) => color !== courseToRemove.color)
         );
         const updatedSchedule = schedule.map((dayRow) => {
-          const updatedSlots = dayRow.slots.map(
-            (slot) =>
-              slot && slot.courseName === courseToRemove.CourseName
-                ? ""
-                : slot
+          const updatedSlots = dayRow.slots.map((slot) =>
+            slot && slot.courseName === courseToRemove.CourseName ? "" : slot
           );
           return { ...dayRow, slots: updatedSlots };
         });
