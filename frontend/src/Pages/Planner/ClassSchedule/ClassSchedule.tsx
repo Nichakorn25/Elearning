@@ -78,15 +78,15 @@ const ClassSchedule: React.FC = () => {
   const populateSchedule = (course) => {
     // เพิ่มรายวิชาใหม่ใน addtable
     setAddtable((prevAddtable) => [...prevAddtable, course]);
-  
+
     // เพิ่มรายวิชาใหม่ใน courses สำหรับ CreditSummary
     setCourses((prevCourses) => [...prevCourses, course]);
-  
+
     // อัปเดตตาราง schedule
     const updatedSchedule = [...schedule];
-  
+
     course.StudyTimes.forEach(({ StudyDay, StudyTimeStart, StudyTimeEnd }) => {
-      // แปลง StudyDay เป็นชื่อวันในภาษาไทย
+      // แปลง StudyDay จากภาษาอังกฤษเป็นภาษาไทย
       const dayMapping = {
         Monday: "จันทร์",
         Tuesday: "อังคาร",
@@ -94,21 +94,21 @@ const ClassSchedule: React.FC = () => {
         Thursday: "พฤหัส",
         Friday: "ศุกร์",
       };
-  
+
       const mappedDay = dayMapping[StudyDay];
       const dayRow = updatedSchedule.find((row) => row.day === mappedDay);
-  
+
       if (dayRow) {
         const startHour = new Date(StudyTimeStart).getHours();
         const endHour = new Date(StudyTimeEnd).getHours();
-  
+
         const startIndex = timeslots.findIndex((slot) =>
           slot.startsWith(`${startHour.toString().padStart(2, "0")}:`)
         );
         const endIndex = timeslots.findIndex((slot) =>
           slot.startsWith(`${endHour.toString().padStart(2, "0")}:`)
         );
-  
+
         if (startIndex !== -1 && endIndex !== -1) {
           for (let i = startIndex; i < endIndex; i++) {
             dayRow.slots[i] = course.CourseName;
@@ -116,12 +116,9 @@ const ClassSchedule: React.FC = () => {
         }
       }
     });
-  
-    console.log(updatedSchedule);
+
     setSchedule(updatedSchedule); // อัปเดต schedule
   };
-  
-  
 
   const handleRemoveCourse = (id: number) => {
     // ลบวิชาออกจาก courses
@@ -167,28 +164,10 @@ const ClassSchedule: React.FC = () => {
           <tbody>
             {schedule.map((scheduleRow, rowIndex) => (
               <tr key={rowIndex}>
-                {/* คอลัมน์ซ้ายสุด: แสดงชื่อวัน */}
                 <td className="day-name">{scheduleRow.day}</td>
-                {/* คอลัมน์เวลาที่ตรงกับข้อมูลใน addtable */}
-                {timeslots.map((timeslot, slotIndex) => {
-                  // ตรวจสอบข้อมูลใน addtable
-                  const matchedCourse = addtable.find(
-                    (row) =>
-                      row.StudyTimes &&
-                      row.StudyTimes[0]?.StudyDay === scheduleRow.day &&
-                      new Date(row.StudyTimes[0]?.StudyTimeStart).getHours() ===
-                        parseInt(timeslot.split(":")[0]) &&
-                      new Date(row.StudyTimes[0]?.StudyTimeEnd).getHours() ===
-                        parseInt(timeslot.split("-")[1].split(":")[0])
-                  );
-
-                  // แสดงชื่อคอร์สหรือเครื่องหมาย "-" ถ้าไม่มีข้อมูล
-                  return (
-                    <td key={slotIndex}>
-                      {matchedCourse ? matchedCourse.CourseName : "-"}
-                    </td>
-                  );
-                })}
+                {scheduleRow.slots.map((slot, slotIndex) => (
+                  <td key={slotIndex}>{slot || "-"}</td>
+                ))}
               </tr>
             ))}
           </tbody>
