@@ -13,6 +13,7 @@ export interface ExamScheduleInterface {
 
 // Interface สำหรับข้อมูลวิชา (Course)
 export interface CourseInterface {
+  color: string;
   StudyTimes: StudyTimeInterface[];
   ID: number;
   CourseName: string;

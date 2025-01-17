@@ -38,12 +38,40 @@ const ClassSchedule: React.FC = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const togglePopup = () => setPopupVisible(!isPopupVisible);
+  const [usedColors, setUsedColors] = useState<string[]>([]);
+
+  const colorTable = [
+    "#FFCDD2", // Light Red
+    "#F8BBD0", // Light Pink
+    "#E1BEE7", // Light Purple
+    "#D1C4E9", // Lavender
+    "#BBDEFB", // Light Blue
+    "#B3E5FC", // Aqua Blue
+    "#B2DFDB", // Teal
+    "#C8E6C9", // Light Green
+    "#DCEDC8", // Lime Green
+    "#FFF9C4", // Light Yellow
+    "#FFECB3", // Light Orange
+    "#FFE0B2", // Peach
+  ];
+
+  const getRandomColor = (): string => {
+    const availableColors = colorTable.filter(
+      (color) => !usedColors.includes(color)
+    );
+    if (availableColors.length === 0) {
+      message.warning("สีถูกใช้งานหมดแล้ว");
+      return "#FFFFFF"; // Default to white if no colors available
+    }
+    const randomIndex = Math.floor(Math.random() * availableColors.length);
+    return availableColors[randomIndex];
+  };
 
   const populateSchedule = (course: CourseInterface) => {
     console.log("Adding course to schedule:", course);
 
-    setAddtable((prevAddtable) => [...prevAddtable, course]);
-    setCourses((prevCourses) => [...prevCourses, course]);
+    const courseColor = getRandomColor();
+    setUsedColors((prev) => [...prev, courseColor]);
 
     const updatedSchedule = [...schedule];
 
@@ -58,23 +86,17 @@ const ClassSchedule: React.FC = () => {
         };
 
         const mappedDay = dayMapping[StudyDay];
-        console.log("Mapped Day:", mappedDay);
-
         const dayRow = updatedSchedule.find((row) => row.day === mappedDay);
-        console.log("DayRow:", dayRow);
 
         if (dayRow) {
           const startDate = new Date(StudyTimeStart);
           const endDate = new Date(StudyTimeEnd);
 
-          // ดึงชั่วโมงและนาทีจากเวลา
-          const startHour = startDate.getUTCHours(); // ปรับเป็น UTC+7
+          const startHour = startDate.getUTCHours();
           const endHour = endDate.getUTCHours();
 
-          let timeFront = startHour - 8; // คำนวณช่วงเวลาเริ่มต้นใน timeslots
-          let timeEnd = endHour - 8 - 1; // คำนวณช่วงเวลาสิ้นสุดใน timeslots
-
-          console.log("Calculated timeFront:", timeFront, "timeEnd:", timeEnd);
+          let timeFront = startHour - 8;
+          let timeEnd = endHour - 8 - 1;
 
           if (
             timeFront >= 0 &&
@@ -84,7 +106,10 @@ const ClassSchedule: React.FC = () => {
           ) {
             for (let i = timeFront; i <= timeEnd; i++) {
               if (!dayRow.slots[i]) {
-                dayRow.slots[i] = course.CourseName;
+                dayRow.slots[i] = {
+                  courseName: course.CourseName,
+                  color: courseColor,
+                };
               } else {
                 console.warn(
                   `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
@@ -101,20 +126,23 @@ const ClassSchedule: React.FC = () => {
         }
       }
     );
-
-    console.log("Updated Schedule:", updatedSchedule);
+    console.log(updatedSchedule);
     setSchedule(updatedSchedule);
+
+    // เพิ่มวิชาใน courses
+    setCourses((prevCourses) => [
+      ...prevCourses,
+      { ...course, color: courseColor },
+    ]);
   };
 
   const handleRemoveCourse = (id: number) => {
-    console.log("ID to remove:", id); // ตรวจสอบค่า ID
     const courseToRemove = courses.find((course) => course.ID === id);
-  
     if (!courseToRemove) {
       console.error(`Course with ID ${id} not found`);
       return;
     }
-  
+
     Swal.fire({
       title: "Are you sure?",
       text: `คุณต้องการลบวิชา ${courseToRemove.CourseName} ใช่ไหม`,
@@ -125,27 +153,27 @@ const ClassSchedule: React.FC = () => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
-        // ลบวิชาออกจาก `courses`
         setCourses((prevCourses) =>
           prevCourses.filter((course) => course.ID !== id)
         );
-  
-        // อัปเดต `schedule`
+        setUsedColors((prevColors) =>
+          prevColors.filter((color) => color !== courseToRemove.color)
+        );
         const updatedSchedule = schedule.map((dayRow) => {
           const updatedSlots = dayRow.slots.map((slot) =>
-            slot === courseToRemove.CourseName ? "" : slot // ลบเฉพาะช่องที่ตรงกับชื่อวิชา
+            slot && slot.courseName === courseToRemove.CourseName ? "" : slot
           );
           return { ...dayRow, slots: updatedSlots };
         });
-  
         setSchedule(updatedSchedule);
-  
-        Swal.fire("Deleted!", "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว", "success");
-        console.log("Updated Schedule after removal:", updatedSchedule);
+        Swal.fire(
+          "Deleted!",
+          "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
+          "success"
+        );
       }
     });
   };
-  
 
   const handleSave = () => {
     console.log("Saving schedule...", schedule);
@@ -171,7 +199,15 @@ const ClassSchedule: React.FC = () => {
               <tr key={rowIndex}>
                 <td className="day-name">{scheduleRow.day}</td>
                 {scheduleRow.slots.map((slot, slotIndex) => (
-                  <td key={slotIndex}>{slot || ""}</td>
+                  <td
+                    key={slotIndex}
+                    style={{
+                      backgroundColor:
+                        slot && slot.color ? slot.color : "transparent",
+                    }}
+                  >
+                    {slot && slot.courseName ? slot.courseName : ""}
+                  </td>
                 ))}
               </tr>
             ))}
