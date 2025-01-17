@@ -21,10 +21,15 @@ interface CreditSummaryProps {
   onRemoveCourse: (id: number) => void; // เพิ่ม props สำหรับลบวิชา
 }
 
-const CreditSummary: React.FC<CreditSummaryProps> = ({ courses, onRemoveCourse }) => {
+const CreditSummary: React.FC<CreditSummaryProps> = ({
+  courses,
+  onRemoveCourse,
+}) => {
   return (
     <section className="credit-summary">
-      <h2>หน่วยกิตรวม {courses.reduce((sum, course) => sum + course.Credit, 0)}</h2>
+      <h2>
+        หน่วยกิตรวม {courses.reduce((sum, course) => sum + course.Credit, 0)}
+      </h2>
       <table>
         <thead>
           <tr>
@@ -49,7 +54,8 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({ courses, onRemoveCourse }
                     {course.ExamSchedules.map((exam, index) => (
                       <li key={index}>
                         <strong>วันที่:</strong> {exam.ExamDate} <br />
-                        <strong>เวลา:</strong> {exam.StartTime} - {exam.EndTime} <br />
+                        <strong>เวลา:</strong> {exam.StartTime} - {exam.EndTime}{" "}
+                        <br />
                         <strong>สถานที่:</strong> {exam.Location}
                       </li>
                     ))}
@@ -61,7 +67,10 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({ courses, onRemoveCourse }
               <td>
                 <button
                   className="delete-button"
-                  onClick={() => onRemoveCourse(course.ID)}
+                  onClick={() => {
+                    console.log("Deleting course ID:", course.ID); // เพิ่ม log ตรวจสอบค่า ID
+                    onRemoveCourse(course.ID); // ส่ง ID ที่ต้องการลบ
+                  }}
                 >
                   ลบ
                 </button>

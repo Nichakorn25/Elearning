@@ -3,8 +3,12 @@ import "./ClassSchedule.css";
 import Header from "../../Component/Header/Header";
 import AddSubjectPopup from "../AddSubjectPopup/AddSubjectPopup";
 import CreditSummary from "../CreditSummary/CreditSummary";
-import { CourseInterface, StudyTimeInterface } from "../../../Interface/IClassSchedule";
+import {
+  CourseInterface,
+  StudyTimeInterface,
+} from "../../../Interface/IClassSchedule";
 import { message } from "antd";
+import Swal from "sweetalert2";
 
 const ClassSchedule: React.FC = () => {
   const timeslots = [
@@ -22,7 +26,7 @@ const ClassSchedule: React.FC = () => {
     "19:00-20:00",
   ];
 
-  const [addtable, setAddtable] = useState<CourseInterface[]>([]);
+  const [, setAddtable] = useState<CourseInterface[]>([]);
   const [schedule, setSchedule] = useState([
     { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
     { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
@@ -30,50 +34,10 @@ const ClassSchedule: React.FC = () => {
     { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
     { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
   ]);
-
-  const days = ["จันทร์", "อังคาร", "พุธ", "พฤหัส", "ศุกร์"];
-
   const [courses, setCourses] = useState<CourseInterface[]>([]); // ใช้ CourseInterface
   const [isPopupVisible, setPopupVisible] = useState(false);
 
   const togglePopup = () => setPopupVisible(!isPopupVisible);
-
-  // const handleAddCourse = (course: CourseInterface) => {
-  //   // ตรวจสอบการซ้อนทับของเวลา
-  //   const dayRow = schedule.find((row) => row.day === course.Day);
-  //   if (dayRow) {
-  //     const startIndex = timeslots.findIndex((time) => time === course.StartTime);
-  //     const endIndex = timeslots.findIndex((time) => time === course.EndTime);
-
-  //     for (let i = startIndex; i <= endIndex; i++) {
-  //       if (dayRow.slots[i]) {
-  //         message.error(`เวลาเรียนของ ${course.CourseName} ซ้อนกับ ${dayRow.slots[i]}`);
-  //         return;
-  //       }
-  //     }
-  //   }
-
-  //   // เพิ่มข้อมูลลงตาราง CreditSummary
-  //   setCourses((prevCourses) => [...prevCourses, course]);
-
-  //   // อัปเดตตารางเรียน
-  //   const newSchedule = schedule.map((dayRow) => {
-  //     if (dayRow.day === course.Day) {
-  //       const updatedSlots = [...dayRow.slots];
-  //       const startIndex = timeslots.findIndex((time) => time === course.StartTime);
-  //       const endIndex = timeslots.findIndex((time) => time === course.EndTime);
-
-  //       for (let i = startIndex; i <= endIndex; i++) {
-  //         updatedSlots[i] = course.CourseName;
-  //       }
-  //       return { ...dayRow, slots: updatedSlots };
-  //     }
-
-  //     return dayRow;
-  //   });
-  //   console.log(newSchedule)
-  //   setSchedule(newSchedule);
-  // };
 
   const populateSchedule = (course: CourseInterface) => {
     console.log("Adding course to schedule:", course);
@@ -83,13 +47,14 @@ const ClassSchedule: React.FC = () => {
 
     const updatedSchedule = [...schedule];
 
-    course.StudyTimes.forEach(({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
+    course.StudyTimes.forEach(
+      ({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
         const dayMapping: { [key: string]: string } = {
-            Monday: "จันทร์",
-            Tuesday: "อังคาร",
-            Wednesday: "พุธ",
-            Thursday: "พฤหัส",
-            Friday: "ศุกร์",
+          Monday: "จันทร์",
+          Tuesday: "อังคาร",
+          Wednesday: "พุธ",
+          Thursday: "พฤหัส",
+          Friday: "ศุกร์",
         };
 
         const mappedDay = dayMapping[StudyDay];
@@ -99,69 +64,92 @@ const ClassSchedule: React.FC = () => {
         console.log("DayRow:", dayRow);
 
         if (dayRow) {
-            const startDate = new Date(StudyTimeStart);
-            const endDate = new Date(StudyTimeEnd);
+          const startDate = new Date(StudyTimeStart);
+          const endDate = new Date(StudyTimeEnd);
 
-            // ดึงชั่วโมงและนาทีจากเวลา
-            const startHour = startDate.getUTCHours(); // ปรับเป็น UTC+7
-            const endHour = endDate.getUTCHours();
+          // ดึงชั่วโมงและนาทีจากเวลา
+          const startHour = startDate.getUTCHours(); // ปรับเป็น UTC+7
+          const endHour = endDate.getUTCHours();
 
-            let timeFront = (startHour - 8); // คำนวณช่วงเวลาเริ่มต้นใน timeslots
-            let timeEnd = (endHour - 8) - 1; // คำนวณช่วงเวลาสิ้นสุดใน timeslots
+          let timeFront = startHour - 8; // คำนวณช่วงเวลาเริ่มต้นใน timeslots
+          let timeEnd = endHour - 8 - 1; // คำนวณช่วงเวลาสิ้นสุดใน timeslots
 
-            console.log("Calculated timeFront:", timeFront, "timeEnd:", timeEnd);
+          console.log("Calculated timeFront:", timeFront, "timeEnd:", timeEnd);
 
-            if (timeFront >= 0 && timeEnd >= 0 && timeFront < timeslots.length && timeEnd < timeslots.length) {
-                for (let i = timeFront; i <= timeEnd; i++) {
-                    if (!dayRow.slots[i]) {
-                        dayRow.slots[i] = course.CourseName;
-                    } else {
-                        console.warn(
-                            `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
-                        );
-                    }
-                }
-            } else {
-                console.error(
-                    `Time indices out of range for ${course.CourseName}: ${timeFront} - ${timeEnd}`
+          if (
+            timeFront >= 0 &&
+            timeEnd >= 0 &&
+            timeFront < timeslots.length &&
+            timeEnd < timeslots.length
+          ) {
+            for (let i = timeFront; i <= timeEnd; i++) {
+              if (!dayRow.slots[i]) {
+                dayRow.slots[i] = course.CourseName;
+              } else {
+                console.warn(
+                  `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
                 );
+              }
             }
+          } else {
+            console.error(
+              `Time indices out of range for ${course.CourseName}: ${timeFront} - ${timeEnd}`
+            );
+          }
         } else {
-            console.error(`Failed to map day for ${StudyDay}`);
+          console.error(`Failed to map day for ${StudyDay}`);
         }
-    });
+      }
+    );
 
     console.log("Updated Schedule:", updatedSchedule);
     setSchedule(updatedSchedule);
-};
-
-
+  };
 
   const handleRemoveCourse = (id: number) => {
-    // ลบวิชาออกจาก courses
-    setCourses((prevCourses) =>
-      prevCourses.filter((course) => course.ID !== id)
-    );
-
-    // อัปเดตตารางเรียน
-    const updatedSchedule = schedule.map((dayRow) => {
-      const updatedSlots = dayRow.slots.map((slot) =>
-        courses.find((course) => course.ID === id && course.CourseName === slot)
-          ? ""
-          : slot
-      );
-      return { ...dayRow, slots: updatedSlots };
+    console.log("ID to remove:", id); // ตรวจสอบค่า ID
+    const courseToRemove = courses.find((course) => course.ID === id);
+  
+    if (!courseToRemove) {
+      console.error(`Course with ID ${id} not found`);
+      return;
+    }
+  
+    Swal.fire({
+      title: "Are you sure?",
+      text: `คุณต้องการลบวิชา ${courseToRemove.CourseName} ใช่ไหม`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45B39D",
+      cancelButtonColor: "#CD6155",
+      confirmButtonText: "Yes",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // ลบวิชาออกจาก `courses`
+        setCourses((prevCourses) =>
+          prevCourses.filter((course) => course.ID !== id)
+        );
+  
+        // อัปเดต `schedule`
+        const updatedSchedule = schedule.map((dayRow) => {
+          const updatedSlots = dayRow.slots.map((slot) =>
+            slot === courseToRemove.CourseName ? "" : slot // ลบเฉพาะช่องที่ตรงกับชื่อวิชา
+          );
+          return { ...dayRow, slots: updatedSlots };
+        });
+  
+        setSchedule(updatedSchedule);
+  
+        Swal.fire("Deleted!", "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว", "success");
+        console.log("Updated Schedule after removal:", updatedSchedule);
+      }
     });
-    console.log(updatedSchedule);
   };
+  
 
   const handleSave = () => {
     console.log("Saving schedule...", schedule);
     message.success("ตารางเรียนถูกบันทึก!");
-  };
-
-  const handleGetcourse = (course: any) => {
-    console.log(course);
   };
 
   return (
@@ -183,7 +171,7 @@ const ClassSchedule: React.FC = () => {
               <tr key={rowIndex}>
                 <td className="day-name">{scheduleRow.day}</td>
                 {scheduleRow.slots.map((slot, slotIndex) => (
-                  <td key={slotIndex}>{slot || "-"}</td>
+                  <td key={slotIndex}>{slot || ""}</td>
                 ))}
               </tr>
             ))}
