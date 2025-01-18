@@ -13,6 +13,10 @@ import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "./DynamicCalendarIcon";
 import CreateAppointment from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../Taskpopup/Taskpopup";
+import Task from "../../../../assets/check.svg";
+import Appointment from "../../../../assets/website.svg"
+import Profile from "../../../../assets/user.svg";
+import Place from "../../../../assets/map-marker.svg"
 
 const TeacherCalendar: React.FC = () => {
   const calendarRef = useRef<FullCalendar>(null);
@@ -298,16 +302,16 @@ const TeacherCalendar: React.FC = () => {
            {/* Icon Menu */}
            <div className="teachercalendar-icon-menu">
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon1.png" alt="Task Icon" />
+              <img src={Task} alt="Task Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon2.png" alt="Meeting Icon" />
+              <img src={Appointment}alt="Meeting Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon3.png" alt="Calendar Icon" />
+              <img src={Profile} alt="Profile Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon4.png" alt="Settings Icon" />
+              <img src={Place} alt="Place Icon" />
             </div>
           </div>
           
