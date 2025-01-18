@@ -296,6 +296,8 @@ html {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s ease, background-color 0.3s ease;
+  position: relative;
+
 }
 
 .teachercalendar-icon-item:hover {
@@ -303,7 +305,76 @@ html {
   transform: scale(1.1);
 }
 
+.teachercalendar-tooltip {
+  visibility: hidden;
+  position: absolute;
+  top: 50%; /* แสดง tooltip ตรงกลางของไอคอน */
+  right: 110%; /* ตำแหน่งด้านขวาของไอคอน */
+  transform: translateY(-50%);
+  background-color: #ddd; /* สีพื้นหลัง */
+  color: #fff; /* สีข้อความ */
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap; /* ไม่ตัดคำ */
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1001;
+}
+
+.teachercalendar-icon-item:hover .teachercalendar-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
 .teachercalendar-icon-item img {
   width: 24px;
   height: 24px;
+}
+
+.teachercalendar-map-popup {
+  margin-top: 5%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100%;
+  background: #fff;
+  box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.teachercalendar-map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #fff;
+  color: #000000;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.teachercalendar-close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #ddd;
+  right: 5px; /* ระยะห่างจากด้านขวา */
+}
+
+.teachercalendar-close-btn:hover {
+  color: #ff6600;
+}
+
+.teachercalendar-map-iframe {
+  width: 100%;
+  height: calc(100% - 60px); /* ลดความสูงของ iframe ให้เว้นพื้นที่ Header */
+  border: none;
+  margin: 0; /* ลบ margin */
+  padding: 0; /* ลบ padding */
 }

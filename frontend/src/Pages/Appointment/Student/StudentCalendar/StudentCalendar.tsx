@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -10,14 +11,13 @@ import "./StudentCalendar.css";
 import Header from "../../../Component/Header/Header";
 import { Menu, Dropdown, Button } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIcon";
+import DynamicCalendarIcon from "../../DynamicCalendarIcon";
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
-import CreateTaskPopup from "../../Teacher/Taskpopup/Taskpopup";
-import { useNavigate } from "react-router-dom";
+import CreateTaskPopup from "../../Taskpopup/Taskpopup";
 import Task from "../../../../assets/check.svg";
-import Appointment from "../../../../assets/website.svg"
+import Appointment from "../../../../assets/website.svg";
 import Profile from "../../../../assets/user.svg";
-import Place from "../../../../assets/map-marker.svg"
+import Place from "../../../../assets/map-marker.svg";
 
 const StudentCalendar: React.FC = () => {
   const navigate = useNavigate(); // เพิ่ม useNavigate
@@ -144,7 +144,9 @@ const StudentCalendar: React.FC = () => {
     const newEvent = {
       id: String(events.length + 1),
       title: values.title || "Untitled Task",
-      start: `${values.date.format("YYYY-MM-DD")}T${values.time.format("HH:mm:ss")}`,
+      start: `${values.date.format("YYYY-MM-DD")}T${values.time.format(
+        "HH:mm:ss"
+      )}`,
       end: `${values.date.format("YYYY-MM-DD")}T${values.time
         .add(1, "hour") // เพิ่มเวลาสิ้นสุดอัตโนมัติ
         .format("HH:mm:ss")}`,
@@ -154,7 +156,6 @@ const StudentCalendar: React.FC = () => {
     setEvents((prevEvents) => [...prevEvents, newEvent]);
     setIsTaskModalVisible(false);
   };
-  
 
   const createMenu = (
     <Menu className="createdropdown">
@@ -167,6 +168,12 @@ const StudentCalendar: React.FC = () => {
       </Menu.Item>
     </Menu>
   );
+
+  const [isMapVisible, setIsMapVisible] = useState(false);
+
+  const toggleMapPopup = () => {
+    setIsMapVisible(!isMapVisible);
+  };
 
   return (
     <div className="teacher-calendar-layout">
@@ -287,20 +294,51 @@ const StudentCalendar: React.FC = () => {
           />
 
           {/* Icon Menu */}
-          {/* Icon Menu */}
           <div className="teachercalendar-icon-menu">
             <div className="teachercalendar-icon-item">
               <img src={Task} alt="Task Icon" />
+              <span className="teachercalendar-tooltip">Task</span>
             </div>
             <div className="teachercalendar-icon-item">
-              <img src={Appointment}alt="Meeting Icon" />
+              <img src={Appointment} alt="Meeting Icon" />
+              <span className="teachercalendar-tooltip">Appointment</span>
             </div>
-            <div className="teachercalendar-icon-item">
+            <div
+              className="teachercalendar-icon-item"
+              onClick={() => navigate("/profile")}
+            >
               <img src={Profile} alt="Profile Icon" />
+              <span className="teachercalendar-tooltip">Profile</span>
             </div>
-            <div className="teachercalendar-icon-item">
+            <div className="teachercalendar-icon-item" onClick={toggleMapPopup}>
               <img src={Place} alt="Place Icon" />
+              <span className="teachercalendar-tooltip">Place</span>
             </div>
+            {/* Map Popup */}
+            {isMapVisible && (
+              <div className="teachercalendar-map-popup">
+                <div className="teachercalendar-map-header">
+                  Suranaree University of Technology
+                  <br />
+                  <button
+                    onClick={toggleMapPopup}
+                    className="teachercalendar-close-btn"
+                  >
+                    ✖
+                  </button>
+                </div>
+                <iframe
+                  title="Google Maps"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3877.123456789123!2d102.456789!3d14.567890123456!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0000000000000000%3A0x000000000000000!2sSuranaree%20University%20of%20Technology!5e0!3m2!1sen!2sth!4v1680000000000!5m2!1sen!2sth"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -39,6 +39,7 @@ import AddSheet from './Pages/AddSheet/AddSheet';
 import EditSealUser from './Pages/EditSealUser/EditSealUser';
 import AddSealUser from './Pages/AddSealUser/AddSealUser';
 import StudentProtectedRoute from './Pages/Component/ProtectedRoute/StudentProtectedRoute';
+import PlacePanel from './Pages/Appointment/PlacePanel/PlacePanel';
 
 
 const App: React.FC = () => {
@@ -70,8 +71,9 @@ const App: React.FC = () => {
           <Route path="/buySheet" element={<BuySheet />} />
           <Route path="//SelectSheet/:id" element={<SelectSheet />} />
           <Route path="/Cart" element={<Cart />} />
-          <Route path="/ClassSchedule" element={<StudentProtectedRoute><ClassSchedule /></StudentProtectedRoute>} />
+          <Route path="/ClassSchedule" element={<ClassSchedule />}/>
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
+          <Route path="/Place" element={<PlacePanel/>}/>
           {/* <Route path="/CreateAppointment" element={<CreateAppointment/>}/> */}
           <Route path="/StudentCalendar" element={<StudentProtectedRoute><StudentCalendar/></StudentProtectedRoute>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>
