@@ -1,0 +1,26 @@
+.TeacherAppointment-layout {
+    margin-top: 5%; /* เพิ่มระยะห่างจากด้านบน */
+    padding: 20px;
+}
+
+.table-header {
+    font-size: 2rem !important;
+    margin-bottom: 2%;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+}
+
+.table-row {
+    font-size: 16px;
+    text-align: left;
+}
+
+.table-row:hover {
+    background-color: #f9f9f9;
+}
+
+.action-btn {
+    margin-right: 8px;
+}

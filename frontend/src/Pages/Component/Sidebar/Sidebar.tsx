@@ -29,11 +29,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     onClose();
   };
 
-  const goToClassSchedule = () => {
-    navigate("/ClassSchedule");
-    onClose();
-  };
-
   const goToStudentCalendar = () => {
     navigate("/StudentCalendar");
     onClose();
@@ -72,7 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
       <ul>
         {userRole === "1" && <li onClick={goToStudentDashboard}>Dashboard</li>}
         {userRole === "2" && <li onClick={goToTeacherDashboard}>Dashboard</li>}
-        {userRole === "1" && <li onClick={goToClassSchedule}>Class Schedule</li>}
+        <li onClick={() => navigateTo("/ClassSchedule")}>Class Schedule</li>
         {userRole === "1" && <li onClick={goToStudentCalendar}>Calendar</li>}
         {userRole === "2" && <li onClick={goToTeacherCalendar}>Calendar</li>}
         {userRole === "1" && <li onClick={goToCoursesOpen}>Courses Open</li>}

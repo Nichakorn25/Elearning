@@ -292,3 +292,23 @@ func GetBookingStudent(c *gin.Context) {
 
     c.JSON(http.StatusOK, studentBookings)
 }
+
+//ดึงข้อมูลการสร้างการนัดหมายไปแสดง
+// func GetTeacherAppointmentsByUserID(c *gin.Context) {
+//     userId := c.Param("userId")
+//     var appointments []entity.TeacherAppointment
+
+//     if err := config.DB().
+//         Preload("User").
+//         Preload("DayofWeek").
+//         Where("user_id = ?", userId).
+//         Find(&appointments).Error; err != nil {
+//         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve appointments"})
+//         return
+//     }
+
+//     c.JSON(http.StatusOK, gin.H{
+//         "appointments": appointments,
+//     })
+// }
+
