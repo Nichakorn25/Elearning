@@ -749,8 +749,15 @@ async function SearchCoursesWithDetails(semester: string, searchTerm: string) {
     });
 }
 
-
-
+async function DeleteTeacherAppointmentByID(id: number) {
+  return axios
+    .delete(`${apiUrl}/teacher-appointments/${id}`, requestOptions)
+    .then((response) => response)
+    .catch((error) => {
+      console.error("Error deleting appointment:", error.response?.data || error.message);
+      throw error;
+    });
+}
 
 
 export{
@@ -820,6 +827,7 @@ export{
   BookAppointment,
   GetDay,
   CreateStudentBooking,
+  DeleteTeacherAppointmentByID,
 
   //ClassSchedule
   GetStudyTimeByCourseId,

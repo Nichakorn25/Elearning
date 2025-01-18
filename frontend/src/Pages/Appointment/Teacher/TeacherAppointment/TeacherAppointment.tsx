@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, message } from "antd";
-import { GetTeacherAppointments } from "../../../../services/https";
+import { GetTeacherAppointments, DeleteTeacherAppointmentByID } from "../../../../services/https"; // Import ฟังก์ชันลบ
 import Header from "../../../Component/Header/Header";
 import { TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
-import axios from "axios";
-import "./TeacherAppointment.css"; // นำเข้า CSS ที่แยกออกมา
+import "./TeacherAppointment.css";
 
 const TeacherAppointment: React.FC = () => {
   const [appointments, setAppointments] = useState<TeacherAppointmentInterface[]>([]);
@@ -42,7 +41,7 @@ const TeacherAppointment: React.FC = () => {
 
   const handleDelete = async (appointmentId: number) => {
     try {
-      const response = await axios.delete(`/api/teacher-appointments/${appointmentId}`);
+      const response = await DeleteTeacherAppointmentByID(appointmentId);
       if (response?.status === 200) {
         setAppointments((prev) => prev.filter((appointment) => appointment.ID !== appointmentId));
         message.success("Appointment deleted successfully.");
@@ -54,6 +53,7 @@ const TeacherAppointment: React.FC = () => {
       console.error(error);
     }
   };
+  
 
   const columns = [
     {
