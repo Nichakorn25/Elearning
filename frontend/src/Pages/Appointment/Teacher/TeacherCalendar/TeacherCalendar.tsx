@@ -18,7 +18,7 @@ import Task from "../../../../assets/check.svg";
 import Appointment from "../../../../assets/website.svg";
 import Profile from "../../../../assets/user.svg";
 import Place from "../../../../assets/map-marker.svg";
-import PlacePanel from "../../PlacePanel/PlacePanel";
+import TeacherAppointment from "../TeacherAppointment/TeacherAppointment";
 
 const TeacherCalendar: React.FC = () => {
   const navigate = useNavigate();
@@ -314,7 +314,7 @@ const TeacherCalendar: React.FC = () => {
               <img src={Task} alt="Task Icon" />
               <span className="teachercalendar-tooltip">Task</span>
             </div>
-            <div className="teachercalendar-icon-item">
+            <div className="teachercalendar-icon-item" onClick={()=>navigate("/TeacherAppointment")}>
               <img src={Appointment} alt="Meeting Icon" />
               <span className="teachercalendar-tooltip">Appointment</span>
             </div>
@@ -333,7 +333,8 @@ const TeacherCalendar: React.FC = () => {
             {isMapVisible && (
               <div className="teachercalendar-map-popup">
                 <div className="teachercalendar-map-header">
-                  Suranaree University of Technology<br />
+                  Suranaree University of Technology
+                  <br />
                   <button
                     onClick={toggleMapPopup}
                     className="teachercalendar-close-btn"

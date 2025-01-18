@@ -639,10 +639,10 @@ async function SaveAvailability(data: {
 }
 
 // ดึงข้อมูล Appointment ตาม UserID ของอาจารย์
-async function GetTeacherAppointments(teacherId: string) {
+async function GetTeacherAppointments(userId: string) {
   return axios
     .get<TeacherAppointmentInterface[]>(
-      `${apiUrl}/teacher/appointments/${teacherId}`,
+      `${apiUrl}/teacher/appointments/${userId}`,
       requestOptions
     )
     .then((res) => res)
