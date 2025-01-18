@@ -193,31 +193,34 @@ const TeacherCalendar: React.FC = () => {
   const [isPopup, setPopUp] = useState(false);
 
   return (
-    <div className="teacher-calendar-layout">
+    <div className="teachercalendar-layout">
       <Header />
       {/* Header */}
-      <header className="teacher-calendar-header">
-        <div className="header-left">
-          <h1 className="calendar-title">
+      <header className="teachercalendar-header">
+        <div className="teachercalendar-header-left">
+          <h1 className="teachercalendar-calendar-title">
             <DynamicCalendarIcon />
-            <span className="mycalendar">Calendar</span>
+            <span className="teachercalendar-mycalendar">Calendar</span>
           </h1>
         </div>
-        <div className="header-center">
-          <button className="today-btn" onClick={handleTodayClick}>
+        <div className="teachercalendar-header-center">
+          <button
+            className="teachercalendar-today-btn"
+            onClick={handleTodayClick}
+          >
             Today
           </button>
-          <button className="nav-btn" onClick={handlePrevClick}>
+          <button className="teachercalendar-nav-btn" onClick={handlePrevClick}>
             {"<"}
           </button>
-          <button className="nav-btn" onClick={handleNextClick}>
+          <button className="teachercalendar-nav-btn" onClick={handleNextClick}>
             {">"}
           </button>
-          <span className="current-date">{formattedDate}</span>
+          <span className="teachercalendar-current-date">{formattedDate}</span>
         </div>
-        <div className="header-right">
+        <div className="teachercalendar-header-right">
           <Dropdown overlay={viewmenu} trigger={["click"]}>
-            <button className="calendar-header__dropdown-btn">
+            <button className="teachercalendar-calendar-header__dropdown-btn">
               {currentView === "timeGridDay"
                 ? "Day"
                 : currentView === "timeGridWeek"
@@ -230,14 +233,13 @@ const TeacherCalendar: React.FC = () => {
       </header>
 
       {/* Main Layout */}
-      <div className="teacher-calendar-main">
+      <div className="teachercalendar-main">
         {/* Sidebar */}
-        <aside className="calendar-sidebar">
-          {/* ปุ่ม popup CreateAppointment */}
+        <aside className="teachercalendar-sidebar">
           {/* ปุ่ม popup CreateAppointment */}
           <div
             onClick={() => setPopUp(!isPopup)}
-            className="create-appointment-btn"
+            className="teachercalendar-create-appointment-btn"
           >
             + CreateAppointment
           </div>
@@ -247,58 +249,14 @@ const TeacherCalendar: React.FC = () => {
             </div>
           )}
 
-          {/* <div className="sidebar-header">
-            <Dropdown overlay={createMenu} trigger={["click"]}>
-              <Button className="create-btn">
-                + Create <DownOutlined />
-              </Button>
-            </Dropdown>
-          </div> */}
-
-          {/* แสดง Popup เมื่อคลิกปุ่ม + Create */}
-          {/* <CreateAppointmentPopup
-            isVisible={isModalVisible}
-            onClose={handleCloseModal}
-            onSubmit={handleSubmitAppointment}
-          /> */}
-
-          {/* <CreateTaskPopup
-            isVisible={isTaskModalVisible}
-            onClose={handleCloseTaskModal}
-            onSubmit={handleSubmitTask}
-            selectedDate={selectedDate}
-          /> */}
-
-          {/* <CreateAppointment
-            isVisible={isAppointmentModalVisible}
-            onClose={() => setIsAppointmentModalVisible(false)}
-            onSubmit={handleSubmitAppointment}
-          /> */}
-
-          <div className="mini-calendar">
+          <div className="teachercalendar-mini-calendar">
             <Calendar />
           </div>
-          {/* <div className="sidebar-section">
-            <h3>My Tasks</h3>
-            <ul>
-              <li>
-                <input type="checkbox" defaultChecked />
-                Nichakorn Chanyutha
-              </li>
-              <li>
-                <input type="checkbox" defaultChecked />
-                Birthdays
-              </li>
-              <li>
-                <input type="checkbox" defaultChecked />
-                Tasks
-              </li>
-            </ul>
-          </div> */}
-          <div className="sidebar-section">
+
+          <div className="teachercalendar-sidebar-section">
             <h3>Other Task</h3>
             <button
-              className="create-task-btn"
+              className="teachercalendar-create-task-btn"
               onClick={() => setIsTaskModalVisible(true)}
             >
               +
@@ -315,7 +273,7 @@ const TeacherCalendar: React.FC = () => {
         </aside>
 
         {/* Calendar */}
-        <div className="calendar-container">
+        <div className="teachercalendar-calendar-container">
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -336,9 +294,25 @@ const TeacherCalendar: React.FC = () => {
             slotMinTime="08:00:00"
             slotMaxTime="20:00:00"
           />
+
+           {/* Icon Menu */}
+           <div className="teachercalendar-icon-menu">
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon1.png" alt="Task Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon2.png" alt="Meeting Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon3.png" alt="Calendar Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon4.png" alt="Settings Icon" />
+            </div>
+          </div>
+          
         </div>
       </div>
-      
     </div>
   );
 };
