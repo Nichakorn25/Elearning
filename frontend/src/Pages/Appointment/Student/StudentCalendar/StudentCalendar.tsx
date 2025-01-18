@@ -299,7 +299,7 @@ const StudentCalendar: React.FC = () => {
               <img src={Task} alt="Task Icon" />
               <span className="teachercalendar-tooltip">Task</span>
             </div>
-            <div className="teachercalendar-icon-item">
+            <div className="teachercalendar-icon-item" onClick={()=>navigate("/StudentAppointment")}>
               <img src={Appointment} alt="Meeting Icon" />
               <span className="teachercalendar-tooltip">Appointment</span>
             </div>

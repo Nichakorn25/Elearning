@@ -313,4 +313,42 @@ func DeleteTeacherAppointment(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{"message": "TeacherAppointment deleted successfully"})
 }
 
+//use
+func GetStudentBookingsByStudentID(c *gin.Context) {
+    studentId := c.Param("studentId") // รับ studentId จาก URL
+    var studentBookings []entity.StudentBooking
 
+    // ดึงข้อมูลการจองของนักเรียนคนนี้
+    if err := config.DB().
+        Preload("TeacherAppointment").
+        Preload("TeacherAppointment.User").
+        Preload("DayofWeek").
+        Where("user_id = ?", studentId). // ใช้ user_id สำหรับนักเรียน
+        Find(&studentBookings).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
+        return
+    }
+
+    c.JSON(http.StatusOK, studentBookings)
+}
+
+//use
+func DeleteStudentBookingByID(c *gin.Context) {
+    bookingID := c.Param("bookingId") // รับ ID การจองจาก URL
+    db := config.DB()
+
+    // ลบ StudentBooking ตาม ID
+    result := db.Delete(&entity.StudentBooking{}, "id = ?", bookingID)
+    if result.Error != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+        return
+    }
+
+    // ตรวจสอบว่าแถวถูกลบหรือไม่
+    if result.RowsAffected == 0 {
+        c.JSON(http.StatusNotFound, gin.H{"error": "StudentBooking not found"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "StudentBooking deleted successfully"})
+}

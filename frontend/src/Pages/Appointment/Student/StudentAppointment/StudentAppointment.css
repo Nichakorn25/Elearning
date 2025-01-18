@@ -1,0 +1,25 @@
+.StudentAppointment-layout {
+    margin-top: 10%;
+    padding: 20px;
+  }
+  
+  .table-header {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 120px;
+  }
+  
+  .table-row {
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  .table-row:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .action-btn {
+    margin-right: 8px;
+  }
+  
