@@ -14,6 +14,10 @@ import DynamicCalendarIcon from "../../Teacher/TeacherCalendar/DynamicCalendarIc
 //import CreateAppointmentPopup from "../CreateAppointment/CreateAppointment";
 import CreateTaskPopup from "../../Teacher/Taskpopup/Taskpopup";
 import { useNavigate } from "react-router-dom";
+import Task from "../../../../assets/check.svg";
+import Appointment from "../../../../assets/website.svg"
+import Profile from "../../../../assets/user.svg";
+import Place from "../../../../assets/map-marker.svg"
 
 const StudentCalendar: React.FC = () => {
   const navigate = useNavigate(); // เพิ่ม useNavigate
@@ -283,21 +287,21 @@ const StudentCalendar: React.FC = () => {
           />
 
           {/* Icon Menu */}
+          {/* Icon Menu */}
           <div className="teachercalendar-icon-menu">
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon1.png" alt="Task Icon" />
+              <img src={Task} alt="Task Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon2.png" alt="Meeting Icon" />
+              <img src={Appointment}alt="Meeting Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon3.png" alt="Calendar Icon" />
+              <img src={Profile} alt="Profile Icon" />
             </div>
             <div className="teachercalendar-icon-item">
-              <img src="path-to-icon4.png" alt="Settings Icon" />
+              <img src={Place} alt="Place Icon" />
             </div>
           </div>
-          
         </div>
       </div>
     </div>
