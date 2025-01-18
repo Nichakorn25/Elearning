@@ -66,6 +66,9 @@ func main() {
 		// Student Routes
 		router.GET("/appointments/:teacherId", controller.GetAppointmentsForStudent)
 		router.POST("/bookings", controller.BookAppointment)
+		router.GET("/bookings/student/:studentId", controller.GetStudentBookingsByStudentID)
+		router.DELETE("/bookings/:bookingId", controller.DeleteStudentBookingByID)   
+
 		//router.GET("/users/filter", controller.ListUsersFilters)
 
 		//Planner

@@ -39,8 +39,8 @@ import AddSheet from './Pages/AddSheet/AddSheet';
 import EditSealUser from './Pages/EditSealUser/EditSealUser';
 import AddSealUser from './Pages/AddSealUser/AddSealUser';
 import StudentProtectedRoute from './Pages/Component/ProtectedRoute/StudentProtectedRoute';
-import PlacePanel from './Pages/Appointment/PlacePanel/PlacePanel';
 import TeacherAppointment from './Pages/Appointment/Teacher/TeacherAppointment/TeacherAppointment';
+import StudentAppointment from './Pages/Appointment/Student/StudentAppointment/StudentAppointment';
 
 
 const App: React.FC = () => {
@@ -75,7 +75,7 @@ const App: React.FC = () => {
           <Route path="/ClassSchedule" element={<ClassSchedule />}/>
           <Route path="/TeacherCalendar" element={<TeacherCalendar/>}/>
           <Route path="/TeacherAppointment" element={<TeacherAppointment/>}/>
-          <Route path="/Place" element={<PlacePanel/>}/>
+          <Route path="/StudentAppointment" element={<StudentAppointment/>}/>
           {/* <Route path="/CreateAppointment" element={<CreateAppointment/>}/> */}
           <Route path="/StudentCalendar" element={<StudentProtectedRoute><StudentCalendar/></StudentProtectedRoute>}/>
           <Route path="/ResetPassword" element={<ResetPassword/>}/>

@@ -759,6 +759,26 @@ async function DeleteTeacherAppointmentByID(id: number) {
     });
 }
 
+async function GetStudentBookingsByID(studentId: string) {
+  return axios
+    .get(`/api/bookings/student/${studentId}`)
+    .then((response) => response)
+    .catch((error) => {
+      console.error("Error fetching student bookings:", error.response?.data || error.message);
+      throw error;
+    });
+}
+
+async function DeleteStudentBookingByID(bookingId: number) {
+  return axios
+    .delete(`${apiUrl}/student/bookings/${bookingId}`)
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error deleting booking:", e.response?.data || e.message);
+      throw e;
+    });
+}
+
 
 export{
   GetCategories,
@@ -828,6 +848,8 @@ export{
   GetDay,
   CreateStudentBooking,
   DeleteTeacherAppointmentByID,
+  GetStudentBookingsByID,
+  DeleteStudentBookingByID,
 
   //ClassSchedule
   GetStudyTimeByCourseId,
