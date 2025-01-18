@@ -1,5 +1,6 @@
 import React from "react";
 import "./CreditSummary.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 interface ExamSchedule {
   ExamDate: string;
@@ -13,6 +14,7 @@ interface Course {
   CourseName: string;
   Credit: number;
   Description: string;
+  color?: string; // เพิ่ม property สี
   ExamSchedules?: ExamSchedule[];
 }
 
@@ -44,7 +46,17 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
         <tbody>
           {courses.map((course) => (
             <tr key={course.ID}>
-              <td>{course.ID}</td>
+              <td
+                style={{
+                  backgroundColor: course.color || "transparent", // ใช้สีจาก course.color หรือโปร่งใส
+                  color: "#000", // สีตัวอักษร
+                  padding: "5px",
+                  borderRadius: "4px", // มุมโค้ง
+                }}
+              >
+                {course.ID}
+              </td>
+
               <td>{course.CourseName}</td>
               <td>{course.Credit}</td>
               <td>{course.Description}</td>
@@ -66,13 +78,13 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
               </td>
               <td>
                 <button
-                  className="delete-button"
+                  className="delete-icon-button"
                   onClick={() => {
-                    console.log("Deleting course ID:", course.ID); // เพิ่ม log ตรวจสอบค่า ID
-                    onRemoveCourse(course.ID); // ส่ง ID ที่ต้องการลบ
+                    console.log("Deleting course ID:", course.ID); // ตรวจสอบ ID ที่ต้องการลบ
+                    onRemoveCourse(course.ID); // ลบคอร์สตาม ID
                   }}
                 >
-                  ลบ
+                  <i className="fas fa-trash delete-icon"></i>
                 </button>
               </td>
             </tr>

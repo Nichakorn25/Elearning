@@ -70,3 +70,25 @@
     background-color: #c82333;
   }
   
+  .delete-icon-button {
+    background-color: #e74c3c; /* สีพื้นหลัง */
+    color: #ffffff; /* สีไอคอน */
+    border: none; /* ไม่มีเส้นขอบ */
+    border-radius: 5px; /* ทำให้มุมมน */
+    padding: 10px; /* ขนาดปุ่ม */
+    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อ hover */
+    display: flex; /* จัดกึ่งกลางไอคอน */
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* ความกว้าง */
+    height: 40px; /* ความสูง */
+  }
+  
+  .delete-icon {
+    font-size: 16px; /* ขนาดของไอคอน */
+  }
+  
+  .delete-icon-button:hover {
+    background-color: #c0392b; /* เปลี่ยนสีเมื่อ hover */
+  }
+  

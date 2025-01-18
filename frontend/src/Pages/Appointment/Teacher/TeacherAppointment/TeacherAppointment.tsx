@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, message } from "antd";
-import { GetTeacherAppointments, DeleteTeacherAppointmentByID } from "../../../../services/https"; // Import ฟังก์ชันลบ
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { GetTeacherAppointments, DeleteTeacherAppointmentByID } from "../../../../services/https"; 
 import Header from "../../../Component/Header/Header";
 import { TeacherAppointmentInterface } from "../../../../Interface/IAppointment";
 import "./TeacherAppointment.css";
@@ -40,20 +41,44 @@ const TeacherAppointment: React.FC = () => {
   }, [userId]);
 
   const handleDelete = async (appointmentId: number) => {
-    try {
-      const response = await DeleteTeacherAppointmentByID(appointmentId);
-      if (response?.status === 200) {
-        setAppointments((prev) => prev.filter((appointment) => appointment.ID !== appointmentId));
-        message.success("Appointment deleted successfully.");
-      } else {
-        message.error("Failed to delete appointment.");
-      }
-    } catch (error) {
-      message.error("Failed to delete appointment.");
-      console.error(error);
+    const appointmentToDelete = appointments.find((appointment) => appointment.ID === appointmentId);
+    if (!appointmentToDelete) {
+      console.error(`Appointment with ID ${appointmentId} not found`);
+      return;
     }
+
+    const appointmentTitle = appointmentToDelete.title;
+
+    // Popup Confirm การลบ
+    Swal.fire({
+      title: "Are you sure?",
+      text: `คุณต้องการลบนัดหมาย "${appointmentTitle}" ใช่ไหม?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45B39D",
+      cancelButtonColor: "#CD6155",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await DeleteTeacherAppointmentByID(appointmentId);
+          if (response?.status === 200) {
+            setAppointments((prev) => prev.filter((appointment) => appointment.ID !== appointmentId));
+            Swal.fire(
+              "Deleted!",
+              `นัดหมาย "${appointmentTitle}" ถูกลบเรียบร้อยแล้ว.`,
+              "success"
+            );
+          } else {
+            message.error("Failed to delete appointment.");
+          }
+        } catch (error) {
+          message.error("Failed to delete appointment.");
+          console.error(error);
+        }
+      }
+    });
   };
-  
 
   const columns = [
     {

@@ -43,3 +43,10 @@ export interface DayInterface {
   ID?: number; // ID ของการจอง
   DayName?: string;
 }
+
+export interface FlattenedBookingInterface {
+  ID: number;
+  AppointmentTitle: string;
+  Day: string;
+  Teacher: string;
+}
