@@ -73,6 +73,9 @@ const ClassSchedule: React.FC = () => {
     const courseColor = getRandomColor();
     setUsedColors((prev) => [...prev, courseColor]);
 
+    // เพิ่มสีให้กับ course
+    const updatedCourse = { ...course, color: courseColor };
+
     const updatedSchedule = [...schedule];
 
     course.StudyTimes.forEach(
@@ -136,6 +139,36 @@ const ClassSchedule: React.FC = () => {
     ]);
   };
 
+  const handleReset = () => {
+    Swal.fire({
+      title: "ยืนยันการรีเซ็ต",
+      text: "คุณต้องการรีเซ็ตตารางเรียนทั้งหมดหรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#45B39D",
+      cancelButtonColor: "#CD6155",
+      confirmButtonText: "รีเซ็ต",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setSchedule([
+          { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
+          { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
+          { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
+          { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
+          { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
+        ]);
+        setCourses([]);
+        setUsedColors([]);
+        Swal.fire(
+          "รีเซ็ตสำเร็จ!",
+          "ตารางเรียนถูกรีเซ็ตเรียบร้อยแล้ว",
+          "success"
+        );
+      }
+    });
+  };
+
   const handleRemoveCourse = (id: number) => {
     const courseToRemove = courses.find((course) => course.ID === id);
     if (!courseToRemove) {
@@ -176,13 +209,35 @@ const ClassSchedule: React.FC = () => {
   };
 
   const handleSave = () => {
-    console.log("Saving schedule...", schedule);
-    message.success("ตารางเรียนถูกบันทึก!");
+    Swal.fire({
+      title: "ยืนยันการบันทึก",
+      text: "คุณต้องการบันทึกตารางเรียนหรือไม่?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#45B39D",
+      cancelButtonColor: "#CD6155",
+      confirmButtonText: "บันทึก",
+      cancelButtonText: "ยกเลิก",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Saving schedule...", schedule);
+        Swal.fire(
+          "บันทึกสำเร็จ!",
+          "ตารางเรียนถูกบันทึกเรียบร้อยแล้ว",
+          "success"
+        );
+      }
+    });
   };
 
   return (
     <div className="dashboard">
       <Header />
+      <div className="reset-container">
+        <button className="reset-button" onClick={handleReset}>
+          รีเซ็ตตาราง
+        </button>
+      </div>
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>
         <table>

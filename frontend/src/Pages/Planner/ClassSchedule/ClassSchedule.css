@@ -145,3 +145,26 @@
 .day-name{
   color: black;
 }
+
+.reset-container {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.reset-button {
+  background-color: transparent;
+  color: #ff6600;
+  border: 1px solid #ff6600;
+  border-radius: 5px ;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.reset-button:hover {
+  background-color: #ff6600;
+  color:black;
+}

@@ -17,6 +17,7 @@ import {
   DayInterface,
   TeacherAppointmentInterface,
 } from "../../../../Interface/IAppointment";
+import Swal from "sweetalert2";
 
 const { Option } = Select;
 // const { RangePicker } = TimePicker;
@@ -103,12 +104,25 @@ const CreateAppointment: React.FC = () => {
     try {
       const appointmentResponse = await SaveAppointment(values);
       if (appointmentResponse.status === 201) {
+        // Popup แจ้งเตือนเมื่อบันทึกสำเร็จ
+        Swal.fire({
+          title: "Success!",
+          text: "การนัดหมายถูกบันทึกเรียบร้อยแล้ว",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
         message.success("Appointment created successfully!");
       } else {
         message.error("Failed to create appointment.");
       }
     } catch (error) {
       console.error("Error saving appointment:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "ไม่สามารถบันทึกนัดหมายได้ โปรดลองอีกครั้ง",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       message.error("Failed to create appointment. Please try again.");
     }
   };
