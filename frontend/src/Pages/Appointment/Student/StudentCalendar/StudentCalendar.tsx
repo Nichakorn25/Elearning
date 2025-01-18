@@ -281,6 +281,23 @@ const StudentCalendar: React.FC = () => {
             slotMinTime="08:00:00"
             slotMaxTime="20:00:00"
           />
+
+          {/* Icon Menu */}
+          <div className="teachercalendar-icon-menu">
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon1.png" alt="Task Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon2.png" alt="Meeting Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon3.png" alt="Calendar Icon" />
+            </div>
+            <div className="teachercalendar-icon-item">
+              <img src="path-to-icon4.png" alt="Settings Icon" />
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
