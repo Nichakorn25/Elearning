@@ -58,6 +58,7 @@ func main() {
 		router.GET("/searchProfessors", controller.SearchProfessors)
 		// Teacher Routes
 		router.GET("/teacher/appointments/:userId", controller.GetTeacherAppointmentsByUserID)
+		router.DELETE("/teacher-appointments/:id", controller.DeleteTeacherAppointment)
 		router.GET("/day", controller.ListDays)
 		router.POST("/teacher/appointments", controller.CreateTeacherAppointment)
 		router.POST("/CreateStudentBooking", controller.CreateStudentBooking)

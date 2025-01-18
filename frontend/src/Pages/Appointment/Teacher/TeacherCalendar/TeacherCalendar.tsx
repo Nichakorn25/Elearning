@@ -18,7 +18,6 @@ import Task from "../../../../assets/check.svg";
 import Appointment from "../../../../assets/website.svg";
 import Profile from "../../../../assets/user.svg";
 import Place from "../../../../assets/map-marker.svg";
-import TeacherAppointment from "../TeacherAppointment/TeacherAppointment";
 
 const TeacherCalendar: React.FC = () => {
   const navigate = useNavigate();
