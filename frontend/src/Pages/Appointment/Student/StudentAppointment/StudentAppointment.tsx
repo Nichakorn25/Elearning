@@ -3,6 +3,7 @@ import { Table, Button, message } from "antd";
 import Swal from "sweetalert2"; // Import SweetAlert2
 import Header from "../../../Component/Header/Header";
 import "./StudentAppointment.css";
+import { GetStudentBookingsByID } from "../../../../services/https"; // Import service API
 
 const StudentAppointment: React.FC = () => {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -15,54 +16,24 @@ const StudentAppointment: React.FC = () => {
       try {
         setLoading(true);
 
-        // ข้อมูล Dummy สำหรับการทดสอบ
-        const dummyData = [
-          {
-            ID: 1,
-            User: {
-              Username: "testuser01",
-              FirstName: "ณิชากร",
-              LastName: "จันทร์ยุทา",
-            },
-            DayofWeek: { DayName: "Monday" },
-            TeacherAppointment: {
-              appointment_duration: "10:00 - 11:00",
-              title: "Database",
-              description: "Learn algebra basics",
-              location: "Online",
-              Teacher: {
-                FirstName: "ศรัญญา",
-                LastName: "กาญจนวัฒนา",
-              },
-            },
-          },
-          {
-            ID: 2,
-            User: {
-              Username: "testuser02",
-              FirstName: "ณิชากร",
-              LastName: "จันทร์ยุทา",
-            },
-            DayofWeek: { DayName: "Wednesday" },
-            TeacherAppointment: {
-              appointment_duration: "13:00 - 14:00",
-              title: "Microprocessor",
-              description: "Physics tutoring session",
-              location: "Classroom A2",
-              Teacher: {
-                FirstName: "วิชัย",
-                LastName: "ศรีสุรักษ์",
-              },
-            },
-          },
-        ];
+        // เรียก API เพื่อนำข้อมูลการนัดหมาย
+        if (!studentId) {
+          throw new Error("Student ID not found in localStorage");
+        }
 
-        setBookings(dummyData);
-        console.log("Fetched Bookings (Dummy):", dummyData);
-        message.success("Dummy bookings loaded successfully.");
+        const response = await GetStudentBookingsByID(studentId);
+        console.log(response);
+
+        if (response && response.status === 200) {
+          setBookings(response.data); // อัปเดต state bookings ด้วยข้อมูลจาก API
+          console.log(response)
+          message.success("โหลดข้อมูลการนัดหมายสำเร็จ");
+        } else {
+          throw new Error("ไม่สามารถดึงข้อมูลการนัดหมายได้");
+        }
       } catch (error) {
         console.error("Error fetching bookings:", error);
-        message.error("Failed to load dummy bookings.");
+        message.error("เกิดข้อผิดพลาดในการโหลดข้อมูล");
       } finally {
         setLoading(false);
       }
@@ -82,7 +53,7 @@ const StudentAppointment: React.FC = () => {
 
     Swal.fire({
       title: "Are you sure?",
-      text: `คุณต้องการลบนัดหมายกับ "${teacherName}" ใช่ไหม`,
+      text: `คุณต้องการลบนัดหมายกับ "${teacherName}" ใช่ไหม?`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#45B39D",
@@ -90,6 +61,7 @@ const StudentAppointment: React.FC = () => {
       confirmButtonText: "Yes",
     }).then((result) => {
       if (result.isConfirmed) {
+        // หากมี API สำหรับลบนัดหมาย ให้เรียกใช้ที่นี่ เช่น DeleteBooking(id)
         setBookings((prev) => prev.filter((booking) => booking.ID !== id));
         Swal.fire(
           "Deleted!",

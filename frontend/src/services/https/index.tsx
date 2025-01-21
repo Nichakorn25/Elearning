@@ -761,7 +761,7 @@ async function DeleteTeacherAppointmentByID(id: number) {
 
 async function GetStudentBookingsByID(studentId: string) {
   return axios
-    .get(`/api/bookings/student/${studentId}`)
+    .get(`${apiUrl}/bookings/student/${studentId}` , requestOptions)
     .then((response) => response)
     .catch((error) => {
       console.error("Error fetching student bookings:", error.response?.data || error.message);
@@ -771,7 +771,7 @@ async function GetStudentBookingsByID(studentId: string) {
 
 async function DeleteStudentBookingByID(bookingId: number) {
   return axios
-    .delete(`${apiUrl}/student/bookings/${bookingId}`)
+    .delete(`${apiUrl}/student/bookings/${bookingId}`  , requestOptions)
     .then((res) => res)
     .catch((e) => {
       console.error("Error deleting booking:", e.response?.data || e.message);
