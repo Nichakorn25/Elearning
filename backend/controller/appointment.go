@@ -312,25 +312,6 @@ func DeleteTeacherAppointment(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "TeacherAppointment deleted successfully"})
 }
 
-//use
-// func GetStudentBookingsByStudentID(c *gin.Context) {
-//     studentId := c.Param("studentId") // รับ studentId จาก URL
-//     var studentBookings []entity.StudentBooking
-
-//     // ดึงข้อมูลการจองของนักเรียนคนนี้
-//     if err := config.DB().
-//         Preload("TeacherAppointment").
-//         Preload("TeacherAppointment.User").
-//         Preload("DayofWeek").
-//         Where("user_id = ?", studentId). // ใช้ user_id สำหรับนักเรียน
-//         Find(&studentBookings).Error; err != nil {
-//         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
-//         return
-//     }
-
-//     c.JSON(http.StatusOK, studentBookings)
-// }
-
 func GetStudentBookingsByStudentID(c *gin.Context) {
 	// รับ studentId จาก URL parameter
 	studentId := c.Param("studentId")
@@ -369,7 +350,6 @@ func GetStudentBookingsByStudentID(c *gin.Context) {
 		Where("student_bookings.user_id = ?", studentId).
 		Scan(&bookingData).Error
 
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -399,3 +379,125 @@ func DeleteStudentBookingByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "StudentBooking deleted successfully"})
 }
+
+// task
+func CreateTask(c *gin.Context) {
+	var task entity.Task
+
+	if err := c.ShouldBindJSON(&task); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	db := config.DB()
+
+	u := entity.Task{
+		UserID:      task.UserID,
+		Title:       task.Title,
+		Date:        task.Date,
+		Time:        task.Time,
+		Description: task.Description,
+	}
+
+	// บันทึก
+	if err := db.Create(&u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "Create task success", "data": u})
+}
+
+// func GetTasksByUserID(c *gin.Context) {
+// 	var task []entity.Task
+
+// 	// รับ User ID จากพารามิเตอร์ใน URL
+// 	userID := c.Param("id")
+// 	if userID == "" {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+// 		return
+// 	}
+
+// 	// Query ข้อมูล Task ที่เกี่ยวข้องกับ User ID
+// 	if err := config.DB().Where("user_id = ?", userID).Find(&task).Error; err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	// ส่งข้อมูลกลับในรูปแบบ JSON
+// 	c.JSON(http.StatusOK, gin.H{"data": task})
+// }
+
+// use
+func GetTaskByUserID(c *gin.Context) {
+	userId := c.Param("userId")
+	var task []entity.Task
+
+
+	// Query Appointments
+	if err := config.DB().Preload("Title").Preload("Date").Preload("Tine").Preload("Description").Where("user_id = ?", userId).Find(&task).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve appointments"})
+		return
+	}
+
+	c.JSON(http.StatusOK, task)
+}
+
+
+func DeleteTaskByID(c *gin.Context) {
+	taskID := c.Param("taskId") // รับ ID ของ Task จาก URL
+	db := config.DB()
+
+	// ลบ Task ตาม ID
+	result := db.Delete(&entity.Task{}, "id = ?", taskID)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	// ตรวจสอบว่าแถวถูกลบหรือไม่
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Task deleted successfully"})
+}
+
+// func UpdateTaskByID(c *gin.Context) {
+// 	taskID := c.Param("taskId") // รับ ID ของ Task จาก URL
+// 	var taskUpdates entity.Task
+// 	db := config.DB()
+
+// 	// ตรวจสอบและผูกข้อมูล JSON ที่ส่งมา
+// 	if err := c.ShouldBindJSON(&taskUpdates); err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	// ค้นหา Task ที่ต้องการอัปเดต
+// 	var task entity.Task
+// 	if err := db.First(&task, "id = ?", taskID).Error; err != nil {
+// 		if err == gorm.ErrRecordNotFound {
+// 			c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
+// 		} else {
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		}
+// 		return
+// 	}
+
+// 	// อัปเดต Task ด้วยข้อมูลใหม่
+// 	task.Title = taskUpdates.Title
+// 	task.Date = taskUpdates.Date
+// 	task.Time = taskUpdates.Time
+// 	task.Description = taskUpdates.Description
+// 	task.Priority = taskUpdates.Priority
+
+// 	if err := db.Save(&task).Error; err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, gin.H{"message": "Task updated successfully", "data": task})
+// }
+

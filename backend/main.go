@@ -49,7 +49,7 @@ func main() {
 		router.GET("/users", controller.ListUsers)
 		router.GET("/users/filter", controller.ListUsersFilters)
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
-
+		//===================================================================================================//
 		//Appointment
 		router.GET("/student/bookings", controller.ListStudentBookingByID)
 		router.GET("/message/:teacherId", controller.GetBookingStudent)
@@ -67,9 +67,14 @@ func main() {
 		router.GET("/appointments/:teacherId", controller.GetAppointmentsForStudent)
 		router.POST("/bookings", controller.BookAppointment)
 		router.GET("/bookings/student/:studentId", controller.GetStudentBookingsByStudentID)
-		router.DELETE("/bookings/:bookingId", controller.DeleteStudentBookingByID)   
+		router.DELETE("/bookings/:bookingId", controller.DeleteStudentBookingByID)
 
-		//router.GET("/users/filter", controller.ListUsersFilters)
+		//Task
+		router.POST("/tasks", controller.CreateTask)       // สร้าง Task
+		router.GET("/tasks/:userId", controller.GetTaskByUserID)    // ดึง Task ทั้งหมดของ User ที่ล็อกอิน
+		// router.PUT("/tasks/:id", controller.UpdateTask)    // อัปเดต Task
+		router.DELETE("/tasks/:id", controller.DeleteTaskByID) // ลบ Task
+		//===================================================================================================//
 
 		//Planner
 		// Routes สำหรับการค้นหาและจัดการข้อมูล Courses

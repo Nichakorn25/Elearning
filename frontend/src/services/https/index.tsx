@@ -784,6 +784,19 @@ async function DeleteStudentBookingByID(bookingId: number) {
     });
 }
 
+async function GetTaskByUserID(userId: string) {
+  try {
+    const response = await axios.get(`${apiUrl}/tasks/${userId}`, requestOptions);
+    return response.data; // คืนค่าเฉพาะ data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error fetching task:", error.response?.data || error.message);
+      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
+    }
+    throw error;
+  }
+}
+
 
 export{
   GetCategories,
@@ -855,6 +868,7 @@ export{
   DeleteTeacherAppointmentByID,
   GetStudentBookingsByID,
   DeleteStudentBookingByID,
+  GetTaskByUserID,
 
   //ClassSchedule
   GetStudyTimeByCourseId,

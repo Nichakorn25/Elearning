@@ -28,6 +28,7 @@ type User struct {
 	Seller             []Seller             `gorm:"foreignKey:UserID"`
 	Cart               []Cart               `gorm:"foreignKey:UserID" `
 	ClassSchedule      []ClassSchedule      `gorm:"foreignKey:UserID" `
+	Task               []Task               `gorm:"foreignKey:UserID" `
 
 	DepartmentID uint       `json:"DepartmentID"`
 	Department   Department `gorm:"foreignKey:DepartmentID"`
