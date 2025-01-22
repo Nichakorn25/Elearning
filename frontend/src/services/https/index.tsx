@@ -760,18 +760,23 @@ async function DeleteTeacherAppointmentByID(id: number) {
 }
 
 async function GetStudentBookingsByID(studentId: string) {
-  return axios
-    .get(`/api/bookings/student/${studentId}`)
-    .then((response) => response)
-    .catch((error) => {
+  try {
+    const response = await axios.get(`${apiUrl}/bookings/student/${studentId}`, requestOptions);
+    return response.data; // คืนค่าเฉพาะ data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
       console.error("Error fetching student bookings:", error.response?.data || error.message);
-      throw error;
-    });
+      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
+    }
+    throw error;
+  }
 }
+
+
 
 async function DeleteStudentBookingByID(bookingId: number) {
   return axios
-    .delete(`${apiUrl}/student/bookings/${bookingId}`)
+    .delete(`${apiUrl}/student/bookings/${bookingId}`  , requestOptions)
     .then((res) => res)
     .catch((e) => {
       console.error("Error deleting booking:", e.response?.data || e.message);

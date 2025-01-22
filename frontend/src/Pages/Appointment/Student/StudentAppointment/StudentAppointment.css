@@ -1,16 +1,17 @@
 .StudentAppointment-layout {
-    margin-top: 5%;
-    padding: 20px;
-    background-color: #f9f9f9;
-    font-family: "Prompt", sans-serif;
-  }
-  
-  .table-header {
-    font-size: 24px;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+  margin-top: 10% !important; /* เพิ่มค่า margin-top ให้มากขึ้น */
+  padding: 20px;
+  background-color: #f9f9f9;
+  font-family: "Prompt", sans-serif;
+}
+
+.table-header {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 25% !important; /* เพิ่มค่า margin-top */
+}
   
   .ant-table {
     background-color: #ffffff;
