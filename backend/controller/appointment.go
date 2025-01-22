@@ -6,9 +6,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"time"
 )
 
-//ไม่ได้ใช้
+// ไม่ได้ใช้
 func CreateAvailability(c *gin.Context) {
 	var availability entity.Availability
 
@@ -30,9 +31,10 @@ func CreateAvailability(c *gin.Context) {
 		"data":    availability,
 	})
 }
+
 //not use
 
-//ใช้
+// ใช้
 func CreateTeacherAppointment(c *gin.Context) {
 	var Appointment entity.TeacherAppointment
 
@@ -44,13 +46,13 @@ func CreateTeacherAppointment(c *gin.Context) {
 	db := config.DB()
 
 	u := entity.TeacherAppointment{
-		Title: Appointment.Title,
+		Title:               Appointment.Title,
 		AppointmentDuration: Appointment.AppointmentDuration,
 		// BufferTime: Appointment.BufferTime,
 		// MaxBookings: Appointment.MaxBookings,
-		Location: Appointment.Location,
+		Location:    Appointment.Location,
 		Description: Appointment.Description,
-		UserID: Appointment.UserID,
+		UserID:      Appointment.UserID,
 		DayofWeekID: Appointment.DayofWeekID,
 		// AvailabilityID: Appointment.AvailabilityID,
 	}
@@ -63,7 +65,6 @@ func CreateTeacherAppointment(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "post Appointment success", "data": u})
 }
-
 
 // GetTeacherAppointments ดึง Appointment ตาม UserID (อาจารย์)
 func GetTeacherAppointments(c *gin.Context) {
@@ -80,9 +81,10 @@ func GetTeacherAppointments(c *gin.Context) {
 		"appointments": appointments,
 	})
 }
+
 //not use
 
-//use
+// use
 func GetTeacherAppointmentsByUserID(c *gin.Context) {
 	userId := c.Param("userId")
 	var appointments []entity.TeacherAppointment
@@ -102,6 +104,7 @@ func GetTeacherAppointmentsByUserID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, appointments)
 }
+
 //use
 
 func GetAppointmentsForStudent(c *gin.Context) {
@@ -124,7 +127,7 @@ func GetAppointmentsForStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, appointments)
 }
 
-//ไม่ได้ใช้
+// ไม่ได้ใช้
 func BookAppointment(c *gin.Context) {
 	var booking entity.StudentBooking
 
@@ -165,9 +168,8 @@ func BookAppointment(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, gin.H{"message": "Appointment booked successfully", "data": booking})
 }
+
 //not use
-
-
 
 // list Day of week use
 func ListDays(c *gin.Context) {
@@ -186,9 +188,7 @@ func ListDays(c *gin.Context) {
 	c.JSON(http.StatusOK, days)
 }
 
-
-
-//จองวันเวลา StudentBooking ใช้อันนี้
+// จองวันเวลา StudentBooking ใช้อันนี้
 func CreateStudentBooking(c *gin.Context) {
 	var booking entity.StudentBooking
 
@@ -200,9 +200,9 @@ func CreateStudentBooking(c *gin.Context) {
 	db := config.DB()
 
 	u := entity.StudentBooking{
-		UserID:        			booking.UserID,
-		DayofWeekID: booking.DayofWeekID,
-		TeacherAppointmentID:   booking.TeacherAppointmentID,
+		UserID:               booking.UserID,
+		DayofWeekID:          booking.DayofWeekID,
+		TeacherAppointmentID: booking.TeacherAppointmentID,
 	}
 
 	// บันทึก
@@ -214,141 +214,188 @@ func CreateStudentBooking(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Booking success", "data": u})
 }
 
-//ไม่ได้ใช้
+// ไม่ได้ใช้
 func ListStudentBookingByID(c *gin.Context) {
-    var studentBookings []struct {
-        ID               uint   `json:"id"`
-        TeacherName      string `json:"teacher_name"`
-        AppointmentDate  string `json:"appointment_date"`
-        Description      string `json:"description"`
-        StudentName      string `json:"student_name"`
-    }
+	var studentBookings []struct {
+		ID              uint   `json:"id"`
+		TeacherName     string `json:"teacher_name"`
+		AppointmentDate string `json:"appointment_date"`
+		Description     string `json:"description"`
+		StudentName     string `json:"student_name"`
+	}
 
-    var teacherAppointments []entity.TeacherAppointment
+	var teacherAppointments []entity.TeacherAppointment
 
-    db := config.DB()
+	db := config.DB()
 
-    userID := c.Query("userID")
-    if userID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
-        return
-    }
+	userID := c.Query("userID")
+	if userID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
+		return
+	}
 
-    // Find TeacherAppointments created by the user
-    if err := db.Where("user_id = ?", userID).Find(&teacherAppointments).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	// Find TeacherAppointments created by the user
+	if err := db.Where("user_id = ?", userID).Find(&teacherAppointments).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    if len(teacherAppointments) == 0 {
+	if len(teacherAppointments) == 0 {
 		c.JSON(http.StatusOK, gin.H{"data": []entity.TeacherAppointment{}})
 		return
 	}
-	
 
-    var teacherAppointmentIDs []uint
-    for _, appointment := range teacherAppointments {
-        teacherAppointmentIDs = append(teacherAppointmentIDs, appointment.ID)
-    }
+	var teacherAppointmentIDs []uint
+	for _, appointment := range teacherAppointments {
+		teacherAppointmentIDs = append(teacherAppointmentIDs, appointment.ID)
+	}
 
-    // Join StudentBooking with Student name and TeacherAppointment
-    query := db.Table("student_bookings").
-        Select("student_bookings.id, teacher_appointments.title AS teacher_name, student_bookings.created_at AS appointment_date, student_bookings.description, users.first_name || ' ' || users.last_name AS student_name").
-        Joins("JOIN teacher_appointments ON student_bookings.teacher_appointment_id = teacher_appointments.id").
-        Joins("JOIN users ON student_bookings.user_id = users.id").
-        Where("teacher_appointments.id IN ?", teacherAppointmentIDs).
-        Scan(&studentBookings)
+	// Join StudentBooking with Student name and TeacherAppointment
+	query := db.Table("student_bookings").
+		Select("student_bookings.id, teacher_appointments.title AS teacher_name, student_bookings.created_at AS appointment_date, student_bookings.description, users.first_name || ' ' || users.last_name AS student_name").
+		Joins("JOIN teacher_appointments ON student_bookings.teacher_appointment_id = teacher_appointments.id").
+		Joins("JOIN users ON student_bookings.user_id = users.id").
+		Where("teacher_appointments.id IN ?", teacherAppointmentIDs).
+		Scan(&studentBookings)
 
-    if query.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": query.Error.Error()})
-        return
-    }
+	if query.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": query.Error.Error()})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"data": studentBookings})
+	c.JSON(http.StatusOK, gin.H{"data": studentBookings})
 }
 
-//ดึงข้อมูลStudentBookingใส่Notification
+// ดึงข้อมูลStudentBookingใส่Notification
 func GetBookingStudent(c *gin.Context) {
-    teacherId := c.Param("teacherId") // รับ teacherId จาก URL parameter
-    var teacher []entity.User
+	teacherId := c.Param("teacherId") // รับ teacherId จาก URL parameter
+	var teacher []entity.User
 
-    // ตรวจสอบว่า Teacher ID มีอยู่หรือไม่ และ Role เป็น Teacher
-    if err := config.DB().First(&teacher, "id = ?", teacherId).Error; err != nil {
-        c.JSON(http.StatusUnauthorized, gin.H{"error": "Teacher not found or invalid"})
-        return
-    }
+	// ตรวจสอบว่า Teacher ID มีอยู่หรือไม่ และ Role เป็น Teacher
+	if err := config.DB().First(&teacher, "id = ?", teacherId).Error; err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Teacher not found or invalid"})
+		return
+	}
 
-    // ดึงข้อมูล StudentBooking พร้อม Preload ตาราง TeacherAppointment
-    var studentBookings []entity.StudentBooking
-    if err := config.DB().
+	// ดึงข้อมูล StudentBooking พร้อม Preload ตาราง TeacherAppointment
+	var studentBookings []entity.StudentBooking
+	if err := config.DB().
 		Preload("User").
 		Preload("DayofWeek").
-        Preload("TeacherAppointment"). // Preload ข้อมูล TeacherAppointment
-        Where("teacher_appointment_id IN (SELECT id FROM teacher_appointments WHERE user_id = ?)", teacherId).
-        Find(&studentBookings).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
-        return
-    }
+		Preload("TeacherAppointment"). // Preload ข้อมูล TeacherAppointment
+		Where("teacher_appointment_id IN (SELECT id FROM teacher_appointments WHERE user_id = ?)", teacherId).
+		Find(&studentBookings).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
+		return
+	}
 
-    c.JSON(http.StatusOK, studentBookings)
+	c.JSON(http.StatusOK, studentBookings)
 }
 
 func DeleteTeacherAppointment(c *gin.Context) {
-    id := c.Param("id") // รับ ID ของ TeacherAppointment จาก URL parameter
-    db := config.DB()
+	id := c.Param("id") // รับ ID ของ TeacherAppointment จาก URL parameter
+	db := config.DB()
 
-    // ลบ TeacherAppointment ตาม ID
-    result := db.Delete(&entity.TeacherAppointment{}, "id = ?", id)
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-        return
-    }
+	// ลบ TeacherAppointment ตาม ID
+	result := db.Delete(&entity.TeacherAppointment{}, "id = ?", id)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
-    // ตรวจสอบว่าพบแถวที่ถูกลบหรือไม่
-    if result.RowsAffected == 0 {
-        c.JSON(http.StatusNotFound, gin.H{"error": "TeacherAppointment not found"})
-        return
-    }
+	// ตรวจสอบว่าพบแถวที่ถูกลบหรือไม่
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "TeacherAppointment not found"})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"message": "TeacherAppointment deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "TeacherAppointment deleted successfully"})
 }
 
 //use
+// func GetStudentBookingsByStudentID(c *gin.Context) {
+//     studentId := c.Param("studentId") // รับ studentId จาก URL
+//     var studentBookings []entity.StudentBooking
+
+//     // ดึงข้อมูลการจองของนักเรียนคนนี้
+//     if err := config.DB().
+//         Preload("TeacherAppointment").
+//         Preload("TeacherAppointment.User").
+//         Preload("DayofWeek").
+//         Where("user_id = ?", studentId). // ใช้ user_id สำหรับนักเรียน
+//         Find(&studentBookings).Error; err != nil {
+//         c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
+//         return
+//     }
+
+//     c.JSON(http.StatusOK, studentBookings)
+// }
+
 func GetStudentBookingsByStudentID(c *gin.Context) {
-    studentId := c.Param("studentId") // รับ studentId จาก URL
-    var studentBookings []entity.StudentBooking
+	// รับ studentId จาก URL parameter
+	studentId := c.Param("studentId")
 
-    // ดึงข้อมูลการจองของนักเรียนคนนี้
-    if err := config.DB().
-        Preload("TeacherAppointment").
-        Preload("TeacherAppointment.User").
-        Preload("DayofWeek").
-        Where("user_id = ?", studentId). // ใช้ user_id สำหรับนักเรียน
-        Find(&studentBookings).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve student bookings"})
-        return
-    }
+	// โครงสร้างสำหรับเก็บข้อมูลที่รวมมาจากหลายตาราง
+	type StudentBookingResponse struct {
+		BookingID           uint      `json:"booking_id"`
+		Title               string    `json:"title"`
+		AppointmentDuration string    `json:"appointment_duration"`
+		Location            string    `json:"location"`
+		Description         string    `json:"description"`
+		TeacherFirstName    string    `json:"teacher_first_name"`
+		TeacherLastName     string    `json:"teacher_last_name"`
+		CreatedAt           time.Time `json:"created_at"`
+	}
 
-    c.JSON(http.StatusOK, studentBookings)
+	var bookingData []StudentBookingResponse
+
+	// เรียกใช้งานฐานข้อมูล
+	db := config.DB()
+
+	// ดึงข้อมูลที่มีการ join ระหว่างตาราง
+	err := db.Table("student_bookings").
+		Select(`
+            student_bookings.id AS booking_id,
+            teacher_appointments.title AS title,
+            teacher_appointments.appointment_duration AS appointment_duration,
+            teacher_appointments.location AS location,
+            teacher_appointments.description AS description,
+            users.first_name AS teacher_first_name,
+            users.last_name AS teacher_last_name,
+            student_bookings.created_at AS created_at
+        `).
+		Joins("INNER JOIN teacher_appointments ON student_bookings.teacher_appointment_id = teacher_appointments.id").
+		Joins("INNER JOIN users ON teacher_appointments.user_id = users.id").
+		Where("student_bookings.user_id = ?", studentId).
+		Scan(&bookingData).Error
+
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ส่งข้อมูลกลับในรูปแบบ JSON
+	c.JSON(http.StatusOK, bookingData)
 }
 
-//use
+// use
 func DeleteStudentBookingByID(c *gin.Context) {
-    bookingID := c.Param("bookingId") // รับ ID การจองจาก URL
-    db := config.DB()
+	bookingID := c.Param("bookingId") // รับ ID การจองจาก URL
+	db := config.DB()
 
-    // ลบ StudentBooking ตาม ID
-    result := db.Delete(&entity.StudentBooking{}, "id = ?", bookingID)
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-        return
-    }
+	// ลบ StudentBooking ตาม ID
+	result := db.Delete(&entity.StudentBooking{}, "id = ?", bookingID)
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
-    // ตรวจสอบว่าแถวถูกลบหรือไม่
-    if result.RowsAffected == 0 {
-        c.JSON(http.StatusNotFound, gin.H{"error": "StudentBooking not found"})
-        return
-    }
+	// ตรวจสอบว่าแถวถูกลบหรือไม่
+	if result.RowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "StudentBooking not found"})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"message": "StudentBooking deleted successfully"})
+	c.JSON(http.StatusOK, gin.H{"message": "StudentBooking deleted successfully"})
 }
