@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./ClassSchedule.css";
 import Header from "../../Component/Header/Header";
 import AddSubjectPopup from "../AddSubjectPopup/AddSubjectPopup";
@@ -7,10 +7,60 @@ import {
   CourseInterface,
   StudyTimeInterface,
 } from "../../../Interface/IClassSchedule";
-import { message } from "antd";
+import { message , Spin } from "antd";
 import Swal from "sweetalert2";
+import { GetClassScheduleById , AddClassSchedule } from "../../../services/https";
 
 const ClassSchedule: React.FC = () => {
+
+  useEffect(() => {
+    const fetchClassSchedule = async () => {
+      try {
+        // ดึง UserID จาก LocalStorage
+        const userId = localStorage.getItem("id");
+        if (!userId) {
+          Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
+          return;
+        }
+  
+        // เรียก API เพื่อดึงข้อมูลตารางเรียน
+        const data = await GetClassScheduleById(userId);
+        console.log("Fetched Class Schedule:", data);
+  
+        // ประมวลผลข้อมูลที่ได้รับจาก API
+        const updatedSchedule = [...schedule];
+        const coursesFromApi: CourseInterface[] = data.map((item: any) => {
+          const dayRow = updatedSchedule.find((row) => row.key === item.DayofWeekID);
+          if (dayRow) {
+            item.StudyTimes.forEach((time: StudyTimeInterface) => {
+              const startHour = new Date(time.StudyTimeStart).getUTCHours();
+              const endHour = new Date(time.StudyTimeEnd).getUTCHours();
+  
+              let timeFront = startHour - 8;
+              let timeEnd = endHour - 8 - 1;
+  
+              for (let i = timeFront; i <= timeEnd; i++) {
+                dayRow.slots[i] = {
+                  courseName: item.CourseName,
+                  color: getRandomColor(),
+                };
+              }
+            });
+          }
+          return item; // เก็บข้อมูล course สำหรับ state courses
+        });
+  
+        setCourses(coursesFromApi); // เก็บ courses ใน state
+        setSchedule(updatedSchedule); // อัปเดตตารางเรียน
+      } catch (error) {
+        console.error("Error fetching class schedule:", error);
+        Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถโหลดตารางเรียนได้", "error");
+      }
+    };
+  
+    fetchClassSchedule();
+  }, []); // useEffect ที่โหลดครั้งเดียว
+  
   const timeslots = [
     "08:00-09:00",
     "09:00-10:00",
@@ -218,17 +268,51 @@ const ClassSchedule: React.FC = () => {
       cancelButtonColor: "#CD6155",
       confirmButtonText: "บันทึก",
       cancelButtonText: "ยกเลิก",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        console.log("Saving schedule...", schedule);
-        Swal.fire(
-          "บันทึกสำเร็จ!",
-          "ตารางเรียนถูกบันทึกเรียบร้อยแล้ว",
-          "success"
-        );
+        try {
+          // ดึง UserID จาก LocalStorage
+          const userId = localStorage.getItem("id");
+          if (!userId) {
+            Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
+            return;
+          }
+  
+          // Loop ผ่าน courses ที่เพิ่มใหม่ แล้วส่ง API
+          for (const course of courses) {
+            // ค้นหา DayofWeekID จาก StudyDay
+            const dayofWeek = schedule.find((row) => row.day === course.StudyDay);
+  
+            if (!dayofWeek) {
+              Swal.fire(
+                "เกิดข้อผิดพลาด!",
+                `ไม่สามารถกำหนดวันสำหรับวิชา ${course.CourseName}`,
+                "error"
+              );
+              continue; // ข้ามไปยังรอบถัดไป
+            }
+  
+            const newSchedule = {
+              CourseID: course.ID,
+              UserID: parseInt(userId), // แปลง UserID เป็นตัวเลข
+              DayofWeekID: dayofWeek.key, // ดึง key จาก schedule
+            };
+  
+            console.log("Preparing to save schedule:", newSchedule); // ตรวจสอบค่า
+  
+            await AddClassSchedule(newSchedule); // เรียก API เพิ่มตารางเรียน
+            console.log(newSchedule);
+          }
+  
+          Swal.fire("บันทึกสำเร็จ!", "ตารางเรียนถูกบันทึกเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถบันทึกตารางเรียนได้", "error");
+        }
       }
     });
   };
+  
+  
 
   return (
     <div className="dashboard">

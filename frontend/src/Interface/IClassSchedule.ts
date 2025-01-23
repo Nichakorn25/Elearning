@@ -11,8 +11,8 @@ export interface ExamScheduleInterface {
   CourseID: number;
 }
 
-// Interface สำหรับข้อมูลวิชา (Course)
 export interface CourseInterface {
+  StudyDay: string;
   color: string;
   StudyTimes: StudyTimeInterface[];
   ID: number;
@@ -36,7 +36,9 @@ export interface CourseInterface {
   Semester?: SemesterInterface;
   DayofWeek?: DayInterface;
   ExamSchedules?: ExamScheduleInterface[]; // ตารางสอบของวิชา
+  ClassSchedules?: ClassScheduleInterface[]; // ตารางเรียนของ Course
 }
+
 
 // Interface สำหรับข้อมูลเวลาเรียน (StudyTime)
 export interface StudyTimeInterface {
@@ -69,18 +71,15 @@ export interface SemesterInterface {
   AcademicYear: number; // เช่น "2567"
 }
 
-// Interface สำหรับข้อมูลวันในหนึ่งสัปดาห์
-//   export interface DayInterface {
-//     ID: number;
-//     DayName: string; // เช่น "จันทร์", "อังคาร"
-//   }
+// Interface สำหรับข้อมูลตารางเรียน (ClassSchedule)
+export interface ClassScheduleInterface {
+  ID: number; // Primary Key ของ ClassSchedule
+  UserID: number; // ID ของผู้ใช้งาน (เช่น นักเรียน)
+  CourseID: number; // ID ของวิชา
+  DayofWeekID: number; // ID ของวันในสัปดาห์
 
-// Interface สำหรับข้อมูลผู้ใช้งาน (ผู้สอน)
-//   export interface UserInterface {
-//     ID: number;
-//     Username: string;
-//     FirstName: string;
-//     LastName: string;
-//     Phone?: string;
-//     Email: string;
-//   }
+  // ความสัมพันธ์กับข้อมูลอื่น
+  Course?: CourseInterface; // ความสัมพันธ์กับ Course
+  DayofWeek?: DayInterface; // ความสัมพันธ์กับ DayInterface
+  User?: UserInterface; // ความสัมพันธ์กับ User
+}

@@ -677,6 +677,54 @@ async function CreateStudentBooking(data: StudentBookingInterface) {
     .catch((e) => e.response);
 }
 
+async function DeleteTeacherAppointmentByID(id: number) {
+  return axios
+    .delete(`${apiUrl}/teacher-appointments/${id}`, requestOptions)
+    .then((response) => response)
+    .catch((error) => {
+      console.error("Error deleting appointment:", error.response?.data || error.message);
+      throw error;
+    });
+}
+
+async function GetStudentBookingsByID(studentId: string) {
+  try {
+    const response = await axios.get(`${apiUrl}/bookings/student/${studentId}`, requestOptions);
+    return response.data; // คืนค่าเฉพาะ data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error fetching student bookings:", error.response?.data || error.message);
+      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
+    }
+    throw error;
+  }
+}
+
+
+
+async function DeleteStudentBookingByID(bookingId: number) {
+  return axios
+    .delete(`${apiUrl}/student/bookings/${bookingId}`  , requestOptions)
+    .then((res) => res)
+    .catch((e) => {
+      console.error("Error deleting booking:", e.response?.data || e.message);
+      throw e;
+    });
+}
+
+async function GetTaskByUserID(userId: string) {
+  try {
+    const response = await axios.get(`${apiUrl}/tasks/${userId}`, requestOptions);
+    return response.data; // คืนค่าเฉพาะ data
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error fetching task:", error.response?.data || error.message);
+      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
+    }
+    throw error;
+  }
+}
+
 //---------------------------------Class Schedule------------------------------------------
 // ค้นหาคอร์สจากคำค้นหาและเทอม
 async function SearchCourses(semester: string, searchTerm: string) {
@@ -749,53 +797,46 @@ async function SearchCoursesWithDetails(semester: string, searchTerm: string) {
     });
 }
 
-async function DeleteTeacherAppointmentByID(id: number) {
+//test
+// ดึงข้อมูล ClassSchedule พร้อมความสัมพันธ์ (เช่น DayOfWeek, Course, StudyTime, ExamSchedule)
+async function GetClassScheduleById(userId: any) {
+  const url = `${apiUrl}/classschedule/${userId}`;
   return axios
-    .delete(`${apiUrl}/teacher-appointments/${id}`, requestOptions)
-    .then((response) => response)
-    .catch((error) => {
-      console.error("Error deleting appointment:", error.response?.data || error.message);
-      throw error;
+    .get(url, requestOptions)
+    .then((res) => res.data) // รับข้อมูลสำเร็จจาก API
+    .catch((err) => {
+      console.error("Error during API request:", err.response || err.message);
+      throw err; 
     });
 }
 
-async function GetStudentBookingsByID(studentId: string) {
-  try {
-    const response = await axios.get(`${apiUrl}/bookings/student/${studentId}`, requestOptions);
-    return response.data; // คืนค่าเฉพาะ data
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error fetching student bookings:", error.response?.data || error.message);
-      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
-    }
-    throw error;
-  }
-}
-
-
-
-async function DeleteStudentBookingByID(bookingId: number) {
+// ฟังก์ชันเพิ่มข้อมูลใน ClassSchedule
+async function AddClassSchedule(classScheduleData: any) {
+  const url = `${apiUrl}/classschedule`;
   return axios
-    .delete(`${apiUrl}/student/bookings/${bookingId}`  , requestOptions)
-    .then((res) => res)
-    .catch((e) => {
-      console.error("Error deleting booking:", e.response?.data || e.message);
-      throw e;
+    .post(url, classScheduleData, requestOptions)
+    .then((res) => res.data) // รับข้อมูลสำเร็จจาก API
+    .catch((err) => {
+      console.error("Error during API request (Add):", err.response?.data || err.message);
+      throw err;
     });
 }
 
-async function GetTaskByUserID(userId: string) {
-  try {
-    const response = await axios.get(`${apiUrl}/tasks/${userId}`, requestOptions);
-    return response.data; // คืนค่าเฉพาะ data
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error fetching task:", error.response?.data || error.message);
-      throw error; // ส่งต่อข้อผิดพลาดให้ผู้เรียกใช้จัดการ
-    }
-    throw error;
-  }
+// ฟังก์ชันลบข้อมูลใน ClassSchedule โดยใช้ CourseID
+async function RemoveClassScheduleByCourseID(courseID: any) {
+  const url = `${apiUrl}/classschedule/course/${courseID}`;
+  return axios
+    .delete(url, requestOptions)
+    .then((res) => res.data) // รับข้อมูลสำเร็จจาก API
+    .catch((err) => {
+      console.error("Error during API request (Remove):", err.response || err.message);
+      throw err; // ขว้างข้อผิดพลาดออกไปให้จัดการต่อในที่เรียกใช้งาน
+    });
 }
+
+//test
+
+
 
 
 export{
@@ -876,4 +917,7 @@ export{
   AddCourseToSchedule,
   RemoveCourseFromSchedule,
   SearchCoursesWithDetails,
+  GetClassScheduleById,
+  AddClassSchedule,
+  RemoveClassScheduleByCourseID,
 };

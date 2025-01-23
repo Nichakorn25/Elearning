@@ -86,6 +86,11 @@ func main() {
 		router.POST("/class-schedule", controller.AddCourseToSchedule)            // เพิ่มรายวิชาในตารางเรียน
 		router.DELETE("/class-schedule/:id", controller.RemoveCourseFromSchedule) // ลบรายวิชาออกจากตารางเรียน
 
+		router.GET("/classschedule/:userID", controller.GetClassScheduleByUserID)
+		router.POST("/classschedule", controller.AddClassSchedule)
+		router.DELETE("/classschedule/course/:courseID", controller.RemoveClassScheduleByCourseID)
+
+
 		// Route สำหรับค้นหารายวิชาพร้อมข้อมูลเพิ่มเติม
 		// router.GET("/searchCoursesWithDetails", controller.SearchCoursesWithDetails) // ค้นหารายวิชาพร้อม StudyTime และ ExamSchedule
 

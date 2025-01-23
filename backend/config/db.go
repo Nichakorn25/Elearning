@@ -357,6 +357,24 @@ func SetupDatabase() {
 		db.FirstOrCreate(&exam, entity.ExamSchedule{CourseID: exam.CourseID, ExamDate: exam.ExamDate})
 	}
 
+	// เพิ่มข้อมูล ClassSchedule
+	classSchedules := []entity.ClassSchedule{
+		{
+			CourseID:    1, // ID ของ Mathematics
+			UserID:      5,
+			DayofWeekID: 1, // Monday
+		},
+		{
+			CourseID:    2, // ID ของ Physics
+			UserID:      5,
+			DayofWeekID: 2, // Tuesday
+		},
+	}
+	for _, schedule := range classSchedules {
+		db.FirstOrCreate(&schedule, entity.ClassSchedule{CourseID: schedule.CourseID, DayofWeekID: schedule.DayofWeekID, UserID: schedule.UserID})
+	}
+
+
 	// permissions := []entity.Permission{
 	// 	{CanCreate: false, CanRead: true, CanUpdate: false, CanDelete: false, ModuleID: 1, RoleID: 1},
 	// 	{CanCreate: true, CanRead: true, CanUpdate: true, CanDelete: false, ModuleID: 2, RoleID: 1},

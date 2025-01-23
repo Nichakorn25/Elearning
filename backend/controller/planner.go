@@ -146,3 +146,71 @@ func RemoveCourseFromSchedule(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Course removed from schedule successfully"})
 }
 
+//test 
+//use ดึงตารางเรียนโดยไอดีผู้ใช้
+func GetClassScheduleByUserID(c *gin.Context) {
+	userID := c.Param("userID")
+
+	var schedules []entity.ClassSchedule
+
+	// Preload ความสัมพันธ์ที่เกี่ยวข้อง
+	if err := config.DB().
+		Where("user_id = ?", userID).
+		Preload("DayofWeek").   // ดึงข้อมูล DayOfWeek
+		Preload("Course").      // ดึงข้อมูล Course
+		Find(&schedules).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ส่งข้อมูลกลับในรูปแบบ JSON
+	c.JSON(http.StatusOK, schedules)
+}
+
+// บันทึกข้อมูลลงใน ClassSchedule
+func AddClassSchedule(c *gin.Context) {
+	var classSchedule entity.ClassSchedule
+
+	// ตรวจสอบและ Bind ข้อมูลจาก Request Body
+	if err := c.ShouldBindJSON(&classSchedule); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ตรวจสอบว่ามีข้อมูล Course, User, หรือ DayOfWeek ID ที่จำเป็นหรือไม่
+	if classSchedule.CourseID == 0 || classSchedule.UserID == 0 || classSchedule.DayofWeekID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID, UserID, and DayofWeekID are required"})
+		return
+	}
+
+	// บันทึกข้อมูลลงในฐานข้อมูล
+	if err := config.DB().Create(&classSchedule).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ส่งข้อมูลกลับหลังจากบันทึกสำเร็จ
+	c.JSON(http.StatusCreated, classSchedule)
+}
+
+// ลบวิชาออกจาก ClassSchedule โดยใช้ CourseID use
+func RemoveClassScheduleByCourseID(c *gin.Context) {
+	courseID := c.Param("courseID") // รับ CourseID จาก Path Parameter
+
+	// ตรวจสอบว่า CourseID เป็นค่าที่ถูกต้องหรือไม่
+	if courseID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID is required"})
+		return
+	}
+
+	// ลบข้อมูลจาก ClassSchedule โดยใช้ CourseID
+	if err := config.DB().Where("course_id = ?", courseID).Delete(&entity.ClassSchedule{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ส่งข้อความกลับเมื่อการลบสำเร็จ
+	c.JSON(http.StatusOK, gin.H{"message": "Class schedule removed successfully"})
+}
+
+//test
