@@ -78,7 +78,8 @@ func main() {
 
 		//Planner
 		// Routes สำหรับการค้นหาและจัดการข้อมูล Courses
-		router.GET("/searchCourses", controller.SearchCourses)                         // ค้นหารายวิชา
+		// router.GET("/searchCourses", controller.SearchCourses)                         // ค้นหารายวิชา
+		router.GET("/courses/search/:id", controller.SearchCoursesByTerm)
 		router.GET("/courses/:id/study-time", controller.GetStudyTimeByCourseId)       // ดึงเวลาเรียนของรายวิชา
 		router.GET("/courses/:id/exam-schedule", controller.GetExamScheduleByCourseId) // ดึงตารางสอบของรายวิชา
 

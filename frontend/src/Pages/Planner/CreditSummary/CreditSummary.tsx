@@ -44,51 +44,61 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
           </tr>
         </thead>
         <tbody>
-          {courses.map((course) => (
-            <tr key={course.ID}>
-              <td
-                style={{
-                  backgroundColor: course.color || "transparent", // ใช้สีจาก course.color หรือโปร่งใส
-                  color: "#000", // สีตัวอักษร
-                  padding: "5px",
-                  borderRadius: "4px", // มุมโค้ง
-                }}
-              >
-                {course.ID}
-              </td>
+          {courses.map((course) => {
+            if (!course.ID) {
+              console.error("Course ID is undefined:", course); // แจ้งเตือนเมื่อไม่มี ID
+              return null; // ข้ามการแสดงข้อมูล
+            }
 
-              <td>{course.CourseName}</td>
-              <td>{course.Credit}</td>
-              <td>{course.Description}</td>
-              <td>
-                {course.ExamSchedules && course.ExamSchedules.length > 0 ? (
-                  <ul>
-                    {course.ExamSchedules.map((exam, index) => (
-                      <li key={index}>
-                        <strong>วันที่:</strong> {exam.ExamDate} <br />
-                        <strong>เวลา:</strong> {exam.StartTime} - {exam.EndTime}{" "}
-                        <br />
-                        <strong>สถานที่:</strong> {exam.Location}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <span>ไม่มีตารางสอบ</span>
-                )}
-              </td>
-              <td>
-                <button
-                  className="delete-icon-button"
-                  onClick={() => {
-                    console.log("Deleting course ID:", course.ID); // ตรวจสอบ ID ที่ต้องการลบ
-                    onRemoveCourse(course.ID); // ลบคอร์สตาม ID
+            return (
+              <tr key={course.ID}>
+                <td
+                  style={{
+                    backgroundColor: course.color || "transparent", // ใช้สีจาก course.color หรือโปร่งใส
+                    color: "#000",
+                    padding: "5px",
+                    borderRadius: "4px",
                   }}
                 >
-                  <i className="fas fa-trash delete-icon"></i>
-                </button>
-              </td>
-            </tr>
-          ))}
+                  {course.ID}
+                </td>
+                <td>{course.CourseName}</td>
+                <td>{course.Credit}</td>
+                <td>{course.Description}</td>
+                <td>
+                  {course.ExamSchedules && course.ExamSchedules.length > 0 ? (
+                    <ul>
+                      {course.ExamSchedules.map((exam, index) => (
+                        <li key={index}>
+                          <strong>วันที่:</strong> {exam.ExamDate} <br />
+                          <strong>เวลา:</strong> {exam.StartTime} -{" "}
+                          {exam.EndTime} <br />
+                          <strong>สถานที่:</strong> {exam.Location}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>ไม่มีตารางสอบ</span>
+                  )}
+                </td>
+                <td>
+                  <button
+                    className="delete-icon-button"
+                    onClick={() => {
+                      if (course.ID) {
+                        console.log("Deleting course ID:", course.ID);
+                        onRemoveCourse(course.ID);
+                      } else {
+                        console.error("Course ID is undefined:", course);
+                      }
+                    }}
+                  >
+                    <i className="fas fa-trash delete-icon"></i>
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

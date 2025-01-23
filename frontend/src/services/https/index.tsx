@@ -727,7 +727,33 @@ async function GetTaskByUserID(userId: string) {
 
 //---------------------------------Class Schedule------------------------------------------
 // ค้นหาคอร์สจากคำค้นหาและเทอม
-async function SearchCourses(semester: string, searchTerm: string) {
+// async function SearchCourses(semester: string, searchTerm: string) {
+//   const Authorization = localStorage.getItem("token");
+//   const Bearer = localStorage.getItem("token_type");
+
+//   const requestOptions = {
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `${Bearer} ${Authorization}`,
+//     },
+//   };
+
+//   const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
+//     searchTerm
+//   )}`;
+
+//   console.log("Sending request to:", url); // Debug URL
+
+//   return axios
+//     .get(url, requestOptions)
+//     .then((res) => res.data)
+//     .catch((err) => {
+//       console.error("Error during API request:", err.response || err.message);
+//       throw err;
+//     });
+// }
+
+async function SearchCourses(termId: string, searchTerm: string) {
   const Authorization = localStorage.getItem("token");
   const Bearer = localStorage.getItem("token_type");
 
@@ -738,7 +764,8 @@ async function SearchCourses(semester: string, searchTerm: string) {
     },
   };
 
-  const url = `${apiUrl}/searchCourses?semester=${semester}&filter=${encodeURIComponent(
+  // ปรับ URL ให้เรียกตาม termId (เช่น /courses/search/:id)
+  const url = `${apiUrl}/courses/search/${termId}?filter=${encodeURIComponent(
     searchTerm
   )}`;
 
@@ -746,12 +773,16 @@ async function SearchCourses(semester: string, searchTerm: string) {
 
   return axios
     .get(url, requestOptions)
-    .then((res) => res.data)
+    .then((res) => {
+      console.log("Received data:", res.data); // Debug response
+      return res.data; // Return response data
+    })
     .catch((err) => {
       console.error("Error during API request:", err.response || err.message);
       throw err;
     });
 }
+
 
 // ดึง StudyTime ตาม CourseID
 async function GetStudyTimeByCourseId(courseId: number) {
