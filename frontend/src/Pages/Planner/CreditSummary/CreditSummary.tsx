@@ -44,14 +44,14 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
           </tr>
         </thead>
         <tbody>
-          {courses.map((course) => {
+          {courses.map((course, index) => {
             if (!course.ID) {
               console.error("Course ID is undefined:", course); // แจ้งเตือนเมื่อไม่มี ID
               return null; // ข้ามการแสดงข้อมูล
             }
 
             return (
-              <tr key={course.ID}>
+              <tr key={`${course.ID}-${index}`}>
                 <td
                   style={{
                     backgroundColor: course.color || "transparent", // ใช้สีจาก course.color หรือโปร่งใส

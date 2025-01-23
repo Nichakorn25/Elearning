@@ -215,7 +215,6 @@ func RemoveCourseFromSchedule(c *gin.Context) {
 }
 
 //test 
-//use ดึงตารางเรียนโดยไอดีผู้ใช้
 func GetClassScheduleByUserID(c *gin.Context) {
 	userID := c.Param("userID")
 
@@ -224,8 +223,10 @@ func GetClassScheduleByUserID(c *gin.Context) {
 	// Preload ความสัมพันธ์ที่เกี่ยวข้อง
 	if err := config.DB().
 		Where("user_id = ?", userID).
-		Preload("DayofWeek").   // ดึงข้อมูล DayOfWeek
-		Preload("Course").      // ดึงข้อมูล Course
+		Preload("DayofWeek").         // ดึงข้อมูล DayOfWeek
+		Preload("Course").            // ดึงข้อมูล Course
+		Preload("Course.StudyTime").  // ดึงข้อมูล StudyTime ที่เกี่ยวข้องกับ Course
+		Preload("Course.ExamSchedule"). // ดึงข้อมูล ExamSchedule
 		Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -234,6 +235,7 @@ func GetClassScheduleByUserID(c *gin.Context) {
 	// ส่งข้อมูลกลับในรูปแบบ JSON
 	c.JSON(http.StatusOK, schedules)
 }
+
 
 // // บันทึกข้อมูลลงใน ClassSchedule
 // func AddClassSchedule(c *gin.Context) {

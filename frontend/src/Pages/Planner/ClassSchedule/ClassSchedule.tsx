@@ -18,52 +18,76 @@ const ClassSchedule: React.FC = () => {
   useEffect(() => {
     const fetchClassSchedule = async () => {
       try {
-        // ดึง UserID จาก LocalStorage
         const userId = localStorage.getItem("id");
         if (!userId) {
           Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
           return;
         }
-
-        // เรียก API เพื่อดึงข้อมูลตารางเรียน
+    
         const data = await GetClassScheduleById(userId);
         console.log("Fetched Class Schedule:", data);
-
-        // ประมวลผลข้อมูลที่ได้รับจาก API
+    
+        if (!data || data.length === 0) {
+          Swal.fire("ไม่มีข้อมูล!", "ไม่พบข้อมูลตารางเรียน", "info");
+          return;
+        }
+    
         const updatedSchedule = [...schedule];
+    
         const coursesFromApi: CourseInterface[] = data.map((item: any) => {
+          const course = item.Course || {};
+          const studyTimes = course.StudyTime || []; // ตรวจสอบ StudyTimes
+          console.log("Course StudyTimes:", studyTimes);
+    
           const dayRow = updatedSchedule.find(
             (row) => row.key === item.DayofWeekID
           );
-          if (dayRow) {
-            item.StudyTimes.forEach((time: StudyTimeInterface) => {
+    
+          if (dayRow && studyTimes.length > 0) {
+            studyTimes.forEach((time: StudyTimeInterface) => {
               const startHour = new Date(time.StudyTimeStart).getUTCHours();
               const endHour = new Date(time.StudyTimeEnd).getUTCHours();
-
+    
               let timeFront = startHour - 8;
               let timeEnd = endHour - 8 - 1;
-
+    
               for (let i = timeFront; i <= timeEnd; i++) {
-                dayRow.slots[i] = {
-                  courseName: item.CourseName,
-                  color: getRandomColor(),
-                };
+                if (!dayRow.slots[i]) {
+                  dayRow.slots[i] = {
+                    courseName: course.CourseName || "Unknown Course",
+                    color: getRandomColor(),
+                  };
+                } else {
+                  console.warn(
+                    `Time conflict at slot ${i} for ${course.CourseName}`
+                  );
+                }
               }
             });
+          } else {
+            console.warn(
+              "No StudyTimes or invalid data for:",
+              course.CourseName || "Unknown"
+            );
           }
-          return item; // เก็บข้อมูล course สำหรับ state courses
+    
+          return {
+            ...course,
+            DayofWeekID: item.DayofWeekID,
+            SemesterID: course.SemesterID,
+          };
         });
-
-        setCourses(coursesFromApi); // เก็บ courses ใน state
-        setSchedule(updatedSchedule); // อัปเดตตารางเรียน
+    
+        setCourses(coursesFromApi);
+        setSchedule(updatedSchedule);
       } catch (error) {
         console.error("Error fetching class schedule:", error);
         Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถโหลดตารางเรียนได้", "error");
       }
     };
-
+    
     fetchClassSchedule();
-  }, []); // useEffect ที่โหลดครั้งเดียว
+  }, []); // จะถูกเรียกครั้งเดียวเมื่อเปิดหน้านี้
 
   const timeslots = [
     "08:00-09:00",
