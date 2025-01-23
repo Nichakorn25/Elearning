@@ -124,14 +124,24 @@ const ClassSchedule: React.FC = () => {
   const populateSchedule = (course: CourseInterface) => {
     console.log("Adding course to schedule:", course);
 
+    const conflicts: string[] = []; // เก็บข้อความเกี่ยวกับข้อขัดแย้ง
+    const currentSemester = 1; // สมมติว่า currentSemester มาจาก state หรือ props
     const courseColor = getRandomColor();
     setUsedColors((prev) => [...prev, courseColor]);
 
-    // เพิ่มสีให้กับ course
-    const updatedCourse = { ...course, color: courseColor };
-
     const updatedSchedule = [...schedule];
 
+    // **ตรวจสอบว่า Course อยู่ในเทอมปัจจุบันหรือไม่**
+    if (course.SemesterID !== currentSemester) {
+      Swal.fire({
+        title: "Semester Conflict!",
+        text: `The course "${course.CourseName}" belongs to Semester ${course.SemesterID}, which is different from the current Semester (${currentSemester}).`,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return; // หยุดการเพิ่มวิชา
+    }
+    // ตรวจสอบเวลาเรียนซ้ำซ้อน
     course.StudyTimes.forEach(
       ({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
         const dayMapping: { [key: string]: string } = {
@@ -162,15 +172,16 @@ const ClassSchedule: React.FC = () => {
             timeEnd < timeslots.length
           ) {
             for (let i = timeFront; i <= timeEnd; i++) {
-              if (!dayRow.slots[i]) {
+              if (dayRow.slots[i]) {
+                // เก็บข้อขัดแย้งใน conflicts
+                conflicts.push(
+                  `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
+                );
+              } else {
                 dayRow.slots[i] = {
                   courseName: course.CourseName,
                   color: courseColor,
                 };
-              } else {
-                console.warn(
-                  `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
-                );
               }
             }
           } else {
@@ -183,6 +194,18 @@ const ClassSchedule: React.FC = () => {
         }
       }
     );
+
+    // หากมี conflicts แสดง Swal และหยุดการเพิ่มวิชา
+    if (conflicts.length > 0) {
+      Swal.fire({
+        title: "Time Conflict!",
+        html: conflicts.join("<br>"), // แสดงข้อขัดแย้งแต่ละรายการ
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
+      return;
+    }
+
     console.log(updatedSchedule);
     setSchedule(updatedSchedule);
 
@@ -233,7 +256,7 @@ const ClassSchedule: React.FC = () => {
       console.error(`Course with ID ${id} not found`);
       return;
     }
-  
+
     Swal.fire({
       title: "Are you sure?",
       text: `คุณต้องการลบวิชา ${courseToRemove.CourseName} ใช่ไหม`,
@@ -248,7 +271,7 @@ const ClassSchedule: React.FC = () => {
         setCourses((prevCourses) =>
           prevCourses.filter((course) => course.ID !== id)
         );
-  
+
         // ลบ slots ของ course ใน schedule
         const updatedSchedule = schedule.map((dayRow) => {
           const updatedSlots = dayRow.slots.map((slot) =>
@@ -257,7 +280,7 @@ const ClassSchedule: React.FC = () => {
           return { ...dayRow, slots: updatedSlots };
         });
         setSchedule(updatedSchedule);
-  
+
         Swal.fire(
           "Deleted!",
           "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
@@ -266,7 +289,6 @@ const ClassSchedule: React.FC = () => {
       }
     });
   };
-  
 
   const handleSave = async () => {
     Swal.fire({
@@ -305,11 +327,7 @@ const ClassSchedule: React.FC = () => {
           );
         } catch (error) {
           console.error("Error saving schedule:", error);
-          Swal.fire(
-            "เกิดข้อผิดพลาด!",
-            "ไม่สามารถบันทึกตารางเรียนได้",
-            "error"
-          );
+          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถบันทึกตารางเรียนได้", "error");
         }
       }
     });
