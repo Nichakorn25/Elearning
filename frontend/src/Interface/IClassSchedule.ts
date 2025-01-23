@@ -12,6 +12,7 @@ export interface ExamScheduleInterface {
 }
 
 export interface CourseInterface {
+  CourseID: number;
   StudyDay: string;
   color: string;
   StudyTimes: StudyTimeInterface[];
