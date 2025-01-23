@@ -18,8 +18,8 @@ type ClassSchedule struct {
 	// SemesterID    uint       `json:"SemesterID"`
 	// Semester      Semester   `gorm:"foreignKey:SemesterID"`
 
-	// DayofWeekID   uint       `json:"DayofWeekID"`
-	// DayofWeek     DayofWeek  `gorm:"foreignKey:DayofWeekID"`
+	DayofWeekID   uint       `json:"DayofWeekID"`
+	DayofWeek     DayofWeek  `gorm:"foreignKey:DayofWeekID"`
 
 	
 	// SuggestionID  uint       `json:"SuggestionID"`

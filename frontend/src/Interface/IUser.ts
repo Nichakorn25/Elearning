@@ -1,3 +1,4 @@
+import { ClassScheduleInterface } from "./IClassSchedule";
 export interface UserInterface{
     ID?: number;
     Username?: string;
@@ -14,6 +15,9 @@ export interface UserInterface{
     rolename?: string;
     Status?: string;
     ProfilePicture?: string;
+
+    // ความสัมพันธ์กับตารางเรียน
+    ClassSchedules?: ClassScheduleInterface[];
 }
 
 export interface DepartmentInterface{
