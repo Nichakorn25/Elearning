@@ -6,29 +6,12 @@ import (
 
 type ClassSchedule struct {
 	gorm.Model
+	CourseID    uint      `json:"CourseID" gorm:"not null"`
+	Course      Course    `gorm:"foreignKey:CourseID"`
 
-	CourseID      uint       `json:"CourseID"`
-	Course        Course     `gorm:"foreignKey:CourseID"`
-
-	UserID        uint       `json:"UserID"`
-	User          User       `gorm:"foreignKey:UserID"`
-
-	CreditSummary []CreditSummary `gorm:"foreignKey:ClassScheduleID"`
-
-	// SemesterID    uint       `json:"SemesterID"`
-	// Semester      Semester   `gorm:"foreignKey:SemesterID"`
-
-	DayofWeekID   uint       `json:"DayofWeekID"`
-	DayofWeek     DayofWeek  `gorm:"foreignKey:DayofWeekID"`
-
+	UserID      uint      `json:"UserID" gorm:"not null"`
+	User        User      `gorm:"foreignKey:UserID"`
 	
-	// SuggestionID  uint       `json:"SuggestionID"`
-	// Suggestion    EnrollmentSuggestion `gorm:"foreignKey:SuggestionID"`
-
-
-
-	// TimeConflict []TimeConflict `gorm:"foreignKey:ClassScheduleID"`
-	
-
-	
+	DayofWeekID uint      `json:"DayofWeekID" gorm:"not null"`
+	DayofWeek   DayofWeek `gorm:"foreignKey:DayofWeekID"`
 }

@@ -239,26 +239,33 @@ func GetClassScheduleByUserID(c *gin.Context) {
 func AddClassSchedule(c *gin.Context) {
 	var classSchedule entity.ClassSchedule
 
-	// ตรวจสอบและ Bind ข้อมูลจาก Request Body
+	// Bind JSON จาก Request Body
 	if err := c.ShouldBindJSON(&classSchedule); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		fmt.Printf("Bind Error: %v\n", err)
 		return
 	}
 
-	// ตรวจสอบว่ามีข้อมูล Course, User, หรือ DayOfWeek ID ที่จำเป็นหรือไม่
+	// ตรวจสอบว่าข้อมูลที่จำเป็นครบหรือไม่
 	if classSchedule.CourseID == 0 || classSchedule.UserID == 0 || classSchedule.DayofWeekID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID, UserID, and DayofWeekID are required"})
+		fmt.Println("Missing required fields")
 		return
 	}
 
 	// บันทึกข้อมูลลงในฐานข้อมูล
-	if err := config.DB().Create(&classSchedule).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if err := config.DB().Debug().Create(&classSchedule).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save data"})
+		fmt.Printf("Database Error: %v\n", err)
 		return
 	}
 
-	// ส่งข้อมูลกลับหลังจากบันทึกสำเร็จ
-	c.JSON(http.StatusCreated, classSchedule)
+	// ส่งข้อมูลกลับเมื่อบันทึกสำเร็จ
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "Class schedule saved successfully",
+		"data":    classSchedule,
+	})
+	fmt.Println("Data saved successfully:", classSchedule)
 }
 
 // ลบวิชาออกจาก ClassSchedule โดยใช้ CourseID use

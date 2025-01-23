@@ -841,14 +841,23 @@ async function GetClassScheduleById(userId: any) {
     });
 }
 
-// ฟังก์ชันเพิ่มข้อมูลใน ClassSchedule
 async function AddClassSchedule(classScheduleData: any) {
+  const Authorization = localStorage.getItem("token");
+  const Bearer = localStorage.getItem("token_type");
+
+  const requestOptions = {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${Bearer} ${Authorization}`,
+    },
+  };
+
   const url = `${apiUrl}/classschedule`;
   return axios
     .post(url, classScheduleData, requestOptions)
-    .then((res) => res.data) // รับข้อมูลสำเร็จจาก API
+    .then((res) => res.data)
     .catch((err) => {
-      console.error("Error during API request (Add):", err.response?.data || err.message);
+      console.error("Error during API request:", err.response || err.message);
       throw err;
     });
 }

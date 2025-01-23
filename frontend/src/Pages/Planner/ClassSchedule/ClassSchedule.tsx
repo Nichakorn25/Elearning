@@ -268,7 +268,7 @@ const ClassSchedule: React.FC = () => {
   };
   
 
-  const handleSave = () => {
+  const handleSave = async () => {
     Swal.fire({
       title: "ยืนยันการบันทึก",
       text: "คุณต้องการบันทึกตารางเรียนหรือไม่?",
@@ -281,46 +281,21 @@ const ClassSchedule: React.FC = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // ดึง UserID จาก LocalStorage
           const userId = localStorage.getItem("id");
           if (!userId) {
             Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
             return;
           }
 
-          // Loop ผ่าน courses ที่เพิ่มใหม่ แล้วส่ง API
           for (const course of courses) {
-            // ค้นหา DayofWeekID จาก StudyDay
-            const dayofWeek = schedule.find(
-              (row) => row.day === course.StudyDay
-            );
-
-            if (!dayofWeek) {
-              Swal.fire(
-                "เกิดข้อผิดพลาด!",
-                `ไม่สามารถกำหนดวันสำหรับวิชา ${course.CourseName}`,
-                "error"
-              );
-              continue; // ข้ามไปยังรอบถัดไป
-            }
-
             const newSchedule = {
               CourseID: course.ID,
-              UserID: parseInt(userId), // แปลง UserID เป็นตัวเลข
-              DayofWeekID: dayofWeek.key,
+              UserID: parseInt(userId),
+              DayofWeekID: course.DayofWeekID,
             };
-            console.log("Data being sent to server:", newSchedule);
 
-            console.log("Preparing to save schedule:", newSchedule); // ตรวจสอบค่า
-
-            try {
-              await AddClassSchedule(newSchedule);
-              console.log("Saved successfully");
-          } catch (error) {
-              console.error("Failed to save:", error);
-              Swal.fire("เกิดข้อผิดพลาด!", "บันทึกตารางเรียนล้มเหลว", "error");
-          }
-          
+            console.log("Data being sent to API:", newSchedule);
+            await AddClassSchedule(newSchedule);
           }
 
           Swal.fire(
@@ -329,7 +304,12 @@ const ClassSchedule: React.FC = () => {
             "success"
           );
         } catch (error) {
-          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถบันทึกตารางเรียนได้", "error");
+          console.error("Error saving schedule:", error);
+          Swal.fire(
+            "เกิดข้อผิดพลาด!",
+            "ไม่สามารถบันทึกตารางเรียนได้",
+            "error"
+          );
         }
       }
     });
