@@ -89,7 +89,9 @@ func main() {
 
 		router.GET("/classschedule/:userID", controller.GetClassScheduleByUserID)
 		router.POST("/classschedule", controller.AddClassSchedule)
-		router.DELETE("/classschedule/course/:courseID", controller.RemoveClassScheduleByCourseID)
+		router.DELETE("/classschedule/user/:userID/course/:courseID", controller.RemoveClassScheduleByCourseID)
+		router.DELETE("/classschedule/user/:userID", controller.RemoveAllClassSchedulesByUserID)
+
 
 
 		// Route สำหรับค้นหารายวิชาพร้อมข้อมูลเพิ่มเติม

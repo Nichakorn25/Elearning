@@ -12,6 +12,8 @@ import Swal from "sweetalert2";
 import {
   GetClassScheduleById,
   AddClassSchedule,
+  RemoveClassScheduleByCourseID,
+  RemoveAllClassSchedules,
 } from "../../../services/https";
 
 const ClassSchedule: React.FC = () => {
@@ -244,7 +246,7 @@ const ClassSchedule: React.FC = () => {
     ]);
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     Swal.fire({
       title: "ยืนยันการรีเซ็ต",
       text: "คุณต้องการรีเซ็ตตารางเรียนทั้งหมดหรือไม่?",
@@ -254,33 +256,46 @@ const ClassSchedule: React.FC = () => {
       cancelButtonColor: "#CD6155",
       confirmButtonText: "รีเซ็ต",
       cancelButtonText: "ยกเลิก",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        setSchedule([
-          { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
-          { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
-          { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
-          { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
-          { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
-        ]);
-        setCourses([]);
-        setUsedColors([]);
-        Swal.fire(
-          "รีเซ็ตสำเร็จ!",
-          "ตารางเรียนถูกรีเซ็ตเรียบร้อยแล้ว",
-          "success"
-        );
+        try {
+          const userId = localStorage.getItem("id");
+          if (!userId) {
+            Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
+            return;
+          }
+  
+          // เรียก API ลบข้อมูลทั้งหมดในฐานข้อมูล
+          await RemoveAllClassSchedules(userId);
+  
+          // ลบข้อมูลใน state
+          setSchedule([
+            { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
+            { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
+            { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
+            { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
+            { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
+          ]);
+          setCourses([]);
+          setUsedColors([]);
+  
+          Swal.fire("รีเซ็ตสำเร็จ!", "ตารางเรียนถูกรีเซ็ตเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          console.error("Error resetting schedule:", error);
+          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถรีเซ็ตตารางเรียนได้", "error");
+        }
       }
     });
   };
+  
 
-  const handleRemoveCourse = (id: number) => {
+  const handleRemoveCourse = async (id: number) => {
     const courseToRemove = courses.find((course) => course.ID === id);
     if (!courseToRemove) {
       console.error(`Course with ID ${id} not found`);
       return;
     }
-
+  
     Swal.fire({
       title: "Are you sure?",
       text: `คุณต้องการลบวิชา ${courseToRemove.CourseName} ใช่ไหม`,
@@ -289,30 +304,49 @@ const ClassSchedule: React.FC = () => {
       confirmButtonColor: "#45B39D",
       cancelButtonColor: "#CD6155",
       confirmButtonText: "Yes",
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        // ลบ course จาก state courses
-        setCourses((prevCourses) =>
-          prevCourses.filter((course) => course.ID !== id)
-        );
-
-        // ลบ slots ของ course ใน schedule
-        const updatedSchedule = schedule.map((dayRow) => {
-          const updatedSlots = dayRow.slots.map((slot) =>
-            slot && slot.courseName === courseToRemove.CourseName ? "" : slot
+        try {
+          const userId = localStorage.getItem("id");
+          if (!userId) {
+            Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
+            return;
+          }
+  
+          // เรียก API ลบข้อมูล
+          await RemoveClassScheduleByCourseID(id, userId);
+  
+          // ลบ course จาก state courses
+          setCourses((prevCourses) =>
+            prevCourses.filter((course) => course.ID !== id)
           );
-          return { ...dayRow, slots: updatedSlots };
-        });
-        setSchedule(updatedSchedule);
-
-        Swal.fire(
-          "Deleted!",
-          "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
-          "success"
-        );
+  
+          // ลบ slots ของ course ใน schedule
+          const updatedSchedule = schedule.map((dayRow) => {
+            const updatedSlots = dayRow.slots.map((slot) =>
+              slot && slot.courseName === courseToRemove.CourseName ? "" : slot
+            );
+            return { ...dayRow, slots: updatedSlots };
+          });
+          setSchedule(updatedSchedule);
+  
+          Swal.fire(
+            "Deleted!",
+            "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
+            "success"
+          );
+        } catch (error) {
+          console.error("Error removing course:", error);
+          Swal.fire(
+            "Error!",
+            "ไม่สามารถลบข้อมูลในฐานข้อมูลได้",
+            "error"
+          );
+        }
       }
     });
   };
+  
 
   const handleSave = async () => {
     Swal.fire({

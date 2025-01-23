@@ -306,22 +306,40 @@ func AddClassSchedule(c *gin.Context) {
 
 // ลบวิชาออกจาก ClassSchedule โดยใช้ CourseID use
 func RemoveClassScheduleByCourseID(c *gin.Context) {
-	courseID := c.Param("courseID") // รับ CourseID จาก Path Parameter
+    userID := c.Param("userID")    // ดึง UserID จาก Path Parameter
+    courseID := c.Param("courseID") // ดึง CourseID จาก Path Parameter
 
-	// ตรวจสอบว่า CourseID เป็นค่าที่ถูกต้องหรือไม่
-	if courseID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID is required"})
-		return
-	}
+    if userID == "" || courseID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID and CourseID are required"})
+        return
+    }
 
-	// ลบข้อมูลจาก ClassSchedule โดยใช้ CourseID
-	if err := config.DB().Where("course_id = ?", courseID).Delete(&entity.ClassSchedule{}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+    if err := config.DB().Where("user_id = ? AND course_id = ?", userID, courseID).Delete(&entity.ClassSchedule{}).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
 
-	// ส่งข้อความกลับเมื่อการลบสำเร็จ
-	c.JSON(http.StatusOK, gin.H{"message": "Class schedule removed successfully"})
+    c.JSON(http.StatusOK, gin.H{"message": "Class schedule removed successfully"})
 }
+
+// ลบ ClassSchedule ทั้งหมดโดยใช้ UserID
+func RemoveAllClassSchedulesByUserID(c *gin.Context) {
+    userID := c.Param("userID") // รับ UserID จาก Path Parameter
+
+    if userID == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
+        return
+    }
+
+    // ลบข้อมูลทั้งหมดใน ClassSchedule ที่เกี่ยวข้องกับ UserID
+    if err := config.DB().Where("user_id = ?", userID).Delete(&entity.ClassSchedule{}).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+
+    // ส่งข้อความกลับเมื่อการลบสำเร็จ
+    c.JSON(http.StatusOK, gin.H{"message": "All class schedules removed successfully"})
+}
+
 
 //test

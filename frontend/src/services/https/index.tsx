@@ -863,14 +863,26 @@ async function AddClassSchedule(classScheduleData: any) {
 }
 
 // ฟังก์ชันลบข้อมูลใน ClassSchedule โดยใช้ CourseID
-async function RemoveClassScheduleByCourseID(courseID: any) {
-  const url = `${apiUrl}/classschedule/course/${courseID}`;
+async function RemoveClassScheduleByCourseID(courseID: number, userID: string) {
+  const url = `${apiUrl}/classschedule/user/${userID}/course/${courseID}`;
   return axios
     .delete(url, requestOptions)
     .then((res) => res.data) // รับข้อมูลสำเร็จจาก API
     .catch((err) => {
       console.error("Error during API request (Remove):", err.response || err.message);
       throw err; // ขว้างข้อผิดพลาดออกไปให้จัดการต่อในที่เรียกใช้งาน
+    });
+}
+
+// ฟังก์ชันลบ ClassSchedule ทั้งหมดสำหรับ UserID
+async function RemoveAllClassSchedules(userID: string) {
+  const url = `${apiUrl}/classschedule/user/${userID}`;
+  return axios
+    .delete(url, requestOptions)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error("Error during API request (Remove All):", err.response || err.message);
+      throw err; // ขว้างข้อผิดพลาดให้จัดการในที่เรียกใช้
     });
 }
 
@@ -960,4 +972,5 @@ export{
   GetClassScheduleById,
   AddClassSchedule,
   RemoveClassScheduleByCourseID,
+  RemoveAllClassSchedules,
 };
