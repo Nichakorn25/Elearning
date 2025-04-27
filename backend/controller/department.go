@@ -1,11 +1,13 @@
+
 package controller
 
 import (
     "net/http"
-    "elearning/entity"
-    "elearning/config"
+    "example.com/Elearning/entity"
+    "example.com/Elearning/config"
     "github.com/gin-gonic/gin"
 )
+
 
 func GetDepartments(c *gin.Context) {
 	var departments []entity.Department

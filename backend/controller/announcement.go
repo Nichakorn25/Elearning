@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"errors"
 	"net/http"
 

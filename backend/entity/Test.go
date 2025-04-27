@@ -5,14 +5,16 @@ import (
 	"time"
 )
 
+
 type Test struct {
 	gorm.Model
-	Title       string    `json:"Title"`
-	Description string    `json:"Description"`
-	DueDate     time.Time `json:"DueDate"`
+	Title       string    `json:"title" valid:"required~Title is required"`
+	Description string    `json:"description" valid:"required~Description is required"`
+	DueDate     time.Time `json:"due_date" valid:"required~DueDate is required"`
+	Timeout     time.Time `json:"time_out"`
 
-	QuizQuestion []QuizQuestion `gorm:"foreignKey:TestID"`
+	QuizQuestion []QuizQuestion `json:"quiz_questions" gorm:"foreignKey:TestID;constraint:OnDelete:CASCADE"`
 
-	CourseID uint                `json:"CourseID"`
+	CourseID uint   `json:"course_id"`
 	Course   Course `gorm:"foreignKey:CourseID"` // ใช้ Course จาก package CreateCourse
 }

@@ -1,17 +1,14 @@
 package controller
 
-
 import (
-
    "errors"
    "net/http"
    "github.com/gin-gonic/gin"
    "golang.org/x/crypto/bcrypt"
    "gorm.io/gorm"
-   "elearning/config"
-   "elearning/entity"
-   "elearning/services"
-
+   "example.com/Elearning/config"
+   "example.com/Elearning/entity"
+   "example.com/Elearning/services"
 )
 type (
     Authen struct {

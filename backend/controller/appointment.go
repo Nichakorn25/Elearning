@@ -1,38 +1,14 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"time"
 )
 
-// ไม่ได้ใช้
-func CreateAvailability(c *gin.Context) {
-	var availability entity.Availability
-
-	// Bind JSON payload
-	if err := c.ShouldBindJSON(&availability); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload", "details": err.Error()})
-		return
-	}
-
-	// Save to the database
-	db := config.DB()
-	if err := db.Create(&availability).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create availability", "details": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Availability created successfully",
-		"data":    availability,
-	})
-}
-
-//not use
 
 // ใช้
 func CreateTeacherAppointment(c *gin.Context) {
@@ -408,27 +384,27 @@ func CreateTask(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "Create task success", "data": u})
 }
 
-// func GetTasksByUserID(c *gin.Context) {
-// 	var task []entity.Task
+func GetTasksByUserID(c *gin.Context) {
+	var task []entity.Task
 
-// 	// รับ User ID จากพารามิเตอร์ใน URL
-// 	userID := c.Param("id")
-// 	if userID == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
-// 		return
-// 	}
+	// รับ User ID จากพารามิเตอร์ใน URL
+	userID := c.Param("id")
+	if userID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+		return
+	}
 
-// 	// Query ข้อมูล Task ที่เกี่ยวข้องกับ User ID
-// 	if err := config.DB().Where("user_id = ?", userID).Find(&task).Error; err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
+	// Query ข้อมูล Task ที่เกี่ยวข้องกับ User ID
+	if err := config.DB().Where("user_id = ?", userID).Find(&task).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-// 	// ส่งข้อมูลกลับในรูปแบบ JSON
-// 	c.JSON(http.StatusOK, gin.H{"data": task})
-// }
+	// ส่งข้อมูลกลับในรูปแบบ JSON
+	c.JSON(http.StatusOK, gin.H{"data": task})
+}
 
-// use
+
 func GetTaskByUserID(c *gin.Context) {
 	userId := c.Param("userId")
 	var task []entity.Task
@@ -500,4 +476,3 @@ func DeleteTaskByID(c *gin.Context) {
 
 // 	c.JSON(http.StatusOK, gin.H{"message": "Task updated successfully", "data": task})
 // }
-

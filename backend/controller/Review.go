@@ -1,16 +1,19 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
+	"math"
 	"strconv"
 	"time"
+
+	"example.com/Elearning/config"
+	"example.com/Elearning/entity"
 
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
+// เพิ่ม Review
 // เพิ่ม Review
 func CreateReview(c *gin.Context) {
 	var input entity.Review
@@ -45,8 +48,32 @@ func CreateReview(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Review created successfully", "review": input})
+	// คำนวณคะแนนเฉลี่ยใหม่
+	var reviews []entity.Review
+	if err := config.DB().Where("sheet_id = ?", input.SheetID).Find(&reviews).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch reviews"})
+		return
+	}
+
+	// คำนวณคะแนนเฉลี่ย
+	var totalRating float32
+	for _, review := range reviews {
+		totalRating += float32(review.Rating)
+	}
+
+	averageRating := totalRating / float32(len(reviews))
+	
+
+	// อัปเดตค่า AverageRating ใน Sheet
+	sheet.Rating = averageRating
+	if err := config.DB().Save(&sheet).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update average rating"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Review created successfully", "review": input, "averageRating": averageRating})
 }
+
 
 // ดึงข้อมูล Review ทั้งหมด
 func GetAllReviews(c *gin.Context) {
@@ -85,31 +112,35 @@ func DeleteReview(c *gin.Context) {
 }
 
 
-// ดึงข้อมูล Review ทั้งหมดตาม Sheet ID พร้อมคะแนนเฉลี่ย
 func GetReviewsBySheetID(c *gin.Context) {
-	sheetID, err := strconv.Atoi(c.Param("sheet_id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Sheet ID"})
-		return
-	}
+    sheetID, err := strconv.Atoi(c.Param("sheet_id"))
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Sheet ID"})
+        return
+    }
 
-	var reviews []entity.Review
-	if err := config.DB().Where("sheet_id = ?", sheetID).Preload("User").Order("review_date DESC").Find(&reviews).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch reviews"})
-		return
-	}
+    var reviews []entity.Review
+    if err := config.DB().Where("sheet_id = ?", sheetID).Preload("User").Order("review_date DESC").Find(&reviews).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch reviews"})
+        return
+    }
 
-	var totalRating float32
-	for _, review := range reviews {
-		totalRating += float32(review.Rating)
-	}
-	averageRating := float32(0)
-	if len(reviews) > 0 {
-		averageRating = totalRating / float32(len(reviews))
-	}
+    // คำนวณคะแนนเฉลี่ย
+    var totalRating float32
+    for _, review := range reviews {
+        totalRating += float32(review.Rating)
+    }
+    averageRating := float32(0)
+    if len(reviews) > 0 {
+        averageRating = totalRating / float32(len(reviews))
+    }
 
-	c.JSON(http.StatusOK, gin.H{
-		"reviews":        reviews,
-		"average_rating": averageRating,
-	})
+    // ปัดคะแนนเฉลี่ยเป็นทศนิยม 1 ตำแหน่ง
+    roundedAverageRating := float32(math.Round(float64(averageRating)*10) / 10)
+
+
+    c.JSON(http.StatusOK, gin.H{
+        "reviews":        reviews,
+        "average_rating": roundedAverageRating,
+    })
 }

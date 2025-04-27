@@ -3,13 +3,15 @@ package entity
 import (
 	"gorm.io/gorm"
 )
+
 type StudentAnswer struct {
 	gorm.Model
-	SelectedOption 		uint `json:"SelectedOption"`
-
-	UserID uint `json:"UserID"`
+	SelectedOption 	uint `json:"selected_option"`
+	Correct int `json:"correct"`
+ 
+	UserID uint `json:"user_id"`
 	User   User `gorm:"foreignKey:UserID"`
 
-	QuestionID uint `json:"QuestionID"`
+	QuestionID uint `json:"question_id"`
 	QuizQuestion   QuizQuestion `gorm:"foreignKey:QuestionID"`
 }

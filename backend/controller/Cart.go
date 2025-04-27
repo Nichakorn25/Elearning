@@ -6,53 +6,24 @@ import (
 	"strconv"
 	"time"
 
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/config"
+	"example.com/Elearning/entity"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+
 func CreateOrGetCart(c *gin.Context) {
-    var input struct {
-        UserID       uint `json:"userId"`
-        CartStatusID uint `json:"cartStatusId"`
-    }
+	var input struct {
+		UserID       uint `json:"userId"`
+		CartStatusID uint `json:"cartStatusId"`
+	}
 
-    if err := c.BindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
-        return
-    }
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
+		return
+	}
 
-    var cart entity.Cart
-    db := config.DB()
-
-    // ตรวจสอบว่ามีตะกร้าสถานะ Active อยู่แล้วหรือไม่
-    if err := db.Where("user_id = ? AND cart_status_id = ?", input.UserID, input.CartStatusID).First(&cart).Error; err == nil {
-        // คืนค่าตะกร้าที่มีอยู่
-        c.JSON(http.StatusOK, gin.H{
-            "message": "Existing cart found",
-            "cartId":  cart.ID,
-            "isNewCartCreated": false,
-        })
-        return
-    }
-
-    // หากไม่มีตะกร้าที่สถานะเป็น Active ให้สร้างใหม่
-    newCart := entity.Cart{
-        UserID:       input.UserID,
-        CartStatusID: input.CartStatusID,
-    }
-
-    if err := db.Create(&newCart).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create cart"})
-        return
-    }
-
-    c.JSON(http.StatusOK, gin.H{
-        "message": "New cart created successfully",
-        "cartId":  newCart.ID,
-        "isNewCartCreated": true,
-    })
 }
 
 func CreateCart(c *gin.Context) {
@@ -82,6 +53,7 @@ func CreateCart(c *gin.Context) {
 		"cartId":  newCart.ID,
 	})
 }
+
 // ดึงข้อมูลสถานะของตะกร้า
 func GetCartStatuses(c *gin.Context) {
 	var statuses []entity.CartStatus
@@ -94,63 +66,62 @@ func GetCartStatuses(c *gin.Context) {
 
 // ดึงข้อมูลตะกร้าของผู้ใช้
 func GetCartByUser(c *gin.Context) {
-    userId := c.Param("id")
-    if userId == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
-        return
-    }
+	userId := c.Param("id")
+	if userId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
+		return
+	}
 
-    // แปลง userId จาก string เป็น uint
-    userIdUint, err := strconv.ParseUint(userId, 10, 32)
-    if err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid User ID"})
-        return
-    }
+	// แปลง userId จาก string เป็น uint
+	userIdUint, err := strconv.ParseUint(userId, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid User ID"})
+		return
+	}
 
-    var cart entity.Cart
-    if err := config.DB().
-        Preload("CartStatus").
-        Preload("User").
-        Preload("CartItem").
-        Preload("CartItem.Sheet").
-        Preload("CartItem.Sheet.Seller"). 
-        Preload("CartItem.Sheet.Course").
-        Where("user_id = ? AND cart_status_id = ?", uint(userIdUint), 1).
-        First(&cart).Error; err != nil {
+	var cart entity.Cart
+	if err := config.DB().
+		Preload("CartStatus").
+		Preload("User").
+		Preload("CartItem").
+		Preload("CartItem.Sheet").
+		Preload("CartItem.Sheet.Seller").
+		Preload("CartItem.Sheet.Course").
+		Preload("CartItem.Sheet.Term").
+		Where("user_id = ? AND cart_status_id = ?", uint(userIdUint), 1).
+		First(&cart).Error; err != nil {
 
-        // หากไม่มี Active Cart ให้สร้างใหม่
-        if err == gorm.ErrRecordNotFound {
-            newCart := entity.Cart{
-                UserID:       uint(userIdUint),
-                CartStatusID: 1, // Active
-            }
-            if createErr := config.DB().Create(&newCart).Error; createErr != nil {
-                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create cart"})
-                return
-            }
-            // พรีโหลดข้อมูลที่เกี่ยวข้องของ Cart ใหม่
-            if err := config.DB().
-                Preload("CartStatus").
-                Preload("User").
-                Preload("CartItem").
-                Preload("CartItem.Sheet").
-                Preload("CartItem.Sheet.Seller").
-                Preload("CartItem.Sheet.Course").
-                First(&newCart, newCart.ID).Error; err != nil {
-                c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to preload cart data"})
-                return
-            }
-            cart = newCart
-        } else {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-            return
-        }
-    }
+		// หากไม่มี Active Cart ให้สร้างใหม่
+		if err == gorm.ErrRecordNotFound {
+			newCart := entity.Cart{
+				UserID:       uint(userIdUint),
+				CartStatusID: 1, // Active
+			}
+			if createErr := config.DB().Create(&newCart).Error; createErr != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create cart"})
+				return
+			}
+			// พรีโหลดข้อมูลที่เกี่ยวข้องของ Cart ใหม่
+			if err := config.DB().
+				Preload("CartStatus").
+				Preload("User").
+				Preload("CartItem").
+				Preload("CartItem.Sheet").
+				Preload("CartItem.Sheet.Seller").
+				Preload("CartItem.Sheet.Course").
+				First(&newCart, newCart.ID).Error; err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to preload cart data"})
+				return
+			}
+			cart = newCart
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+	}
 
-    c.JSON(http.StatusOK, gin.H{"data": cart})
+	c.JSON(http.StatusOK, gin.H{"data": cart})
 }
-
-
 
 // ดึงข้อมูลตะกร้าทั้งหมด
 func GetCarts(c *gin.Context) {
@@ -168,13 +139,13 @@ func GetCartById(c *gin.Context) {
 
 	var cart entity.Cart
 	if err := config.DB().
-	Preload("CartStatus").        
-	Preload("CartStatus").
-	Preload("User").
-	Preload("CartItem").
-	Preload("CartItem.Sheet").
-	Preload("CartItem.Sheet.Seller"). 
-	Preload("CartItem.Sheet.Course").First(&cart, cartID).Error; err != nil {
+		Preload("CartStatus").
+		Preload("CartStatus").
+		Preload("User").
+		Preload("CartItem").
+		Preload("CartItem.Sheet").
+		Preload("CartItem.Sheet.Seller").
+		Preload("CartItem.Sheet.Course").First(&cart, cartID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cart not found"})
 		return
 	}
@@ -182,37 +153,34 @@ func GetCartById(c *gin.Context) {
 }
 
 func AddToCart(c *gin.Context) {
-    var input struct {
-        CartID  uint `json:"cartID"`
-        SheetID uint `json:"sheetID"`
-    }
+	var input struct {
+		CartID  uint `json:"cartID"`
+		SheetID uint `json:"sheetID"`
+	}
 
-    if err := c.BindJSON(&input); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
-        return
-    }
+	if err := c.BindJSON(&input); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
+		return
+	}
 
-    db := config.DB()
-    tx := db.Begin()
+	db := config.DB()
+	tx := db.Begin()
 
-    cartItem := entity.CartItem{
-        AddedDate: time.Now(),
-        SheetID:   input.SheetID,
-        CartID:    input.CartID,
-    }
+	cartItem := entity.CartItem{
+		AddedDate: time.Now(),
+		SheetID:   input.SheetID,
+		CartID:    input.CartID,
+	}
 
-    if err := tx.Create(&cartItem).Error; err != nil {
-        tx.Rollback()
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add item to cart"})
-        return
-    }
+	if err := tx.Create(&cartItem).Error; err != nil {
+		tx.Rollback()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add item to cart"})
+		return
+	}
 
-    tx.Commit()
-    c.JSON(http.StatusOK, gin.H{"message": "Item added to cart successfully"})
+	tx.Commit()
+	c.JSON(http.StatusOK, gin.H{"message": "Item added to cart successfully"})
 }
-
-
-
 
 // ดึงรายการสินค้าทั้งหมดในตะกร้า
 func ListCartItems(c *gin.Context) {
@@ -255,10 +223,10 @@ func DeleteCartItemById(c *gin.Context) {
 
 func CheckoutCart(c *gin.Context) {
 	var input struct {
-		CartID     uint   
+		CartID     uint
 		DiscountID uint   `json:"discount_id"`
-		MethodID   uint   `json:"method_id"` 
-		Slip       string `json:"slip"`      
+		MethodID   uint   `json:"MethodID"`
+		Slip       string `json:"slip"`
 	}
 	fmt.Println("Cart ID received:", input.CartID)
 
@@ -274,7 +242,7 @@ func CheckoutCart(c *gin.Context) {
 		fmt.Println("Query error:", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Cart not found"})
 		return
-	}	
+	}
 
 	// คำนวณราคารวม
 	var totalPrice float32
@@ -287,7 +255,6 @@ func CheckoutCart(c *gin.Context) {
 		PurchaseDate: time.Now(),
 		TotalPrice:   totalPrice,
 		CartID:       cart.ID,
-		DiscountID:   input.DiscountID,
 		UserID:       cart.UserID,
 	}
 	if err := config.DB().Create(&purchase).Error; err != nil {
@@ -345,4 +312,3 @@ func CheckoutCart(c *gin.Context) {
 		"transaction_id": transactionLog.ID,
 	})
 }
-

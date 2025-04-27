@@ -5,10 +5,11 @@ import (
 
 	"strings"
 
-	"elearning/services"
+	"example.com/Elearning/services"
 
 	"github.com/gin-gonic/gin"
 )
+
 
 var HashKey = []byte("very-secret")
 

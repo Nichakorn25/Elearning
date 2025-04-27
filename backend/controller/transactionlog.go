@@ -2,8 +2,8 @@ package controller
 
 import (
 	"net/http"
-	"elearning/entity"
-	"elearning/config"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,7 +13,7 @@ func GetTransactionLog(c *gin.Context) {
 	db := config.DB()
 	
 	// ใช้ Preload เพื่อดึงข้อมูล Payment ที่สัมพันธ์กับ TransactionLog
-	if err := db.Preload("Payment").Find(&transactionlog).Error; err != nil {
+	if err := db.Preload("Payment").Preload("Payment.User").Find(&transactionlog).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

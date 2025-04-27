@@ -8,17 +8,15 @@ import (
 
 type Purchase struct {
 	gorm.Model
-	PurchaseDate time.Time `json:"PurchaseDate"`
-	TotalPrice   float32   `json:"TotalPrice"`
+	PurchaseDate time.Time `json:"PurchaseDate" valid:"required~PurchaseDate is required"`
+
+	TotalPrice   float32   `json:"TotalPrice" valid:"required~TotalPrice is required"`
 
 	Payment []Payment `gorm:"foreignKey:PurchaseID"`
 
-	CartID uint `json:"CartID"`
+	CartID uint `json:"CartID" valid:"-"`
 	Cart    Cart `gorm:"foreignKey:CartID"`
 
-	UserID uint `json:"UserID"`
+	UserID uint `json:"UserID" valid:"-"`
 	User   User `gorm:"foreignKey:UserID"`
-
-	DiscountID uint     `json:"DiscountID"`
-	Discount   Discount `gorm:"foreignKey:DiscountID"`
 }

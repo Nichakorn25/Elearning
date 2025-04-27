@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"strconv"
 	"errors" // เพิ่ม import สำหรับ package errors
 	"github.com/gin-gonic/gin"
@@ -301,6 +301,24 @@ func UpdateUserByid(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, gin.H{"message": "Status updated successfully"})
+}
+
+func GetCategory(c *gin.Context) {
+
+	// ตัวแปรสำหรับเก็บข้อมูลคอร์สที่ผู้ใช้สร้าง
+	var category []entity.Category
+
+	// เรียกใช้งานฐานข้อมูล
+	db := config.DB()
+
+	// ค้นหาคอร์สที่มี user_id ตรงกับ userID ที่ได้รับจากพารามิเตอร์
+	if err := db.Find(&category).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// ส่งข้อมูลคอร์สที่พบกลับไปในรูปแบบ JSON
+	c.JSON(http.StatusOK, category)
 }
 
 // ------------------------------------------------Appointment------------------------------------------------

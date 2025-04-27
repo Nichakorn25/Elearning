@@ -3,210 +3,213 @@ package controller
 import(
 	"time"
 	"net/http"
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/config"
+   	"example.com/Elearning/entity"
 	"github.com/gin-gonic/gin"
+	"path/filepath"
+	"strconv"
 )
 
-func GetSubmissionWithAttachment(c *gin.Context) {
-	// รับค่า userID และ assignmentID จาก URL parameter
-	userID := c.Param("user_id") // รับ user_id
-	assignmentID := c.Param("assignment_id") // รับ assignment_id
+func CreateSubmission(c *gin.Context) {
 
-	// ค้นหา Submission ที่ตรงกับ userID และ assignmentID
-	var submission entity.Submission
-	if err := config.DB().Preload("Attachment"). // ใช้ Preload เพื่อโหลดข้อมูล Attachment ที่สัมพันธ์กับ Submission
-		Where("user_id = ? AND assignment_id = ?", userID, assignmentID). // ค้นหาโดยใช้ userID และ assignmentID
-		First(&submission).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission not found"})
+	// ดึงข้อมูลฟอร์มที่แนบมาพร้อมไฟล์
+	userID := c.PostForm("user_id")
+	assignmentID := c.PostForm("assignment_id")
+	fileName := c.PostForm("file_name")
+
+	// รับไฟล์จากฟอร์ม
+	file, err := c.FormFile("file_path")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Please upload a file"})
 		return
 	}
 
-	// ส่งข้อมูลกลับ (รวมข้อมูล Submission และ Attachment)
-	c.JSON(http.StatusOK, gin.H{
-		"submission": submission,
-		"attachment": submission.Attachment,
-	})
-}
-
-
-func GetSubmissionWithAttachmentAll(c *gin.Context) {
-	assignmentID := c.Param("assignment_id")
-
-	// ค้นหา Submission พร้อมกับ Attachment ที่เกี่ยวข้อง
-	var submission []entity.Submission
-	if err := config.DB().Preload("Attachment").
-						  Where("assignment_id = ?", assignmentID).
-						  Find(&submission).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission not found"})
+	// บันทึกไฟล์ลงในโฟลเดอร์ backend/file_teacher
+	savePath := filepath.Join("file_submission", filepath.Base(file.Filename))
+	if err := c.SaveUploadedFile(file, savePath); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save file"})
 		return
 	}
 
-	// ส่งข้อมูลกลับ
-	c.JSON(http.StatusOK, gin.H{
-		"submission": submission,
-	})
-}
-
-func CreateSubmissionWithAttachment(c *gin.Context) {
-	// ใช้ entity.Submission เป็นโครงสร้างสำหรับรับข้อมูล
-	var submission entity.Submission
-
-	// รับค่าจาก Frontend และ Bind JSON เข้ากับ Submission
-	if err := c.ShouldBindJSON(&submission); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	userIDUint, err := strconv.Atoi(userID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID must be a valid number"})
 		return
 	}
 
-	// ตรวจสอบ Assignment ที่เกี่ยวข้อง
-	var assignment entity.Assignment
-	if err := config.DB().First(&assignment, submission.AssignmentID).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Assignment not found"})
+	assignmentIDUint, err := strconv.Atoi(assignmentID)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Year must be a valid number"})
 		return
 	}
 
-	// ตั้งค่าเวลา SubmissionDate
-	if submission.SubmissionDate.IsZero() {
-		submission.SubmissionDate = time.Now()
+	submission := entity.Submission{
+		SubmissionDate: time.Now(),
+		FileName: fileName,
+		FilePath: savePath,
+		UserID: uint(userIDUint),
+		AssignmentID: uint(assignmentIDUint),
 	}
 
-	// บันทึก Submission
 	if err := config.DB().Create(&submission).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	// เชื่อม Attachment กับ Submission ที่สร้างใหม่
-	submission.Attachment.SubmissionID = submission.ID
-
-	// บันทึก Attachment (ไม่ต้องส่ง ID ในข้อมูลที่รับ)
-	if err := config.DB().Create(&submission.Attachment).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	// ส่งผลลัพธ์กลับ
-	c.JSON(http.StatusOK, gin.H{
-		"submission":  submission,
-		"attachment": submission.Attachment,
-	})
+	c.JSON(http.StatusOK, gin.H{"submission": submission})
 }
 
-func UpdateSubmissionWithAttachment(c *gin.Context) {
-	submissionID := c.Param("id")
-	var submission entity.Submission
 
-	// ค้นหา Submission ที่ต้องการอัปเดตจากฐานข้อมูล
-	if err := config.DB().First(&submission, submissionID).Error; err != nil {
+func GetSubmission(c *gin.Context) {
+	userID := c.Param("user_id") 
+	assignmentID := c.Param("assignment_id") 
+
+	// ค้นหา Submission ที่ตรงกับ userID และ assignmentID
+	var submission entity.Submission
+	if err := config.DB().
+		Where("user_id = ? AND assignment_id = ?", userID, assignmentID). 
+		First(&submission).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission not found"})
 		return
 	}
 
-	// ตรวจสอบว่ามีไฟล์ที่ส่งมาหรือไม่
-	file, err := c.FormFile("file")
-	if err == nil {
-		// มีไฟล์ใหม่ -> บันทึกไฟล์ใหม่
-		filePath := "./uploads/" + file.Filename
-		if err := c.SaveUploadedFile(file, filePath); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save file"})
-			return
-		}
+	c.JSON(http.StatusOK, gin.H{"submission": submission})
+}
 
-		// ค้นหา Attachment ที่เกี่ยวข้องกับ Submission
-		var attachment entity.Attachment
-		if err := config.DB().First(&attachment, "submission_id = ?", submission.ID).Error; err == nil {
-			// อัปเดต Attachment เดิม
-			attachment.FileName = file.Filename
-			attachment.FilePath = filePath
-			if err := config.DB().Save(&attachment).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to update attachment"})
-				return
-			}
-		} else {
-			// หากไม่มี Attachment ให้สร้างใหม่
-			newAttachment := entity.Attachment{
-				FileName:     file.Filename,
-				FilePath:     filePath,
-				SubmissionID: submission.ID,
-			}
-			if err := config.DB().Create(&newAttachment).Error; err != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to create attachment"})
-				return
-			}
-			submission.Attachment = newAttachment
-		}
-	}
 
-	// อัปเดตวันที่ส่งงาน
-	submission.SubmissionDate = time.Now()
+func GetSubmissionAll(c *gin.Context) {
+	assignmentID := c.Param("assignment_id")
 
-	// บันทึกการอัปเดต Submission
-	if err := config.DB().Save(&submission).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var submission []entity.Submission
+	if err := config.DB().Where("assignment_id = ?", assignmentID).
+						  Find(&submission).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission not found"})
 		return
 	}
 
-	// ส่งผลลัพธ์กลับไปยัง Frontend
-	c.JSON(http.StatusOK, gin.H{
-		"updated":    true,
-		"submission": submission,
-		"attachment": submission.Attachment,
-	})
+	c.JSON(http.StatusOK, gin.H{"submission": submission})
+}
+
+func UpdateSubmission(c *gin.Context) {
+	var submission entity.Submission
+	submissionID := c.Param("id")
+
+	db := config.DB()
+	result := db.First(&submission, submissionID)
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Submission ID not found"})
+		return
+	}
+
+	if err := c.ShouldBindJSON(&submission); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request, unable to map payload"})
+		return
+	}
+
+	result = db.Save(&submission)
+
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bad request"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Updated successfully", "submission": submission})
 }
 
 func DeleteSubmission(c *gin.Context) {
-	// รับ SubmissionID จาก URL parameter
-	submissionID := c.Param("id")
+	id := c.Param("id")
 
-	// ค้นหา Submission ที่ต้องการลบจากฐานข้อมูล
+	db := config.DB()
+	if tx := db.Exec("DELETE FROM submissions WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission ID not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Deleted successfully"})
+}
+
+func GetGradesAll(c *gin.Context) {
+	assignmentID := c.Param("assignment_id")
+	var submissions []entity.Submission
+
+	db := config.DB()
+	// ดึงข้อมูล Submission ที่มี Grade และอยู่ใน Assignment นั้น
+	result := db.Preload("Grade").
+		Where("assignment_id = ?", assignmentID).
+		Where("id IN (SELECT submission_id FROM grades)").
+		Find(&submissions)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"assignment_id": assignmentID,
+		"submissions":   submissions,
+	})
+}
+
+func GetGrade(c *gin.Context) {
+	submissionID := c.Param("submission_id")
+	var grade entity.Grade
+
+	db := config.DB()
+	result := db.Where("submission_id = ?", submissionID).First(&grade)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Grade not found for the given submission ID"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"submission_id": submissionID,
+		"grade":         grade,
+	})
+}
+
+func CreateGrade(c *gin.Context) {
+	var grade entity.Grade
+
+	if err := c.ShouldBindJSON(&grade); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
 	var submission entity.Submission
-	if err := config.DB().First(&submission, submissionID).Error; err != nil {
+	if err := config.DB().First(&submission, grade.SubmissionID).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Submission not found"})
 		return
 	}
 
-	// ลบ Attachment ที่เชื่อมโยงกับ Submission
-	if err := config.DB().Where("submission_id = ?", submission.ID).Delete(&entity.Attachment{}).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	db := config.DB()
+	if err := db.Create(&grade).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create grade"})
 		return
 	}
 
-	// ลบ Submission
-	if err := config.DB().Delete(&submission).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	// ส่งผลลัพธ์กลับ
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Submission and attachment deleted successfully",
-	})
+	c.JSON(http.StatusOK, gin.H{"grade": grade})
 }
 
+func UpdateGrade(c *gin.Context) {
+	var grade entity.Grade
+	gradeID := c.Param("id")
 
+	db := config.DB()
+	if err := db.First(&grade, gradeID).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Grade not found"})
+		return
+	}
 
+	if err := c.ShouldBindJSON(&grade); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
 
-// func CreateSubmission(c *gin.Context) {
-// 	var submission entity.Submission
+	if err := db.Save(&grade).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update grade"})
+		return
+	}
 
-// 	// Bind JSON จาก request body
-// 	if err := c.ShouldBindJSON(&submission); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	// ตรวจสอบว่า CourseID ที่ส่งมาใน request มีอยู่จริงหรือไม่
-// 	var course entity.Course
-// 	if err := config.DB().First(&course, assignment.CourseID).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Course not found"})
-// 		return
-// 	}
-
-// 	// บันทึก Assignment ลงฐานข้อมูล
-// 	if err := config.DB().Create(&submission).Error; err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, gin.H{"data": submission})
-// }
+	c.JSON(http.StatusOK, gin.H{"grade": grade})
+}

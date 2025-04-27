@@ -1,14 +1,13 @@
 package main
 
 import (
-	"elearning/config"
-	"elearning/controller"
-	"elearning/middlewares"
-	"github.com/gin-gonic/gin"
 	"net/http"
-)
 
-const PORT = "8000"
+	"example.com/Elearning/config"
+	"example.com/Elearning/controller"
+	"example.com/Elearning/middlewares"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 
@@ -21,10 +20,11 @@ func main() {
 	config.SetupDatabase()
 
 	r := gin.Default()
-
+	r.Static("/file_teacher", "./file_teacher")
 	r.Use(CORSMiddleware())
 	r.Static("/uploads", "./public/uploads")
 	r.Static("/worker", "./public/worker")
+	r.Static("/Uploads", "./uploads")
 
 	// Auth Route
 	r.GET("/departments", controller.GetDepartments)
@@ -34,12 +34,6 @@ func main() {
 	r.POST("/signin", controller.SignIn)                      //Sign in == login
 	r.PUT("/ResetPasswordUser", controller.ResetPasswordUser) //Sign in == login
 	r.GET("/users/:id", controller.GetUser)                   //getOnlyID
-	// r.GET("/professors/search", controller.SearchProfessors) // เส้นทางสำหรับค้นหาอาจารย์
-	r.Static("/Uploads", "./uploads")
-
-	// r.POST("/send_recovery_email", controller.SendRecoveryEmail)
-	// r.POST("/verify_otp", controller.VerifyOTP)
-	// r.POST("/reset_password", controller.Resetpassword)
 
 	router := r.Group("")
 	{
@@ -49,11 +43,82 @@ func main() {
 		router.GET("/users", controller.ListUsers)
 		router.GET("/users/filter", controller.ListUsersFilters)
 		//router.GET("/users/:id", user.GetUser) //getOnlyID ย้ายไปไว้ข้างนอกเพื่อให้มันเรียกใช้ในหน้า login ได้
-		//===================================================================================================//
+		router.POST("/users", controller.CreateUser)
+		router.PUT("/users/:id", controller.UpdateUserByid)
+		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้
+		router.GET("/category", controller.GetCategory)
+
+		// Announcement Routes
+		router.GET("/announcements", controller.ListAnnouncements)
+		router.GET("/announcements/:id", controller.GetAnnouncement)
+		router.POST("/announcements", controller.CreateAnnouncement)
+		router.PUT("/announcements/:id", controller.UpdateAnnouncement)
+		router.DELETE("/announcements/:id", controller.DeleteAnnouncement)
+
+		//RequestChangeRole
+		router.POST("/requestchangeroles", controller.CreateRoleChangeRequests)
+		router.GET("/requestchangeroles", controller.GetRoleChangeRequests)
+		router.PATCH("/requestchangeroles/:id", controller.UpdateRoleChangeRequestsByID)
+		router.PATCH("/users/role/:id", controller.UpdateUserRoleByID)
+
+		//TransactionLog
+		router.GET("/transactionlogs", controller.GetTransactionLog)
+		router.PATCH("/transactionlogs/:id", controller.UpdateTransactionLogStatus)
+		router.GET("/createcourse/GetSemester", controller.GetSemester)
+		router.GET("/managecourse/course", controller.GetCourse)
+		router.PUT("/managecourse/editexam/:id", controller.UpdateCourseExam)
+
+		// CreateCourse Routers
+		router.GET("/createcourse/:id", controller.GetCoursesByUserID)
+		router.GET("/createcourse/category/:id", controller.GetCategoryByID)
+		router.GET("/createcourse/category", controller.GetCetagory)
+		router.GET("/createcourse/dayofweek", controller.GetDayOfWeek)
+		router.POST("/createcourse/semester", controller.CreateSemester)
+		router.POST("/createcourse/course", controller.CreateCourse)
+		router.GET("/createcourse/GetSemesterID", controller.GetSemesterID)
+		router.POST("/createcourse/studytime", controller.CreateStudyTime)
+		router.GET("/createcourse/getcoures", controller.GetCourseByDESC)
+		router.GET("/managecourse/:id", controller.GetCoursesByID)
+		router.POST("/managecourse/lesson", controller.CreateLesson)
+		router.POST("/managecourse/content", controller.CreateCourseContent)
+		router.POST("/managecourse/video", controller.CreateCourseVideo)
+		router.POST("/managecourse/material", controller.CreateMaterial)
+		router.GET("/managecourse/lesson/:id", controller.GetLessonByCourseID)
+		router.GET("/managecourse/content/:id", controller.GetCourseContent)
+		router.GET("/managecourse/url/:id", controller.GetCourseUrl)
+		router.GET("/managecourse/material/:id", controller.GetCourseMaterial)
+		router.POST("/createcourse/picture", controller.UploadPicture)
+		router.GET("/createcourse/picture", controller.GetPicture)
+		router.GET("/createcourse/course", controller.GetAllCourse)
+		router.DELETE("/managecourse/delete/:id", controller.DeleteAllaboutCoures)
+		router.PUT("/managecourse/edit/:id", controller.UpdateCourse)
+		router.DELETE("/managecourse/delete/content/:id", controller.DeleteCourseContent)
+		router.DELETE("/managecourse/delete/url/:id", controller.DeleteCourseVideo)
+		router.DELETE("/managecourse/delete/material/:id", controller.DeleteCourseMaterial)
+		router.DELETE("/managecourse/delete/lesson/:id", controller.DeleteLesson)
+		router.GET("/managecourse/studytime/:id", controller.GetCourseStudytime)
+		router.PUT("/managecourse/updateStatus/material/:id", controller.UpdateMaterial)
+		router.PUT("/managecourse/updateStatus/content/:id", controller.UpdateContent)
+		router.PUT("/managecourse/updateStatus/url/:id", controller.UpdateUrl)
+		router.PUT("/createcourse/updateStatus/:id", controller.UpdateStatusCourse)
+		router.GET("/dashboard/:id", controller.GetEnrollByUserID)
+		router.GET("/dashboard/info/:id", controller.GetCourseEnrollUserDepartmentSemester)
+		router.GET("/dashboard/course", controller.GetCourseAndUsername)
+		router.GET("/dashboard/user", controller.GetAllUser)
+		router.POST("/dashboard/enroll", controller.CreateEnroll)
+		router.GET("/dashboard/departmentCourse/:id", controller.GetAllCourseDepartment)
+		router.GET("/dashboard/user/:id", controller.GetUserInfo)
+		router.GET("/dashboard/enrollUser/:id", controller.GetEnrollUserID)
+		router.DELETE("/dashboard/delete/enroll/:id", controller.Unenroll)
+		router.PUT("/managecourse/edit/content/:id", controller.UpdateEditContent)
+		router.PUT("/managecourse/edit/url/:id", controller.UpdateEditUrl)
+		router.PUT("/managecourse/edit/lesson/:id", controller.UpdateEditLesson)
+		router.GET("/managecourse/studytime/add/:id", controller.GetStudytimeByID)
+		router.DELETE("/managecourse/delete/file/:id", controller.DeleteFile)
+
 		//Appointment
 		router.GET("/student/bookings", controller.ListStudentBookingByID)
 		router.GET("/message/:teacherId", controller.GetBookingStudent)
-		router.POST("/availabilities", controller.CreateAvailability)
 		router.POST("/appointments", controller.CreateTeacherAppointment)
 		router.GET("/searchProfessors", controller.SearchProfessors)
 		// Teacher Routes
@@ -71,7 +136,7 @@ func main() {
 
 		//Task
 		router.POST("/tasks", controller.CreateTask)       // สร้าง Task
-		router.GET("/tasks/:userId", controller.GetTaskByUserID)    // ดึง Task ทั้งหมดของ User ที่ล็อกอิน
+		router.GET("/tasks/:userId", controller.GetTasksByUserID)    // ดึง Task ทั้งหมดของ User ที่ล็อกอิน
 		// router.PUT("/tasks/:id", controller.UpdateTask)    // อัปเดต Task
 		router.DELETE("/tasks/:id", controller.DeleteTaskByID) // ลบ Task
 		//===================================================================================================//
@@ -89,36 +154,12 @@ func main() {
 
 		router.GET("/classschedule/:userID", controller.GetClassScheduleByUserID)
 		router.POST("/classschedule", controller.AddClassSchedule)
-		router.DELETE("/classschedule/user/:userID/course/:courseID", controller.RemoveClassScheduleByCourseID)
-		router.DELETE("/classschedule/user/:userID", controller.RemoveAllClassSchedulesByUserID)
-
-
-
-		// Route สำหรับค้นหารายวิชาพร้อมข้อมูลเพิ่มเติม
-		// router.GET("/searchCoursesWithDetails", controller.SearchCoursesWithDetails) // ค้นหารายวิชาพร้อม StudyTime และ ExamSchedule
-
-		//----------------------//
-		router.POST("/users", controller.CreateUser)
-		router.PUT("/users/:id", controller.UpdateUserByid)
-		router.DELETE("/users/:id", controller.DeleteUser) //ไม่ได้เรียกใช้
-
-		// Announcement Routes
-		router.GET("/announcements", controller.ListAnnouncements)
-		router.GET("/announcements/:id", controller.GetAnnouncement)
-		router.POST("/announcements", controller.CreateAnnouncement)
-		router.PUT("/announcements/:id", controller.UpdateAnnouncement)
-		router.DELETE("/announcements/:id", controller.DeleteAnnouncement)
-
-		//RequestChangeRole
-		router.POST("/requestchangeroles", controller.CreateRoleChangeRequests)
-		router.GET("/requestchangeroles", controller.GetRoleChangeRequests)
-		router.PATCH("/requestchangeroles/:id", controller.UpdateRoleChangeRequestsByID)
-		router.PATCH("/users/role/:id", controller.UpdateUserRoleByID)
+		router.DELETE("/classschedule/course/:courseID", controller.RemoveClassScheduleByCourseID)
 
 		// SellerBankAccount Routes
 		router.GET("/seller-bank-accounts", controller.GetAllSellerBankAccounts)
 		router.GET("/seller-bank-accounts/:id", controller.GetSellerBankAccountByID)
-		router.GET("/seller-bank-accounts/user/:userID", controller.GetSellerBankAccountsByUserID)
+		router.GET("/seller-bank-accounts/user/:userID", controller.GetSellerBankAccountsByUserID) // Route ใหม่
 		router.POST("/seller-bank-accounts", controller.CreateSellerBankAccount)
 		router.PUT("/seller-bank-accounts/:id", controller.UpdateSellerBankAccount)
 		router.DELETE("/seller-bank-accounts/:id", controller.DeleteSellerBankAccount)
@@ -142,9 +183,11 @@ func main() {
 		router.POST("/sheets", controller.CreateSheet)
 		router.PUT("/sheets/:id", controller.UpdateSheet)
 		router.DELETE("/sheets/:id", controller.DeleteSheet)
-		r.GET("/courses", controller.GetCourses)
-		r.POST("/upload", controller.UploadFile)
+		router.GET("/terms", controller.GetTerms)
+		router.GET("/courses", controller.GetCourses)
+		router.POST("/upload", controller.UploadFile)
 		router.GET("/sheets/seller/:sellerID", controller.GetSheetsBySellerID)
+		router.GET("/purchased-files/:userID", controller.GetPurchasedFiles)
 		// Route สำหรับ Cart
 		router.GET("/cart-statuses", controller.GetCartStatuses)
 		router.GET("/carts", controller.GetCarts)
@@ -156,6 +199,7 @@ func main() {
 		router.POST("/carts/:id/checkout", controller.CheckoutCart)
 		router.GET("/carts/user/:id", controller.GetCartByUser)
 		router.POST("/carts", controller.CreateOrGetCart)
+		router.GET("/income-history/:sellerID", controller.GetIncomeHistoryBySellerID)
 		// Routes สำหรับ Review
 		reviewRoutes := router.Group("/reviews")
 		{
@@ -165,39 +209,54 @@ func main() {
 			reviewRoutes.DELETE("/:id", controller.DeleteReview) // ลบ Review
 			reviewRoutes.GET("/sheet/:sheet_id", controller.GetReviewsBySheetID)
 		}
+		routes := router.Group("/payment-methods")
+		{
+			routes.GET("/", controller.GetAllPaymentMethods)      // ดึงข้อมูล Payment Methods ทั้งหมด
+			routes.POST("/", controller.CreatePaymentMethod)      // เพิ่ม Payment Method ใหม่
+			routes.PUT("/:id", controller.UpdatePaymentMethod)    // แก้ไข Payment Method
+			routes.DELETE("/:id", controller.DeletePaymentMethod) // ลบ Payment Method
+		}
 
-		// Assignment Routes
-		router.GET("/courses/:id/assignments", controller.GetAssignmentCourseID)
-		router.GET("/courses/:id/assignments/:assignment_id", controller.GetAssignmentByIDAndCourseID)
-		router.POST("/assignments", controller.CreateAssignment)       // สร้าง Assignment ใหม่
-		router.PUT("/assignments/:id", controller.UpdateAssignment)    // อัปเดต Assignment ตาม ID
-		router.DELETE("/assignments/:id", controller.DeleteAssignment) // ลบ Assignment ตาม ID
+		r.GET("/courses/:id/assignments", controller.GetAssignmentCourseID)
+		r.GET("/courses/:id/assignments/:assignment_id", controller.GetAssignmentByIDAndCourseID)
+		r.POST("/assignments", controller.CreateAssignment)
+		r.PUT("/assignments/:id", controller.UpdateAssignment)
+		r.DELETE("/assignments/:id", controller.DeleteAssignment)
 
-		router.GET("/submission/:user_id/:assignment_id", controller.GetSubmissionWithAttachment)
-		router.GET("/assignments/:assignment_id/submissions", controller.GetSubmissionWithAttachmentAll)
-		router.POST("/submissions", controller.CreateSubmissionWithAttachment)
-		router.PUT("/submissions/:id", controller.UpdateSubmissionWithAttachment)
-		router.DELETE("/submissions/:id", controller.DeleteSubmission)
+		r.GET("/submissions/:user_id/:assignment_id", controller.GetSubmission)
+		r.GET("/submissions/assignments/:assignment_id", controller.GetSubmissionAll)
+		r.POST("/submissions", controller.CreateSubmission)
+		r.PUT("/submissions/:id", controller.UpdateSubmission)
+		r.DELETE("/submissions/:id", controller.DeleteSubmission)
 
-		//TransactionLog
-		router.GET("/transactionlogs", controller.GetTransactionLog)
-		router.PATCH("/transactionlogs/:id", controller.UpdateTransactionLogStatus)
+		r.GET("/grades/:submission_id", controller.GetGrade)
+		r.GET("/grades/assignments/:assignment_id", controller.GetGradesAll)
+		r.POST("/grades", controller.CreateGrade)
+		r.PUT("/grades/:id", controller.UpdateGrade)
 
-		//Course
-		router.GET("/categories", controller.GetCategories)
-		router.GET("/semesters", controller.GetSemesters)
-		router.GET("/daysofweek", controller.GetDayOfWeek)
+		// r.GET("/grades/:submission_id", controller.GetGrade)
+		// r.GET("/grades/assignments/:assignment_id", controller.GetGradesAll)
+		// r.POST("/grades", controller.CreateGrade)
+		// r.PUT("/grades/:id", controller.UpdateGrade)
+
+		r.GET("/courses/:id/tests", controller.GetTest)
+		r.POST("/tests", controller.CreateTest)
+		r.PUT("/tests/:id", controller.UpdateTest)
+		r.DELETE("/tests/:id", controller.DeleteTest) 
+
+		r.GET("/answerstudents/:user_id/:test_id", controller.GetStudentAnswersWithScore)
+		r.POST("/answerstudents", controller.CreateAnswerStudent)
 	}
 
 	r.GET("/", func(c *gin.Context) {
 
-		c.String(http.StatusOK, "API RUNNING... PORT: %s", PORT)
+		c.String(http.StatusOK, "API RUNNING...")
 
 	})
 
 	// Run the server
 
-	r.Run("localhost:" + PORT)
+	r.Run()
 
 }
 

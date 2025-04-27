@@ -1,14 +1,16 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
 	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 	"time"
+
+	"example.com/Elearning/config"
+	"example.com/Elearning/entity"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,13 +18,24 @@ import (
 // Get all Sheets
 func GetSheets(c *gin.Context) {
 	var sheets []entity.Sheet
-	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").Find(&sheets).Error; err != nil {
+	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").Preload("Term").Find(&sheets).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": sheets})
 }
+func GetTerms(c *gin.Context) {
+	var terms []entity.Term
 
+	// ดึงข้อมูล Term ทั้งหมดจากฐานข้อมูล
+	if err := config.DB().Find(&terms).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch terms"})
+		return
+	}
+
+	// ส่งข้อมูล Term กลับ
+	c.JSON(http.StatusOK, gin.H{"data": terms})
+}
 func GetSheetsBySellerID(c *gin.Context) {
 	var sheets []entity.Sheet
 	sellerID := c.Param("sellerID")
@@ -37,6 +50,7 @@ func GetSheetsBySellerID(c *gin.Context) {
 		Preload("Seller").
 		Preload("Course").
 		Preload("Review").
+		Preload("Term").
 		Find(&sheets).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -50,7 +64,7 @@ func GetSheetByID(c *gin.Context) {
 	id := c.Param("id")
 	var sheet entity.Sheet
 
-	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").First(&sheet, id).Error; err != nil {
+	if err := config.DB().Preload("Seller").Preload("Course").Preload("Review").Preload("Term").First(&sheet, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
 		return
 	}
@@ -58,61 +72,83 @@ func GetSheetByID(c *gin.Context) {
 }
 
 func CreateSheet(c *gin.Context) {
+	// รับไฟล์จากฟอร์ม
 	file, err := c.FormFile("file")
 	if err != nil {
-		fmt.Println("File Error:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Please upload a file"})
 		return
 	}
 
+	// ตรวจสอบและสร้างไดเรกทอรีอัปโหลด
 	uploadDir := "public/uploads"
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
-		os.MkdirAll(uploadDir, os.ModePerm)
+		if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to create upload directory"})
+			return
+		}
 	}
 
-	filename := fmt.Sprintf("%d-%s", time.Now().Unix(), file.Filename)
+	// สร้างชื่อไฟล์ใหม่
+	filename := fmt.Sprintf("%s-%s", time.Now().In(time.FixedZone("Asia/Bangkok", 7*60*60)).Format("20060102-150405"), file.Filename)
 	filePath := filepath.Join(uploadDir, filename)
 
+	// บันทึกไฟล์ลงในเซิร์ฟเวอร์
 	if err := c.SaveUploadedFile(file, filePath); err != nil {
-		fmt.Println("File Save Error:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to save the file"})
 		return
 	}
 
+	// สร้างเส้นทางไฟล์แบบสัมพันธ์
 	relativePath := fmt.Sprintf("/uploads/%s", filename)
+	relativePath = strings.Replace(relativePath, "/", "\\", -1)
 
+	// รับค่าจากฟอร์ม
 	title := c.PostForm("Title")
 	description := c.PostForm("Description")
 	price := c.PostForm("Price")
 	courseID := c.PostForm("CourseID")
 	year := c.PostForm("Year")
 	sellerID := c.PostForm("SellerID")
-	term := c.PostForm("Term")
+	termID := c.PostForm("TermID")
 
+	// ตรวจสอบค่าที่จำเป็น
+	if title == "" || description == "" || price == "" || courseID == "" || year == "" || sellerID == "" || termID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "All fields are required"})
+		return
+	}
+
+	// แปลงค่าที่ต้องเป็นตัวเลข
 	priceFloat, err := strconv.ParseFloat(price, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Price must be a number"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Price must be a valid number"})
 		return
 	}
 
 	courseIDUint, err := strconv.ParseUint(courseID, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID must be a number"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID must be a valid number"})
 		return
 	}
 
 	yearUint, err := strconv.ParseUint(year, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Year must be a number"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Year must be a valid number"})
 		return
 	}
 
 	sellerIDUint, err := strconv.ParseUint(sellerID, 10, 32)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "SellerID must be a number"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "SellerID must be a valid number"})
 		return
 	}
 
+	termIDUint, err := strconv.ParseUint(termID, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "TermID must be a valid number"})
+		return
+	}
+
+	// สร้าง Sheet ใหม่
 	sheet := entity.Sheet{
 		Title:       title,
 		Description: description,
@@ -121,15 +157,21 @@ func CreateSheet(c *gin.Context) {
 		Year:        uint(yearUint),
 		SellerID:    uint(sellerIDUint),
 		FilePath:    relativePath,
-		Term:        term,
+		TermID:      uint(termIDUint),
 	}
 
+	// บันทึก Sheet ลงฐานข้อมูล
 	if err := config.DB().Create(&sheet).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save the sheet"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"data": sheet})
+	// ส่งข้อมูลกลับ
+	c.JSON(http.StatusCreated, gin.H{
+		"status":  "success",
+		"message": "Sheet created successfully",
+		"data":    sheet,
+	})
 }
 
 // Update a Sheet by ID
@@ -137,26 +179,33 @@ func UpdateSheet(c *gin.Context) {
 	id := c.Param("id")
 	var sheet entity.Sheet
 
+	// ค้นหา Sheet จาก ID
 	if err := config.DB().First(&sheet, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
 		return
 	}
 
+	// ตรวจสอบและอัปโหลดไฟล์ใหม่ (ถ้ามี)
 	file, err := c.FormFile("file")
-	if err == nil {
+	if err == nil { // ถ้ามีไฟล์ที่ส่งมา
+		// ลบไฟล์เก่า (ถ้ามี)
 		if sheet.FilePath != "" {
-			oldFilePath := filepath.Join("public", sheet.FilePath)
+			oldFilePath := filepath.Join("public", filepath.FromSlash(sheet.FilePath))
 			if _, err := os.Stat(oldFilePath); err == nil {
-				os.Remove(oldFilePath)
+				if err := os.Remove(oldFilePath); err != nil {
+					c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to delete old file"})
+					return
+				}
 			}
 		}
 
-		uploadDir := "public/uploads"
+		// อัปโหลดไฟล์ใหม่
+		uploadDir := filepath.Join("public", "uploads")
 		if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 			os.MkdirAll(uploadDir, os.ModePerm)
 		}
 
-		filename := fmt.Sprintf("%d-%s", time.Now().Unix(), file.Filename)
+		filename := fmt.Sprintf("%s-%s", time.Now().In(time.FixedZone("Asia/Bangkok", 7*60*60)).Format("20060102-150405"), file.Filename)
 		filePath := filepath.Join(uploadDir, filename)
 
 		if err := c.SaveUploadedFile(file, filePath); err != nil {
@@ -165,29 +214,68 @@ func UpdateSheet(c *gin.Context) {
 		}
 
 		relativePath := fmt.Sprintf("/uploads/%s", filename)
-		sheet.FilePath = relativePath
+		sheet.FilePath = strings.Replace(relativePath, "/", "\\", -1)
 	}
 
-	sheet.Title = c.PostForm("Title")
-	sheet.Description = c.PostForm("Description")
-	price, _ := strconv.ParseFloat(c.PostForm("Price"), 32)
-	sheet.Price = float32(price)
-	year, _ := strconv.Atoi(c.PostForm("Year"))
-	sheet.Year = uint(year)
-	sheet.Term = c.PostForm("Term")
-	courseID, _ := strconv.Atoi(c.PostForm("CourseID"))
-	sheet.CourseID = uint(courseID)
+	// อัปเดตข้อมูลใน Sheet
+	title := c.PostForm("Title")
+	description := c.PostForm("Description")
+	price := c.PostForm("Price")
+	year := c.PostForm("Year")
+	courseID := c.PostForm("CourseID")
+	termID := c.PostForm("TermID")
 
+	if title != "" {
+		sheet.Title = title
+	}
+
+	if description != "" {
+		sheet.Description = description
+	}
+
+	if price != "" {
+		priceFloat, err := strconv.ParseFloat(price, 32)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Price must be a valid number"})
+			return
+		}
+		sheet.Price = float32(priceFloat)
+	}
+
+	if year != "" {
+		yearUint, err := strconv.Atoi(year)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Year must be a valid number"})
+			return
+		}
+		sheet.Year = uint(yearUint)
+	}
+
+	if courseID != "" {
+		courseIDUint, err := strconv.Atoi(courseID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID must be a valid number"})
+			return
+		}
+		sheet.CourseID = uint(courseIDUint)
+	}
+
+	if termID != "" {
+		termIDUint, err := strconv.Atoi(termID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "TermID must be a valid number"})
+			return
+		}
+		sheet.TermID = uint(termIDUint)
+	}
+
+	// บันทึกการอัปเดตลงในฐานข้อมูล
 	if err := config.DB().Save(&sheet).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update the sheet"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  "success",
-		"message": "Sheet updated successfully",
-		"data":    sheet,
-	})
+	c.JSON(http.StatusOK, sheet)
 }
 
 // Delete a Sheet by ID
@@ -195,25 +283,23 @@ func DeleteSheet(c *gin.Context) {
 	id := c.Param("id")
 	var sheet entity.Sheet
 
+	// หาข้อมูล sheet จากฐานข้อมูล
 	if err := config.DB().First(&sheet, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Sheet not found"})
 		return
 	}
 
-	if sheet.FilePath != "" {
-		filePath := filepath.Join("public", sheet.FilePath)
-		if _, err := os.Stat(filePath); err == nil {
-			os.Remove(filePath)
-		}
-	}
-
-	if err := config.DB().Delete(&sheet).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete the sheet"})
+	// ใช้ Soft Delete โดยการตั้งค่า DeletedAt
+	if err := config.DB().Model(&sheet).Update("DeletedAt", time.Now()).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to mark sheet as deleted"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Sheet deleted successfully"})
+	// ส่งข้อมูลที่ถูก soft delete กลับไป
+	c.JSON(http.StatusOK, sheet)
 }
+
+
 
 func UploadFile(c *gin.Context) {
 	file, err := c.FormFile("file")
@@ -250,15 +336,49 @@ func UploadFile(c *gin.Context) {
 
 func GetCourses(c *gin.Context) {
 	var courses []entity.Course
-	if err := config.DB().
-		Preload("Category").
-		Preload("User").
-		Preload("Semester").
-		Preload("DayofWeek").
-		Find(&courses).Error; err != nil {
+	if err := config.DB().Find(&courses).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": courses})
 }
+func GetPurchasedFiles(c *gin.Context) {
+	userID := c.Param("userID") // รับ UserID จาก parameter
 
+	var purchases []entity.Purchase
+	// Preload Cart, CartItem, Sheet และ Seller
+	if err := config.DB().
+		Unscoped().
+		Preload("Cart.CartItem.Sheet").
+		Preload("Cart.CartItem.Sheet.Seller"). // Preload Seller ที่เกี่ยวข้องกับ Sheet
+		Preload("Cart.CartItem.Sheet.Course").
+		Preload("Cart.CartItem.Sheet.Term").
+		Where("user_id = ?", userID).
+		Find(&purchases).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch purchased files"})
+		return
+	}
+
+	// เตรียมข้อมูล purchasedFiles
+	var purchasedFiles []gin.H
+	for _, purchase := range purchases {
+		for _, cartItem := range purchase.Cart.CartItem {
+			// ใช้ข้อมูลจากตอนที่ซื้อหรือข้อมูลเดิม ไม่ต้องการอัพเดทตามการแก้ไขใน Sheet
+			purchasedFiles = append(purchasedFiles, gin.H{
+				"sheetID":     cartItem.Sheet.ID,
+				"CourseCode":  cartItem.Sheet.Course.CourseCode,
+				"title":       cartItem.Sheet.Title,  // ใช้ข้อมูลที่ซื้อครั้งแรก
+				"description": cartItem.Sheet.Description,  // ใช้ข้อมูลที่ซื้อครั้งแรก
+				"term":        cartItem.Sheet.Term.TermName,
+				"year":        cartItem.Sheet.Year,
+				"fileURL":     cartItem.Sheet.FilePath,
+				"seller":      cartItem.Sheet.Seller.Name, // ดึงชื่อ Seller
+				"sellerID":    cartItem.Sheet.Seller.ID,   // ดึง ID ของ Seller
+				"sellerName":  cartItem.Sheet.Seller.Name,
+			})
+		}
+	}
+
+	// ส่งข้อมูลกลับ
+	c.JSON(http.StatusOK, gin.H{"data": purchasedFiles})
+}

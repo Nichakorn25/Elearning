@@ -1,3 +1,4 @@
+
 package entity
 
 import (
@@ -6,9 +7,9 @@ import (
 
 type AnswerOption struct {
 	gorm.Model
-	OptionText string `json:"OptionText"`
-	IsCorrect  bool   `json:"IsCorrect"`
+	OptionText string `json:"option_text"`
+	IsCorrect  bool   `json:"is_correct"`
 
-	QuestionID   uint         `json:"QuestionID"`
+	QuestionID   uint         `json:"question_id"`
 	QuizQuestion QuizQuestion `gorm:"foreignKey:QuestionID"`
 }

@@ -4,6 +4,7 @@ import (
 	"time"
 	"gorm.io/gorm"
 )
+
 type Log struct {
 	gorm.Model
 	Action  string `json:"Action"`

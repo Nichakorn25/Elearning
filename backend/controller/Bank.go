@@ -3,10 +3,8 @@ package controller
 import (
 	"net/http"
 	"strconv"
-
-	"elearning/config"
-	"elearning/entity"
-
+   "example.com/Elearning/config"
+   "example.com/Elearning/entity"
 	"github.com/gin-gonic/gin"
 )
 

@@ -6,9 +6,9 @@ import (
 type CourseContent struct {
 	gorm.Model
 	Title  string `json:"Title"`
-	ContentType  string `json:"ContentType"`
-	Url  string `json:"Url"`
+	Content  string `json:"Content"`
+	Status  string `json:"Status" valid:"required~Status is required"`
 	
-	LessonID uint `json:"LessonID"`
+	LessonID uint `json:"LessonID" valid:"required~LessonID is required"`
 	Lesson   Lesson `gorm:"foreignKey:LessonID"`
 }

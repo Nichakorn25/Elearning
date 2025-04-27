@@ -6,6 +6,6 @@ import (
 
 type Bank struct {
 	gorm.Model
-	BankName          string              `json:"BankName"`
-	SellerBankAccount []SellerBankAccount `gorm:"foreignKey:BankID"`
+	BankName string `json:"BankName"`
+	SellerBankAccount     []SellerBankAccount `gorm:"foreignKey:BankID"`
 }

@@ -3,8 +3,8 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/config"
+   	"example.com/Elearning/entity"
 	"github.com/gin-gonic/gin"
 )
 
@@ -118,6 +118,5 @@ func DeleteAssignment(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": "Assignment deleted successfully"})
+	
 }
-
-

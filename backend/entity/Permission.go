@@ -3,6 +3,7 @@ package entity
 import (
 	"gorm.io/gorm"
 )
+
 type Permission struct {
 	gorm.Model
 	CanCreate  bool `json:"CanCreate"`

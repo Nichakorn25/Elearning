@@ -2,6 +2,7 @@ package config
 
 import "golang.org/x/crypto/bcrypt"
 
+
 // hashPassword เป็น function สำหรับการแปลง password
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)

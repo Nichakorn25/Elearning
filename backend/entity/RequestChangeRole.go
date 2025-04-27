@@ -6,9 +6,10 @@ import (
 
 type RequestChangeRole struct {
 	gorm.Model
-	UserID     uint   `json:"userID"`                         // เชื่อมโยงกับตาราง User
-	User       User   `gorm:"foreignKey:UserID"`              // Foreign key สำหรับดึงข้อมูล User
-	Reason     string `json:"reason"`                         // เหตุผลในการขอเปลี่ยน Role
-	IDCard     string `json:"idCard"`                         // Path ของไฟล์บัตรประชาชนที่อัปโหลด
-	Status     string `json:"status"` // สถานะของคำขอ (Pending, Approved, Rejected)
+	Reason     string `json:"reason" valid:"required~Reason is required"`                
+	IDCard     string `json:"idCard" valid:"required~IDCard is required, url~IDCard must be a valid URL"`                 
+	Status     string `json:"status" valid:"required~Status is required"`						
+	UserID     uint   `json:"userID" valid:"required~UserID is required"`                         
+	User       User   `gorm:"foreignKey:UserID"`             
+	
 }

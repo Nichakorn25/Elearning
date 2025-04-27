@@ -1,80 +1,13 @@
 package controller
 
 import (
-	"elearning/config"
-	"elearning/entity"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"fmt"
 )
-
-// //ดึงคอร์สBytermid
-// func SearchCourses(c *gin.Context) {
-// 	// รับพารามิเตอร์ filter และ semester
-// 	searchQuery := c.Query("filter")
-// 	semester := c.Query("semester")
-
-// 	// สร้าง slice สำหรับเก็บผลลัพธ์
-// 	var courses []entity.Course
-// 	var result []map[string]interface{}
-
-// 	db := config.DB()
-
-// 	// ดึงข้อมูล Course พร้อม StudyTime และ ExamSchedule
-// 	err := db.Preload("StudyTime").Preload("ExamSchedule").
-// 		Where("semester_id = ? AND course_name LIKE ?", semester, "%"+searchQuery+"%").
-// 		Find(&courses).Error
-
-// 	if err != nil {
-// 		fmt.Println("Database Error:", err)
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	// รวม Course, StudyTime และ ExamSchedule ในรูปแบบ JSON
-// 	for _, course := range courses {
-// 		courseData := map[string]interface{}{
-// 			"id":          course.ID,
-// 			"CourseName":  course.CourseName,
-// 			"CourseDate":  course.CourseDate,
-// 			"Credit":      course.Credit,
-// 			"Description": course.Description,
-// 			"CategoryID":  course.CategoryID,
-// 			"UserID":      course.UserID,
-// 			"SemesterID":  course.SemesterID,
-// 			"DayofWeekID": course.DayofWeekID,
-// 			"StudyTimes":  []map[string]interface{}{},
-// 			"ExamSchedule": nil, // Default value
-// 		}
-
-// 		// เพิ่ม StudyTime ลงใน JSON
-// 		for _, studyTime := range course.StudyTime {
-// 			studyTimeData := map[string]interface{}{
-// 				"StudyDay":       studyTime.StudyDay,
-// 				"StudyTimeStart": studyTime.StudyTimeStart,
-// 				"StudyTimeEnd":   studyTime.StudyTimeEnd,
-// 			}
-// 			courseData["StudyTimes"] = append(courseData["StudyTimes"].([]map[string]interface{}), studyTimeData)
-// 		}
-
-// 		// เพิ่ม ExamSchedule ลงใน JSON (ถ้ามี)
-// 		if len(course.ExamSchedule) > 0 {
-// 			exam := course.ExamSchedule[0] // ใช้เฉพาะรายการแรก
-// 			examData := map[string]interface{}{
-// 				"ExamDate":  exam.ExamDate,
-// 				"StartTime": exam.StartTime,
-// 				"EndTime":   exam.EndTime,
-// 			}
-// 			courseData["ExamSchedule"] = examData
-// 		}
-
-// 		result = append(result, courseData)
-// 	}
-
-// 	// ส่งข้อมูลกลับในรูปแบบ JSON
-// 	c.JSON(http.StatusOK, result)
-// }
 
 //test
 func SearchCoursesByTerm(c *gin.Context) {
@@ -89,7 +22,8 @@ func SearchCoursesByTerm(c *gin.Context) {
 	db := config.DB()
 
 	// ดึงข้อมูล Course พร้อม StudyTime และ ExamSchedule ตาม Term ID และคำค้นหา
-	err := db.Preload("StudyTime").Preload("ExamSchedule").
+	err := db.Preload("StudyTime.DayofWeek").
+		Preload("ExamSchedule").
 		Where("semester_id = ? AND course_name LIKE ?", termID, "%"+searchQuery+"%").
 		Find(&courses).Error
 
@@ -103,22 +37,23 @@ func SearchCoursesByTerm(c *gin.Context) {
 	for _, course := range courses {
 		courseData := map[string]interface{}{
 			"CourseID":     course.ID,            // ส่ง CourseID หรือ id ของ Course
+			"CourseCode":	course.CourseCode,
 			"CourseName":   course.CourseName,    // ชื่อวิชา
-			"CourseDate":   course.CourseDate,    // วันที่ของวิชา
+			"CourseDate":   course.CreatedAt,     // วันที่สร้างของวิชา
 			"Credit":       course.Credit,        // หน่วยกิต
 			"Description":  course.Description,   // คำอธิบาย
 			"CategoryID":   course.CategoryID,    // หมวดหมู่
 			"UserID":       course.UserID,        // ผู้ใช้
 			"SemesterID":   course.SemesterID,    // เทอม
-			"DayofWeekID":  course.DayofWeekID,   // วันที่เรียน
 			"StudyTimes":   []map[string]interface{}{}, // รายละเอียดเวลาเรียน
-			"ExamSchedule": nil,                  // Default value สำหรับตารางสอบ
+			"ExamSchedule": []map[string]interface{}{},                 // Default value สำหรับตารางสอบ
 		}
 
 		// เพิ่ม StudyTime ลงใน JSON
 		for _, studyTime := range course.StudyTime {
 			studyTimeData := map[string]interface{}{
-				"StudyDay":       studyTime.StudyDay,
+				"StudyDay":       studyTime.DayofWeek.DayName,
+				"DayofWeekID":	studyTime.DayofWeekID,
 				"StudyTimeStart": studyTime.StudyTimeStart,
 				"StudyTimeEnd":   studyTime.StudyTimeEnd,
 			}
@@ -142,6 +77,7 @@ func SearchCoursesByTerm(c *gin.Context) {
 	// ส่งข้อมูลกลับในรูปแบบ JSON
 	c.JSON(http.StatusOK, result)
 }
+
 //test
 
 
@@ -215,6 +151,7 @@ func RemoveCourseFromSchedule(c *gin.Context) {
 }
 
 //test 
+//use ดึงตารางเรียนโดยไอดีผู้ใช้
 func GetClassScheduleByUserID(c *gin.Context) {
 	userID := c.Param("userID")
 
@@ -223,10 +160,8 @@ func GetClassScheduleByUserID(c *gin.Context) {
 	// Preload ความสัมพันธ์ที่เกี่ยวข้อง
 	if err := config.DB().
 		Where("user_id = ?", userID).
-		Preload("DayofWeek").         // ดึงข้อมูล DayOfWeek
-		Preload("Course").            // ดึงข้อมูล Course
-		Preload("Course.StudyTime").  // ดึงข้อมูล StudyTime ที่เกี่ยวข้องกับ Course
-		Preload("Course.ExamSchedule"). // ดึงข้อมูล ExamSchedule
+		Preload("DayofWeek").   // ดึงข้อมูล DayOfWeek
+		Preload("Course").      // ดึงข้อมูล Course
 		Find(&schedules).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -236,110 +171,75 @@ func GetClassScheduleByUserID(c *gin.Context) {
 	c.JSON(http.StatusOK, schedules)
 }
 
-
-// // บันทึกข้อมูลลงใน ClassSchedule
-// func AddClassSchedule(c *gin.Context) {
-// 	var classSchedule entity.ClassSchedule
-
-// 	// Bind JSON จาก Request Body
-// 	if err := c.ShouldBindJSON(&classSchedule); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
-// 		fmt.Printf("Bind Error: %v\n", err)
-// 		return
-// 	}
-
-// 	// ตรวจสอบว่าข้อมูลที่จำเป็นครบหรือไม่
-// 	if classSchedule.CourseID == 0 || classSchedule.UserID == 0 || classSchedule.DayofWeekID == 0 {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID, UserID, and DayofWeekID are required"})
-// 		fmt.Println("Missing required fields")
-// 		return
-// 	}
-
-// 	// บันทึกข้อมูลลงในฐานข้อมูล
-// 	if err := config.DB().Debug().Create(&classSchedule).Error; err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save data"})
-// 		fmt.Printf("Database Error: %v\n", err)
-// 		return
-// 	}
-
-// 	// ส่งข้อมูลกลับเมื่อบันทึกสำเร็จ
-// 	c.JSON(http.StatusCreated, gin.H{
-// 		"message": "Class schedule saved successfully",
-// 		"data":    classSchedule,
-// 	})
-// 	fmt.Println("Data saved successfully:", classSchedule)
-// }
-
+// บันทึกข้อมูลลงใน ClassSchedule
 func AddClassSchedule(c *gin.Context) {
     var classSchedule entity.ClassSchedule
 
-    // ตรวจสอบและ Bind ข้อมูลจาก Request Body
+    // Bind JSON จาก Request Body
     if err := c.ShouldBindJSON(&classSchedule); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+        fmt.Printf("Bind Error: %v\n", err)
         return
     }
 
-    // ตรวจสอบข้อมูลที่จำเป็น
-    if classSchedule.CourseID == 0 || classSchedule.UserID == 0 || classSchedule.DayofWeekID == 0 {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Missing required fields: CourseID, UserID, DayofWeekID"})
+    // ตรวจสอบว่าข้อมูลที่จำเป็นครบหรือไม่
+    if classSchedule.CourseID == 0 || classSchedule.UserID == 0 || classSchedule.DayofWeekID == 0 || classSchedule.StudyTimeID == 0 {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID, UserID, DayofWeekID, and StudyTimeID are required"})
+        fmt.Println("Missing required fields")
         return
     }
 
-    // ตรวจสอบว่าข้อมูลนี้มีอยู่แล้วหรือไม่
-    var existingClassSchedule entity.ClassSchedule
-    if err := config.DB().Where("course_id = ? AND user_id = ? AND dayof_week_id = ?",
-        classSchedule.CourseID, classSchedule.UserID, classSchedule.DayofWeekID).
-        First(&existingClassSchedule).Error; err == nil {
-        c.JSON(http.StatusConflict, gin.H{"error": "Class schedule already exists"})
+    // ตรวจสอบว่า StudyTime มีอยู่ในฐานข้อมูลหรือไม่
+    var studyTime entity.StudyTime
+    if err := config.DB().First(&studyTime, classSchedule.StudyTimeID).Error; err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid StudyTimeID"})
+        fmt.Printf("StudyTime not found: %v\n", err)
         return
     }
 
-    // บันทึกข้อมูลใหม่
-    if err := config.DB().Create(&classSchedule).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add class schedule"})
+    // บันทึกข้อมูลลงในฐานข้อมูล
+    if err := config.DB().Debug().Create(&classSchedule).Error; err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save data"})
+        fmt.Printf("Database Error: %v\n", err)
         return
     }
 
-    c.JSON(http.StatusCreated, gin.H{"message": "Class schedule added successfully"})
+    // โหลดข้อมูล StudyTime เพื่อส่งกลับ
+    if err := config.DB().Model(&classSchedule).Association("StudyTime").Find(&studyTime); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to load StudyTime data"})
+        fmt.Printf("StudyTime Load Error: %v\n", err)
+        return
+    }
+
+    // ส่งข้อมูลกลับเมื่อบันทึกสำเร็จ
+    c.JSON(http.StatusCreated, gin.H{
+        "message": "Class schedule saved successfully",
+        "data": map[string]interface{}{
+            "ClassSchedule": classSchedule,
+            "StudyTime":     studyTime,
+        },
+    })
+    fmt.Println("Data saved successfully:", classSchedule)
 }
-
 
 // ลบวิชาออกจาก ClassSchedule โดยใช้ CourseID use
 func RemoveClassScheduleByCourseID(c *gin.Context) {
-    userID := c.Param("userID")    // ดึง UserID จาก Path Parameter
-    courseID := c.Param("courseID") // ดึง CourseID จาก Path Parameter
+	courseID := c.Param("courseID") // รับ CourseID จาก Path Parameter
 
-    if userID == "" || courseID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID and CourseID are required"})
-        return
-    }
+	// ตรวจสอบว่า CourseID เป็นค่าที่ถูกต้องหรือไม่
+	if courseID == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "CourseID is required"})
+		return
+	}
 
-    if err := config.DB().Where("user_id = ? AND course_id = ?", userID, courseID).Delete(&entity.ClassSchedule{}).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
+	// ลบข้อมูลจาก ClassSchedule โดยใช้ CourseID
+	if err := config.DB().Where("course_id = ?", courseID).Delete(&entity.ClassSchedule{}).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 
-    c.JSON(http.StatusOK, gin.H{"message": "Class schedule removed successfully"})
+	// ส่งข้อความกลับเมื่อการลบสำเร็จ
+	c.JSON(http.StatusOK, gin.H{"message": "Class schedule removed successfully"})
 }
-
-// ลบ ClassSchedule ทั้งหมดโดยใช้ UserID
-func RemoveAllClassSchedulesByUserID(c *gin.Context) {
-    userID := c.Param("userID") // รับ UserID จาก Path Parameter
-
-    if userID == "" {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "UserID is required"})
-        return
-    }
-
-    // ลบข้อมูลทั้งหมดใน ClassSchedule ที่เกี่ยวข้องกับ UserID
-    if err := config.DB().Where("user_id = ?", userID).Delete(&entity.ClassSchedule{}).Error; err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-        return
-    }
-
-    // ส่งข้อความกลับเมื่อการลบสำเร็จ
-    c.JSON(http.StatusOK, gin.H{"message": "All class schedules removed successfully"})
-}
-
 
 //test

@@ -2,13 +2,12 @@ package controller
 
 import (
     "net/http"
-    "elearning/entity"
-    "elearning/config"
+    "example.com/Elearning/entity"
+    "example.com/Elearning/config"
     "github.com/gin-gonic/gin"
 	"errors"  // เพิ่ม import สำหรับ package errors
 	"gorm.io/gorm" // เพิ่ม import สำหรับ gorm
 )
-
 func GetMajorsByDepartment(c *gin.Context) {
 	departmentID := c.Param("id")
 	var majors []entity.Major
@@ -28,4 +27,3 @@ func GetMajorsByDepartment(c *gin.Context) {
 
 	c.JSON(http.StatusOK, majors)
 }
-

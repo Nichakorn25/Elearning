@@ -10,6 +10,7 @@ import (
 
 // JwtWrapper wraps the signing key and the issuer
 
+
 type JwtWrapper struct {
 	SecretKey string
 

@@ -4,6 +4,7 @@ import (
 	"time"
 	"gorm.io/gorm"
 )
+
 type Assignment struct {
 	gorm.Model
 	Title  		string `json:"title" valid:"required~Title is required"`

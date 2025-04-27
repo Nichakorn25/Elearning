@@ -3,10 +3,8 @@ package controller
 import (
 	"net/http"
 	"strconv"
-
-	"elearning/entity"
-	"elearning/config"
-
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 	"github.com/gin-gonic/gin"
 )
 
@@ -65,7 +63,10 @@ func CreateSeller(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, seller)
+	c.JSON(http.StatusCreated, gin.H{
+		"message":   "Seller created successfully",
+		"sellerId":  seller.ID, // ส่ง ID ของ Seller ที่เพิ่งสร้าง
+	})
 }
 
 // UpdateSeller - อัปเดตข้อมูล Seller
@@ -183,4 +184,3 @@ func CheckUserExistsInSeller(c *gin.Context) {
 		})
 	}
 }
-
