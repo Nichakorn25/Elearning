@@ -40,7 +40,7 @@ const SearchResultsPopup: React.FC<SearchResultsPopupProps> = ({
               <tbody>
                 {results.map((course) => (
                   <tr key={course.ID}>
-                    <td>{course.ID}</td>
+                    <td>{course.CourseCode}</td>
                     <td>{course.CourseName}</td>
                     <td>{course.Credit}</td>
                     <td>{course.Description}</td>

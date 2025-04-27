@@ -1,5 +1,4 @@
 export interface SheetInterface {
-    Term: string;
     ID: number;           
     Title: string;          
     Description: string;   
@@ -14,6 +13,9 @@ export interface SheetInterface {
         Name: string;
     };
     Course?: {              
-        CourseDate: string;
+        CourseCode: string;
+    };
+    Term?: {              
+        Name: string;
     };
 }

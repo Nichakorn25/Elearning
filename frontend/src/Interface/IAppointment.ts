@@ -1,5 +1,4 @@
 import { MajorInterface, UserInterface } from "./IUser";
-import { ClassScheduleInterface } from "./IClassSchedule";
 
 export interface DaysAvailabilityInterface {
   day: string;
@@ -43,12 +42,4 @@ export interface StudentBookingInterface {
 export interface DayInterface {
   ID?: number; // ID ของการจอง
   DayName?: string;
-   ClassSchedules?: ClassScheduleInterface[]; // ตารางเรียนในวันนั้น ๆ
-}
-
-export interface FlattenedBookingInterface {
-  ID: number;
-  AppointmentTitle: string;
-  Day: string;
-  Teacher: string;
 }

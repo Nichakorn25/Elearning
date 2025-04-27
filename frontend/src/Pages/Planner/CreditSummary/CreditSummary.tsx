@@ -10,6 +10,7 @@ interface ExamSchedule {
 }
 
 interface Course {
+  CourseCode: string;
   ID: number;
   CourseName: string;
   Credit: number;
@@ -44,14 +45,14 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
           </tr>
         </thead>
         <tbody>
-          {courses.map((course, index) => {
+          {courses.map((course) => {
             if (!course.ID) {
               console.error("Course ID is undefined:", course); // แจ้งเตือนเมื่อไม่มี ID
               return null; // ข้ามการแสดงข้อมูล
             }
 
             return (
-              <tr key={`${course.ID}-${index}`}>
+              <tr key={course.ID}>
                 <td
                   style={{
                     backgroundColor: course.color || "transparent", // ใช้สีจาก course.color หรือโปร่งใส
@@ -60,7 +61,7 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
                     borderRadius: "4px",
                   }}
                 >
-                  {course.ID}
+                  {course.CourseCode}
                 </td>
                 <td>{course.CourseName}</td>
                 <td>{course.Credit}</td>
@@ -70,10 +71,28 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
                     <ul>
                       {course.ExamSchedules.map((exam, index) => (
                         <li key={index}>
-                          <strong>วันที่:</strong> {exam.ExamDate} <br />
-                          <strong>เวลา:</strong> {exam.StartTime} -{" "}
-                          {exam.EndTime} <br />
-                          <strong>สถานที่:</strong> {exam.Location}
+                          <strong>วันที่:</strong>{" "}
+                          {new Date(exam.ExamDate).toLocaleDateString("th-TH", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}{" "}
+                          <br />
+                          <strong>เวลา:</strong>{" "}
+                          {new Date(exam.StartTime).toLocaleTimeString(
+                            "th-TH",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}{" "}
+                          -{" "}
+                          {new Date(exam.EndTime).toLocaleTimeString("th-TH", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}{" "}
+                          <br />
+                          <strong>สถานที่:</strong> {exam.Location || "ไม่ระบุ"}
                         </li>
                       ))}
                     </ul>
@@ -81,6 +100,7 @@ const CreditSummary: React.FC<CreditSummaryProps> = ({
                     <span>ไม่มีตารางสอบ</span>
                   )}
                 </td>
+
                 <td>
                   <button
                     className="delete-icon-button"

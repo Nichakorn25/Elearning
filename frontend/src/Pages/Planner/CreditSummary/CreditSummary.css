@@ -1,94 +1,97 @@
 .credit-summary {
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-    color: black;
-  }
-  
-  .credit-summary h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-  }
-  
-  .credit-summary table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .credit-summary th,
-  .credit-summary td {
-    text-align: left;
-    padding: 10px;
-    border:  1px solid #ddd;
-  }
-  
-  .credit-summary th {
-    background-color: #f9f9f9;
-    font-weight: bold;
-  }
-  
-  .credit-summary tr:nth-child(even) {
-    background-color: #f4f4f4;
-  }
-  
-  .credit-summary tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .credit-summary .note {
-    color: #888;
-    font-size: 12px;
-  }
-  
-  .info-btn,
-  .delete-btn {
-    display: inline-block; /* ทำให้ปุ่มเรียงในแนวนอน */
-    margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
-    padding: 5px 10px;
-    font-size: 14px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .info-btn {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .info-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-  }
-  
-  .delete-btn:hover {
-    background-color: #c82333;
-  }
-  
-  .delete-icon-button {
-    background-color: #e74c3c; /* สีพื้นหลัง */
-    color: #ffffff; /* สีไอคอน */
-    border: none; /* ไม่มีเส้นขอบ */
-    border-radius: 5px; /* ทำให้มุมมน */
-    padding: 10px; /* ขนาดปุ่ม */
-    cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อ hover */
-    display: flex; /* จัดกึ่งกลางไอคอน */
-    align-items: center;
-    justify-content: center;
-    width: 40px; /* ความกว้าง */
-    height: 40px; /* ความสูง */
-  }
-  
-  .delete-icon {
-    font-size: 16px; /* ขนาดของไอคอน */
-  }
-  
-  .delete-icon-button:hover {
-    background-color: #c0392b; /* เปลี่ยนสีเมื่อ hover */
-  }
-  
+  margin: 10px auto; /* จัดให้อยู่กึ่งกลางและเพิ่มระยะขอบ */
+  max-width: 95%; /* กำหนดความกว้างสูงสุดให้เท่ากับ .schedule-table */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  color: black;
+  background: linear-gradient(to bottom, #ffffff, #fff4e5); /* เพิ่มพื้นหลัง */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+}
+
+
+.credit-summary h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.credit-summary table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.credit-summary th,
+.credit-summary td {
+  text-align: left;
+  padding: 10px;
+  border:  1px solid #ddd;
+}
+
+.credit-summary th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.credit-summary tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+.credit-summary tr:hover {
+  background-color: #f1f1f1;
+}
+
+.credit-summary .note {
+  color: #888;
+  font-size: 12px;
+}
+
+.info-btn,
+.delete-btn {
+  display: inline-block; /* ทำให้ปุ่มเรียงในแนวนอน */
+  margin-right: 10px; /* เพิ่มระยะห่างระหว่างปุ่ม */
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.info-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.info-btn:hover {
+  background-color: #0056b3;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.delete-icon-button {
+  background-color: #e74c3c; /* สีพื้นหลัง */
+  color: #ffffff; /* สีไอคอน */
+  border: none; /* ไม่มีเส้นขอบ */
+  border-radius: 5px; /* ทำให้มุมมน */
+  padding: 10px; /* ขนาดปุ่ม */
+  cursor: pointer; /* เปลี่ยนเคอร์เซอร์เมื่อ hover */
+  display: flex; /* จัดกึ่งกลางไอคอน */
+  align-items: center;
+  justify-content: center;
+  width: 40px; /* ความกว้าง */
+  height: 40px; /* ความสูง */
+}
+
+.delete-icon {
+  font-size: 16px; /* ขนาดของไอคอน */
+}
+
+.delete-icon-button:hover {
+  background-color: #c0392b; /* เปลี่ยนสีเมื่อ hover */
+}

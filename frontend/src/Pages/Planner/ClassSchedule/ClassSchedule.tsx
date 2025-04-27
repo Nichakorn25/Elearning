@@ -7,89 +7,63 @@ import {
   CourseInterface,
   StudyTimeInterface,
 } from "../../../Interface/IClassSchedule";
-import { message, Spin } from "antd";
+import { message } from "antd";
 import Swal from "sweetalert2";
 import {
   GetClassScheduleById,
   AddClassSchedule,
-  RemoveClassScheduleByCourseID,
-  RemoveAllClassSchedules,
 } from "../../../services/https";
 
 const ClassSchedule: React.FC = () => {
   useEffect(() => {
     const fetchClassSchedule = async () => {
       try {
+        // ดึง UserID จาก LocalStorage
         const userId = localStorage.getItem("id");
         if (!userId) {
           Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
           return;
         }
-    
+
+        // เรียก API เพื่อดึงข้อมูลตารางเรียน
         const data = await GetClassScheduleById(userId);
         console.log("Fetched Class Schedule:", data);
-    
-        if (!data || data.length === 0) {
-          Swal.fire("ไม่มีข้อมูล!", "ไม่พบข้อมูลตารางเรียน", "info");
-          return;
-        }
-    
+
+        // ประมวลผลข้อมูลที่ได้รับจาก API
         const updatedSchedule = [...schedule];
-    
         const coursesFromApi: CourseInterface[] = data.map((item: any) => {
-          const course = item.Course || {};
-          const studyTimes = course.StudyTime || []; // ตรวจสอบ StudyTimes
-          console.log("Course StudyTimes:", studyTimes);
-    
           const dayRow = updatedSchedule.find(
             (row) => row.key === item.DayofWeekID
           );
-    
-          if (dayRow && studyTimes.length > 0) {
-            studyTimes.forEach((time: StudyTimeInterface) => {
+          if (dayRow) {
+            item.StudyTimes.forEach((time: StudyTimeInterface) => {
               const startHour = new Date(time.StudyTimeStart).getUTCHours();
               const endHour = new Date(time.StudyTimeEnd).getUTCHours();
-    
+
               let timeFront = startHour - 8;
               let timeEnd = endHour - 8 - 1;
-    
+
               for (let i = timeFront; i <= timeEnd; i++) {
-                if (!dayRow.slots[i]) {
-                  dayRow.slots[i] = {
-                    courseName: course.CourseName || "Unknown Course",
-                    color: getRandomColor(),
-                  };
-                } else {
-                  console.warn(
-                    `Time conflict at slot ${i} for ${course.CourseName}`
-                  );
-                }
+                dayRow.slots[i] = {
+                  courseName: item.CourseName,
+                  color: getRandomColor(),
+                };
               }
             });
-          } else {
-            console.warn(
-              "No StudyTimes or invalid data for:",
-              course.CourseName || "Unknown"
-            );
           }
-    
-          return {
-            ...course,
-            DayofWeekID: item.DayofWeekID,
-            SemesterID: course.SemesterID,
-          };
+          return item; // เก็บข้อมูล course สำหรับ state courses
         });
-    
-        setCourses(coursesFromApi);
-        setSchedule(updatedSchedule);
+
+        setCourses(coursesFromApi); // เก็บ courses ใน state
+        setSchedule(updatedSchedule); // อัปเดตตารางเรียน
       } catch (error) {
         console.error("Error fetching class schedule:", error);
         Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถโหลดตารางเรียนได้", "error");
       }
     };
-    
+
     fetchClassSchedule();
-  }, []); // จะถูกเรียกครั้งเดียวเมื่อเปิดหน้านี้
+  }, []); // useEffect ที่โหลดครั้งเดียว
 
   const timeslots = [
     "08:00-09:00",
@@ -106,13 +80,15 @@ const ClassSchedule: React.FC = () => {
     "19:00-20:00",
   ];
 
-  const [, setAddtable] = useState<CourseInterface[]>([]);
+
   const [schedule, setSchedule] = useState([
+    { day: "อาทิตย์", key: 1, slots: Array(timeslots.length).fill("") },
     { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
     { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
     { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
     { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
     { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
+    { day: "เสาร์", key: 7, slots: Array(timeslots.length).fill("") },
   ]);
   const [courses, setCourses] = useState<CourseInterface[]>([]); // ใช้ CourseInterface
   const [isPopupVisible, setPopupVisible] = useState(false);
@@ -171,11 +147,13 @@ const ClassSchedule: React.FC = () => {
     course.StudyTimes.forEach(
       ({ StudyDay, StudyTimeStart, StudyTimeEnd }: StudyTimeInterface) => {
         const dayMapping: { [key: string]: string } = {
-          Monday: "จันทร์",
-          Tuesday: "อังคาร",
-          Wednesday: "พุธ",
-          Thursday: "พฤหัส",
-          Friday: "ศุกร์",
+          วันอาทิตย์: "อาทิตย์",
+          วันจันทร์: "จันทร์",
+          วันอังคาร: "อังคาร",
+          วันพุธ: "พุธ",
+          วันพฤหัสบดี: "พฤหัส",
+          วันศุกร์: "ศุกร์",
+          วันเสาร์: "เสาร์",
         };
 
         const mappedDay = dayMapping[StudyDay];
@@ -198,16 +176,29 @@ const ClassSchedule: React.FC = () => {
             timeEnd < timeslots.length
           ) {
             for (let i = timeFront; i <= timeEnd; i++) {
-              if (dayRow.slots[i]) {
-                // เก็บข้อขัดแย้งใน conflicts
-                conflicts.push(
-                  `Time conflict for ${course.CourseName} at slot ${timeslots[i]}`
-                );
-              } else {
+              if (i === timeFront) {
+                // ตรวจสอบข้อขัดแย้งในช่วงเวลานั้น
+                for (let j = timeFront; j <= timeEnd; j++) {
+                  if (dayRow.slots[j] && !dayRow.slots[j].merged) {
+                    conflicts.push(
+                      `Time conflict for ${course.CourseName} at slot ${timeslots[j]}`
+                    );
+                  }
+                }
+          
+                if (conflicts.length > 0) {
+                  break; // หากมีข้อขัดแย้ง ให้หยุดการดำเนินการ
+                }
+          
+                // ช่องเริ่มต้นของช่วงเวลา: กำหนด colspan
                 dayRow.slots[i] = {
                   courseName: course.CourseName,
                   color: courseColor,
+                  colspan: timeEnd - timeFront + 1, // จำนวนชั่วโมงที่ครอบคลุม
                 };
+              } else {
+                // ช่องที่ถูกรวมใน colspan
+                dayRow.slots[i] = { merged: true };
               }
             }
           } else {
@@ -215,6 +206,7 @@ const ClassSchedule: React.FC = () => {
               `Time indices out of range for ${course.CourseName}: ${timeFront} - ${timeEnd}`
             );
           }
+          
         } else {
           console.error(`Failed to map day for ${StudyDay}`);
         }
@@ -246,7 +238,7 @@ const ClassSchedule: React.FC = () => {
     ]);
   };
 
-  const handleReset = async () => {
+  const handleReset = () => {
     Swal.fire({
       title: "ยืนยันการรีเซ็ต",
       text: "คุณต้องการรีเซ็ตตารางเรียนทั้งหมดหรือไม่?",
@@ -256,46 +248,35 @@ const ClassSchedule: React.FC = () => {
       cancelButtonColor: "#CD6155",
       confirmButtonText: "รีเซ็ต",
       cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
+    }).then((result: { isConfirmed: any }) => {
       if (result.isConfirmed) {
-        try {
-          const userId = localStorage.getItem("id");
-          if (!userId) {
-            Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
-            return;
-          }
-  
-          // เรียก API ลบข้อมูลทั้งหมดในฐานข้อมูล
-          await RemoveAllClassSchedules(userId);
-  
-          // ลบข้อมูลใน state
-          setSchedule([
-            { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
-            { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
-            { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
-            { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
-            { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
-          ]);
-          setCourses([]);
-          setUsedColors([]);
-  
-          Swal.fire("รีเซ็ตสำเร็จ!", "ตารางเรียนถูกรีเซ็ตเรียบร้อยแล้ว", "success");
-        } catch (error) {
-          console.error("Error resetting schedule:", error);
-          Swal.fire("เกิดข้อผิดพลาด!", "ไม่สามารถรีเซ็ตตารางเรียนได้", "error");
-        }
+        setSchedule([
+          { day: "อาทิตย์", key: 1, slots: Array(timeslots.length).fill("") },
+          { day: "จันทร์", key: 2, slots: Array(timeslots.length).fill("") },
+          { day: "อังคาร", key: 3, slots: Array(timeslots.length).fill("") },
+          { day: "พุธ", key: 4, slots: Array(timeslots.length).fill("") },
+          { day: "พฤหัส", key: 5, slots: Array(timeslots.length).fill("") },
+          { day: "ศุกร์", key: 6, slots: Array(timeslots.length).fill("") },
+          { day: "เสาร์", key: 7, slots: Array(timeslots.length).fill("") },
+        ]);
+        setCourses([]);
+        setUsedColors([]);
+        Swal.fire(
+          "รีเซ็ตสำเร็จ!",
+          "ตารางเรียนถูกรีเซ็ตเรียบร้อยแล้ว",
+          "success"
+        );
       }
     });
   };
-  
 
-  const handleRemoveCourse = async (id: number) => {
+  const handleRemoveCourse = (id: number) => {
     const courseToRemove = courses.find((course) => course.ID === id);
     if (!courseToRemove) {
       console.error(`Course with ID ${id} not found`);
       return;
     }
-  
+
     Swal.fire({
       title: "Are you sure?",
       text: `คุณต้องการลบวิชา ${courseToRemove.CourseName} ใช่ไหม`,
@@ -304,49 +285,30 @@ const ClassSchedule: React.FC = () => {
       confirmButtonColor: "#45B39D",
       cancelButtonColor: "#CD6155",
       confirmButtonText: "Yes",
-    }).then(async (result) => {
+    }).then((result: { isConfirmed: any }) => {
       if (result.isConfirmed) {
-        try {
-          const userId = localStorage.getItem("id");
-          if (!userId) {
-            Swal.fire("เกิดข้อผิดพลาด!", "ไม่พบข้อมูลผู้ใช้งานในระบบ", "error");
-            return;
-          }
-  
-          // เรียก API ลบข้อมูล
-          await RemoveClassScheduleByCourseID(id, userId);
-  
-          // ลบ course จาก state courses
-          setCourses((prevCourses) =>
-            prevCourses.filter((course) => course.ID !== id)
+        // ลบ course จาก state courses
+        setCourses((prevCourses) =>
+          prevCourses.filter((course) => course.ID !== id)
+        );
+
+        // ลบ slots ของ course ใน schedule
+        const updatedSchedule = schedule.map((dayRow) => {
+          const updatedSlots = dayRow.slots.map((slot) =>
+            slot && slot.courseName === courseToRemove.CourseName ? "" : slot
           );
-  
-          // ลบ slots ของ course ใน schedule
-          const updatedSchedule = schedule.map((dayRow) => {
-            const updatedSlots = dayRow.slots.map((slot) =>
-              slot && slot.courseName === courseToRemove.CourseName ? "" : slot
-            );
-            return { ...dayRow, slots: updatedSlots };
-          });
-          setSchedule(updatedSchedule);
-  
-          Swal.fire(
-            "Deleted!",
-            "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
-            "success"
-          );
-        } catch (error) {
-          console.error("Error removing course:", error);
-          Swal.fire(
-            "Error!",
-            "ไม่สามารถลบข้อมูลในฐานข้อมูลได้",
-            "error"
-          );
-        }
+          return { ...dayRow, slots: updatedSlots };
+        });
+        setSchedule(updatedSchedule);
+
+        Swal.fire(
+          "Deleted!",
+          "วิชาได้ถูกลบออกจากตารางเรียบร้อยแล้ว",
+          "success"
+        );
       }
     });
   };
-  
 
   const handleSave = async () => {
     Swal.fire({
@@ -358,7 +320,7 @@ const ClassSchedule: React.FC = () => {
       cancelButtonColor: "#CD6155",
       confirmButtonText: "บันทึก",
       cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
+    }).then(async (result: { isConfirmed: any }) => {
       if (result.isConfirmed) {
         try {
           const userId = localStorage.getItem("id");
@@ -371,7 +333,7 @@ const ClassSchedule: React.FC = () => {
             const newSchedule = {
               CourseID: course.ID,
               UserID: parseInt(userId),
-              DayofWeekID: course.DayofWeekID,
+              DayofWeekID: course.StudyTimes[0]?.DayofWeekID,
             };
 
             console.log("Data being sent to API:", newSchedule);
@@ -394,13 +356,13 @@ const ClassSchedule: React.FC = () => {
   return (
     <div className="dashboard">
       <Header />
-      <div className="reset-container">
-        <button className="reset-button" onClick={handleReset}>
-          รีเซ็ตตาราง
-        </button>
-      </div>
       <section className="schedule-table">
         <h2>ตารางเรียน</h2>
+        <div className="reset-container">
+          <button className="reset-button" onClick={handleReset}>
+            รีเซ็ตตาราง
+          </button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -414,17 +376,31 @@ const ClassSchedule: React.FC = () => {
             {schedule.map((scheduleRow, rowIndex) => (
               <tr key={rowIndex}>
                 <td className="day-name">{scheduleRow.day}</td>
-                {scheduleRow.slots.map((slot, slotIndex) => (
-                  <td
-                    key={slotIndex}
-                    style={{
-                      backgroundColor:
-                        slot && slot.color ? slot.color : "transparent",
-                    }}
-                  >
-                    {slot && slot.courseName ? slot.courseName : ""}
-                  </td>
-                ))}
+                {scheduleRow.slots.map((slot, slotIndex) => {
+                  // ตรวจสอบว่า slot นี้เป็นจุดเริ่มต้นของวิชาที่มีเวลาต่อเนื่อง
+                  if (slot && slot.colspan) {
+                    return (
+                      <td
+                        key={slotIndex}
+                        colSpan={slot.colspan} // ใช้ colspan เพื่อรวมหลายช่อง
+                        style={{
+                          backgroundColor: slot.color || "transparent",
+                          textAlign: "center",
+                        }}
+                      >
+                        {slot.courseName}
+                      </td>
+                    );
+                  }
+
+                  // หากช่องนี้เป็นส่วนที่รวมอยู่ใน colspan แล้วให้คืนค่า null
+                  if (slot && slot.merged) {
+                    return null;
+                  }
+
+                  // สำหรับช่องว่าง (ไม่มีวิชา)
+                  return <td key={slotIndex}></td>;
+                })}
               </tr>
             ))}
           </tbody>

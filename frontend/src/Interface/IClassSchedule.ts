@@ -13,6 +13,7 @@ export interface ExamScheduleInterface {
 
 export interface CourseInterface {
   CourseID: number;
+  CourseCode: string; // เพิ่ม property นี้
   StudyDay: string;
   color: string;
   StudyTimes: StudyTimeInterface[];
@@ -43,6 +44,7 @@ export interface CourseInterface {
 
 // Interface สำหรับข้อมูลเวลาเรียน (StudyTime)
 export interface StudyTimeInterface {
+  DayofWeekID: any;
   ID: number;
   StudyDay: "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday";  // วันที่เรียน เช่น "จันทร์", "อังคาร"
   StudyTimeStart: string; // เวลาที่เริ่มเรียน เช่น "08:00"

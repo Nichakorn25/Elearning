@@ -183,23 +183,23 @@ func UpdateCourseExam(c *gin.Context) {
 	})
 }
 
-func GetDayOfWeek(c *gin.Context) {
+// func GetDayOfWeek(c *gin.Context) {
 
-	// ตัวแปรสำหรับเก็บข้อมูลคอร์สที่ผู้ใช้สร้าง
-	var dayofweek []entity.DayofWeek
+// 	// ตัวแปรสำหรับเก็บข้อมูลคอร์สที่ผู้ใช้สร้าง
+// 	var dayofweek []entity.DayofWeek
 
-	// เรียกใช้งานฐานข้อมูล
-	db := config.DB()
+// 	// เรียกใช้งานฐานข้อมูล
+// 	db := config.DB()
 
-	// ค้นหาคอร์สที่มี user_id ตรงกับ userID ที่ได้รับจากพารามิเตอร์
-	if err := db.Find(&dayofweek).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+// 	// ค้นหาคอร์สที่มี user_id ตรงกับ userID ที่ได้รับจากพารามิเตอร์
+// 	if err := db.Find(&dayofweek).Error; err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	// ส่งข้อมูลคอร์สที่พบกลับไปในรูปแบบ JSON
-	c.JSON(http.StatusOK, dayofweek)
-}
+// 	// ส่งข้อมูลคอร์สที่พบกลับไปในรูปแบบ JSON
+// 	c.JSON(http.StatusOK, dayofweek)
+// }
 
 func CreateSemester(c *gin.Context) {
 	var semester entity.Semester

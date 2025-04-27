@@ -160,9 +160,6 @@
   transition: all 0.3s;
 }
 
-.student-booking__timeslot:hover {
-  /* background-color: #f1f3f4; */
-}
 
 .student-booking__timeslot--selected {
   background-color: #1a73e8;
@@ -670,3 +667,28 @@
   color: white; /* สีดินสอ */
 }
 
+/* custom-swal.css */
+.custom-swal-popup {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  text-align: left;
+  padding: 20px;
+}
+
+.custom-swal-confirm-button {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+}
+
+.custom-swal-cancel-button {
+  background-color: #f44336 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+}

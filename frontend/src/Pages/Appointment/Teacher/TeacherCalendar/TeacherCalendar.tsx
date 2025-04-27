@@ -13,7 +13,7 @@ import { Menu, Dropdown } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import DynamicCalendarIcon from "../../DynamicCalendarIcon";
 import CreateAppointment from "../CreateAppointment/CreateAppointment";
-import CreateTaskPopup from "../../Taskpopup/Taskpopup";
+import CreateTaskPopup from "../../TaskPopup/TaskPopup";
 import Task from "../../../../assets/check.svg";
 import Appointment from "../../../../assets/website.svg";
 import Profile from "../../../../assets/user.svg";
@@ -309,11 +309,10 @@ const TeacherCalendar: React.FC = () => {
 
           {/* Icon Menu */}
           <div className="teachercalendar-icon-menu">
-            <div className="teachercalendar-icon-item">
-              <img src={Task} alt="Task Icon" />
-              <span className="teachercalendar-tooltip">Task</span>
-            </div>
-            <div className="teachercalendar-icon-item" onClick={()=>navigate("/TeacherAppointment")}>
+            <div
+              className="teachercalendar-icon-item"
+              onClick={() => navigate("/TeacherAppointment")}
+            >
               <img src={Appointment} alt="Meeting Icon" />
               <span className="teachercalendar-tooltip">Appointment</span>
             </div>
@@ -328,6 +327,16 @@ const TeacherCalendar: React.FC = () => {
               <img src={Place} alt="Place Icon" />
               <span className="teachercalendar-tooltip">Place</span>
             </div>
+            <a
+              className="teachercalendar-icon-item"
+              href="https://www.facebook.com/profile.php?id=61567774413479"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src={Task} alt="Task Icon" />
+              <span className="teachercalendar-tooltip">Contact us</span>
+            </a>
+
             {/* Map Popup */}
             {isMapVisible && (
               <div className="teachercalendar-map-popup">

@@ -3,9 +3,9 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"example.com/Elearning/config"
-   	"example.com/Elearning/entity"
 	"github.com/gin-gonic/gin"
+	"example.com/Elearning/entity"
+    "example.com/Elearning/config"
 )
 
 func GetAssignmentCourseID(c *gin.Context){

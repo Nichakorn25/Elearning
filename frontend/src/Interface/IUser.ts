@@ -1,5 +1,4 @@
-import { ClassScheduleInterface } from "./IClassSchedule";
-export interface UserInterface{
+export interface UserInterface {
     ID?: number;
     Username?: string;
     Password?: string;
@@ -7,35 +6,32 @@ export interface UserInterface{
     LastName?: string;
     Email?: string;
     DepartmentID?: number;
-    departmentname?: string;
+    Department?: DepartmentInterface; // ใช้ object ของ DepartmentInterface
     MajorID?: number;
-    majorname?: string;
+    Major?: MajorInterface; // ใช้ object ของ MajorInterface
     Phone?: string;
     RoleID?: number;
-    rolename?: string;
+    Role?: RoleInterface; // ใช้ object ของ RoleInterface
     Status?: string;
     ProfilePicture?: string;
-
-    // ความสัมพันธ์กับตารางเรียน
-    ClassSchedules?: ClassScheduleInterface[];
-}
-
-export interface DepartmentInterface{
+  }
+  
+  export interface DepartmentInterface {
     ID?: number;
     DepartmentName?: string;
-}
-
-export interface MajorInterface{
+  }
+  
+  export interface MajorInterface {
     ID?: number;
     MajorName?: string;
-
     Department?: DepartmentInterface;
-}
-
-export interface RoleInterface{
+  }
+  
+  export interface RoleInterface {
     ID?: number;
     RoleName?: string;
-}
+  }
+  
 
 export interface SignInInterface{
     Username?: string;

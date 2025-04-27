@@ -16,7 +16,7 @@ const SearchGuidePopup: React.FC<SearchGuidePopupProps> = ({ onClose }) => {
           </button>
         </div>
         <div className="explainhowtosearch">
-            <h4>*สามารถค้นหารายวิชาจาก (รหัสวิชา) หรือ (ชื่อวิชา) หรือ (ทั้งสอง) ได้ จากนั้นจึงค่อยกดปุ่มค้นหา</h4>
+            <h4>*สามารถค้นหารายวิชาจาก 'ชื่อวิชา' จากนั้นจึงค่อยกดปุ่มค้นหา</h4>
         </div>
         <div className="search-guide-popup__content">
           <p>
@@ -24,17 +24,10 @@ const SearchGuidePopup: React.FC<SearchGuidePopupProps> = ({ onClose }) => {
           </p>
           <ul>
             <li>
-              ค้นหารายวิชาที่มีรหัสขึ้นต้นด้วย <strong>102</strong> ป้อน <strong>102*</strong> ลงในช่องรหัสวิชา
+              ค้นหารายวิชาที่มีคำว่า <strong>world</strong> เป็นส่วนหนึ่งของชื่อวิชา ป้อน <strong>world</strong> ลงในช่องชื่อวิชา
             </li>
             <li>
-              ค้นหารายวิชาที่มีคำว่า <strong>world</strong> เป็นส่วนหนึ่งของชื่อวิชา ป้อน <strong>*world*</strong> ลงในช่องชื่อวิชา
-            </li>
-            <li>
-              ค้นหารายวิชาที่มีชื่อวิชาลงท้ายด้วย <strong>finance</strong> ป้อน <strong>*finance</strong> ลงในช่องชื่อวิชา
-            </li>
-            <li>
-              ค้นหารายวิชาที่มีรหัสขึ้นต้นด้วย <strong>102</strong> และชื่อวิชาลงท้ายด้วย <strong>world</strong> ป้อน{" "}
-              <strong>102*</strong> ลงในช่องรหัสวิชา และป้อน <strong>*world</strong> ลงในช่องชื่อวิชา
+              ค้นหารายวิชาที่มีชื่อวิชาลงท้ายด้วย <strong>finance</strong> ป้อน <strong>finance</strong> ลงในช่องชื่อวิชา
             </li>
           </ul>
         </div>
