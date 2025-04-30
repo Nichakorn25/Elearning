@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./ForTeacher.css";
-import { useNavigate } from "react-router-dom";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import Teacher01 from "../../../assets/teacher01.jpeg"
@@ -11,14 +10,12 @@ import Teacher05 from "../../../assets/teacher05.jpeg"
 import Teacher06 from "../../../assets/teacher06.jpeg"
 import Teacher07 from "../../../assets/teacher07.jpeg"
 import Teacher08 from "../../../assets/teacher08.jpeg"
-import Teacher09 from "../../../assets/teacher09.jpeg"
 import Teacher10 from "../../../assets/teacher10.jpeg"
 
 
 
 const ForTeacher: React.FC = () => {
   const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
-  const navigate = useNavigate();
 
   // ฟังก์ชันแสดง Popup
   const handleOpenLoginPopup = () => {
@@ -114,4 +111,3 @@ const ForTeacher: React.FC = () => {
 export default ForTeacher;
 
     
-

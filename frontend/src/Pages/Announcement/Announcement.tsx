@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Input, message, DatePicker, Table } from 'antd';
-import moment, { Moment } from 'moment';
+import dayjs from 'dayjs'; // No extra plugins
+import utc from 'dayjs/plugin/utc';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
 import {
   ListAnnouncements,
   CreateAnnouncement,
   UpdateAnnouncementById,
-  DeleteAnnouncementById
+  DeleteAnnouncementById,
 } from '../../services/https';
 import './Announcement.css';
 import { AnnouncementInterface } from '../../Interface/Admin';
+dayjs.extend(utc);
 
 const Announcement: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -18,21 +20,25 @@ const Announcement: React.FC = () => {
   const [newAnnouncement, setNewAnnouncement] = useState<{
     title: string;
     content: string;
-    date: string | null;
+    date: any | null;
   }>({ title: '', content: '', date: null });
   const [editingAnnouncement, setEditingAnnouncement] = useState<any>(null);
   const [announcements, setAnnouncements] = useState<any[]>([]);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+  const closeSidebar = () => {
+    setSidebarVisible(false); // Function to close the sidebar
   };
 
   const fetchAnnouncements = async () => {
-    const response = await ListAnnouncements();
-    if (response.status === 200) {
-      setAnnouncements(response.data);
-    } else {
-      message.error('Failed to fetch announcements');
+    try {
+      const response = await ListAnnouncements();
+      if (response.status === 200) {
+        setAnnouncements(response.data);
+      } else {
+        message.error('Failed to fetch announcements');
+      }
+    } catch (error) {
+      message.error('An error occurred while fetching announcements');
     }
   };
 
@@ -40,12 +46,12 @@ const Announcement: React.FC = () => {
     fetchAnnouncements();
   }, []);
 
-  const handleOpenModal = async (announcement: AnnouncementInterface | null) => {
+  const handleOpenModal = (announcement: AnnouncementInterface | null) => {
     if (announcement) {
       setNewAnnouncement({
         title: announcement.title || '',
         content: announcement.content || '',
-        date: announcement.announce_date ? moment(announcement.announce_date) : null,
+        date: announcement.announce_date ? dayjs(announcement.announce_date) : null,
       });
       setEditingAnnouncement(announcement);
     } else {
@@ -62,42 +68,46 @@ const Announcement: React.FC = () => {
   };
 
   const handleSaveAnnouncement = async () => {
-    if (!newAnnouncement.date || !newAnnouncement.title || !newAnnouncement.content) {
-      message.error('Please fill in all fields.');
+    const { title, content, date } = newAnnouncement;
+  
+    if (!date || !title || !content) {
+      message.error('All fields are required.');
       return;
     }
-
-    const date = new Date(newAnnouncement.date);
-    date.setHours(date.getHours() + 7);
-    const formattedDate = date.toISOString();
-
+  
+    const formattedDate = dayjs(date).format('YYYY-MM-DD'); // Keep only the date part
     const data: AnnouncementInterface = {
-      title: newAnnouncement.title,
-      content: newAnnouncement.content,
-      announce_date: formattedDate,
+      title,
+      content,
+      announce_date: `${formattedDate}T00:00:00.000Z`,
       user_id: Number(localStorage.getItem('id')),
     };
-
-    if (editingAnnouncement) {
-      const response = await UpdateAnnouncementById(editingAnnouncement.id, data);
-      if (response.status === 200) {
-        message.success('Announcement updated successfully');
-        fetchAnnouncements();
-        handleCloseModal();
+  
+    try {
+      if (editingAnnouncement) {
+        const response = await UpdateAnnouncementById(editingAnnouncement.ID, data);
+        if (response.status === 200) {
+          message.success('Announcement updated successfully');
+          fetchAnnouncements();
+          handleCloseModal();
+        } else {
+          message.error('Failed to update announcement');
+        }
       } else {
-        message.error('Failed to update announcement');
+        const response = await CreateAnnouncement(data);
+        if (response.status === 201) {
+          message.success('Announcement created successfully');
+          fetchAnnouncements();
+          handleCloseModal();
+        } else {
+          message.error('Failed to create announcement');
+        }
       }
-    } else {
-      const response = await CreateAnnouncement(data);
-      if (response.status === 201) {
-        message.success('Announcement created successfully');
-        fetchAnnouncements();
-        handleCloseModal();
-      } else {
-        message.error('Failed to create announcement');
-      }
+    } catch (error) {
+      message.error('An error occurred while saving the announcement');
     }
   };
+  
 
   const handleDeleteAnnouncement = async (id: string) => {
     Modal.confirm({
@@ -107,12 +117,16 @@ const Announcement: React.FC = () => {
       okType: 'danger',
       cancelText: 'Cancel',
       onOk: async () => {
-        const response = await DeleteAnnouncementById(id);
-        if (response.status === 200) {
-          message.success('Announcement deleted successfully');
-          fetchAnnouncements();
-        } else {
-          message.error('Failed to delete announcement');
+        try {
+          const response = await DeleteAnnouncementById(id);
+          if (response.status === 200) {
+            message.success('Announcement deleted successfully');
+            fetchAnnouncements();
+          } else {
+            message.error('Failed to delete announcement');
+          }
+        } catch (error) {
+          message.error('An error occurred while deleting the announcement');
         }
       },
     });
@@ -133,12 +147,12 @@ const Announcement: React.FC = () => {
       title: 'Publish Date',
       dataIndex: 'announce_date',
       key: 'announce_date',
-      render: (text: string) => moment(text).format('DD MMM YYYY'),
+      render: (text: string) => dayjs(text).local().format('DD MMM YYYY'),
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (text: string, record: any) => (
+      render: (_text: string, record: any) => (
         <>
           <Button onClick={() => handleOpenModal(record)} style={{ marginRight: 8 }}>
             Edit
@@ -155,18 +169,18 @@ const Announcement: React.FC = () => {
     <div className="announcement-container">
       <Header />
 
-      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
+      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} onClose={closeSidebar}/>}
 
       <div className="announcement-content">
         <h2>Manage Announcements</h2>
-        <Button type="primary" onClick={() => handleOpenModal(null)} style={{ marginBottom: '16px' }}>
+        <Button
+          type="primary"
+          onClick={() => handleOpenModal(null)}
+          style={{ marginBottom: '16px' }}
+        >
           Create New Announcement
         </Button>
-        <Table
-          dataSource={announcements}
-          columns={columns}
-          rowKey="ID"
-        />
+        <Table dataSource={announcements} columns={columns} rowKey="ID" />
       </div>
 
       <Modal
@@ -190,10 +204,8 @@ const Announcement: React.FC = () => {
           rows={4}
         />
         <DatePicker
-          value={newAnnouncement.date ? moment(newAnnouncement.date) : null}
-          onChange={(date) => {
-            setNewAnnouncement({ ...newAnnouncement, date: date ? date.toISOString() : null });
-          }}
+          value={newAnnouncement.date ? dayjs(newAnnouncement.date) : null}
+          onChange={(date) => setNewAnnouncement({ ...newAnnouncement, date })}
           style={{ marginTop: '1rem', width: '100%' }}
         />
       </Modal>

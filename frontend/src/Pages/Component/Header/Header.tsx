@@ -5,6 +5,8 @@ import "./Header.css";
 // import axios from "axios";
 import { StudentBookingInterface } from "../../../Interface/IAppointment";
 import { GetMessageById } from "../../../services/https";
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import simpleAvatar from "../../../assets/cat.png"
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ const Header: React.FC = () => {
 
   // Get profile picture URL from localStorage
   const profileImageUrl =
-    localStorage.getItem("profilePicture") || "https://via.placeholder.com/120";
+    localStorage.getItem("profilePicture") || simpleAvatar;
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -96,7 +98,9 @@ const Header: React.FC = () => {
   const handleTitleClick = () => {
     navigate("/dashboard");
   };
-
+  
+  console.log(simpleAvatar)
+  console.log("Profile Image URL:", profileImageUrl);
   return (
     <>
       <header className="stddashboard-header">
@@ -111,27 +115,19 @@ const Header: React.FC = () => {
 
         <div className="stddashboard-header-right">
           {/* Notification Button */}
-          <button
-            className="notification-button"
+          
+          <div
+            className="notification-container"
             onClick={() => setNotificationVisible(!isNotificationVisible)}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              className="notification-icon"
-            >
-              <path fill="none" d="M0 0h24v24H0z"></path>
-              <path
-                fill="currentColor"
-                d="M20 17h2v2H2v-2h2v-7a8 8 0 1 1 16 0v7zm-2 0v-7a6 6 0 1 0-12 0v7h12zm-9 4h6v2H9v-2z"
-              ></path>
-            </svg>
+            {/* ใช้ CircleNotificationsIcon เป็นไอคอนหลัก */}
+            <CircleNotificationsIcon className="notification-icon" />
+
+            {/* แสดง badge ถ้ามีการจอง */}
             {bookings.length > 0 && (
               <span className="notification-badge">{bookings.length}</span>
             )}
-          </button>
+          </div>
 
           {/* Notification Popup */}
           {isNotificationVisible && (
@@ -172,9 +168,15 @@ const Header: React.FC = () => {
             <span className="stddashboard-user-name">{`${firstName} ${lastName}`}</span>
             <img
               src={profileImageUrl}
-              // alt="User Avatar"
+              onError={(e) => {
+                // TypeScript ช่วยไม่ให้เกิด error
+                const target = e.target as HTMLImageElement;
+                console.log("Image load failed. Using fallback avatar.");
+                target.src = simpleAvatar;
+              }}
+              alt="User Avatar"
               className="stddashboard-user-avatar"
-            />
+            />  
             <i
               className={`stddashboard-arrow ${isDropdownVisible ? "down" : "up"
                 }`}

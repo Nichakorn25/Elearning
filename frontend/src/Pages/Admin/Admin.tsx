@@ -1,73 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Admin.css';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
+import { ListUsers } from '../../services/https';
+import { NotificationOutlined, UserOutlined, FileDoneOutlined, SolutionOutlined, FormOutlined } from '@ant-design/icons';
 
 const Admin: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarVisible, setSidebarVisible] = useState(false);
+  const [activeUsers, setActiveUsers] = useState(0);
+  const [inactiveUsers, setInactiveUsers] = useState(0);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await ListUsers();
+        if (response?.data) {
+          const activeCount = response.data.filter((user: any) => user.Status === 'Active').length;
+          const inactiveCount = response.data.filter((user: any) => user.Status === 'Inactive').length;
 
-  const goToAnnouncement = () => {
-    navigate('/Announcement'); // Navigate to Announcement page
-  };
+          setActiveUsers(activeCount);
+          setInactiveUsers(inactiveCount);
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
 
-  const goToConfirmTransfer = () => {
-    navigate('/ConfirmTransfer'); // Navigate to Confirm Transfer page
-  };
+    fetchUsers();
+  }, []);
 
-  const goToManageRoleRequests = () => {
-    navigate('/ManageRoleRequests'); // Navigate to Manage Role Requests page
-  };
-
-  const goToManageUsers = () => {
-    navigate('/ManageUsers'); // Navigate to Manage Users page
-  };
-
-  const goToAdminFillDetails = () => {
-    navigate('/AdminFillDetails'); // Navigate to Admin Fill Details page
-  };
+  const goToAnnouncement = () => navigate('/Announcement');
+  const goToConfirmTransfer = () => navigate('/ConfirmTransfer');
+  const goToManageRoleRequests = () => navigate('/ManageRoleRequests');
+  const goToManageUsers = () => navigate('/ManageUsers');
+  const goToAdminFillDetails = () => navigate('/AdminFillDetails');
 
   return (
-    <div className="admin-dashboard">
+    <div className="profile-content">
       <Header />
 
-      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} />}
+      {isSidebarVisible && <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />}
 
-      <div className="admin-overview">
+      <div className="admin-card">
         <h2>Admin Dashboard</h2>
         <div className="admin-course-list">
           <div className="admin-course-card">
-            <h3>ENG23 3054 Operating Systems</h3>
-            <p>Asst. Dr. Prof...</p>
+            <h3>Active Users</h3>
+            <p className="user-count active-count">{activeUsers}</p>
           </div>
           <div className="admin-course-card">
-            <h3>ENG23 4041 CYBER SECURITY FUNDAMENTALS</h3>
-            <p>02/2567 ...</p>
+            <h3>Inactive Users</h3>
+            <p className="user-count inactive-count">{inactiveUsers}</p>
           </div>
         </div>
+      </div>
 
-        {/* Buttons Section */}
+      <div className="admin-card">
+        <h2>ระบบแอดมิน</h2>
         <div className="admin-buttons">
-          <button onClick={goToAnnouncement} className="admin-button">Announcement</button>
-          <button onClick={goToConfirmTransfer} className="admin-button confirm-transfer-button">
-            Confirm Payment Transfers
+          <button onClick={goToAnnouncement} className="admin-button">
+            <NotificationOutlined /> Announcement
           </button>
-          <button onClick={goToManageUsers} className="admin-button manage-users-button">
-            Manage Users
+          <button onClick={goToManageRoleRequests} className="admin-button">
+            <SolutionOutlined /> Manage Role Change Requests
           </button>
-          <button onClick={goToManageRoleRequests} className="admin-button manage-role-requests-button">
-            Manage Role Change Requests
+          <button onClick={goToManageUsers} className="admin-button">
+            <UserOutlined /> Manage Users
           </button>
-          <button onClick={goToAdminFillDetails} className="admin-button fill-details-button">
-            Fill Additional Course Details
+        </div>
+        <div className="admin-buttons">
+          <button onClick={goToConfirmTransfer} className="admin-button">
+            <FileDoneOutlined /> Confirm Payment Transfers
+          </button>
+          <button onClick={goToAdminFillDetails} className="admin-button">
+            <FormOutlined /> Fill Additional Course Details
           </button>
         </div>
       </div>
+
     </div>
   );
 };

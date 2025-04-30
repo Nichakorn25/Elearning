@@ -85,6 +85,7 @@
   object-fit: cover;
   border: 2px solid white;
   background-color: gray;
+  display: block;
 }
 
 .stddashboard-dropdown-menu {
@@ -256,3 +257,38 @@
     transform: translateY(0);
   }
 } 
+
+.notification-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* เพิ่มเอฟเฟกต์ hover */
+}
+
+.notification-container:hover {
+  transform: scale(1.5); /* ขยายไอคอนเมื่อ hover */
+}
+
+.notification-icon {
+  color: #fefefe; /* สีเริ่มต้น */
+  font-size: 64px; /* เพิ่มขนาดไอคอน */
+  transition: color 0.2s ease; /* เปลี่ยนสีเมื่อ hover */
+}
+
+.notification-container:hover .notification-icon {
+  color: #ff5722; /* เปลี่ยนสีเมื่อ hover */
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px; /* ตำแหน่งด้านบน */
+  right: -5px; /* ตำแหน่งด้านขวา */
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 14px;
+  padding: 3px 7px;
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ badge */
+}

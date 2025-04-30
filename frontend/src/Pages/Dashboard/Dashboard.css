@@ -4,7 +4,7 @@
   min-height: 100vh; /* ให้เนื้อหาเต็มความสูง */
   overflow-y: auto; /* เพิ่มการเลื่อน */
   background-color: #f8f9fa; /* เพิ่มสีพื้นหลัง */
-  margin-top: 80px; /* ระยะห่างจาก Header */
+  margin-top: 60px; /* ระยะห่างจาก Header */
 }
 
 .stddashboard-search-bar {

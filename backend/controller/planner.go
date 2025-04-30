@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"example.com/Elearning/entity"
-    "example.com/Elearning/config"
+	"elearning/entity"
+    "elearning/config"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

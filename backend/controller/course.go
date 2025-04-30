@@ -9,8 +9,8 @@ import (
 	"strconv"
 	"time"
 
-	"example.com/Elearning/config"
-	"example.com/Elearning/entity"
+	"elearning/entity"
+    "elearning/config"
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"

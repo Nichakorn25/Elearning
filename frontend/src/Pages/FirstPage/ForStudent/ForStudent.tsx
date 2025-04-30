@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./ForStudent.css";
-import { useNavigate } from "react-router-dom";
 import LoginPopup from "../LoginPopup/LoginPopup";
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import Student01 from "../../../assets/student01.jpeg" 
@@ -18,7 +17,6 @@ import Student11 from "../../../assets/student11.jpeg"
 
 const ForStudent: React.FC = () => {
   const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
-  const navigate = useNavigate();
 
   // ฟังก์ชันแสดง Popup
   const handleOpenLoginPopup = () => {

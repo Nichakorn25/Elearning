@@ -4,9 +4,8 @@ import './EditProfile.css';
 import Sidebar from '../../Component/Sidebar/Sidebar';
 import Header from '../../Component/Header/Header';
 import { GetUserById, UpdateUserByid, GetDepartments, GetMajors } from '../../../services/https';
-import { UserInterface } from '../../../Interface/IUser';
-import { message, Upload, Button, Input, Select, Spin } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { message, Upload, Button, Input, Select } from 'antd';
+import { UploadOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -21,7 +20,6 @@ const EditProfile: React.FC = () => {
   const [departmentId, setDepartmentId] = useState(0);
   const [majorId, setMajorId] = useState(0);
   const [role, setRole] = useState('');
-  const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState<{ ID: number; DepartmentName: string }[]>([]);
   const [majors, setMajors] = useState<{ ID: number; MajorName: string }[]>([]);
@@ -30,6 +28,9 @@ const EditProfile: React.FC = () => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const userIdFromLocalStorage = localStorage.getItem('id');
+  const closeSidebar = () => {
+    setSidebarVisible(false); // Function to close the sidebar
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,7 +38,6 @@ const EditProfile: React.FC = () => {
         if (userIdFromLocalStorage) {
           const userResponse = await GetUserById(userIdFromLocalStorage);
           if (userResponse.status === 200) {
-            console.log("data", userResponse)
             const data = userResponse.data;
             setUsername(data.Username || '');
             setFirstName(data.FirstName || '');
@@ -47,20 +47,19 @@ const EditProfile: React.FC = () => {
             setDepartmentId(data.DepartmentID || 0);
             setMajorId(data.MajorID || 0);
             setRole(data.Role?.RoleName || '');
-            setUserId(data.ID?.toString() || '');
-
-            // ตั้งค่า URL ของรูปโปรไฟล์เริ่มต้น
+            const departmentsResponse = await GetDepartments();
+            if (departmentsResponse.status === 200) {
+              setDepartments(departmentsResponse.data);
+            }
+            const filePath = data.ProfilePicture[0].FilePath.replace(/\\/g, '/');
+            // Set the initial profile picture preview
             if (data.ProfilePicture && data.ProfilePicture[0]) {
-              // ใช้ base URL สำหรับภาพ
-              setPreview(`http://localhost:8000${data.ProfilePicture[0].FilePath}`);
+              setPreview(`http://api.se-elearning.online${filePath}`);
             }
           }
         }
 
-        const departmentsResponse = await GetDepartments();
-        if (departmentsResponse.status === 200) {
-          setDepartments(departmentsResponse.data);
-        }
+
       } catch (error) {
         console.error('Error fetching data', error);
       } finally {
@@ -110,11 +109,13 @@ const EditProfile: React.FC = () => {
     formData.append('MajorID', majorId.toString());
     formData.append('Status', 'Active');
 
+    // Check if profilePicture is set before appending to formData
     if (profilePicture) {
-      console.log('Profile picture selected:', profilePicture);
+      console.log("Profile Picture before appending to FormData:", profilePicture);
       formData.append('ProfilePicture', profilePicture);
-    } else {
-      console.log('No profile picture selected');
+    }
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
     }
 
     try {
@@ -141,6 +142,11 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  const handleRemoveImage = () => {
+    setProfilePicture(null);
+    setPreview(null); // Clear the preview if image is removed
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -148,7 +154,7 @@ const EditProfile: React.FC = () => {
   return (
     <div className="profile-dashboard">
       <Header />
-      <Sidebar isVisible={isSidebarVisible} />
+      <Sidebar isVisible={isSidebarVisible} onClose={closeSidebar} />
 
       <main className="profile-content">
         <div className="profile-card">
@@ -229,24 +235,36 @@ const EditProfile: React.FC = () => {
             </div>
             <div className="form-group">
               <label htmlFor="profilePicture">Profile Picture</label>
-              <Upload
+              <Upload id="file"
                 beforeUpload={(file) => {
-                  setProfilePicture(file);
-                  setPreview(URL.createObjectURL(file)); // แสดง preview ของรูปใหม่ที่เลือก
-                  return false;
+                  console.log(file);
+                  setProfilePicture(file); // Set the selected file
+                  setPreview(URL.createObjectURL(file)); // Preview the selected file
+                  return false; // Prevent automatic upload
                 }}
                 showUploadList={false}
                 accept="image/*"
               >
                 <Button icon={<UploadOutlined />}>Select File</Button>
               </Upload>
-              {/* แสดง preview ของรูป */}
+
+              {/* Show preview of the selected image */}
               {preview && (
-                <img
-                  src={preview}
-                  alt="Profile Preview"
-                  style={{ width: '100px', marginTop: '10px', borderRadius: '8px' }}
-                />
+                <div style={{ marginTop: '10px' }}>
+                  <img
+                    src={preview}
+                    alt="Profile Preview"
+                    style={{ width: '100px', borderRadius: '8px' }}
+                  />
+                  <Button
+                    type="link"
+                    icon={<DeleteOutlined />}
+                    onClick={handleRemoveImage}
+                    style={{ marginTop: '10px', color: 'red' }}
+                  >
+                    Remove Image
+                  </Button>
+                </div>
               )}
             </div>
 

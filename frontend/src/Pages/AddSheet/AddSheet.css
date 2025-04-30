@@ -1,34 +1,92 @@
-/* MainSealSheet.css */
-.sealsheet {
+
+/* รูปแบบ Modal */
+.add-sheet-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 10px;
+  color: #000; /* สีข้อความ */
+}
+
+/* รูปแบบฟอร์ม */
+.add-sheet-form {
+  margin: 0 auto;
+  max-width: 500px; /* กำหนดความกว้างฟอร์ม */
+}
+
+/* ป้ายกำกับ (Label) */
+.add-sheet-form .ant-form-item-label > label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000; /* สีข้อความ */
+}
+
+/* Input และ Select */
+.add-sheet-form .ant-input,
+.add-sheet-form .ant-select-selector {
+  height: 40px; /* กำหนดความสูง */
+  border-radius: 6px; /* มุมโค้ง */
+  font-size: 1rem;
+}
+
+/* TextArea */
+.add-sheet-form .ant-input-textarea {
+  font-size: 1rem;
+  border-radius: 6px; /* มุมโค้ง */
+}
+
+.addsheet-button-container {
+  display: flex; /* ใช้ Flexbox */
+  justify-content: center; /* จัดให้อยู่ตรงกลางแนวนอน */
+  align-items: center; /* จัดให้อยู่ตรงกลางแนวตั้ง */
+  width: 100%; /* กินพื้นที่เต็ม */
+  margin-top: 20px; /* เพิ่มระยะห่างด้านบน */
+}
+
+.addsheet-Button {
+  font-size: 1.2rem !important; /* ขนาดตัวอักษร */
+  font-weight: bold !important;
+  padding: 20px 50px !important; /* เพิ่มขนาดปุ่ม */
+  background: linear-gradient(45deg, #ffc107, #ffd966) !important; /* ไล่สีทอง */
+  color: black !important;
+  border: none !important;
+  border-radius: 30px !important; /* โค้งมน */
+  cursor: pointer !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  width: auto !important; /* ปรับขนาดให้เหมาะสม */
+}
+
+
+.addsheet-Button:hover {
+  background: linear-gradient(45deg, #e6b800, #ffc34d) !important; /* ไล่สีเข้ม */
+  transform: scale(1.1) !important; /* ขยายใหญ่ขึ้นเล็กน้อย */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important; /* เพิ่มเงา */
+}
+
+.addsheet-Button:active {
+  transform: scale(1) !important; /* คืนขนาดเดิมเมื่อคลิก */
+  background: linear-gradient(45deg, #cc9900, #e6b800) !important; /* สีเข้มขึ้น */
+}
+.fullscreen-loading {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  background-color: #ffffff;
-  }
-  
-  .sealsheet-content {
-    display: flex;
-    justify-content: center; /* ฟอร์มจะอยู่ตรงกลาง */
-    align-items: flex-start; /* ทำให้ฟอร์มชิดด้านบน */
-    height: 100%; /* ทำให้ใช้ความสูงที่เหลือจาก header */
-    padding-top: 30px; /* กำหนดระยะห่างจาก header */
-    background-color: #ffffff;
-  }
-  
-  .card-title {
-    font-size: 24px;
-    color: #1890ff; /* Blue color for the card title */
-    text-align: center;
-    margin-bottom: 20px; /* Additional bottom space */
-  }
-  
-  .sealsheetform-container {
-    width: 100%;
-    max-width: 500px; /* ปรับขนาดให้แคบลง */
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    margin-top: 30; /* ไม่ต้องมี margin-top เพื่อให้ฟอร์มชิดกับ header */  
-  }
-  
+  background-color: #f9f9f9;
+}
+
+.loader-circle {
+  width: 60px;
+  height: 60px;
+  border: 8px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #ff6b00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.fullscreen-loading h2 {
+  color: #333;
+  margin-bottom: 20px;
+}

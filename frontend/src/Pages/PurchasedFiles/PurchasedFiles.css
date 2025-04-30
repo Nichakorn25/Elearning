@@ -1,0 +1,134 @@
+/* Layout ของ PurchasedFiles */
+.purchased-files-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f7f9fc; /* สีพื้นหลังอ่อน */
+    padding-top: 60px; /* สำหรับ Header */
+  }
+  
+  /* Content */
+  .purchased-files-content {
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* หัวข้อ */
+  .purchased-files-content h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000000; /* สีเน้น */
+    margin-bottom: 30px;
+    text-transform: uppercase; /* เปลี่ยนเป็นตัวใหญ่ทั้งหมด */
+  }
+  
+  /* List ของการ์ด */
+  .purchased-files-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px; /* ระยะห่างระหว่างการ์ด */
+    margin-top: 20px;
+  }
+  
+  .purchased-files-list-card {
+    width: 300px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px; /* มุมมน */
+    border: 1px solid #e0e0e0;
+  }
+  
+  .purchased-files-list-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border-color: #ff6b00; /* เปลี่ยนสีขอบเมื่อ hover */
+  }
+  
+  .purchased-files-list-card-cover canvas {
+    border-radius: 12px 12px 0 0; /* มุมมนเฉพาะด้านบน */
+  }
+  
+  /* Description ของการ์ด */
+  .purchased-files-list-card .ant-card-meta-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .purchased-files-list-card .ant-card-meta-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 10px;
+    line-height: 1.6; /* เพิ่มความสูงบรรทัด */
+  }
+  
+  /* Empty state */
+  .empty-container {
+    margin-top: 50px;
+    text-align: center;
+    color: #999;
+    font-size: 1.2rem;
+  }
+  
+  /* Loading Spinner */
+  .fullscreen-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .loader-circle {
+    width: 60px;
+    height: 60px;
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-top-color: #ff6b00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .fullscreen-loading h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+  }
+  
+  /* การหมุนของ Loader */
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .purchased-files-list-card {
+      width: 260px; /* ปรับขนาดการ์ด */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .purchased-files-list-card {
+      width: 100%; /* การ์ดกว้างเต็ม */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .purchased-files-content h2 {
+      font-size: 1.8rem; /* ลดขนาดหัวข้อ */
+    }
+  
+    .purchased-files-list-card {
+      width: 100%; /* การ์ดกว้างเต็ม */
+    }
+  }
+  

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import './AllCourse.css'; // ไฟล์ CSS สำหรับหน้า AllCourses
-import { useNavigate } from 'react-router-dom'
 import HeaderTabBFLogin from "../../Component/HeaderTabBFLogin/HeaderTabBFLogin";
 import LoginPopup from '../LoginPopup/LoginPopup'; // Import LoginPopup
 
 const AllCourse: React.FC = () => {
     const [isLoginPopupVisible, setLoginPopupVisible] = useState(false);
-    const navigate = useNavigate();
+    
   
     // ฟังก์ชันแสดง Popup
     const handleOpenLoginPopup = () => {
@@ -19,9 +18,7 @@ const AllCourse: React.FC = () => {
     };
   
     // ฟังก์ชันเปลี่ยนหน้าไป BeforeLogin
-    const handleNavigateToBeforeLogin = () => {
-      navigate('/beforeLogin', { state: { showLoginPopup: true } });
-    };
+   
   return (
     <div>
       {/* เรียกใช้ Header */}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Tabs, message, Popconfirm } from 'antd';
+import { Table, Button, Tabs, message, Popconfirm, Modal } from 'antd';
 import Header from '../Component/Header/Header';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import { GetTransactionLog, UpdateTransactionLog } from "../../services/https";
@@ -10,10 +10,7 @@ const ConfirmTransfer: React.FC = () => {
   const [pendingTransfers, setPendingTransfers] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+  const [selectedSlip, setSelectedSlip] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPendingTransfers = async () => {
@@ -40,7 +37,7 @@ const ConfirmTransfer: React.FC = () => {
   // ในฟังก์ชัน handleConfirm
 const handleConfirm = async (transactionId: number) => {
   try {
-    await UpdateTransactionLog(transactionId, 2);  // ส่ง StatusID เป็นค่าตัวเลข 2
+    await UpdateTransactionLog(transactionId.toString(), 2);  // ส่ง StatusID เป็นค่าตัวเลข 2
     message.success(`Transfer confirmed successfully!`);
     setPendingTransfers((prev) =>
       prev.map((transfer) =>
@@ -75,10 +72,43 @@ const handleConfirm = async (transactionId: number) => {
       title: 'Slip',
       dataIndex: ['Payment', 'Slip'],
       key: 'Slip',
-      render: (slip: string) => (
-        <a href={slip} target="_blank" rel="noopener noreferrer">
-          View Slip
-        </a>
+      render: (Slip: string) => (
+        <>
+          <a onClick={() => setSelectedSlip(Slip)} style={{ cursor: 'pointer', color: '#1890ff' }}>
+            View Slip
+          </a>
+          <Modal
+            title="Slip Preview"
+            visible={!!selectedSlip}
+            footer={null}
+            onCancel={() => setSelectedSlip(null)}
+            centered // ทำให้ Modal อยู่ตรงกลางหน้าจอ
+            bodyStyle={{ padding: 0 }} // ลบ padding ใน Modal
+          >
+            <div
+              style={{
+                textAlign: 'center',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}
+            >
+              <img
+                src={selectedSlip || ''}
+                alt="Slip"
+                style={{
+                  maxWidth: '100%', // กำหนดความกว้างสูงสุดไม่เกิน 90% ของ Modal
+                  maxHeight: '60vh', // จำกัดความสูงไม่เกิน 80% ของหน้าจอ
+                  width: 'auto', // รักษาอัตราส่วน
+                  height: 'auto', // รักษาอัตราส่วน
+                  display: 'block', // ป้องกัน spacing
+                }}
+              />
+            </div>
+          </Modal>
+
+                  </>
       ),
     },
     {

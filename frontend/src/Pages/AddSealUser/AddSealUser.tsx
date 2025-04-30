@@ -70,8 +70,11 @@ const AddSealUser = () => {
       // ส่งข้อมูลไปยัง API
       const response = await CreateSeller(dataToSave);
       if (response.status === 201) {
-        message.success("ผู้ใช้ถูกสร้างเรียบร้อยแล้ว!");
-        navigate("/MainSealSheet");
+        const sellerId = response.data.sellerId; // ดึง sellerId จาก API response
+      if (sellerId) {
+        localStorage.setItem("sellerId", sellerId); // บันทึก sellerId ลงใน localStorage
+        console.log("Seller ID saved:", sellerId);
+      }
       } else {
         message.error("เกิดข้อผิดพลาด: " + response.data.message);
       }
@@ -117,7 +120,21 @@ const AddSealUser = () => {
               <Form.Item
                 label="เลขบัญชีธนาคาร"
                 name="accountNumber"
-                rules={[{ required: true, message: "กรุณากรอกเลขบัญชีธนาคาร" }]}
+                rules={[
+                  { required: true, message: "กรุณากรอกเลขบัญชีธนาคาร" },
+                  {
+                    pattern: /^[0-9]+$/, // ตรวจสอบว่าเป็นตัวเลขเท่านั้น
+                    message: "เลขบัญชีต้องเป็นตัวเลขเท่านั้น",
+                  },
+                  {
+                    validator(_, value) {
+                      if (value && value.length >= 10) {
+                        return Promise.resolve(); // ผ่านการตรวจสอบ
+                      }
+                      return Promise.reject("เลขบัญชีต้องมีอย่างน้อย 10 หลัก");
+                    },
+                  },
+                ]}
               >
                 <Input placeholder="กรอกเลขบัญชีธนาคาร" />
               </Form.Item>

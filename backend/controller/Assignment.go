@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"example.com/Elearning/entity"
-    "example.com/Elearning/config"
+	"elearning/entity"
+    "elearning/config"
 )
 
 func GetAssignmentCourseID(c *gin.Context){

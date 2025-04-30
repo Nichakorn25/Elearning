@@ -1,69 +1,68 @@
 /* VerifyOTP.css */
 .verify-otp-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #f9f9f9;
-    text-align: center;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.verify-otp-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.verify-otp-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.verify-otp-container button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.verify-otp-container button:hover {
+  background-color: #218838;
+}
+
+.verify-otp-container p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .verify-otp-container {
+    padding: 15px;
+    margin: 20px auto;
   }
-  
+
   .verify-otp-container h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: 20px;
   }
-  
+
   .verify-otp-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .verify-otp-container button {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #28a745;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .verify-otp-container button:hover {
-    background-color: #218838;
-  }
-  
-  .verify-otp-container p {
     font-size: 14px;
-    color: #666;
-    margin-top: 10px;
   }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .verify-otp-container {
-      padding: 15px;
-      margin: 20px auto;
-    }
-  
-    .verify-otp-container h1 {
-      font-size: 20px;
-    }
-  
-    .verify-otp-container input {
-      font-size: 14px;
-    }
-  
-    .verify-otp-container button {
-      font-size: 14px;
-    }
+
+  .verify-otp-container button {
+    font-size: 14px;
   }
-  
+}

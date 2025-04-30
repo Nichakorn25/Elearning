@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"example.com/Elearning/entity"
+	"elearning/entity"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"

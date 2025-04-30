@@ -5,6 +5,7 @@ import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
 import { GetUserById } from '../../services/https';
 import { UserInterface } from '../../Interface/IUser';
+import simpleAvatar from "../../assets/cat.png"
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -12,8 +13,8 @@ const Profile: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserInterface | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+  const closeSidebar = () => {
+    setSidebarVisible(false); // Function to close the sidebar
   };
 
   useEffect(() => {
@@ -29,9 +30,9 @@ const Profile: React.FC = () => {
         if (response.status === 200) {
           setUserProfile(response.data);
           // Save profile picture to localStorage
-          const profilePictureUrl = response.data.ProfilePicture?.[0]?.FilePath
-            ? `http://localhost:8000${response.data.ProfilePicture[0].FilePath}`
-            : 'https://via.placeholder.com/120';
+          const profilePictureUrl = response.data.ProfilePicture?.[0]?.FilePath.replace(/\\/g, '/')
+            ? `https://api.se-elearning.online${response.data.ProfilePicture[0].FilePath.replace(/\\/g, '/')}`
+            : simpleAvatar;
           localStorage.setItem('profilePicture', profilePictureUrl);
         } else {
           console.error('Failed to fetch user profile:', response.data.error);
@@ -63,7 +64,7 @@ const Profile: React.FC = () => {
       <Header />
 
       {/* Sidebar Section */}
-      <Sidebar isVisible={isSidebarVisible} />
+      <Sidebar isVisible={isSidebarVisible} onClose={closeSidebar}/>
 
       {/* Profile Content */}
       <main className="profile-content">

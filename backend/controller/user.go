@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"example.com/Elearning/entity"
-    "example.com/Elearning/config"
+	"elearning/entity"
+    "elearning/config"
 	"strconv"
 	"errors" // เพิ่ม import สำหรับ package errors
 	"github.com/gin-gonic/gin"

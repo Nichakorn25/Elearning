@@ -5,6 +5,7 @@ import "./LoginPopup.css";
 import { SignInInterface } from "../../../Interface/IUser";
 import { SignIn, GetUserById } from "../../../services/https";
 import Loading from "../../Component/Loading/Loading";
+import simpleAvatar from "../../../assets/cat.png"
 
 interface LoginPopupProps {
   onClose: () => void;
@@ -52,8 +53,8 @@ const LoginPopup: React.FC<LoginPopupProps> = ({ onClose }) => {
         );
         const profilePictureUrl = userResponse.data.ProfilePicture?.[0]
           ?.FilePath
-          ? `http://localhost:8000${userResponse.data.ProfilePicture[0].FilePath}`
-          : "https://via.placeholder.com/120";
+          ? `http://api.se-elearning.online${userResponse.data.ProfilePicture[0].FilePath}`
+          : simpleAvatar;
         localStorage.setItem("profilePicture", profilePictureUrl);
         setTimeout(() => {
           if (user.RoleID === 1) {

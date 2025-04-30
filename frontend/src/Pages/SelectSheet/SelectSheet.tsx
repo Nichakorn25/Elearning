@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Row, Col, Layout, Input, List, Form, message, Spin, Rate } from 'antd';
+import { Card, Button, Row, Col, Layout, Input, List, Form, message, Rate } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import Header from '../Component/Header/Header';
@@ -8,8 +8,7 @@ import './SelectSheet.css';
 import { Document, Page, pdfjs } from 'react-pdf';
 
 // ตั้งค่า Worker ให้ตรงกับเวอร์ชัน PDF
-pdfjs.GlobalWorkerOptions.workerSrc = '/worker/pdf.worker.min.mjs';
-
+pdfjs.GlobalWorkerOptions.workerSrc = 'https://api.se-elearning.online/worker/pdf.worker.min.mjs';
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -24,18 +23,28 @@ const SelectSheet: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [numPages, setNumPages] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [addingToCart, setAddingToCart] = useState(false);
+  const userId = localStorage.getItem("id");
+  if (!userId) {
+    console.error("User ID not found in localStorage.");
+    message.error("กรุณาเข้าสู่ระบบ");
+    navigate("/");
+    return;
+  }
 
   useEffect(() => {
     const fetchSheetDetails = async () => {
       try {
+       
         setLoading(true);
         const response = await GetSheetByID(id as string);
         setSheetDetails(response.data);
+        
+      
       } catch (error) {
         message.error('ไม่สามารถดึงข้อมูลชีทได้');
       } finally {
-        setLoading(false);
+         
+        setLoading(false); 
       }
     };
 
@@ -58,21 +67,17 @@ const SelectSheet: React.FC = () => {
 
     if (id) {
       fetchSheetDetails();
-      fetchComments();
+      fetchComments();   
     }
   }, [id]);
-
+  useEffect(() => {
+    if (sheetDetails && sheetDetails.FilePath) {
+      console.log(`https://api.se-elearning.online${sheetDetails.FilePath}`);
+    }
+  }, [sheetDetails]); // จะทำงานเมื่อ `sheetDetails` เปลี่ยนแปลง
   // ฟังก์ชันเพิ่มชีทลงในตะกร้า
   const handleAddToCart = async () => {
-    const userId = localStorage.getItem('id');
-    if (!userId) {
-      message.error('กรุณาเข้าสู่ระบบก่อนซื้อสินค้า');
-      navigate('/login');
-      return;
-    }
-
     try {
-      setAddingToCart(true);
 
       const cartResponse = await GetCartByUser(userId);
       const cartId = cartResponse?.data?.ID || null;
@@ -102,20 +107,12 @@ const SelectSheet: React.FC = () => {
     } catch (error) {
       console.error('Error adding to cart:', error);
       message.error('ไม่สามารถเพิ่มชีทลงในตะกร้าได้');
-    } finally {
-      setAddingToCart(false);
     }
   };
 
   // ฟังก์ชันเพิ่มคอมเมนต์พร้อมคะแนน
   const handleAddComment = async () => {
-    const userId = localStorage.getItem('id');
-    if (!userId) {
-      message.error('กรุณาเข้าสู่ระบบก่อนแสดงความคิดเห็น');
-      navigate('/');
-      return;
-    }
-
+    
     if (!commentInput.trim() || rating === 0) {
       message.warning('กรุณาใส่คอมเมนต์และคะแนนที่ถูกต้อง');
       return;
@@ -161,13 +158,11 @@ const SelectSheet: React.FC = () => {
 
   if (loading) {
     return (
-      <Layout className="sheet">
-        <Header />
-        <Content className="sheet-content">
-          <Spin size="large" style={{ display: 'block', margin: 'auto', marginTop: '20%' }} />
-        </Content>
-      </Layout>
-    );
+        <div className="fullscreen-loading">
+          <div className="loader-circle"></div>
+          <h2>กำลังโหลด...</h2>
+        </div>
+      ) 
   }
 
   if (!sheetDetails) {
@@ -193,14 +188,14 @@ const SelectSheet: React.FC = () => {
       {sheetDetails.FilePath ? (
         <div className="pdf-preview-container">
           <Document
-            file={`http://localhost:8000${sheetDetails.FilePath}`}
+            file={`https://api.se-elearning.online${sheetDetails.FilePath}`}
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <Page
               pageNumber={currentPage}
               renderTextLayer={false}
               renderAnnotationLayer={false}
-              width={250}
+              width={300}
             />
           </Document>
         </div>
@@ -227,37 +222,35 @@ const SelectSheet: React.FC = () => {
     <Card className="selectsheet-details">
   <h3 className="selectsheet-details-title">รายละเอียดชีท</h3>
   <p>
-    <strong>ชื่อชีท:</strong>
-    <span> {sheetDetails.Title}</span>
+    <strong>ชื่อชีท:</strong> {sheetDetails.Title}
   </p>
   <p>
-    <strong>รหัสวิชา:</strong>
-    <span> {sheetDetails.Course.CourseDate}</span>
+    <strong>รหัสวิชา:</strong> {sheetDetails.Course.CourseDate}
   </p>
   <p>
-    <strong>วิชา:</strong>
-    <span> {sheetDetails.Course.CourseName}</span>
+    <strong>วิชา:</strong> {sheetDetails.Course.CourseName}
   </p>
   <p>
-    <strong>ราคา:</strong>
-    <span> {sheetDetails.Price} THB</span>
+    <strong>ราคา:</strong> {sheetDetails.Price} THB
   </p>
   <p>
-    <strong>รายละเอียด:</strong>
-    <span> {sheetDetails.Description}</span>
+    <strong>รายละเอียด:</strong> {sheetDetails.Description}
   </p>
-  <Button type="primary" block onClick={handleAddToCart}>
-    ซื้อชีทนี้
-  </Button>
+  <div className="button-container">
+    <Button className="selectsheet-Button" onClick={handleAddToCart}>
+      ซื้อชีทนี้
+    </Button>
+  </div>
 </Card>
+
 
 
     {/* คอมเมนต์และคะแนน */}
     <Card title="คอมเมนต์และคะแนน" className="comments-card">
       <Form layout="vertical" onFinish={handleAddComment}>
-        <Form.Item label="ให้คะแนน">
-          <Rate value={rating} onChange={(value) => setRating(value)} />
-        </Form.Item>
+      <Form.Item label="ให้คะแนน" style={{ textAlign: 'left' }}>
+        <Rate value={rating} onChange={(value) => setRating(value)} />
+      </Form.Item>
         <Form.Item label="เขียนคอมเมนต์">
           <TextArea
             rows={3}
@@ -267,9 +260,12 @@ const SelectSheet: React.FC = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" block>
+        <div className="comment-Button-container">
+          <Button className="comment-Button" htmlType="submit">
             เพิ่มคอมเมนต์พร้อมคะแนน
           </Button>
+        </div>
+
         </Form.Item>
       </Form>
       <List

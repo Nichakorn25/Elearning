@@ -23,6 +23,7 @@
   background-color: #ffffff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   border-radius: 8px;
+  text-align: left;
 }
 
 /* Enhance input and select consistency */
@@ -31,18 +32,31 @@
   border: 1px solid #d9d9d9; /* Soften the border */
 }
 
-/* Button styling unified */
-.ant-btn-primary {
-  background-color: #1890ff;
-  border-color: #1890ff;
-  width: 100%;
+.addseller-button-container {
+  display: flex;
+  justify-content: center;
 }
 
-.ant-btn-primary:hover {
-  background-color: #40a9ff;
-  border-color: #40a9ff;
+.addseller-Button {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 20px 50px;
+  background: linear-gradient(45deg, #ffc107, #ffd966);
+  color: black;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 20px;
 }
 
-.form-button-item {
-  margin-top: 24px;
+.addseller-Button:hover {
+  background: linear-gradient(45deg, #e6b800, #ffc34d);
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.addseller-Button:active {
+  transform: scale(1);
+  background: linear-gradient(45deg, #cc9900, #e6b800);
 }

@@ -5,7 +5,7 @@ import Header from '../Component/Header/Header';
 import Sidebar from '../Component/Sidebar/Sidebar';
 import './ManageRoleRequests.css';
 import { GetRoleChangeRequests, UpdateRoleChangeRequestsById, UpdateUserRoleByID } from '../../services/https';
-import { ChangeRoleInterface, RoleRequest } from '../../Interface/Admin';
+import { ChangeRoleInterface } from '../../Interface/Admin';
 
 const ManageRoleRequests: React.FC = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(false);
@@ -14,10 +14,6 @@ const ManageRoleRequests: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentIdCard, setCurrentIdCard] = useState<string | null>(null);
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
 
   const fetchRoleRequests = async () => {
     setLoading(true);
@@ -62,8 +58,12 @@ const ManageRoleRequests: React.FC = () => {
     }
   };
 
-  const showIdCard = (idCardUrl: string) => {
-    setCurrentIdCard(`http://localhost:8000${idCardUrl}`);
+  const showIdCard = (idCardUrl: File  | null) => {
+    if (idCardUrl) {
+      setCurrentIdCard(`http://api.se-elearning.online${idCardUrl}`);
+    } else {
+      setCurrentIdCard(""); // หาก idCardUrl เป็น null ก็ให้ตั้งค่าเป็นค่าว่าง
+    }
     setModalVisible(true);
   };
 
@@ -133,7 +133,15 @@ const ManageRoleRequests: React.FC = () => {
           <div className="action-buttons">
             <Popconfirm
               title="Are you sure to approve this request?"
-              onConfirm={() => handleApprove(record.ID, record.User.ID)}
+              onConfirm={() => {
+                console.log("Record ID:", record.ID);
+                console.log("userid",record.userID);
+                if (record.ID && record.userID) {
+                  handleApprove(record.ID, record.userID); // Ensure both are defined
+                } else {
+                  message.error('Invalid ID');
+                }
+              }}
               okText="Yes"
               cancelText="No"
             >
@@ -141,7 +149,13 @@ const ManageRoleRequests: React.FC = () => {
             </Popconfirm>
             <Popconfirm
               title="Are you sure to reject this request?"
-              onConfirm={() => handleReject(record.ID)}
+              onConfirm={() => {
+                if (record.ID) {
+                  handleReject(record.ID);
+                } else {
+                  message.error('Invalid ID');
+                }
+              }}
               okText="Yes"
               cancelText="No"
             >

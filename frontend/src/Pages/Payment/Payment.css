@@ -1,119 +1,194 @@
 .site-layout {
-    background-color: #ffffff;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
+  background-color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.card {
+  margin: 20px auto;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 50px;
+  min-width: 100vh;
+  min-height: 100vh;
+}
+
+.total-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 10px 0;
+  border-top: 1px solid #eaeaea;
+}
+
+.bank-details {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.bank-details strong {
+  color: #333;
+}
+
+.upload-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.upload-container .ant-btn {
+  background: #ff7a45;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.upload-container .ant-btn:hover {
+  background: #e66a3c;
+  color: white;
+}
+
+.confirm-payment {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.confirm-payment-bottom {
+  font-size: 1.2rem; /* ขนาดใหญ่ขึ้น */
+  font-weight: bold;
+  padding: 15px 30px; /* ขยายปุ่มให้ใหญ่ขึ้น */
+  background: linear-gradient(45deg, #ff6b00, #ffa000); /* ไล่สีให้เด่น */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-top: 40px;
+}
+
+.confirm-payment-bottom:disabled {
+  background: #d9d9d9;
+  color: #999;
+}
+
+.confirm-payment-bottom:hover {
+  background: linear-gradient(45deg, #ffa000, #ff6b00); /* สลับไล่สี */
+  transform: scale(1); /* ขยายใหญ่ขึ้นเล็กน้อย */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* เพิ่มเงา */
+}
+
+.table-container {
+  margin-top: 20px;
+}
+
+.ant-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ant-table-tbody > tr > td {
+  font-size: 15px;
+}
+
+@media (max-width: 768px) {
   .card {
-    margin: 20px auto;
-    background: #ffffff;
-    border-radius: 10px;
-    padding: 50px;
-    min-width: 100vh;
+    max-width: 95%;
   }
-  
+
   .total-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 20px;
-    padding: 10px 0;
-    border-top: 1px solid #eaeaea;
-  }
-  
-  .bank-details {
-    margin-top: 20px;
-    padding: 15px;
-    background: #f5f5f5;
-    border-radius: 8px;
+    flex-direction: column;
+    align-items: flex-start;
     font-size: 16px;
-    line-height: 1.8;
   }
-  
-  .bank-details strong {
-    color: #333;
-  }
-  
-  .upload-container {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .upload-container .ant-btn {
-    background: #ff7a45;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-  }
-  
-  .upload-container .ant-btn:hover {
-    background: #e66a3c;
-    color: white;
-  }
-  
-  .confirm-payment {
-    margin-top: 30px;
-    text-align: center;
-  }
-  
+
+  .upload-container .ant-btn,
   .confirm-payment .ant-btn {
-    background: #52c41a;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 24px;
-    font-size: 18px;
-    transition: all 0.3s ease;
+    width: 100%;
   }
-  
-  .confirm-payment .ant-btn:disabled {
-    background: #d9d9d9;
-    color: #999;
+}
+.payment-icon {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  height: 150px;
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-icon:hover {
+  border-color: #1890ff;
+}
+
+.selected-icon {
+  border-color: #1890ff;
+  box-shadow: 0 0 10px rgba(24, 144, 255, 0.5);
+}
+
+.qr-container {
+  text-align: center;
+  margin-top: 20px;
+}
+.details-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.details-container p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.details-container strong {
+  color: #000;
+}
+.fullscreen-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.loader-circle {
+  width: 60px;
+  height: 60px;
+  border: 8px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #ff6b00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.fullscreen-loading h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  
-  .confirm-payment .ant-btn:hover {
-    background: #45ad16;
-    color: white;
-  }
-  
-  .table-container {
-    margin-top: 20px;
-  }
-  
-  .ant-table {
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .ant-table-thead > tr > th {
-    background: #fafafa;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  
-  .ant-table-tbody > tr > td {
-    font-size: 15px;
-  }
-  
-  @media (max-width: 768px) {
-    .card {
-      max-width: 95%;
-    }
-  
-    .total-container {
-      flex-direction: column;
-      align-items: flex-start;
-      font-size: 16px;
-    }
-  
-    .upload-container .ant-btn,
-    .confirm-payment .ant-btn {
-      width: 100%;
-    }
-  }
-  
+}

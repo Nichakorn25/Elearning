@@ -1,6 +1,6 @@
 import React from 'react';
 import './HeaderTabBFLogin.css'; // เพิ่ม CSS เฉพาะสำหรับ Header
-import logo from '../../../assets/sebranding.jpg';
+import logo from '../../../assets/sebranding04.jpg';
 import { useNavigate } from 'react-router-dom';
 
 interface HeaderTabBFLoginProps {
@@ -13,9 +13,9 @@ const HeaderTabBFLogin: React.FC<HeaderTabBFLoginProps> = ({ onLoginClick }) => 
     const goToHome = () => {
         navigate('/BeforeLogin');
     };
-    const goToAllCourses = () => {
-        navigate('/AllCourse');
-    };
+    // const goToAllCourses = () => {
+    //     navigate('/AllCourse');
+    // };
 
     const goToForTeacher = () => {
         navigate('/ForTeacher');
@@ -35,7 +35,7 @@ const HeaderTabBFLogin: React.FC<HeaderTabBFLoginProps> = ({ onLoginClick }) => 
       {/* ลิงก์เมนู */}
       <div className="headerLinksTabBeforeLogin">
         <a onClick={goToHome} style={{ cursor: 'pointer' }}>Home</a>
-        <a onClick={goToAllCourses} style={{ cursor: 'pointer' }}>Course</a>
+        {/* <a onClick={goToAllCourses} style={{ cursor: 'pointer' }}>Course</a> */}
         <a onClick={goToForTeacher} style={{ cursor: 'pointer' }}>Teacher</a>
         <a onClick={goToForStudent} style={{ cursor: 'pointer' }}>Student</a>
       </div>

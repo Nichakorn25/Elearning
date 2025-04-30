@@ -14,10 +14,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
    const userRole = localStorage.getItem("role"); // RoleID: '1', '2', '3'
    //const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const navigateTo = (path: string) => {
-    navigate(path); // เปลี่ยนหน้า
-    onClose(); // ปิด Sidebar
-  };
+
 
   const goToStudentDashboard = () => {
     navigate("/dashboard");
@@ -25,7 +22,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
   };
 
   const goToTeacherDashboard = () => {
-    navigate("/TeacherDashboard");
+    navigate("/dashboard");
+    onClose();
+  };
+
+  const goToClassSchedule = () => {
+    navigate("/ClassSchedule");
     onClose();
   };
 
@@ -49,6 +51,24 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
     onClose();
   };
 
+  const goToCreateCourse = () => {
+    navigate("/CreateCourse");
+    onClose();
+  };
+  const goToPurchased = () => {
+    navigate("/Purchased");
+    onClose();
+  };
+  const goToBuysheet= () => {
+    navigate("/Buysheet");
+    onClose();
+  };
+  const goToCheckSeller = () => {
+    navigate("/CheckSeller");
+    onClose();
+  };
+
+
 
   useEffect(() => {
     // ปรับ margin-left ของ #root ตามสถานะ Sidebar
@@ -67,12 +87,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isVisible, onClose }) => {
       <ul>
         {userRole === "1" && <li onClick={goToStudentDashboard}>Dashboard</li>}
         {userRole === "2" && <li onClick={goToTeacherDashboard}>Dashboard</li>}
-        <li onClick={() => navigateTo("/ClassSchedule")}>Class Schedule</li>
+        {userRole === "3" && <li onClick={goToStudentDashboard}>Dashboard</li>}
+        {userRole === "1" && <li onClick={goToClassSchedule}>Class Schedule</li>}
+        {userRole === "2" && <li onClick={goToClassSchedule}>Class Schedule</li>}
+        {userRole === "3" && <li onClick={goToClassSchedule}>Class Schedule</li>}
         {userRole === "1" && <li onClick={goToStudentCalendar}>Calendar</li>}
         {userRole === "2" && <li onClick={goToTeacherCalendar}>Calendar</li>}
+        {userRole === "3" && <li onClick={goToTeacherCalendar}>Calendar</li>}
         {userRole === "1" && <li onClick={goToCoursesOpen}>Courses Open</li>}
-        <li onClick={() => navigateTo("/Buysheet")}>Buy Sheet</li>
-        <li onClick={() => navigateTo("/CheckSeller")}>Seal Sheet</li>
+        {userRole === "3" && <li onClick={goToCoursesOpen}>Courses Open</li>}
+        {userRole === "2" && <li onClick={goToCreateCourse}>Courses Create</li>}
+        {userRole === "1" && <li onClick={goToPurchased}>My Sheet</li>}
+        {userRole === "1" && <li onClick={goToBuysheet}>Buy Sheet</li>}
+        {userRole === "1" && <li onClick={goToCheckSeller}>Seal Sheet</li>}
         {userRole === "1" && <li onClick={goToRequestChangeRole}>Request for Change Role</li>}
       </ul>
     </div>

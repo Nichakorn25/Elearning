@@ -1,38 +1,37 @@
 .confirm-transfer-container {
-    padding: 20px;
-    margin-top: 60px;
-    font-family: 'Open Sans', sans-serif;
-  }
+  padding: 20px;
+  margin-top: 60px;
+  font-family: 'Open Sans', sans-serif;
+}
 
-  .pending-transfers {
-    margin-top: 5px;
-  }
-  
-  .pending-transfers ul {
-    list-style-type: none;
-    color: black;
-    padding: 0;
-  }
-  
-  .transfer-item {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .transfer-item button {
-    background-color: #4caf50;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .transfer-item button:hover {
-    background-color: #45a049;
-  }
-  
+.pending-transfers {
+  margin-top: 5px;
+}
+
+.pending-transfers ul {
+  list-style-type: none;
+  color: black;
+  padding: 0;
+}
+
+.transfer-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.transfer-item button {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.transfer-item button:hover {
+  background-color: #45a049;
+}

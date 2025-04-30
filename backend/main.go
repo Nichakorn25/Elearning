@@ -3,9 +3,9 @@ package main
 import (
 	"net/http"
 
-	"example.com/Elearning/config"
-	"example.com/Elearning/controller"
-	"example.com/Elearning/middlewares"
+	"elearning/config"
+	"elearning/controller"
+	"elearning/middlewares"
 	"github.com/gin-gonic/gin"
 )
 

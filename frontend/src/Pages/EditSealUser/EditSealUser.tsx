@@ -1,19 +1,23 @@
+import React from "react";
 import { useState, useEffect } from "react";
-import { Card, Layout, Button, Input, Form, message, Select, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
-import Sidebar from "../Component/Sidebar/Sidebar";
-import Header from "../Component/Header/Header";
+import { Modal, Button, Input, Form, message, Select, Spin } from "antd";
 import { ListBanks, GetSellerById, UpdateSellerById } from "../../services/https/index";
 import "./EditSealUser.css";
+import { BankInterface } from "../../Interface/Bank";
 
-const { Content } = Layout;
+
+
 const { Option } = Select;
 
-const EditSealUser = () => {
-  const navigate = useNavigate();
+
+interface EditSealUserProps {
+  visible: boolean;
+  onClose: () => void;
+}
+
+const EditSealUser: React.FC<EditSealUserProps> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
-  const [isSidebarVisible, setSidebarVisible] = useState(false);
-  const [banks, setBanks] = useState([]);
+  const [banks, setBanks] = useState<BankInterface[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -23,11 +27,10 @@ const EditSealUser = () => {
         const sellerId = localStorage.getItem("sellerId");
         if (!sellerId) {
           message.error("ไม่พบ ID ผู้ขายใน localStorage");
-          navigate("/MainSealSheet");
+          onClose();
           return;
         }
-        const userID = localStorage.getItem("id");
-        // ดึงข้อมูลธนาคาร
+
         const bankResponse = await ListBanks();
         if (bankResponse.status === 200 && bankResponse.data.data) {
           setBanks(bankResponse.data.data);
@@ -35,7 +38,6 @@ const EditSealUser = () => {
           message.error("ไม่สามารถดึงข้อมูลธนาคารได้");
         }
 
-        // ดึงข้อมูลผู้ขาย
         const sellerResponse = await GetSellerById(sellerId);
         if (sellerResponse.status === 200 && sellerResponse.data) {
           const sellerData = sellerResponse.data;
@@ -55,34 +57,29 @@ const EditSealUser = () => {
       }
     };
 
-    fetchInitialData();
-  }, [form, navigate]);
+    if (visible) {
+      fetchInitialData();
+    }
+  }, [form, visible, onClose]);
 
   const handleUpdateUser = async () => {
     setSaving(true);
     try {
       await form.validateFields();
       const values = form.getFieldsValue();
-  
+
       const sellerId = localStorage.getItem("sellerId");
-      const userID = localStorage.getItem("id"); // ดึง userID จาก localStorage
-  
-      if (!sellerId) {
-        message.error("ไม่พบ ID ผู้ขายใน localStorage");
+      const userID = localStorage.getItem("id");
+
+      if (!sellerId || !userID) {
+        message.error("ข้อมูลไม่สมบูรณ์ใน localStorage");
         setSaving(false);
         return;
       }
-  
-      if (!userID) {
-        message.error("ไม่พบ UserID ใน localStorage");
-        setSaving(false);
-        return;
-      }
-  
-      // สร้างข้อมูลที่จะอัปเดต
+
       const dataToSave = {
         Name: values.username,
-        UserID: Number(userID), // รวม UserID ที่ดึงมาจาก localStorage
+        UserID: Number(userID),
         SellerBankAccount: [
           {
             BankID: values.bank,
@@ -90,13 +87,11 @@ const EditSealUser = () => {
           },
         ],
       };
-  
-      console.log("Data to Update:", dataToSave);
-  
+
       const response = await UpdateSellerById(sellerId, dataToSave);
       if (response.status === 200) {
         message.success("อัปเดตข้อมูลผู้ขายสำเร็จ");
-        navigate("/dashboard");
+        onClose();
       } else {
         message.error("เกิดข้อผิดพลาด: " + response.data.message);
       }
@@ -107,54 +102,83 @@ const EditSealUser = () => {
       setSaving(false);
     }
   };
-  
+
   return (
-    <Layout className="editsealer">
-      <Header />
-      <Sidebar isVisible={isSidebarVisible} onClose={() => setSidebarVisible(false)} />
-      <Content className="editsealer-content">
-        <Card className="form-container" title="แก้ไขข้อมูลผู้ขาย" bordered={false}>
-          {loading ? (
-            <Spin tip="กำลังโหลดข้อมูล..." />
-          ) : (
-            <Form form={form} layout="vertical" onFinish={handleUpdateUser}>
+<Modal
+  title={<div className="edit-seal-user-modal-title">แก้ไข/ดู บัญชี</div>}
+  visible={visible}
+  onCancel={onClose}
+  footer={
+    <div className="edit-seal-user-footer">
+      <Button
+        key="submit"
+        className="editseller-Button"
+        loading={saving}
+        onClick={handleUpdateUser}
+      >
+        บันทึก
+      </Button>
+    </div>
+  }
+  className="edit-seal-user-modal-content"
+>
+{loading  ? (
+  <div className="fullscreen-loading">
+    <Spin size="large" tip="กำลังโหลดข้อมูล..." />
+  </div>
+)  : (
+    <Form form={form} layout="vertical" className="edit-seal-user-form-item">
+      <Form.Item
+        label="ชื่อผู้ใช้"
+        name="username"
+        className="edit-seal-user-form-item"
+        rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
+      >
+        <Input className="edit-seal-user-input" placeholder="กรอกชื่อผู้ใช้" />
+      </Form.Item>
               <Form.Item
-                label="ชื่อผู้ใช้"
-                name="username"
-                rules={[{ required: true, message: "กรุณากรอกชื่อผู้ใช้" }]}
-              >
-                <Input placeholder="กรอกชื่อผู้ใช้" />
-              </Form.Item>
-              <Form.Item
-                label="เลือกธนาคาร"
-                name="bank"
-                rules={[{ required: true, message: "กรุณาเลือกธนาคาร" }]}
-              >
-                <Select placeholder="เลือกธนาคาร">
-                  {banks.map((bank: any) => (
-                    <Option key={bank.ID} value={bank.ID}>
-                      {bank.BankName}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="เลขบัญชีธนาคาร"
-                name="accountNumber"
-                rules={[{ required: true, message: "กรุณากรอกเลขบัญชีธนาคาร" }]}
-              >
-                <Input placeholder="กรอกเลขบัญชีธนาคาร" />
-              </Form.Item>
-              <Form.Item className="form-button-item">
-                <Button type="primary" htmlType="submit" loading={saving}>
-                  บันทึกการเปลี่ยนแปลง
-                </Button>
-              </Form.Item>
-            </Form>
-          )}
-        </Card>
-      </Content>
-    </Layout>
+          label="เลือกธนาคาร"
+          name="bank"
+          className="edit-seal-user-form-item"
+          rules={[{ required: true, message: "กรุณาเลือกธนาคาร" }]}
+        >
+          <Select
+            className="edit-seal-user-select-selector"
+            dropdownClassName="edit-seal-user-select-dropdown"
+            placeholder="เลือกธนาคาร"
+          >
+            {banks.map((bank) => (
+              <Option key={bank.ID} value={bank.ID}>
+                {bank.BankName}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          label="เลขบัญชีธนาคาร"
+          name="accountNumber"
+          className="edit-seal-user-form-item"
+          rules={[
+            { required: true, message: "กรุณากรอกเลขบัญชีธนาคาร" },
+            {
+              pattern: /^[0-9]+$/, // ตรวจสอบว่าเป็นตัวเลขเท่านั้น
+              message: "เลขบัญชีต้องเป็นตัวเลขเท่านั้น",
+            },
+            {
+              validator(_, value) {
+                if (value && value.length >= 10) {
+                  return Promise.resolve(); // ผ่านการตรวจสอบ
+                }
+                return Promise.reject("เลขบัญชีต้องมีอย่างน้อย 10 หลัก");
+              },
+            },
+          ]}
+        >
+          <Input className="edit-seal-user-input" placeholder="กรอกเลขบัญชีธนาคาร" />
+        </Form.Item>
+    </Form>
+  )}
+</Modal>
   );
 };
 

@@ -3,231 +3,246 @@
   background: #fff;
 }
 
-.menu-button {
-  background: none;
-  border: none;
-  font-size: 1.5em;
-  color: white;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.language {
-  margin-left: 10px;
-}
-
-.user-id, .user-name {
-  margin-right: 10px;
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
 .selectsheet-layout {
   min-height: 100vh;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
 }
-
-.selectsheet-content {
-  display: grid;
-  grid-template-columns: 1fr 2fr; /* แบ่ง 2 คอลัมน์ */
-  grid-template-rows: auto auto; /* แถวแรกอัตโนมัติ แถวสองใช้พื้นที่ที่เหลือ */
-  gap: 24px; /* ระยะห่างระหว่างแต่ละ Grid Item */
-  padding: 30px;
-  min-height: 100vh; 
-  background-color: #fff;
-}
-
 .selectsheet-details {
-  grid-column: 2 / 3; /* อยู่ในคอลัมน์ที่สอง */
-  grid-row: 1 / 2; /* อยู่ในแถวแรก */
-  padding: 20px;
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  padding: 20px 40px; /* เพิ่ม padding ด้านข้าง */
   background-color: #fafafa;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   min-width: 90%;
-  margin-left : -50px;
-  
-}
-
-
-.selectsheet-details-title {
-  font-size: 22px; /* เพิ่มขนาดตัวหนังสือของหัวข้อ */
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
-  color: #000000; /* สีตัวหนังสือของหัวข้อ */
+  max-width: 600px; /* กำหนดความกว้างสูงสุด */
+  text-align: start;
 }
 
 .selectsheet-details p {
-  margin: 10px 0;
-  font-size: 16px; /* ขนาดตัวหนังสือสำหรับเนื้อหา */
-  color: #555; /* สีตัวหนังสือของเนื้อหา */
+  margin: 15px 0; /* เพิ่มระยะห่างระหว่างข้อความ */
+  font-size: 1rem; /* ขนาดตัวอักษร */
+  color: #555; /* สีของข้อความ */
+  line-height: 1.8; /* เพิ่มความสูงระหว่างบรรทัด */
 }
 
 .selectsheet-details p strong {
-  color: #000000; /* สีของข้อความที่เน้น */
+  color: #000; /* ทำให้ข้อความเน้นสีดำ */
 }
 
-.selectsheet-details button {
-  margin-top: 20px;
-  font-size: 16px;
+
+/* การจัดตำแหน่งเนื้อหาภายใน details-content */
+.details-content {
+  width: 100%; /* ใช้พื้นที่เต็ม */
+  max-width: 600px; /* จำกัดความกว้างสูงสุด */
+  text-align: left; /* จัดข้อความชิดซ้าย */
+}
+
+/* สไตล์หัวข้อ */
+.selectsheet-details-title {
+  font-size: 24px; /* ขนาดตัวอักษรใหญ่ขึ้น */
   font-weight: bold;
+  text-align: center; /* จัดให้อยู่ตรงกลาง */
+  margin-bottom: 20px; /* เพิ่มระยะห่างด้านล่าง */
+  color: #333;
 }
 
-.selectsheet-card img {
-  border-radius: 8px 8px 0 0;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  z-index: 10;
-  width: 150px;
-  overflow: hidden;
-}
-
-.dropdown-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  background: none;
-  border: none;
-  text-align: left;
-  font-size: 16px;
-  color: #003366;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.dropdown-menu button:hover {
-  background-color: #f0f0f0;
-}
-
-.pdf-preview-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  filter: blur(1px);
-  -webkit-filter: blur(1px); /* Fallback for Safari */
-}
-
-.pdf-preview-container canvas {
-  margin: auto;
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+.selectsheet-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* แบ่งคอลัมน์ */
+  grid-template-rows: auto auto; /* แถวแรกอัตโนมัติ */
+  gap: 24px; /* ระยะห่างระหว่าง Grid Item */
+  padding: 30px;
 }
 
 .selectsheet-card {
-  grid-column: 1 / 2; /* อยู่ในคอลัมน์แรก */
-  grid-row: 1 / 2; /* อยู่ในแถวแรก */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-right : 200px;
-  margin-left : 50px;
+  border-radius: 12px;
+  height: 100%; /* ให้ความสูงเต็มพื้นที่ */
 }
-.selectsheet-details button {
-  margin-top: 80px; /* เพิ่มระยะห่างด้านบนของปุ่ม */
-  font-size: 16px;
-  font-weight: bold;
+.pdf-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: #f9f9f9; /* สีพื้นหลัง */
+  filter: blur(2px); /* เพิ่มความมัว */
+  -webkit-filter: blur(2px); /* สำหรับเบราว์เซอร์ที่รองรับ WebKit */
 }
 .nav-button {
   position: absolute;
   top: 50%;
-  width: 35px;
-  height: 35px;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  background-color: #e4c3ac;
-  color: #ffffff;
+  background-color: #ff6b00;
+  color: white;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%); /* จัดให้ปุ่มอยู่กึ่งกลางแนวตั้ง */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ff6b00; /* สีหลัก */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   border: none;
   font-size: 16px;
+  z-index: 1000; /* ให้ปุ่มอยู่เหนือองค์ประกอบอื่น */
 }
 
 .nav-button.left {
-  left: -45px;
+  left: -20px; /* ปรับระยะห่างจากขอบซ้าย */
 }
 
 .nav-button.right {
-  right: -45px;
+  right: -20px; /* ปรับระยะห่างจากขอบขวา */
 }
 
 .nav-button:disabled {
-  background-color: #ccc;
+  background-color: #ccc; /* สีเมื่อไม่สามารถกดได้ */
   cursor: not-allowed;
 }
 
 .comments-card {
   grid-column: 1 / 3; /* ครอบคลุมทั้งสองคอลัมน์ */
-  grid-row: 2 / 3; /* อยู่ในแถวที่สอง */
-  padding: 10px;
+  grid-row: 2 / 3;
+  padding: 20px;
   background-color: #fff;
-  min-width: 80%; /* กำหนดความกว้างของ Card */
-  margin: 0 auto; /* จัดให้อยู่ตรงกลางแนวนอน */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
 }
 
 .comment-list {
+  flex-direction: column; /* จัดรายการในแนวตั้ง */
   margin-top: 20px;
-  margin-bottom: 20px;
+  text-align: left;
 }
 
 .comment-item {
-  padding: 10px 15px;
-  background-color: #ffffff;
+  padding: 15px;
+  background-color: #f7f7f7;
   border-radius: 8px;
   margin-bottom: 10px;
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.button-container {
+  display: flex !important;
+  justify-content: center !important; /* จัดปุ่มให้อยู่ตรงกลาง */
+  margin-top: 20px !important;
 }
 
-.comment-user {
-  font-weight: bold;
-  color: #f6b400;
+.selectsheet-Button {
+  font-size: 1.2rem !important; /* ขนาดตัวอักษร */
+  font-weight: bold !important;
+  padding: 20px 50px !important; /* เพิ่มขนาดปุ่ม */
+  background: linear-gradient(45deg, #ffc107, #ffd966) !important; /* ไล่สีทอง */
+  color: black !important;
+  border: none !important;
+  border-radius: 30px !important; /* โค้งมน */
+  cursor: pointer !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+  width: auto !important; /* ปรับขนาดให้เหมาะสม */
+  margin-top: 80px;
 }
 
-.comment-content {
-  font-size: 14px;
-  color: #4d4d4d;
+.selectsheet-Button:hover {
+  background: linear-gradient(45deg, #e6b800, #ffc34d) !important; /* ไล่สีเข้ม */
+  transform: scale(1.1) !important; /* ขยายใหญ่ขึ้นเล็กน้อย */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important; /* เพิ่มเงา */
 }
 
-.comment-rating {
+.selectsheet-Button:active {
+  transform: scale(1) !important; /* คืนขนาดเดิมเมื่อคลิก */
+  background: linear-gradient(45deg, #cc9900, #e6b800) !important; /* สีเข้มขึ้น */
+}
+.comment-Button-container {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-end; /* จัดปุ่มไปทางขวา */
+  margin-top: 20px; /* ระยะห่างจากด้านบน */
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .selectsheet-details,
-  .comments-card {
-      width: 90%;
-      padding: 10px;
-  }
+.comment-Button {
+  font-size: 1.2rem !important; /* ขนาดตัวอักษร */
+  font-weight: bold !important; /* เพิ่มความหนา */
+  padding: 20px 35px !important; /* เพิ่มขนาดปุ่ม */
+  background: linear-gradient(45deg, #ffc107, #ffd966) !important; /* ไล่สีทอง */
+  color: black !important;
+  border: none !important; /* เอาเส้นขอบออก */
+  border-radius: 30px !important; /* โค้งมน */
+  cursor: pointer !important; /* เปลี่ยนเคอร์เซอร์ */
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important; /* เพิ่มเอฟเฟกต์การเคลื่อนไหว */
+}
 
-  .selectsheet-card {
-      margin-left: 0;
-      margin-right: 0;
-      padding: 10px;
-  }
+.comment-Button:hover {
+  background: linear-gradient(45deg, #e6b800, #ffc34d) !important; /* ไล่สีเข้ม */
+  transform: scale(1.1) !important; /* ขยายใหญ่ขึ้นเล็กน้อย */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important; /* เพิ่มเงา */
+}
 
-  .pdf-preview-container {
-      height: 200px;
+.comment-Button:active {
+  transform: scale(1) !important; /* คืนขนาดเดิมเมื่อคลิก */
+  background: linear-gradient(45deg, #cc9900, #e6b800) !important; /* สีเข้มขึ้น */
+}
+
+.comment-Button:disabled {
+  background: #ccc !important; /* สีปุ่มเมื่อปิดการใช้งาน */
+  color: #666 !important; /* สีตัวอักษรเมื่อปิดการใช้งาน */
+  cursor: not-allowed !important; /* เปลี่ยนเคอร์เซอร์ */
+}
+
+.loader-circle {
+  width: 80px;
+  height: 80px;
+  border: 8px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #ff6b00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.fullscreen-loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.fullscreen-loading h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+/* การหมุนของ Loader */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }

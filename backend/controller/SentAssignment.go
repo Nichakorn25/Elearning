@@ -3,8 +3,8 @@ package controller
 import(
 	"time"
 	"net/http"
-	"example.com/Elearning/config"
-   	"example.com/Elearning/entity"
+	"elearning/entity"
+    "elearning/config"
 	"github.com/gin-gonic/gin"
 	"path/filepath"
 	"strconv"

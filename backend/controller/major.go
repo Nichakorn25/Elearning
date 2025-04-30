@@ -2,8 +2,8 @@ package controller
 
 import (
     "net/http"
-    "example.com/Elearning/entity"
-    "example.com/Elearning/config"
+   	"elearning/entity"
+    "elearning/config"
     "github.com/gin-gonic/gin"
 	"errors"  // เพิ่ม import สำหรับ package errors
 	"gorm.io/gorm" // เพิ่ม import สำหรับ gorm

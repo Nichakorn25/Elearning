@@ -1,8 +1,4 @@
-h2 {
-  padding: 10px;
-  font-size: 30px; /* ขนาดตัวอักษรเริ่มต้น */
-  margin-bottom: 20px;
-}
+
 .buysheet {
   display: flex;
   flex-direction: column;
@@ -17,6 +13,7 @@ h2 {
   padding: 20px 20px;
   height: auto;
   min-height: 100vh;
+  margin-top: 40px ;
 }
 
 /* CSS สำหรับพื้นที่เนื้อหาหลัก */
@@ -31,19 +28,6 @@ h2 {
   overflow: auto;
   background-color: #f0f2f5;
 }
-  .search-filters {
-    margin: 20px;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .search-filters h3 {
-    margin-bottom: 10px;
-    font-size: 18px;
-  }
-  
   /* จัดรูปแบบเมื่อมีหลายแถว */
   @media (max-width: 768px) {
     .search-bar-sheet {
@@ -59,32 +43,30 @@ h2 {
   .Sheet-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
     justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    gap: 20px;
+    margin-top: 40px;
   
   }
   
   .Sheet-list .ant-card {
-    flex: 0 1 calc(25% - 20px); 
-    box-sizing: border-box;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px; /* มุมมนที่ชัดเจนขึ้น */
+    border: 1px solid #f0f0f0;
   }
   .Sheet-list .ant-card:hover {
-    transform: scale(1.05); /* ขยายขนาดการ์ดเล็กน้อยเมื่อเมาส์วาง */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* เพิ่มเงารอบๆ การ์ด */
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #ffa000;
   }
   
   .Sheet-list .ant-card .ant-card-body {
-    transition: background-color 0.3s ease; /* เพิ่มการเคลื่อนไหวให้กับเนื้อหาภายในการ์ด */
+    border-radius: 12px 12px 0 0;
   }
   
-  .Sheet-list .ant-card:hover .ant-card-body {
-    background-color: #f7f7f7; /* เปลี่ยนสีพื้นหลังของการ์ดเมื่อมีการวางเมาส์ */
-  }
-  
+ 
   @media (max-width: 1024px) {
     .Sheet-list .ant-card {
       flex: 1 1 calc(33.33% - 20px); /* 3 cards per row for smaller screens */
@@ -102,36 +84,6 @@ h2 {
       flex: 1 1 calc(100% - 20px); /* 1 card per row for very small screens */
     }
   }
-   
-  .dropdown-menu-sheet {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    z-index: 10;
-    width: 150px;
-    overflow: hidden;
-  }
-  
-  .dropdown-menu-sheet button {
-    display: block;
-    width: 100%;
-    padding: 10px 15px;
-    background: none;
-    border: none;
-    text-align: left;
-    font-size: 16px;
-    color: #003366;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .dropdown-menu-sheet button:hover {
-    background-color: #f0f0f0;
-  }
-  
 
   .cart-icon {
     position: fixed;
@@ -141,24 +93,24 @@ h2 {
   }
   
   .cart-icon .ant-btn {
-    background-color: #ff6b00;
-    border-color: #000000;
-    border-width: 2px;
-    color: rgb(255, 255, 255);
-    font-size: 32px; /* ปรับขนาดไอคอน */
-    width: 60px; /* ปรับขนาดของปุ่ม */
-    height: 60px; /* ปรับขนาดของปุ่ม */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px; /* กำหนดมุมให้ไม่กลม */
-    padding: 0; /* ปิด padding เพื่อให้ขนาดไอคอนชัดเจน */
+    background: linear-gradient(to bottom, #ff6b00, #ff4500); /* ไล่สีปุ่ม */
+    border: none;
+    color: white;
+    font-size: 40px; /* ขนาดไอคอน */
+    width: 70px;
+    height: 70px;
+    border-radius: 50%; /* ปุ่มกลม */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .cart-icon .ant-btn:hover {
-    background-color: #5a6066;
-    border-color: #40a9ff;
+    transform: scale(1.1); /* ขยายเล็กน้อยเมื่อ hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to bottom, #ff4500, #ff2200); /* ไล่สีเข้มขึ้น */
   }
+
+  
   .cart-item-count {
     position: absolute;
     top: -1px;  /* ปรับตำแหน่งให้เลขชิดไอคอน */
@@ -166,27 +118,83 @@ h2 {
     background-color: red; /* สีพื้นหลังของเลข */
     color: white; /* สีข้อความ */
     border-radius: 50%; /* ทำให้เป็นวงกลม */
-    padding: 5px 10px; /* เพิ่มขนาดของเลข */
-    font-size: 14px; /* ขนาดตัวอักษร */
+    padding: 10px 20px; /* เพิ่มขนาดของเลข */
+    font-size: 16px; /* ขนาดตัวอักษร */
   }
 
   .additional-info {
     margin-top: 16px;
   }
   
-  .purchased-info {
+  .purchased-buysheet-info {
+    margin-top: 10px;
     font-size: 14px;
-    color: #666;
+    color: white;
+    background: linear-gradient(135deg, #ff6b00, #ffa000); /* ไล่สีส้ม */
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  .search-filters {
+    margin: 20px auto;
+    padding: 15px;
+    background: linear-gradient(to bottom, #ffffff, #fff4e5); /* ไล่สีฟิลเตอร์ */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  .average-rating span {
+  .search-filters input {
+    border: 1px solid #ff6b00; /* กรอบสีหลัก */
+    border-radius: 6px;
+    padding: 10px;
     font-size: 14px;
   }
-  .sidebar-fixed {
-    position: fixed;
-    height: 100vh;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 250px; /* Adjust width as needed */
+  
+  .search-filters input:focus {
+    border-color: #ff4500;
+    box-shadow: 0 0 5px #ff4500; /* เพิ่ม glow เมื่อโฟกัส */
   }
+  @media (max-width: 768px) {
+    .buysheet-content {
+      padding: 10px;
+      margin: 10px;
+    }
+  
+    .search-filters {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .Sheet-list .ant-card {
+      width: calc(100% - 20px); /* การ์ดเต็มหน้าจอ */
+    }
+  
+    .cart-icon .ant-btn {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+    }
+  }
+  .fullscreen-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .loader-circle {
+    width: 60px;
+    height: 60px;
+    border: 8px solid rgba(0, 0, 0, 0.2);
+    border-top-color: #ff6b00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .fullscreen-loading h2 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  

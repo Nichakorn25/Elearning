@@ -6,9 +6,9 @@ import (
    "github.com/gin-gonic/gin"
    "golang.org/x/crypto/bcrypt"
    "gorm.io/gorm"
-   "example.com/Elearning/config"
-   "example.com/Elearning/entity"
-   "example.com/Elearning/services"
+    "elearning/entity"
+    "elearning/config"
+   "elearning/services"
 )
 type (
     Authen struct {

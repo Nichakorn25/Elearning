@@ -5,8 +5,8 @@ import (
 	"strconv"
 	"time"
 
-	"example.com/Elearning/config"
-	"example.com/Elearning/entity"
+	"elearning/entity"
+    "elearning/config"
 
 	"net/http"
 

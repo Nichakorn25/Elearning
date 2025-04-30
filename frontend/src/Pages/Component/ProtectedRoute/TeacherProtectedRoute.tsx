@@ -10,7 +10,7 @@ const TeacherProtectedRoute: React.FC<TeacherProtectedRouteProps> = ({ children 
   const userId = localStorage.getItem("id");
   const userRole = localStorage.getItem("role");
 
-  if (!userId || userRole !== "1") {
+  if (!userId || userRole !== "2") {
     message.destroy(); // Clear any existing messages
     message.error("You do not have permission to access this page.");
     return <Navigate to="/" replace />;

@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;700&display=swap');
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Prompt', Arial, sans-serif;
+    overflow-x: hidden; /* ป้องกันการเลื่อนแนวนอน */
+}
+
+.assign{
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #33333300;
+    padding-bottom: 20px;
+}
+
+.assignment-header{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ff6b00;
+    position: fixed; /* ทำให้ header ติดอยู่ด้านบน */
+    z-index: 999;
+}
+
+.assignment-body{
+    width: 90%;
+    max-width: 90%;
+    background-color: rgb(255, 255, 255);
+    margin-top: 80px;
+    padding: 20px ;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.assignment-body h1{
+    font-size: 30px;
+    padding-left: 10px;
+    color: black;
+}
+
+.assignment-body h2{
+    font-size: 20px;
+    padding: 20px;
+    color: black;
+}
+
+.assignment-body2{
+    width: 90%;
+    max-width: 90%;
+    background-color: rgb(255, 255, 255);
+    margin-top: 20px;
+    padding: 20px ;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.assignment-body2 h1{
+    font-size: 40px;
+    padding-left: 10px;
+    color: black;
+}
+
+.assignment-body2 h2{
+    font-size: 20px;
+    padding: 10px;
+    color: black;
+}
+
+.details{
+    padding: 10px;
+    padding-bottom: 60px;
+    padding-top: 60px;
+}
+
+.direct{
+    width: 100px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.set-buttonA{
+    display: flex;
+    justify-content: center;
+}
+
+.ant-table {
+    min-width: 100%; /* กำหนดให้ตารางขยายขนาดตาม container */
+}
+
+.ant-table-container {
+    overflow-x: auto; /* เพิ่ม scroll bar แนวนอนในตาราง */
+}
+
+.AFeedback{
+    width: 90%;
+    max-width: 90%;
+    background-color: rgb(255, 255, 255);
+    margin-top: 20px;
+    padding: 20px ;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}

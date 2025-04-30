@@ -19,7 +19,7 @@ const Cart: React.FC = () => {
     const userId = localStorage.getItem("id");
     if (!userId) {
       message.error("กรุณาเข้าสู่ระบบก่อนใช้งาน");
-      navigate("/login");
+      navigate("/");
       return;
     }
   
@@ -107,11 +107,13 @@ const handlePayment = () => {
 
           // Clear canvas
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-          // Background
-          ctx.fillStyle = "#f2a900";
+          // Gradient Background
+          const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          gradient.addColorStop(0, "#ff6b00"); // สีหลัก
+          gradient.addColorStop(1, "#ffa000"); // สีส้มอ่อน
+          ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-
+            
           // Border
           ctx.strokeStyle = "#fff";
           ctx.lineWidth = 2;
@@ -121,7 +123,7 @@ const handlePayment = () => {
           ctx.fillStyle = "#000";
           ctx.font = "bold 30px Arial";
           ctx.textAlign = "center";
-          ctx.fillText(cartItem.Sheet?.Course?.CourseDate || "No Course Code", canvas.width / 2, 60);
+          ctx.fillText(cartItem.Sheet?.Course?.CourseCode || "No Course Code", canvas.width / 2, 60);
 
           // Title
           ctx.fillStyle = "#000";
@@ -136,7 +138,7 @@ const handlePayment = () => {
           // Edition
           ctx.fillStyle = "#000";
           ctx.font = "16px Arial";
-          ctx.fillText(`ฉบับ ${cartItem.Sheet?.Term || "N/A"} / ${cartItem.Sheet?.Year || "N/A"}`, canvas.width / 2, 160);
+          ctx.fillText(`ฉบับ ${cartItem.Sheet?.Term?.Name || "N/A"} / ${cartItem.Sheet?.Year || "N/A"}`, canvas.width / 2, 160);
 
           // Price (Rounded Button)
           const price = `${cartItem.Sheet?.Price || "0"} BAHT`;
@@ -184,12 +186,23 @@ const handlePayment = () => {
   <div className="Cart-Content">
     <h2 className="Cart-Title">ตะกร้าสินค้า</h2>
     {cartItems.length === 0 ? (
-      <Empty description="ไม่มีสินค้าในตะกร้าของคุณ">
-        <Button type="primary" onClick={() => navigate("/Buysheet")}>
-          ไปเลือกสินค้ากัน!
-        </Button>
-      </Empty>
-    ) : (
+  <div className="Empty-Container">
+    <Empty
+      description={
+        <span className="Empty-Description">
+          ไม่มีสินค้าในตะกร้าของคุณ
+        </span>
+      }
+    >
+      <button
+        className="Empty-Button"
+        onClick={() => navigate("/Buysheet")}
+      >
+        ไปเลือกสินค้ากัน!
+      </button>
+    </Empty>
+  </div>
+)  : (
       <div className="CartSheet-list">
         {cartItems.map((item, index) => (
           <Card
@@ -206,9 +219,13 @@ const handlePayment = () => {
               />
             }
             actions={[
-              <Button type="link" danger onClick={() => handleRemoveItem(item.ID!)}>
-                ลบสินค้า
-              </Button>,
+          <Button
+            className="remove-button"
+            type="link"
+            onClick={() => handleRemoveItem(item.ID!)}
+          >
+            ลบสินค้า
+          </Button>
             ]}
           >
             <Meta
@@ -228,7 +245,6 @@ const handlePayment = () => {
   {cartItems.length > 0 && (
     <div className="CartFooter">
       <Button
-        type="primary"
         size="large"
         className="Button-Checkout"
         onClick={handlePayment}

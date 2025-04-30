@@ -1,87 +1,87 @@
 .signup-container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-top: 80px;
-    margin-bottom: 80px;
-  }
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
 
-  /* การตั้งค่าวิดีโอพื้นหลัง */
+/* การตั้งค่าวิดีโอพื้นหลัง */
 .backgroundbeforelogin-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -2; /* ทำให้วิดีโออยู่ด้านหลังเลเยอร์โปร่งแสง */
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: -2; /* ทำให้วิดีโออยู่ด้านหลังเลเยอร์โปร่งแสง */
 }
 
 /* เพิ่มเลเยอร์โปร่งแสง */
 .signup-container::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* สีดำโปร่งแสง ปรับค่า 0.5 ตามความเข้มที่ต้องการ */
-  z-index: -1; /* ทำให้เลเยอร์โปร่งแสงอยู่ด้านหลังเนื้อหา แต่หน้าวิดีโอ */
+content: "";
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.4); /* สีดำโปร่งแสง ปรับค่า 0.5 ตามความเข้มที่ต้องการ */
+z-index: -1; /* ทำให้เลเยอร์โปร่งแสงอยู่ด้านหลังเนื้อหา แต่หน้าวิดีโอ */
 }
-  
-  .signup-title {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    color: black;
-  }
-  
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
 
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  label {
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  input,
-  select,
-  button {
-    padding: 10px;
-    font-size: 16px;
-  }
-  
-  button.signup-submit {
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button.signup-submit:hover {
-    background-color: #45a049;
-  }
-  
+.signup-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input,
+select,
+button {
+  padding: 10px;
+  font-size: 16px;
+}
+
+button.signup-submit {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button.signup-submit:hover {
+  background-color: #45a049;
+}
+
 /* สไตล์สำหรับ dropdown */
 .dropdown {
-  color: black; /* สีตัวอักษรของ select */
-  background-color: white; /* สีพื้นหลัง */
-  font-size: 16px; /* ปรับขนาดฟอนต์ (ถ้าจำเป็น) */
+color: black; /* สีตัวอักษรของ select */
+background-color: white; /* สีพื้นหลัง */
+font-size: 16px; /* ปรับขนาดฟอนต์ (ถ้าจำเป็น) */
 }
 
 /* สไตล์สำหรับ option */
 .dropdown option {
-  color: black; /* สีตัวอักษรของ option */
+color: black; /* สีตัวอักษรของ option */
 }

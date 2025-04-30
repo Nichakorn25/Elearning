@@ -1,49 +1,110 @@
-/* ปรับให้ Layout ใช้เต็มพื้นที่หน้าจอ */
-.editsheet {
+.fullscreen-loading {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: #f9f9f9;
 }
-
-/* เพิ่มระยะห่างจาก header */
-.editsheet-content {
-  display: flex;
-  justify-content: center; /* ฟอร์มจะอยู่ตรงกลาง */
-  align-items: flex-start; /* ทำให้ฟอร์มชิดด้านบน */
-  height: 100%; /* ใช้ความสูงที่เหลือจาก header */
-  padding-top: 30px; /* ระยะห่างจาก header */
-  background-color: #ffffff;
-}
-
-/* ปรับขนาดของฟอร์ม */
-.editform-container {
-  width: 100%;
-  max-width: 500px; /* ความกว้างสูงสุดของฟอร์ม */
-  padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  margin-top: 0; /* ชิดกับ header */
-}
-
-/* ปรับขนาดของ title */
-.editcard-title {
-  font-size: 24px;
-  color: #1890ff; /* สีฟ้าสำหรับ title */
+.edit-sheet-modal .ant-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
   text-align: center;
-  margin-bottom: 20px; /* ระยะห่างด้านล่าง */
+  margin-bottom: 30px;
+  margin-top: 10px;
+  color: #000; /* สีข้อความ */
 }
 
-/* จัดตำแหน่งปุ่มในฟอร์ม */
-.editform-buttons {
+.loader-circle {
+  width: 60px;
+  height: 60px;
+  border: 8px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #ff6b00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.editsheet-button-container {
   display: flex;
-  justify-content: center; /* ปุ่มอยู่ตรงกลาง */
-  gap: 10px; /* ระยะห่างระหว่างปุ่ม */
-  margin-top: 20px; /* ระยะห่างด้านบน */
+  justify-content: center;
 }
 
-/* ปรับขนาดและสีของปุ่ม */
-.editform-buttons .ant-btn {
-  min-width: 120px; /* กำหนดความกว้างขั้นต่ำของปุ่ม */
+.editsheet-Button {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 10px 30px !important;
+  background: linear-gradient(45deg, #ffc107, #ffd966);
+  color: black;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.editsheet-Button:hover {
+  background: linear-gradient(45deg, #e6b800, #ffc34d);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.editsheet-Button:active {
+  transform: scale(1);
+  background: linear-gradient(45deg, #cc9900, #e6b800);
+}
+.upload-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.upload-label {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.reset-file-button {
+  font-size: 1rem !important;
+  font-weight: bold !important;
+  padding: 10px 20px !important;
+  background: linear-gradient(45deg, #4caf50, #81c784) !important; /* สีเขียว */
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform 0.3s ease !important;
+  box-shadow : 0.3s ease !important;
+}
+
+.reset-file-button:hover {
+  background: linear-gradient(45deg, #43a047, #66bb6a) !important; /* สีเขียวเข้ม */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.reset-file-button:active {
+  transform: scale(1) !important;
+  background: linear-gradient(45deg, #388e3c, #4caf50) !important; /* สีเขียวเข้มกว่า */
+}
+
+.delete-sheet-button {
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+  padding: 10px 30px !important;
+  background: linear-gradient(45deg, #f44336, #e57373) !important; /* สีแดง */
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform 0.3s ease !important;
+   box-shadow : 0.3s ease !important;
+   margin-left: 20px;
+}
+
+.delete-sheet-button:hover {
+  background: linear-gradient(45deg, #d32f2f, #ef5350) !important; /* สีแดงเข้ม */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2) !important;
+}
+
+.delete-sheet-button:active {
+  transform: scale(1) !important;
+  background: linear-gradient(45deg, #b71c1c, #d32f2f) !important; /* สีแดงเข้มกว่า */
 }

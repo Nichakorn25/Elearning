@@ -1,10 +1,9 @@
 .manage-role-requests-container {
-    padding: 20px;
-    margin-top: 60px;
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
+  padding: 20px;
+  margin-top: 60px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}

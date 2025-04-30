@@ -23,10 +23,10 @@ import AllCourse from './Pages/FirstPage/AllCourse/AllCourse';
 import CreateCourse from './Pages/CreateCourse/CreateCourse';
 import Assignment from './Pages/Assignment/Assignment';
 // import AssignmentReview from './Pages/Assignment/AssignmentReview';
-import Ateach from './Pages/Assignment/Ateach';
+import Ateach from './Pages/Assignment/Atech';
 import ManageCourse from './Pages/ManageCourse/ManageCourse';
 // import AddSealUser from './Pages/AddSealUser/AddSealUser';
-import DashboardforStudent from "./Pages/Dashboard/CouresDashboardforStudent";
+import DashboardforStudent from './Pages/Dashboard/CourseDashboardforStudent';
 import AddSealUser from './Pages/AddSealUser/AddSealUser';
 import CheckSeller from './Pages/CheckSeller/ChechSeller';
 import GetPurchasedFiles from './Pages/PurchasedFiles/PurchasedFiles';
@@ -46,7 +46,7 @@ import StudentAppointment from './Pages/Appointment/Student/StudentAppointment/S
 import TeacherAppointment from './Pages/Appointment/Teacher/TeacherAppointment/TeacherAppointment';
 import ForTeacher from './Pages/FirstPage/ForTeacher/ForTeacher';
 import ForStudent from './Pages/FirstPage/ForStudent/ForStudent';
-import SignUp from './Pages/FirstPage/SignUP/SignUP';
+import SignUp from './Pages/FirstPage/SignUp/SignUp';
 import AssignmentReview from './Pages/Assignment/AssignmentReview';
 
 const App: React.FC = () => {

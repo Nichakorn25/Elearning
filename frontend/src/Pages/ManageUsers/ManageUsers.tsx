@@ -3,6 +3,7 @@ import { Table, Button, message, Modal, Input } from "antd";
 import Sidebar from "../Component/Sidebar/Sidebar";
 import Header from "../Component/Header/Header";
 import { ListUsers, DeleteUserByID, UpdateUserByid } from "../../services/https"; // Import API functions
+//import { UserInterface } from '../../Interface/IUser';
 import "./ManageUsers.css";
 
 const { Search } = Input;
@@ -25,10 +26,6 @@ const ManageUsers: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   const loggedInUserId = localStorage.getItem("id");
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -77,7 +74,7 @@ const ManageUsers: React.FC = () => {
       cancelText: "No",
       onOk: async () => {
         try {
-          const isDeleted = await DeleteUserByID(id);
+          const isDeleted = await DeleteUserByID(Number(id));
           if (isDeleted) {
             message.success("User deleted successfully.");
             fetchUsers();
@@ -220,7 +217,7 @@ const ManageUsers: React.FC = () => {
           value={searchText}
           onChange={(e) => handleSearch(e.target.value)}
           onSearch={handleSearch}
-          style={{ marginBottom: "1rem", width: "300px" }}
+          style={{ marginBottom: "1rem", width: "400px" }}
         />
         <Table
           dataSource={filteredUsers}

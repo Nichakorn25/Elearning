@@ -2,13 +2,16 @@
 
 body {
     background-color: #f9f9f9;
+    /* background-image:  */
+        /* linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), */
+        /* url('https://img.freepik.com/free-photo/lone-tree_181624-46361.jpg?t=st=1732550254~exp=1732553854~hmac=93ec43595c5354beccbe16071be2af683ce14757c6078aa17dd864a8a0f4ce63&w=996'); ลิงก์ URL ของรูปภาพ */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    background-color: rgba(0, 0, 0, 0.1);
     position: relative;
-    font: normal 1.25em 'Open Sans', sans-serif;
+    font: normal 1.25em 'Prompt', sans-serif;
   }
 
 .Header{
@@ -18,16 +21,15 @@ body {
 .Section_1 {
     background-color: #ffffff; 
     padding: 10px; 
-    margin: 20px ; 
+    margin: 5px ; 
     width: 100%; 
     padding-right: 60%;
-    box-shadow: 0 2px 8px rgba(0.1, 0.1, 0.1, 0.1);
+
     
 }
 
 .Seach_bar{
     color: black;
-    padding-top: 10px;
     padding-right: 10px;
     padding-left: 20px;
     padding-bottom: 15px;

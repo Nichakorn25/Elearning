@@ -4,7 +4,7 @@
   background-color: #ffffff; 
   color: #000000; 
   min-height: 100vh;
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Noto Sans", "Noto Sans Thai", "Prompt", sans-serif;
 }
 
 /* Search Bar Styling */
@@ -52,15 +52,30 @@
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  
+}
+
+.admin-card {
+  background: #ffffff; /* Background color */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Align items in a column */
+  gap: 0px;
+  width: 100%;
+  max-width: 92vw; /* Make the card responsive */
+  margin: 10px 0; /* Margin between cards */
 }
 
 .admin-course-card {
   background-color: #222; /* Card background */
   color: #fff;
-  padding: 1rem;
+  padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  width: 300px;
+  width: 400px;
+  
 }
 
 .admin-course-card h3 {
@@ -68,23 +83,25 @@
 }
 
 .admin-course-card p {
-  font-size: 0.9rem;
+  font-size: 1.8rem;
   color: #ccc;
 }
 
 /* Button Section */
 .admin-buttons {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  
   gap: 15px;  /* Space between buttons */
-  margin-top: 30px;
+  margin-bottom: 10px;
 }
+
 
 .admin-button {
   padding: 10px 20px;
   font-size: 16px;
   color: #fff;
-  background-color: #007bff;
+  background-color: #ff6b00; /* เปลี่ยนเป็นสี #ff6b00 */
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -92,21 +109,36 @@
 }
 
 .admin-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #e65c00; /* เปลี่ยนสีเมื่อ hover */
 }
 
 .confirm-transfer-button {
-  background-color: #007bff;
+  background-color: #ff6b00; /* เปลี่ยนเป็นสี #ff6b00 */
 }
 
 .confirm-transfer-button:hover {
-  background-color: #0056b3;
+  background-color: #e65c00; /* เปลี่ยนสีเมื่อ hover */
 }
 
 .manage-role-requests-button {
-  background-color: #07ff98;
+  background-color: #ff6b00; /* เปลี่ยนเป็นสี #ff6b00 */
 }
 
 .manage-role-requests-button:hover {
-  background-color: #10d282;
+  background-color: #e65c00; /* เปลี่ยนสีเมื่อ hover */
+}
+
+/* User Count Styling */
+.user-count {
+  font-size: 3rem; /* ขนาดตัวเลขใหญ่ */
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.active-count {
+  color: #28a745; /* สีเขียวสำหรับ Active */
+}
+
+.inactive-count {
+  color: #dc3545; /* สีแดงสำหรับ Inactive */
 }
